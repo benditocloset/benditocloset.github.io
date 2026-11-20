@@ -104,6 +104,29 @@ header{position:relative}
 .soon h2{font-family:var(--display);font-size:22px;margin:0}
 .soon p{margin:0;color:var(--muted);max-width:60ch}
 
+.reviews{padding:28px 0;border-top:1px solid var(--line);display:grid;gap:18px}
+.reviews h2{font-family:var(--display);font-size:28px;margin:0}
+.rv-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.rv-list:empty{display:none}
+.rv{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:8px;margin:0}
+.rv .stars{color:var(--halo);letter-spacing:2px;font-size:16px}
+.rv blockquote{margin:0;font-family:var(--display);font-size:20px;line-height:1.35}
+.rv figcaption{font-size:13px;color:var(--muted)}
+.rv-form{background:var(--surface);border:1px solid var(--halo);border-radius:14px;padding:18px 20px;display:grid;gap:12px;max-width:640px}
+.rv-form p{margin:0}
+.rv-form .lead{color:var(--muted);font-size:15px}
+.rv-form label{display:grid;gap:6px;font-size:14px;font-weight:600}
+.rv-form input[type=text],.rv-form textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;box-sizing:border-box}
+.rv-form textarea{min-height:96px;resize:vertical}
+.rv-form .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.rv-stars{display:flex;gap:6px}
+.rv-stars button{font:inherit;font-size:26px;line-height:1;color:var(--line);background:transparent;border:0;padding:4px 2px;cursor:pointer;min-width:40px;min-height:40px}
+.rv-stars button.on{color:var(--halo)}
+.rv-form .ok{display:flex;gap:10px;align-items:flex-start;font-weight:400;grid-template-columns:none}
+.rv-form .ok input{margin-top:3px;width:18px;height:18px;accent-color:var(--rose)}
+#rv-send{justify-self:start;font:inherit;font-size:15px;font-weight:600;background:var(--rose);color:#fff;border:0;border-radius:10px;padding:12px 20px;min-height:44px;cursor:pointer}
+.rv-form .hint{color:var(--warn);font-size:14px}
+.rv-form input:focus-visible,.rv-form textarea:focus-visible,.rv-stars button:focus-visible,#rv-send:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
 .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:28px 0;border-top:1px solid var(--line)}
 .how h3{font-family:var(--display);font-size:21px;margin:0 0 4px}
 .how p{margin:0;color:var(--muted);font-size:15px}
@@ -205,6 +228,26 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
     <div class="step"><span class="n">3</span><div><h3 data-i18n="s3t">Receba em casa</h3><p data-i18n="s3p">Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento. Portes combinados pelo WhatsApp, grátis em compras acima de 100 €.</p></div></div>
   </section>
 
+  <section class="reviews" id="avaliacoes" aria-labelledby="rv-title">
+    <h2 id="rv-title" data-i18n="rvT">Avaliações</h2>
+    <p class="lead" data-i18n="rvNote" style="margin:-8px 0 0;color:var(--muted);font-size:14px">Só publicamos avaliações de clientes que compraram connosco, depois de confirmarmos a compra.</p>
+    <div class="rv-list" id="rv-list"></div>
+    <form class="rv-form" id="rv-form" novalidate>
+      <p class="lead" data-i18n="rvIntro">Comprou no Bendito Closet? Conte-nos como foi. Publicamos a sua avaliação só com o primeiro nome e a cidade.</p>
+      <div><p class="q" id="rv-stars-l" data-i18n="rvStars" style="font-size:14px;font-weight:600;margin-bottom:4px">A sua nota</p>
+        <div class="rv-stars" id="rv-stars" role="group" aria-labelledby="rv-stars-l"><button type="button" data-n="1">★</button><button type="button" data-n="2">★</button><button type="button" data-n="3">★</button><button type="button" data-n="4">★</button><button type="button" data-n="5">★</button></div></div>
+      <div class="two">
+        <label><span data-i18n="rvName">Primeiro nome</span><input type="text" id="rv-name" maxlength="30" autocomplete="given-name"></label>
+        <label><span data-i18n="rvCity">Cidade</span><input type="text" id="rv-city" maxlength="40" autocomplete="address-level2"></label>
+      </div>
+      <label><span data-i18n="rvItem">Peça que comprou</span><input type="text" id="rv-item" maxlength="60"></label>
+      <label><span data-i18n="rvText">A sua avaliação</span><textarea id="rv-text" maxlength="600"></textarea></label>
+      <label class="ok"><input type="checkbox" id="rv-ok"><span data-i18n="rvOk">Autorizo a publicação desta avaliação no site, com o meu primeiro nome e a cidade.</span></label>
+      <button type="submit" id="rv-send" data-i18n="rvSend">Enviar avaliação pelo WhatsApp</button>
+      <p class="hint" id="rv-hint" role="alert" hidden></p>
+    </form>
+  </section>
+
   <footer>
     <span>© Bendito Closet</span>
     <span id="contact">WhatsApp: +351 936 796 783 · Instagram: <a href="https://www.instagram.com/benditocloset.pt/" target="_blank" rel="noopener">@benditocloset.pt</a> · E-mail: <a href="mailto:ola@benditocloset.pt">ola@benditocloset.pt</a></span>
@@ -265,10 +308,17 @@ const PECAS = [
   { id:"primark-jaq",   cat:"casacos", marca:"Primark", nome:"Jaqueta biker verde",    detalhe:"Pele sintética · tamanho 40",   preco:8,  status:"disponivel", foto:"img/biker-verde-modelo.jpg" }
 ];
 
+/* ====== AVALIAÇÕES ======
+   Só avaliações reais, enviadas pelas clientes e com autorização para publicar.
+   Exemplo: { nome:"Ana", cidade:"Lisboa", peca:"Vestido floral", texto:"…", estrelas:5 } */
+const AVALIACOES = [
+];
+
 const ST = { disponivel:"ok", reservado:"res", vendido:"sold" };
 /* ====== IDIOMAS ====== */
 const UI = {
-  pt:{h1:"Moda de segunda mão escolhida a dedo",
+  pt:{rvNote:"Só publicamos avaliações de clientes que compraram connosco, depois de confirmarmos a compra.", rvT:"Avaliações", rvIntro:"Comprou no Bendito Closet? Conte-nos como foi. Publicamos a sua avaliação só com o primeiro nome e a cidade.", rvStars:"A sua nota", rvName:"Primeiro nome", rvCity:"Cidade", rvItem:"Peça que comprou", rvText:"A sua avaliação", rvOk:"Autorizo a publicação desta avaliação no site, com o meu primeiro nome e a cidade.", rvSend:"Enviar avaliação pelo WhatsApp", rvNeed:"Preencha a nota, o nome, a cidade e a avaliação.", rvNeedOk:"Marque a autorização para podermos publicar.", rvStar:"estrelas", rvBought:"comprou", rvMsg:(e,n,c,i,t)=>`Avaliação para o site Bendito Closet ${"⭐".repeat(e)}\nNome: ${n}\nCidade: ${c}\nPeça: ${i||"-"}\nAvaliação: ${t}\n✅ Autorizo a publicação no site com o primeiro nome e a cidade.`,
+      h1:"Moda de segunda mão escolhida a dedo",
       intro:"Bolsas, casacos, roupas e acessórios em bom estado, direto do meu armário para o seu. Cada peça é única: quando sai, sai.",
       f1:"Envio para Portugal e toda a Europa (portes à parte)", f2:"Portes grátis acima de 100 € em Portugal", f3:"MB WAY, transferência ou Revolut",
       brands:"Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.",
@@ -281,7 +331,8 @@ const UI = {
       s3t:"Receba em casa", s3p:"Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento, para Portugal e toda a Europa. Portes combinados pelo WhatsApp, grátis em compras acima de 100 € em Portugal.",
       buy:"Comprar pelo WhatsApp", more:"toque para ver mais", st:{disponivel:"Disponível",reservado:"Reservado",vendido:"Vendido"},
       msg:(n,m,pr)=>`Olá! Tenho interesse em: ${n} (${m}) – ${pr}. Ainda está disponível?`},
-  en:{h1:"Hand-picked pre-loved fashion",
+  en:{rvNote:"We only publish reviews from customers who bought from us, after confirming the purchase.", rvT:"Reviews", rvIntro:"Bought from Bendito Closet? Tell us how it went. We publish your review with your first name and city only.", rvStars:"Your rating", rvName:"First name", rvCity:"City", rvItem:"Item you bought", rvText:"Your review", rvOk:"I agree to this review being published on the website with my first name and city.", rvSend:"Send review on WhatsApp", rvNeed:"Please fill in the rating, name, city and review.", rvNeedOk:"Please tick the consent box so we can publish it.", rvStar:"stars", rvBought:"bought", rvMsg:(e,n,c,i,t)=>`Review for the Bendito Closet website ${"⭐".repeat(e)}\nName: ${n}\nCity: ${c}\nItem: ${i||"-"}\nReview: ${t}\n✅ I agree to it being published on the website with my first name and city.`,
+      h1:"Hand-picked pre-loved fashion",
       intro:"Bags, coats, clothing and accessories in great condition, from my wardrobe to yours. Every piece is one of a kind: once it's gone, it's gone.",
       f1:"Shipping to Portugal and all of Europe (postage extra)", f2:"Free shipping over €100 in Portugal", f3:"MB WAY, bank transfer or Revolut",
       brands:"Original pieces from Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa and more.",
@@ -342,7 +393,8 @@ const EN = {
   "primark-jaq":["Green biker jacket","Faux leather · size 40"]
 };
 Object.assign(UI, {
-  es:{h1:"Moda de segunda mano elegida con cariño",
+  es:{rvNote:"Solo publicamos opiniones de clientes que nos compraron, tras confirmar la compra.", rvT:"Opiniones", rvIntro:"¿Compraste en Bendito Closet? Cuéntanos qué tal. Publicamos tu opinión solo con tu nombre y ciudad.", rvStars:"Tu nota", rvName:"Nombre", rvCity:"Ciudad", rvItem:"Pieza que compraste", rvText:"Tu opinión", rvOk:"Autorizo la publicación de esta opinión en la web, con mi nombre y ciudad.", rvSend:"Enviar opinión por WhatsApp", rvNeed:"Rellena la nota, el nombre, la ciudad y la opinión.", rvNeedOk:"Marca la autorización para que podamos publicarla.", rvStar:"estrellas", rvBought:"compró", rvMsg:(e,n,c,i,t)=>`Opinión para la web de Bendito Closet ${"⭐".repeat(e)}\nNombre: ${n}\nCiudad: ${c}\nPieza: ${i||"-"}\nOpinión: ${t}\n✅ Autorizo su publicación en la web con mi nombre y ciudad.`,
+      h1:"Moda de segunda mano elegida con cariño",
       intro:"Bolsos, abrigos, ropa y accesorios en buen estado, de mi armario al tuyo. Cada pieza es única: cuando se va, se va.",
       f1:"Envíos a Portugal y toda Europa (gastos de envío aparte)", f2:"Envío gratis a partir de 100 € en Portugal", f3:"MB WAY, transferencia o Revolut",
       brands:"Piezas originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa y más.",
@@ -355,7 +407,8 @@ Object.assign(UI, {
       s3t:"Recíbelo en casa", s3p:"Enviamos por CTT, con número de seguimiento, en un máximo de 2 días laborables tras el pago, a Portugal y toda Europa. Gastos de envío por WhatsApp, gratis a partir de 100 € en Portugal.",
       buy:"Comprar por WhatsApp", more:"toca para ver más", st:{disponivel:"Disponible",reservado:"Reservado",vendido:"Vendido"},
       msg:(n,m,pr)=>`¡Hola! Me interesa: ${n} (${m}) – ${pr}. ¿Sigue disponible?`},
-  fr:{h1:"Mode de seconde main choisie avec soin",
+  fr:{rvNote:"Nous ne publions que les avis de clientes ayant acheté chez nous, après vérification de l'achat.", rvT:"Avis", rvIntro:"Vous avez acheté chez Bendito Closet ? Racontez-nous. Nous publions votre avis avec votre prénom et votre ville uniquement.", rvStars:"Votre note", rvName:"Prénom", rvCity:"Ville", rvItem:"Pièce achetée", rvText:"Votre avis", rvOk:"J'autorise la publication de cet avis sur le site, avec mon prénom et ma ville.", rvSend:"Envoyer l'avis sur WhatsApp", rvNeed:"Indiquez la note, le prénom, la ville et l'avis.", rvNeedOk:"Cochez l'autorisation pour que nous puissions le publier.", rvStar:"étoiles", rvBought:"a acheté", rvMsg:(e,n,c,i,t)=>`Avis pour le site Bendito Closet ${"⭐".repeat(e)}\nPrénom: ${n}\nVille: ${c}\nPièce: ${i||"-"}\nAvis: ${t}\n✅ J'autorise sa publication sur le site avec mon prénom et ma ville.`,
+      h1:"Mode de seconde main choisie avec soin",
       intro:"Sacs, manteaux, vêtements et accessoires en bon état, de mon dressing au vôtre. Chaque pièce est unique : une fois partie, elle est partie.",
       f1:"Livraison au Portugal et dans toute l'Europe (frais de port en sus)", f2:"Livraison offerte dès 100 € au Portugal", f3:"MB WAY, virement ou Revolut",
       brands:"Pièces originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa et plus.",
@@ -368,7 +421,8 @@ Object.assign(UI, {
       s3t:"Recevez-la chez vous", s3p:"Envoi par CTT, avec suivi, sous 2 jours ouvrés après paiement, au Portugal et dans toute l'Europe. Frais de port convenus sur WhatsApp, offerts dès 100 € au Portugal.",
       buy:"Acheter sur WhatsApp", more:"touchez pour voir plus", st:{disponivel:"Disponible",reservado:"Réservé",vendido:"Vendu"},
       msg:(n,m,pr)=>`Bonjour ! Je suis intéressée par : ${n} (${m}) – ${pr}. Est-ce toujours disponible ?`},
-  de:{h1:"Handverlesene Second-Hand-Mode",
+  de:{rvNote:"Wir veröffentlichen nur Bewertungen von Kundinnen, die bei uns gekauft haben, nach Prüfung des Kaufs.", rvT:"Bewertungen", rvIntro:"Bei Bendito Closet gekauft? Erzähl uns, wie es war. Wir veröffentlichen deine Bewertung nur mit Vorname und Stadt.", rvStars:"Deine Bewertung", rvName:"Vorname", rvCity:"Stadt", rvItem:"Gekauftes Teil", rvText:"Dein Kommentar", rvOk:"Ich bin einverstanden, dass diese Bewertung mit meinem Vornamen und meiner Stadt auf der Website erscheint.", rvSend:"Bewertung per WhatsApp senden", rvNeed:"Bitte Sterne, Vorname, Stadt und Kommentar ausfüllen.", rvNeedOk:"Bitte die Einwilligung ankreuzen, damit wir sie veröffentlichen können.", rvStar:"Sterne", rvBought:"kaufte", rvMsg:(e,n,c,i,t)=>`Bewertung für die Website von Bendito Closet ${"⭐".repeat(e)}\nName: ${n}\nStadt: ${c}\nTeil: ${i||"-"}\nBewertung: ${t}\n✅ Ich bin mit der Veröffentlichung mit Vorname und Stadt einverstanden.`,
+      h1:"Handverlesene Second-Hand-Mode",
       intro:"Taschen, Mäntel, Kleidung und Accessoires in gutem Zustand, aus meinem Kleiderschrank in deinen. Jedes Stück ist ein Unikat: Weg ist weg.",
       f1:"Versand nach Portugal und in ganz Europa (zzgl. Versandkosten)", f2:"Kostenloser Versand ab 100 € innerhalb Portugals", f3:"MB WAY, Überweisung oder Revolut",
       brands:"Originalteile von Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa und mehr.",
@@ -381,7 +435,8 @@ Object.assign(UI, {
       s3t:"Lieferung nach Hause", s3p:"Versand mit CTT und Sendungsverfolgung innerhalb von 2 Werktagen nach Zahlung, nach Portugal und in ganz Europa. Versandkosten per WhatsApp, kostenlos ab 100 € innerhalb Portugals.",
       buy:"Über WhatsApp kaufen", more:"tippen für mehr", st:{disponivel:"Verfügbar",reservado:"Reserviert",vendido:"Verkauft"},
       msg:(n,m,pr)=>`Hallo! Ich interessiere mich für: ${n} (${m}) – ${pr}. Ist es noch verfügbar?`},
-  ru:{h1:"Тщательно отобранная мода секонд-хенд",
+  ru:{rvNote:"Мы публикуем только отзывы покупательниц, после проверки покупки.", rvT:"Отзывы", rvIntro:"Покупали в Bendito Closet? Расскажите, как всё прошло. Мы публикуем отзыв только с именем и городом.", rvStars:"Ваша оценка", rvName:"Имя", rvCity:"Город", rvItem:"Что вы купили", rvText:"Ваш отзыв", rvOk:"Я согласна на публикацию этого отзыва на сайте с моим именем и городом.", rvSend:"Отправить отзыв в WhatsApp", rvNeed:"Укажите оценку, имя, город и отзыв.", rvNeedOk:"Отметьте согласие, чтобы мы могли опубликовать отзыв.", rvStar:"звёзд", rvBought:"купила", rvMsg:(e,n,c,i,t)=>`Отзыв для сайта Bendito Closet ${"⭐".repeat(e)}\nИмя: ${n}\nГород: ${c}\nПокупка: ${i||"-"}\nОтзыв: ${t}\n✅ Согласна на публикацию на сайте с именем и городом.`,
+      h1:"Тщательно отобранная мода секонд-хенд",
       intro:"Сумки, пальто, одежда и аксессуары в хорошем состоянии — из моего гардероба в ваш. Каждая вещь уникальна: продана — значит продана.",
       f1:"Доставка по Португалии и всей Европе (доставка оплачивается отдельно)", f2:"Бесплатная доставка по Португалии от 100 €", f3:"MB WAY, банковский перевод или Revolut",
       brands:"Оригинальные вещи Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa и других брендов.",
@@ -709,6 +764,36 @@ document.querySelectorAll(".filters button").forEach(b => {
   });
 });
 
+/* ====== AVALIAÇÕES (mostrar + formulário) ====== */
+function esc(x){ return String(x).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
+function renderAval(){
+  const box = document.getElementById("rv-list");
+  if (!box) return;
+  box.innerHTML = AVALIACOES.map(a => `<figure class="rv"><span class="stars" aria-label="${a.estrelas} ${T().rvStar}">${"★".repeat(a.estrelas)}${"☆".repeat(5-a.estrelas)}</span><blockquote>“${esc(a.texto)}”</blockquote><figcaption>${esc(a.nome)} · ${esc(a.cidade)}${a.peca ? " · " + T().rvBought + " " + esc(a.peca) : ""}</figcaption></figure>`).join("");
+}
+let RV_N = 0;
+function pintarEstrelas(){
+  document.querySelectorAll("#rv-stars button").forEach(b => {
+    const n = +b.dataset.n;
+    b.classList.toggle("on", n <= RV_N);
+    b.setAttribute("aria-pressed", n === RV_N ? "true" : "false");
+    b.setAttribute("aria-label", `${n} ${T().rvStar}`);
+  });
+}
+document.querySelectorAll("#rv-stars button").forEach(b => b.addEventListener("click", () => { RV_N = +b.dataset.n; pintarEstrelas(); }));
+{ const f = document.getElementById("rv-form");
+  if (f) f.addEventListener("submit", e => {
+    e.preventDefault();
+    const v = id => document.getElementById(id).value.trim();
+    const h = document.getElementById("rv-hint");
+    const nome = v("rv-name"), cidade = v("rv-city"), peca = v("rv-item"), texto = v("rv-text");
+    if (!RV_N || !nome || !cidade || !texto) { h.textContent = T().rvNeed; h.hidden = false; return; }
+    if (!document.getElementById("rv-ok").checked) { h.textContent = T().rvNeedOk; h.hidden = false; return; }
+    h.hidden = true;
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(T().rvMsg(RV_N, nome, cidade, peca, texto))}`, "_blank", "noopener");
+  });
+}
+{ const _ap = aplicarIdioma; aplicarIdioma = function(){ _ap(); renderAval(); pintarEstrelas(); }; }
 aplicarIdioma();
 </script>
 <dialog id="det" aria-label="Detalhe da peça"></dialog>
