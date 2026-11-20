@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bendito Closet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Plano: vitrine de segunda mão — tinta escura + rosa "bendito" + auréola dourada; grelha de peças com filtros e estado (disponível / reservado / vendido) */
+:root{
+  /* Tema único, igual ao logo: preto, bordô veludo e dourado */
+  --bg:#000000;
+  --surface:#161214;
+  --ink:#F4ECE4;
+  --muted:#B4A79F;
+  --line:#33292C;
+  --rose:#9E1B3F;
+  --rose-soft:#2A1219;
+  --halo:#D9A85B;
+  --ok:#7FCB9C;
+  --warn:#E8B85E;
+  --display:"Cormorant Garamond", Georgia, serif;
+  --body:"Montserrat", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+header{padding:16px 0 0;display:flex;flex-direction:column;align-items:center}
+.brand{display:block;width:min(520px,100%)}
+.brand img{width:100%;height:auto;display:block}
+.brand svg{flex:none}
+.brand-name{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-.02em;line-height:1}
+.brand-name em{font-style:normal;color:var(--rose)}
+.tag{color:var(--muted);font-size:14px;margin-top:4px}
+
+.intro{display:grid;gap:16px;justify-items:center;text-align:center;padding:8px 0 24px;border-bottom:1px solid var(--line)}
+.intro h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:0;margin:0;max-width:18ch;color:var(--halo);text-wrap:balance}
+.intro p{margin:0;color:var(--muted);max-width:56ch}
+.facts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+.fact{font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px}
+
+.cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;border:1px solid var(--halo);border-radius:14px;padding:16px 20px;margin:8px 0 4px;background:var(--surface)}
+.cta p{margin:0;color:var(--muted);font-size:15px;max-width:52ch}
+.cta strong{display:block;font-family:var(--display);font-size:21px;color:var(--ink);font-weight:600;margin-bottom:2px}
+.cta a{font-size:14px;font-weight:600;text-decoration:none;background:var(--rose);color:#fff;border-radius:10px;padding:10px 16px;white-space:nowrap}
+.cta a:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
+.brands{font-size:14px;color:var(--halo);font-weight:500;margin:0}
+.lang{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;width:100%;margin-bottom:4px}
+.lang button{font:inherit;font-size:12px;min-width:38px;font-weight:600;letter-spacing:.06em;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 10px;cursor:pointer}
+.lang button[aria-pressed="true"]{color:#0B0A0B;background:var(--halo);border-color:var(--halo)}
+.lang button:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
+header{position:relative}
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:20px 0}
+.filters button{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--halo);color:#0B0A0B;border-color:var(--halo)}
+.filters button:focus-visible,.buy:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding-bottom:36px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.photo{aspect-ratio:4/5;background:var(--rose-soft);display:grid;place-items:center;position:relative}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
+.count{position:absolute;bottom:10px;right:10px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff}
+.photo .ph{display:grid;justify-items:center;gap:8px;color:var(--halo);font-size:13px;font-weight:600}
+.status{position:absolute;top:10px;left:10px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.status.ok{color:var(--ok)} .status.res{color:var(--warn)} .status.sold{color:var(--muted)}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.brandlabel{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card .title{cursor:pointer}
+.title{font-family:var(--display);font-weight:600;font-size:22px;line-height:1.2;margin:0}
+.meta{font-size:13px;color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:10px}
+.price{font-family:var(--display);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.buy{font:inherit;font-size:14px;font-weight:600;text-decoration:none;background:var(--rose);color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;white-space:nowrap}
+.card.sold .buy{background:var(--line);color:var(--muted);pointer-events:none}
+.card.sold .photo{opacity:.55}
+
+.soon{border:1px dashed var(--halo);border-radius:14px;padding:20px;margin-bottom:36px;display:grid;gap:6px}
+.soon h2{font-family:var(--display);font-size:22px;margin:0}
+.soon p{margin:0;color:var(--muted);max-width:60ch}
+
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:28px 0;border-top:1px solid var(--line)}
+.how h3{font-family:var(--display);font-size:21px;margin:0 0 4px}
+.how p{margin:0;color:var(--muted);font-size:15px}
+.step{display:flex;gap:12px}
+.n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--rose-soft);color:var(--halo);font-weight:700;display:grid;place-items:center;font-size:14px}
+
+footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+.note{font-size:13px;color:var(--warn);margin-top:6px;display:none}
+.note.show{display:block}
+.sortbar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:-6px 0 14px;font-size:13px;color:var(--muted)}
+.sortbar select{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.sortbar select:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
+.buy .sm{display:none}
+@media (max-width:600px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{border-radius:10px}
+  .body{padding:10px 10px 12px;gap:4px}
+  .brandlabel{font-size:10px;letter-spacing:.06em}
+  .title{font-size:16px}
+  .meta{font-size:11.5px;line-height:1.35}
+  .row{flex-direction:column;align-items:stretch;gap:6px;padding-top:6px}
+  .price{font-size:18px}
+  .buy{font-size:13px;padding:8px 10px;text-align:center}
+  .buy .lg{display:none} .buy .sm{display:inline}
+  .status{font-size:10px;padding:3px 8px;top:6px;left:6px}
+  .count{font-size:10px;padding:3px 8px;bottom:6px;right:6px}
+  .filters{gap:6px;padding:14px 0}
+  .filters button{font-size:13px;padding:7px 12px}
+}
+#det{border:0;padding:0;margin:auto;width:min(560px,100vw);max-height:100dvh;background:var(--bg);color:var(--ink);border-radius:14px;overflow:auto}
+#det::backdrop{background:rgba(0,0,0,.85)}
+#det .dimg{position:relative;background:var(--surface)}
+#det .dimg img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover}
+#det .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:22px;cursor:pointer}
+#det .prev{left:10px} #det .next{right:10px}
+#det .dots{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;font-weight:600;color:#fff}
+#det .dots span{background:rgba(0,0,0,.6);padding:4px 10px;border-radius:999px}
+#det .x{position:absolute;top:10px;left:10px;border:0;border-radius:999px;background:rgba(0,0,0,.7);color:#fff;font:inherit;font-size:14px;font-weight:600;padding:9px 16px;cursor:pointer;z-index:2}
+#det .dimg .status{left:auto;right:10px}
+#det .voltar{font:inherit;font-size:15px;font-weight:600;width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+#det .dbody{padding:16px 18px 22px;display:grid;gap:8px}
+#det .dbody .title{font-size:26px}
+#det .dbody .meta{font-size:15px;line-height:1.5}
+#det .dbody .row{flex-direction:row;align-items:center}
+#det .dbody .buy .lg{display:inline} #det .dbody .buy .sm{display:none}
+#det button:focus-visible,#det a:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
+@media (prefers-reduced-motion: no-preference){.card{transition:transform .15s ease}.card:hover{transform:translateY(-2px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="lang" role="group" aria-label="Idioma / Language"><button type="button" id="lang-pt" data-lang="pt" aria-pressed="true">PT</button><button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button><button type="button" id="lang-es" data-lang="es" aria-pressed="false">ES</button><button type="button" id="lang-fr" data-lang="fr" aria-pressed="false">FR</button><button type="button" id="lang-de" data-lang="de" aria-pressed="false">DE</button><button type="button" id="lang-ru" data-lang="ru" aria-pressed="false">RU</button></div>
+    <a class="brand" href="#" aria-label="Bendito Closet — início"><img src="img/logo.jpg" alt="Bendito Closet" width="1000" height="667"></a>
+  </header>
+
+  <section class="intro">
+    <h1 data-i18n="h1">Moda de segunda mão escolhida a dedo</h1>
+    <p data-i18n="intro">Bolsas, casacos, roupas e acessórios em bom estado, direto do meu armário para o seu. Cada peça é única: quando sai, sai.</p>
+    <div class="facts">
+      <span class="fact" data-i18n="f1">Envio para Portugal e toda a União Europeia (portes à parte)</span>
+      <span class="fact" data-i18n="f2">Portes grátis acima de 100 € em Portugal</span>
+      <span class="fact" data-i18n="f3">MB WAY, transferência ou Revolut</span>
+    </div>
+  </section>
+
+  <section class="cta" aria-label="Contacto">
+    <div>
+      <p class="brands" data-i18n="brands">Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.</p>
+      <strong data-i18n="ctaT">Procura uma peça que não está aqui?</strong>
+      <p data-i18n="ctaP">Há novas peças a chegar todas as semanas. Diga-nos o que procura e enviamos fotos.</p>
+    </div>
+    <a id="cta-wa" href="https://wa.me/351936796783?text=Ol%C3%A1!%20Procuro%20uma%20pe%C3%A7a%20que%20n%C3%A3o%20est%C3%A1%20no%20cat%C3%A1logo%3A%20" target="_blank" rel="noopener" data-i18n="ctaB">Falar no WhatsApp</a>
+  </section>
+
+  <nav class="filters" aria-label="Filtrar peças">
+    <button type="button" id="f-all" data-f="all" aria-pressed="true" data-i18n="fAll">Tudo</button>
+    <button type="button" id="f-bolsas" data-f="bolsas" aria-pressed="false" data-i18n="fBolsas">Bolsas</button>
+    <button type="button" id="f-casacos" data-f="casacos" aria-pressed="false" data-i18n="fCasacos">Casacos</button>
+    <button type="button" id="f-roupas" data-f="roupas" aria-pressed="false" data-i18n="fRoupas">Roupas</button>
+    <button type="button" id="f-sapatos" data-f="sapatos" aria-pressed="false" data-i18n="fSapatos">Sapatos</button>
+    <button type="button" id="f-acessorios" data-f="acessorios" aria-pressed="false" data-i18n="fAcess">Acessórios</button>
+  </nav>
+  <div class="sortbar"><label for="ordem" data-i18n="sortLabel">Ordenar:</label><select id="ordem"><option value="novo" data-i18n="sortNew">Novidades</option><option value="barato" data-i18n="sortLow">Preço: mais baratos</option><option value="caro" data-i18n="sortHigh">Preço: mais caros</option></select></div>
+
+  <main class="grid" id="grid"></main>
+
+  <section class="how" aria-label="Como comprar">
+    <div class="step"><span class="n">1</span><div><h3 data-i18n="s1t">Escolha a peça</h3><p data-i18n="s1p">Toque em “Comprar pelo WhatsApp”. A mensagem já vai com o nome da peça.</p></div></div>
+    <div class="step"><span class="n">2</span><div><h3 data-i18n="s2t">Combine o pagamento</h3><p data-i18n="s2p">MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.</p></div></div>
+    <div class="step"><span class="n">3</span><div><h3 data-i18n="s3t">Receba em casa</h3><p data-i18n="s3p">Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento. Portes combinados pelo WhatsApp, grátis em compras acima de 100 €.</p></div></div>
+  </section>
+
+  <footer>
+    <span>© Bendito Closet</span>
+    <span id="contact">WhatsApp: +351 936 796 783</span>
+  </footer>
+</div>
+
+<script>
+/* ====== EDITAR AQUI ======
+   WHATSAPP: número com indicativo, só dígitos (ex.: 5511999999999)
+   status: "disponivel" | "reservado" | "vendido"
+   foto: deixe "" até ter a foto */
+const WHATSAPP = "351936796783";
+
+const PECAS = [
+  { id:"versace-bolsa", cat:"bolsas",  marca:"Versace Jeans Couture", nome:"Bolsa rosa com corrente dourada", detalhe:"Usada, com marcas de uso: pequena falha no revestimento no canto superior · fotos reais pelo WhatsApp", preco:80, status:"disponivel",foto:"img/versace-bolsa-modelo.jpg" },
+  { id:"shein-blusa-rosa", cat:"roupas", marca:"Shein", nome:"Blusa cetim rosa com plumas", detalhe:"Tamanho L · nunca usada", preco:10, status:"disponivel", foto:"img/shein-blusa-modelo.jpg" },
+  { id:"blueman-saida-praia", cat:"roupas", marca:"Blue Man", nome:"Saída de praia tropical", detalhe:"Kaftan longo em tecido leve, estampa tropical · tamanho L · usada uma vez", preco:60, status:"disponivel", foto:"img/blueman-modelo.jpg" },
+  { id:"blueman-vestido-mata", cat:"roupas", marca:"Blue Man", nome:"Vestido Mata Atlântica", detalhe:"Vestido lenço com bico, estampa de selva, alça de cordão no pescoço · tamanho M · nunca usado", preco:50, status:"disponivel", foto:"img/blueman-vestido-modelo.jpg" },
+  { id:"sarong-bali-seda", cat:"roupas", marca:"Bali", nome:"Sarong de seda de Bali", detalhe:"Seda natural de Bali, estampa batik bordô e rosa · usa-se como saia, vestido ou lenço · novo", preco:60, status:"disponivel",foto:"img/sarong-vestido-modelo.jpg", fotos:["img/sarong-vestido-modelo.jpg","img/sarong-saia-modelo.jpg"] },
+  { id:"vestido-rio", cat:"roupas", marca:"Feito no Brasil", nome:"Vestido longo tropical", detalhe:"Recortes laterais com argola, alças finas, estampa de cajus e palmeiras · novo", preco:15, status:"disponivel",foto:"img/vestido-rio-modelo.jpg" },
+  { id:"asics-noosa", cat:"sapatos", marca:"ASICS", nome:"Ténis Noosa Tri 14", detalhe:"Tamanho 39 · usado uma vez", preco:60, status:"disponivel",foto:"img/asics-produto.jpg" },
+  { id:"sandalia-prata", cat:"sapatos", marca:"About You", nome:"Sandália de salto prateada", detalhe:"Tiras metalizadas e brilho, fivela no tornozelo · tamanho 39 · usada", preco:20, status:"disponivel",foto:"img/sandalia-prata-modelo.jpg" },
+  { id:"zara-slingback-perolas", cat:"sapatos", marca:"Zara", nome:"Sapato slingback com pérolas", detalhe:"Bico fino em vinil transparente com pérolas e strass, tira elástica · tamanho 39 · usado, com marcas na palmilha", preco:20, status:"disponivel",foto:"img/zara-perolas-produto.jpg" },
+  { id:"pepe-coturno", cat:"sapatos", marca:"Pepe Jeans", nome:"Botas de cano curto pretas", detalhe:"Pele preta, sola tratorada, tira com logótipo · tamanho 39 · usadas uma vez", preco:45, status:"disponivel",foto:"img/pepe-botas-produto.jpg" },
+  { id:"rl-camisola-rosa", cat:"roupas", marca:"Ralph Lauren", nome:"Camisola de gola alta rosa", detalhe:"Malha entrançada · etiqueta L, encolheu na lavagem: veste como M · usada 2-3 vezes", preco:35, status:"vendido",foto:"img/rl-camisola-modelo.jpg" },
+  { id:"body-leopardo", cat:"roupas", marca:"Feito no Brasil", nome:"Body leopardo em tule", detalhe:"Tule transparente, decote envelope, mangas balão", preco:15, status:"disponivel",foto:"img/body-leopardo-modelo.jpg" },
+  { id:"vestido-floral-preto", cat:"roupas", marca:"Feito no Brasil", nome:"Vestido justo floral", detalhe:"Fundo preto com flores coral, recortes laterais pretos, manga comprida, tecido quentinho · tamanho M · usado 2 vezes", preco:15, status:"disponivel", foto:"img/vestido-floral-modelo.jpg" },
+  { id:"shein-vestido-zebra", cat:"roupas", marca:"Shein", nome:"Vestido curto zebra", detalhe:"Cetim leve, decote envelope, ombros franzidos, folho lateral", preco:8, status:"disponivel",foto:"img/shein-zebra-modelo.jpg" },
+  { id:"adidas-legging", cat:"roupas", marca:"Adidas", nome:"Leggings de desporto rosa-velho", detalhe:"Cintura alta, 3 riscas rosa na perna · tamanho XL · novas, nunca usadas", preco:20, status:"disponivel",foto:"img/adidas-legging-modelo.jpg" },
+  { id:"nike-mind-002", cat:"sapatos", marca:"Nike", nome:"Ténis Nike Mind 002 bordô", detalhe:"Sola com nódulos sensoriais · novos, nunca usados, com etiqueta", preco:110, status:"disponivel", foto:"" },
+  { id:"moschino-botas-neve", cat:"sapatos", marca:"Love Moschino", nome:"Botas de neve pretas", detalhe:"Acolchoadas, faixa com logótipo e coração vermelho atrás · tamanho 39 · usadas uma vez", preco:70, status:"disponivel", foto:"img/moschino-botas-produto.jpg" },
+  { id:"rl-camisola-azul", cat:"roupas", marca:"Ralph Lauren", nome:"Camisola azul com Big Pony", detalhe:"Malha grossa, logótipo grande vermelho, corte curto · tamanho L (veste pequeno) · usada poucas vezes", preco:80, status:"disponivel",foto:"img/rl-camisola-azul-modelo.jpg" },
+  { id:"rl-camisa-linho", cat:"roupas", marca:"Polo Ralph Lauren", nome:"Camisa-vestido de linho amarela", detalhe:"100% linho, camisa oversized tamanho XXL que se usa como vestido · usada poucas vezes, como nova", preco:70, status:"disponivel",foto:"img/rl-camisa-linho-modelo.jpg" },
+  { id:"rl-camisa-linho-rosa", cat:"roupas", marca:"Polo Ralph Lauren", nome:"Camisa-vestido de linho rosa", detalhe:"100% linho, gola com botões, camisa oversized tamanho XL que se usa como vestido · usada poucas vezes, como nova", preco:70, status:"disponivel", foto:"img/rl-camisa-linho-rosa-modelo.jpg" },
+  { id:"kimono-dourado-ibiza", cat:"roupas", marca:"Comprado em Ibiza", nome:"Kimono de praia dourado com franjas", detalhe:"Malha aberta com fio dourado brilhante, franjas na barra · tamanho único · novo, ainda na embalagem", preco:10, status:"disponivel",foto:"img/kimono-dourado-modelo.jpg" },
+  { id:"shein-camisa-caramelo", cat:"roupas", marca:"Shein", nome:"Camisa caramelo com estampa preta", detalhe:"Chiffon leve e transparente, mangas bufantes com punho · tamanho L · usada 2 vezes", preco:10, status:"disponivel", foto:"img/shein-camisa-caramelo-modelo.jpg" },
+  { id:"shein-body-dourado", cat:"roupas", marca:"Shein", nome:"Body dourado metalizado", detalhe:"Tecido brilhante com cintilado, decote redondo e alças largas · tamanho L · novo, nunca usado, ainda na embalagem", preco:10, status:"disponivel", foto:"img/shein-body-dourado-modelo.jpg" },
+  { id:"shein-body-azul", cat:"roupas", marca:"Shein", nome:"Body azul-turquesa metalizado", detalhe:"Tecido brilhante com cintilado, decote redondo e alças largas · tamanho L · novo, nunca usado, ainda na embalagem", preco:10, status:"disponivel", foto:"img/shein-body-azul-modelo.jpg" },
+  { id:"gucci-gframe", cat:"acessorios", marca:"Gucci", nome:"Relógio G-Frame YA147404", detalhe:"Mostrador em madrepérola verde e vermelho com abelhas, aço inoxidável, quartzo suíço · comprado na Farfetch · com caixa e etiqueta · usado poucas vezes, pulseira com sinais de uso · pilha nova colocada antes do envio", preco:300, status:"disponivel", foto:"img/gucci-gframe-modelo.jpg", fotos:["img/gucci-gframe-modelo.jpg","img/gucci-gframe-real.jpg"] },
+  { id:"adidas-casaco-bordo", cat:"casacos", marca:"Adidas", nome:"Casaco de fato de treino bordô", detalhe:"Corte oversize, gola alta, fecho e bolsos laterais · tamanho 2XL · novo, nunca usado", preco:30, status:"disponivel", foto:"img/adidas-casaco-bordo-modelo.jpg" },
+  { id:"zara-bomber-organza", cat:"casacos", marca:"Zara", nome:"Bomber transparente em organza preta", detalhe:"Organza leve e transparente, punhos, gola e barra canelados, fecho e bolsos · tamanho L · novo, nunca usado", preco:15, status:"disponivel", foto:"img/zara-bomber-organza-modelo.jpg", fotos:["img/zara-bomber-organza-modelo.jpg","img/zara-bomber-organza-produto.jpg"] },
+  { id:"versace-oculos", cat:"acessorios", marca:"Versace", nome:"Óculos de sol oversized Medusa", detalhe:"Armação Luxottica · nunca usados", preco:130, status:"disponivel", foto:"img/versace-oculos-modelo.jpg" },
+  { id:"guess-bolsa-laranja", cat:"bolsas", marca:"Guess", nome:"Bolsa dupla coral", detalhe:"Duas bolsas com zíper, corrente e alça ajustável · seminova", preco:50, status:"disponivel", foto:"img/guess-bolsa-coral-modelo.jpg" },
+  { id:"ck-bolsa-prata", cat:"bolsas", marca:"Calvin Klein Jeans", nome:"Bolsa prateada com corrente", detalhe:"Textura pele de cobra metalizada, alça de corrente", preco:50, status:"disponivel",foto:"img/ck-bolsa-modelo.jpg" },
+  { id:"guess-bolsa-preta", cat:"bolsas", marca:"Guess", nome:"Bolsa preta com correntes", detalhe:"Alças de corrente prateada com medalhão · usada, com marcas de uso", preco:35, status:"disponivel",foto:"img/guess-bolsa-preta-modelo.jpg" },
+  { id:"guess-bolsa-aba", cat:"bolsas", marca:"Guess", nome:"Bolsa preta com aba e corrente", detalhe:"Logótipo 4G prateado, alça de corrente · usada, com marcas de uso", preco:30, status:"disponivel",foto:"img/guess-bolsa-aba-modelo.jpg" },
+  { id:"adidas-bolsa",  cat:"bolsas",  marca:"Adidas",  nome:"Bolsa shopper verniz preto", detalhe:"Forro verde néon · comprada em loja · nova, nunca usada", preco:25, status:"disponivel", foto:"img/adidas-modelo.jpg" },
+  { id:"guess-casaco-1",cat:"casacos", marca:"Guess",   nome:"Casaco comprido bege",   detalhe:"Tamanho XL", preco:120, status:"disponivel", foto:"img/guess-bege-modelo.jpg" },
+  { id:"guess-casaco-2",cat:"casacos", marca:"Guess",   nome:"Casaco acolchoado vinho", detalhe:"Tamanho L · usado poucas vezes", preco:120, status:"disponivel",foto:"img/guess-vinho-modelo.jpg" },
+  { id:"versace-casaco", cat:"casacos", marca:"Versace Jeans Couture", nome:"Casaco corta-vento com rosas", detalhe:"Tamanho M (IT 42) · nunca usado · autenticidade verificada pela Certilogo", preco:120, status:"disponivel", foto:"img/versace-casaco-modelo.jpg" },
+  { id:"pepe-parka", cat:"casacos", marca:"Pepe Jeans", nome:"Parka acolchoada preta", detalhe:"Capuz com pelo amovível, cinto com fivela · tamanho XL · usado uma vez", preco:60, status:"disponivel",foto:"img/pepe-parka-modelo.jpg" },
+  { id:"guess-biker",   cat:"casacos", marca:"Guess",   nome:"Casaco biker castanho",  detalhe:"Tamanho L · pele sintética · usado uma vez", preco:120, status:"disponivel", foto:"img/guess-biker-modelo.jpg" },
+  { id:"zara-gabardina",cat:"casacos", marca:"Zara",    nome:"Gabardina castanha",     detalhe:"Tamanho M · nova, nunca usada, com etiqueta", preco:45, status:"disponivel", foto:"img/zara-gabardina-modelo.jpg" },
+  { id:"salsa-dupla-face",cat:"casacos", marca:"Salsa", nome:"Casaco dupla face camel", detalhe:"Tamanho L · seminovo · dois casacos num só: camurça ou pelo", preco:100, status:"disponivel", foto:"img/salsa-camurca.jpg", fotos:["img/salsa-camurca.jpg","img/salsa-pelo.jpg"] },
+  { id:"pelo-camel",    cat:"casacos", marca:"Madame Cocó", nome:"Casaco de pelo camel", detalhe:"Tamanho L · novo, nunca usado", preco:80, status:"disponivel", foto:"img/pelo-camel-modelo.jpg" },
+  { id:"pelo-rosa",     cat:"casacos", marca:"About You", nome:"Casaco de pelo rosa fúcsia", detalhe:"Tamanho L (40) · novo, nunca usado", preco:40, status:"disponivel", foto:"img/pelo-rosa-modelo.jpg" },
+  { id:"shein-bomber-lantejoulas", cat:"casacos", marca:"Shein", nome:"Casaco bomber de lantejoulas", detalhe:"Lantejoulas multicolor · tamanho L", preco:20, status:"disponivel", foto:"img/shein-bomber-modelo.jpg" },
+  { id:"primark-jaq",   cat:"casacos", marca:"Primark", nome:"Jaqueta biker verde",    detalhe:"Pele sintética · tamanho 40",   preco:8,  status:"disponivel", foto:"img/biker-verde-modelo.jpg" }
+];
+
+const ST = { disponivel:"ok", reservado:"res", vendido:"sold" };
+/* ====== IDIOMAS ====== */
+const UI = {
+  pt:{h1:"Moda de segunda mão escolhida a dedo",
+      intro:"Bolsas, casacos, roupas e acessórios em bom estado, direto do meu armário para o seu. Cada peça é única: quando sai, sai.",
+      f1:"Envio para Portugal e toda a União Europeia (portes à parte)", f2:"Portes grátis acima de 100 € em Portugal", f3:"MB WAY, transferência ou Revolut",
+      brands:"Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.",
+      ctaT:"Procura uma peça que não está aqui?", ctaP:"Há novas peças a chegar todas as semanas. Diga-nos o que procura e enviamos fotos.", ctaB:"Falar no WhatsApp",
+      ctaMsg:"Olá! Procuro uma peça que não está no catálogo: ",
+      sortLabel:"Ordenar:", sortNew:"Novidades", sortLow:"Preço: mais baratos", sortHigh:"Preço: mais caros", buyShort:"Comprar", back:"Voltar", backShop:"Voltar à loja", fAll:"Tudo", fBolsas:"Bolsas", fCasacos:"Casacos", fRoupas:"Roupas", fSapatos:"Sapatos", fAcess:"Acessórios",
+      s1t:"Escolha a peça", s1p:"Toque em “Comprar pelo WhatsApp”. A mensagem já vai com o nome da peça.",
+      s2t:"Combine o pagamento", s2p:"MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.",
+      s3t:"Receba em casa", s3p:"Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento, para Portugal e toda a União Europeia. Portes combinados pelo WhatsApp, grátis em compras acima de 100 € em Portugal.",
+      buy:"Comprar pelo WhatsApp", more:"toque para ver mais", st:{disponivel:"Disponível",reservado:"Reservado",vendido:"Vendido"},
+      msg:(n,m,pr)=>`Olá! Tenho interesse em: ${n} (${m}) – ${pr}. Ainda está disponível?`},
+  en:{h1:"Hand-picked pre-loved fashion",
+      intro:"Bags, coats, clothing and accessories in great condition, from my wardrobe to yours. Every piece is one of a kind: once it's gone, it's gone.",
+      f1:"Shipping to Portugal and the whole EU (postage extra)", f2:"Free shipping over €100 in Portugal", f3:"MB WAY, bank transfer or Revolut",
+      brands:"Original pieces from Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa and more.",
+      ctaT:"Looking for something that isn't here?", ctaP:"New pieces arrive every week. Tell us what you're looking for and we'll send photos.", ctaB:"Chat on WhatsApp",
+      ctaMsg:"Hi! I'm looking for a piece that isn't in the catalogue: ",
+      sortLabel:"Sort:", sortNew:"Newest", sortLow:"Price: low to high", sortHigh:"Price: high to low", buyShort:"Buy", back:"Back", backShop:"Back to shop", fAll:"All", fBolsas:"Bags", fCasacos:"Coats", fRoupas:"Clothing", fSapatos:"Shoes", fAcess:"Accessories",
+      s1t:"Choose your piece", s1p:"Tap “Buy on WhatsApp”. The message already includes the item name.",
+      s2t:"Arrange payment", s2p:"MB WAY, bank transfer or Revolut. The item is reserved for you for 24 hours.",
+      s3t:"Delivered to your door", s3p:"Shipped with CTT, with tracking, within 2 working days of payment, to Portugal and the whole EU. Postage agreed on WhatsApp, free on orders over €100 in Portugal.",
+      buy:"Buy on WhatsApp", more:"tap to see more", st:{disponivel:"Available",reservado:"Reserved",vendido:"Sold"},
+      msg:(n,m,pr)=>`Hi! I'm interested in: ${n} (${m}) – ${pr}. Is it still available?`}
+};
+const EN = {
+  "zara-bomber-organza":["Sheer black organza bomber", "Light see-through organza, ribbed cuffs, collar and hem, zip and pockets · size L · new, never worn"],
+  "adidas-casaco-bordo":["Burgundy track jacket", "Oversized fit, high collar, zip and side pockets · size 2XL · new, never worn"],
+  "gucci-gframe":["G-Frame watch YA147404", "Green and red mother-of-pearl dial with bees, stainless steel, Swiss quartz · bought on Farfetch · with box and tag · worn a few times, strap shows signs of wear · new battery fitted before shipping"],
+  "shein-body-azul":["Metallic turquoise bodysuit", "Shiny shimmer fabric, scoop neck and wide straps · size L · new, never worn, still in packaging"],
+  "shein-body-dourado":["Metallic gold bodysuit", "Shiny shimmer fabric, scoop neck and wide straps · size L · new, never worn, still in packaging"],
+  "shein-camisa-caramelo":["Caramel shirt with black print", "Light sheer chiffon, puffed sleeves with cuffs · size L · worn twice"],
+  "kimono-dourado-ibiza":["Gold fringed beach kimono","Open weave with shimmering gold thread, fringed hem · one size · new, still in packaging"],
+  "rl-camisa-linho-rosa":["Pink linen shirt dress","100% linen, button-down collar, oversized XL shirt worn as a dress · worn a few times, like new"],
+  "rl-camisa-linho":["Yellow linen shirt dress","100% linen, oversized XXL shirt worn as a dress · worn a few times, like new"],
+  "rl-camisola-azul":["Blue Big Pony sweater","Chunky knit, large red logo, cropped fit · size L (runs small) · worn a few times"],
+  "moschino-botas-neve":["Black snow boots","Padded, logo band and red heart on the back · size 39 · worn once"],
+  "nike-mind-002":["Nike Mind 002 sneakers in burgundy","Sensory node sole · new, never worn, with tags"],
+  "adidas-legging":["Dusty pink sports leggings","High waist, 3 pink stripes on the leg · size XL · new, never worn"],
+  "shein-vestido-zebra":["Zebra print mini dress","Light satin, wrap neckline, puff shoulders, side ruffle"],
+  "vestido-floral-preto":["Floral bodycon dress","Black with coral flowers, black side panels, long sleeves, warm fabric · size M · worn twice"],
+  "body-leopardo":["Leopard print mesh bodysuit","Sheer mesh, wrap neckline, balloon sleeves"],
+  "rl-camisola-rosa":["Pink cable-knit turtleneck","Cable knit · label says L, shrank in the wash: fits like M · worn 2-3 times"],
+  "pepe-parka":["Black puffer parka","Detachable faux fur hood, belted waist · size XL · worn once"],
+  "pepe-coturno":["Black combat boots","Black leather, chunky lug sole, logo strap · size 39 · worn once"],
+  "zara-slingback-perolas":["Pearl slingback heels","Pointed clear vinyl toe with pearls and rhinestones, elastic strap · size 39 · worn, marks on insole"],
+  "sandalia-prata":["Silver strappy heels","Metallic and glitter straps, ankle buckle · size 39 · worn"],
+  "asics-noosa":["Noosa Tri 14 running shoes","Size 39 · worn once"],
+  "versace-bolsa":["Pink bag with gold chain","Used, with signs of wear: small coating flaw on the top corner · real photos on WhatsApp"],
+  "shein-blusa-rosa":["Pink satin blouse with feathers","Size L · never worn"],
+  "blueman-saida-praia":["Tropical beach cover-up","Long lightweight kaftan, tropical print · size L · worn once"],
+  "blueman-vestido-mata":["Mata Atlântica dress","Pointed handkerchief dress, jungle print, cord halter neck · size M · never worn"],
+  "sarong-bali-seda":["Balinese silk sarong","Pure silk from Bali, burgundy and pink batik print · wear as a skirt, dress or scarf · new"],
+  "vestido-rio":["Long tropical dress","Side cut-outs with ring detail, thin straps, cashew and palm print · new"],
+  "versace-oculos":["Oversized Medusa sunglasses","Luxottica frame · never worn"],
+  "guess-bolsa-laranja":["Coral double pouch bag","Two zip pouches, chain and adjustable strap · like new"],
+  "ck-bolsa-prata":["Silver chain bag","Metallic snake-effect texture, chain strap"],
+  "guess-bolsa-preta":["Black bag with chain straps","Silver chain straps with medallion · used, with signs of wear"],
+  "guess-bolsa-aba":["Black flap bag with chain","Silver 4G logo, chain strap · used, with signs of wear"],
+  "adidas-bolsa":["Black patent shopper bag","Neon green lining · bought in store · new, never used"],
+  "guess-casaco-1":["Long beige puffer coat","Size XL"],
+  "guess-casaco-2":["Burgundy puffer coat","Size L · worn a few times"],
+  "versace-casaco":["Rose-print windbreaker","Size M (IT 42) · never worn · authenticity verified by Certilogo"],
+  "guess-biker":["Brown biker jacket","Size L · faux leather · worn once"],
+  "zara-gabardina":["Brown trench coat","Size M · new, never worn, with tags"],
+  "salsa-dupla-face":["Camel reversible coat","Size L · like new · two coats in one: suede or fur"],
+  "pelo-camel":["Camel faux fur coat","Size L · new, never worn"],
+  "pelo-rosa":["Fuchsia faux fur coat","Size L (40) · new, never worn"],
+  "shein-bomber-lantejoulas":["Sequin bomber jacket","Multicolour sequins · size L"],
+  "primark-jaq":["Green biker jacket","Faux leather · size 40"]
+};
+Object.assign(UI, {
+  es:{h1:"Moda de segunda mano elegida con cariño",
+      intro:"Bolsos, abrigos, ropa y accesorios en buen estado, de mi armario al tuyo. Cada pieza es única: cuando se va, se va.",
+      f1:"Envíos a Portugal y toda la Unión Europea (gastos de envío aparte)", f2:"Envío gratis a partir de 100 € en Portugal", f3:"MB WAY, transferencia o Revolut",
+      brands:"Piezas originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa y más.",
+      ctaT:"¿Buscas algo que no está aquí?", ctaP:"Llegan piezas nuevas cada semana. Dinos qué buscas y te enviamos fotos.", ctaB:"Hablar por WhatsApp",
+      ctaMsg:"¡Hola! Busco una pieza que no está en el catálogo: ",
+      sortLabel:"Ordenar:", sortNew:"Novedades", sortLow:"Precio: más baratos", sortHigh:"Precio: más caros", buyShort:"Comprar", back:"Volver", backShop:"Volver a la tienda", fAll:"Todo", fBolsas:"Bolsos", fCasacos:"Abrigos", fRoupas:"Ropa", fSapatos:"Zapatos", fAcess:"Accesorios",
+      s1t:"Elige la pieza", s1p:"Toca «Comprar por WhatsApp». El mensaje ya incluye el nombre de la pieza.",
+      s2t:"Acuerda el pago", s2p:"MB WAY, transferencia bancaria o Revolut. La pieza queda reservada para ti durante 24 horas.",
+      s3t:"Recíbelo en casa", s3p:"Enviamos por CTT, con número de seguimiento, en un máximo de 2 días laborables tras el pago, a Portugal y toda la Unión Europea. Gastos de envío por WhatsApp, gratis a partir de 100 € en Portugal.",
+      buy:"Comprar por WhatsApp", more:"toca para ver más", st:{disponivel:"Disponible",reservado:"Reservado",vendido:"Vendido"},
+      msg:(n,m,pr)=>`¡Hola! Me interesa: ${n} (${m}) – ${pr}. ¿Sigue disponible?`},
+  fr:{h1:"Mode de seconde main choisie avec soin",
+      intro:"Sacs, manteaux, vêtements et accessoires en bon état, de mon dressing au vôtre. Chaque pièce est unique : une fois partie, elle est partie.",
+      f1:"Livraison au Portugal et dans toute l'Union européenne (frais de port en sus)", f2:"Livraison offerte dès 100 € au Portugal", f3:"MB WAY, virement ou Revolut",
+      brands:"Pièces originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa et plus.",
+      ctaT:"Vous cherchez une pièce qui n'est pas ici ?", ctaP:"De nouvelles pièces arrivent chaque semaine. Dites-nous ce que vous cherchez et nous vous enverrons des photos.", ctaB:"Discuter sur WhatsApp",
+      ctaMsg:"Bonjour ! Je cherche une pièce qui n'est pas dans le catalogue : ",
+      sortLabel:"Trier :", sortNew:"Nouveautés", sortLow:"Prix croissant", sortHigh:"Prix décroissant", buyShort:"Acheter", back:"Retour", backShop:"Retour à la boutique", fAll:"Tout", fBolsas:"Sacs", fCasacos:"Manteaux", fRoupas:"Vêtements", fSapatos:"Chaussures", fAcess:"Accessoires",
+      s1t:"Choisissez la pièce", s1p:"Touchez « Acheter sur WhatsApp ». Le message contient déjà le nom de la pièce.",
+      s2t:"Convenez du paiement", s2p:"MB WAY, virement bancaire ou Revolut. La pièce vous est réservée pendant 24 heures.",
+      s3t:"Recevez-la chez vous", s3p:"Envoi par CTT, avec suivi, sous 2 jours ouvrés après paiement, au Portugal et dans toute l'Union européenne. Frais de port convenus sur WhatsApp, offerts dès 100 € au Portugal.",
+      buy:"Acheter sur WhatsApp", more:"touchez pour voir plus", st:{disponivel:"Disponible",reservado:"Réservé",vendido:"Vendu"},
+      msg:(n,m,pr)=>`Bonjour ! Je suis intéressée par : ${n} (${m}) – ${pr}. Est-ce toujours disponible ?`},
+  de:{h1:"Handverlesene Second-Hand-Mode",
+      intro:"Taschen, Mäntel, Kleidung und Accessoires in gutem Zustand, aus meinem Kleiderschrank in deinen. Jedes Stück ist ein Unikat: Weg ist weg.",
+      f1:"Versand nach Portugal und in die ganze EU (zzgl. Versandkosten)", f2:"Kostenloser Versand ab 100 € innerhalb Portugals", f3:"MB WAY, Überweisung oder Revolut",
+      brands:"Originalteile von Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa und mehr.",
+      ctaT:"Du suchst etwas, das hier nicht ist?", ctaP:"Jede Woche kommen neue Teile dazu. Sag uns, was du suchst, und wir schicken dir Fotos.", ctaB:"Auf WhatsApp schreiben",
+      ctaMsg:"Hallo! Ich suche ein Teil, das nicht im Katalog ist: ",
+      sortLabel:"Sortieren:", sortNew:"Neuheiten", sortLow:"Preis aufsteigend", sortHigh:"Preis absteigend", buyShort:"Kaufen", back:"Zurück", backShop:"Zurück zum Shop", fAll:"Alle", fBolsas:"Taschen", fCasacos:"Mäntel", fRoupas:"Kleidung", fSapatos:"Schuhe", fAcess:"Accessoires",
+      s1t:"Teil auswählen", s1p:"Tippe auf „Über WhatsApp kaufen“. Die Nachricht enthält schon den Namen des Teils.",
+      s2t:"Zahlung vereinbaren", s2p:"MB WAY, Banküberweisung oder Revolut. Das Teil wird 24 Stunden für dich reserviert.",
+      s3t:"Lieferung nach Hause", s3p:"Versand mit CTT und Sendungsverfolgung innerhalb von 2 Werktagen nach Zahlung, nach Portugal und in die ganze EU. Versandkosten per WhatsApp, kostenlos ab 100 € innerhalb Portugals.",
+      buy:"Über WhatsApp kaufen", more:"tippen für mehr", st:{disponivel:"Verfügbar",reservado:"Reserviert",vendido:"Verkauft"},
+      msg:(n,m,pr)=>`Hallo! Ich interessiere mich für: ${n} (${m}) – ${pr}. Ist es noch verfügbar?`},
+  ru:{h1:"Тщательно отобранная мода секонд-хенд",
+      intro:"Сумки, пальто, одежда и аксессуары в хорошем состоянии — из моего гардероба в ваш. Каждая вещь уникальна: продана — значит продана.",
+      f1:"Доставка по Португалии и всему Евросоюзу (доставка оплачивается отдельно)", f2:"Бесплатная доставка по Португалии от 100 €", f3:"MB WAY, банковский перевод или Revolut",
+      brands:"Оригинальные вещи Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa и других брендов.",
+      ctaT:"Ищете то, чего здесь нет?", ctaP:"Новые вещи появляются каждую неделю. Напишите, что вы ищете, и мы пришлём фото.", ctaB:"Написать в WhatsApp",
+      ctaMsg:"Здравствуйте! Я ищу вещь, которой нет в каталоге: ",
+      sortLabel:"Сортировка:", sortNew:"Новинки", sortLow:"Сначала дешёвые", sortHigh:"Сначала дорогие", buyShort:"Купить", back:"Назад", backShop:"Вернуться в магазин", fAll:"Все", fBolsas:"Сумки", fCasacos:"Верхняя одежда", fRoupas:"Одежда", fSapatos:"Обувь", fAcess:"Аксессуары",
+      s1t:"Выберите вещь", s1p:"Нажмите «Купить через WhatsApp». В сообщении уже будет название вещи.",
+      s2t:"Договоритесь об оплате", s2p:"MB WAY, банковский перевод или Revolut. Вещь бронируется за вами на 24 часа.",
+      s3t:"Получите дома", s3p:"Отправляем почтой CTT с трек-номером в течение 2 рабочих дней после оплаты — по Португалии и всему Евросоюзу. Стоимость доставки — в WhatsApp, бесплатно по Португалии от 100 €.",
+      buy:"Купить через WhatsApp", more:"нажмите, чтобы увидеть ещё", st:{disponivel:"В наличии",reservado:"Забронировано",vendido:"Продано"},
+      msg:(n,m,pr)=>`Здравствуйте! Меня интересует: ${n} (${m}) – ${pr}. Ещё доступно?`}
+});
+const TR_ES = {
+  "zara-bomber-organza":["Bomber transparente de organza negra", "Organza ligera y transparente, puños, cuello y bajo de canalé, cremallera y bolsillos · talla L · nueva, sin usar"],
+  "adidas-casaco-bordo":["Chaqueta de chándal burdeos", "Corte oversize, cuello alto, cremallera y bolsillos laterales · talla 2XL · nueva, sin usar"],
+  "gucci-gframe":["Reloj G-Frame YA147404", "Esfera de nácar verde y roja con abejas, acero inoxidable, cuarzo suizo · comprado en Farfetch · con caja y etiqueta · usado pocas veces, correa con señales de uso · pila nueva antes del envío"],
+  "shein-body-azul":["Body turquesa metalizado", "Tejido brillante con destellos, escote redondo y tirantes anchos · talla L · nuevo, sin usar, aún en su embalaje"],
+  "shein-body-dourado":["Body dorado metalizado", "Tejido brillante con destellos, escote redondo y tirantes anchos · talla L · nuevo, sin usar, aún en su embalaje"],
+  "shein-camisa-caramelo":["Camisa caramelo con estampado negro", "Gasa ligera y transparente, mangas abullonadas con puño · talla L · usada 2 veces"],
+  "kimono-dourado-ibiza":["Kimono de playa dorado con flecos","Punto abierto con hilo dorado brillante, flecos en el bajo · talla única · nuevo, aún en su embalaje"],
+  "rl-camisa-linho-rosa":["Camisa-vestido de lino rosa","100% lino, cuello abotonado, camisa oversize talla XL para usar como vestido · usada pocas veces, como nueva"],
+  "rl-camisa-linho":["Camisa-vestido de lino amarilla","100% lino, camisa oversize talla XXL para usar como vestido · usada pocas veces, como nueva"],
+  "rl-camisola-azul":["Jersey azul Big Pony","Punto grueso, logo grande rojo, corte corto · talla L (talla pequeño) · usado pocas veces"],
+  "moschino-botas-neve":["Botas de nieve negras","Acolchadas, banda con logo y corazón rojo detrás · talla 39 · usadas una vez"],
+  "nike-mind-002":["Zapatillas Nike Mind 002 burdeos","Suela con nódulos sensoriales · nuevas, sin estrenar, con etiqueta"],
+  "adidas-legging":["Mallas deportivas rosa palo","Cintura alta, 3 rayas rosas en la pierna · talla XL · nuevas, sin estrenar"],
+  "shein-vestido-zebra":["Vestido corto de cebra","Satén ligero, escote cruzado, hombros fruncidos, volante lateral"],
+  "vestido-floral-preto":["Vestido ajustado de flores","Fondo negro con flores coral, paneles laterales negros, manga larga, tejido calentito · talla M · usado 2 veces"],
+  "body-leopardo":["Body de tul estampado leopardo","Tul transparente, escote cruzado, mangas abullonadas"],
+  "rl-camisola-rosa":["Jersey de cuello alto rosa","Punto de ochos · etiqueta L, encogió al lavar: queda como M · usado 2-3 veces"],
+  "pepe-parka":["Parka acolchada negra","Capucha con pelo desmontable, cinturón con hebilla · talla XL · usada una vez"],
+  "pepe-coturno":["Botines militares negros","Piel negra, suela dentada, tira con logo · talla 39 · usados una vez"],
+  "zara-slingback-perolas":["Zapato destalonado con perlas","Punta fina de vinilo transparente con perlas y strass, tira elástica · talla 39 · usado, con marcas en la plantilla"],
+  "sandalia-prata":["Sandalias de tacón plateadas","Tiras metalizadas y brillo, hebilla al tobillo · talla 39 · usadas"],
+  "asics-noosa":["Zapatillas Noosa Tri 14","Talla 39 · usadas una vez"],
+  "versace-bolsa":["Bolso rosa con cadena dorada","Usado, con señales de uso: pequeño defecto en el revestimiento de la esquina superior · fotos reales por WhatsApp"],
+  "shein-blusa-rosa":["Blusa de satén rosa con plumas","Talla L · sin estrenar"],
+  "blueman-saida-praia":["Pareo-caftán tropical","Caftán largo de tejido ligero, estampado tropical · talla L · usado una vez"],
+  "blueman-vestido-mata":["Vestido Mata Atlântica","Vestido pañuelo con pico, estampado de selva, tira de cordón al cuello · talla M · sin estrenar"],
+  "sarong-bali-seda":["Pareo de seda de Bali","Seda natural de Bali, estampado batik burdeos y rosa · se usa como falda, vestido o pañuelo · nuevo"],
+  "vestido-rio":["Vestido largo tropical","Aberturas laterales con aro, tirantes finos, estampado de anacardos y palmeras · nuevo"],
+  "versace-oculos":["Gafas de sol oversize Medusa","Montura Luxottica · sin estrenar"],
+  "guess-bolsa-laranja":["Bolso doble coral","Dos bolsillos con cremallera, cadena y correa ajustable · como nuevo"],
+  "ck-bolsa-prata":["Bolso plateado con cadena","Textura metalizada efecto serpiente, correa de cadena"],
+  "guess-bolsa-preta":["Bolso negro con cadenas","Asas de cadena plateada con medallón · usado, con señales de uso"],
+  "guess-bolsa-aba":["Bolso negro con solapa y cadena","Logo 4G plateado, correa de cadena · usado, con señales de uso"],
+  "adidas-bolsa":["Bolso shopper de charol negro","Forro verde neón · comprado en tienda · nuevo, sin estrenar"],
+  "guess-casaco-1":["Abrigo acolchado largo beige","Talla XL"],
+  "guess-casaco-2":["Abrigo acolchado burdeos","Talla L · usado pocas veces"],
+  "versace-casaco":["Cortavientos con rosas","Talla M (IT 42) · sin estrenar · autenticidad verificada por Certilogo"],
+  "guess-biker":["Chaqueta biker marrón","Talla L · piel sintética · usada una vez"],
+  "zara-gabardina":["Gabardina marrón","Talla M · nueva, sin estrenar, con etiqueta"],
+  "salsa-dupla-face":["Abrigo reversible camel","Talla L · como nuevo · dos abrigos en uno: ante o pelo"],
+  "pelo-camel":["Abrigo de pelo camel","Talla L · nuevo, sin estrenar"],
+  "pelo-rosa":["Abrigo de pelo fucsia","Talla L (40) · nuevo, sin estrenar"],
+  "shein-bomber-lantejoulas":["Bomber de lentejuelas","Lentejuelas multicolor · talla L"],
+  "primark-jaq":["Chaqueta biker verde","Piel sintética · talla 40"]
+};
+const TR_FR = {
+  "zara-bomber-organza":["Bomber transparent en organza noir", "Organza léger et transparent, poignets, col et bas côtelés, zip et poches · taille L · neuf, jamais porté"],
+  "adidas-casaco-bordo":["Veste de survêtement bordeaux", "Coupe oversize, col montant, zip et poches latérales · taille 2XL · neuve, jamais portée"],
+  "gucci-gframe":["Montre G-Frame YA147404", "Cadran en nacre vert et rouge avec abeilles, acier inoxydable, quartz suisse · achetée sur Farfetch · avec boîte et étiquette · portée quelques fois, bracelet avec traces d'usure · pile neuve posée avant l'envoi"],
+  "shein-body-azul":["Body turquoise métallisé", "Tissu brillant pailleté, encolure ronde et larges bretelles · taille L · neuf, jamais porté, encore emballé"],
+  "shein-body-dourado":["Body doré métallisé", "Tissu brillant pailleté, encolure ronde et larges bretelles · taille L · neuf, jamais porté, encore emballé"],
+  "shein-camisa-caramelo":["Chemise caramel à imprimé noir", "Mousseline légère et transparente, manches bouffantes à poignets · taille L · portée 2 fois"],
+  "kimono-dourado-ibiza":["Kimono de plage doré à franges","Maille ajourée au fil doré scintillant, franges en bas · taille unique · neuf, encore emballé"],
+  "rl-camisa-linho-rosa":["Robe-chemise en lin rose","100% lin, col boutonné, chemise oversize taille XL à porter en robe · portée quelques fois, comme neuve"],
+  "rl-camisa-linho":["Robe-chemise en lin jaune","100% lin, chemise oversize taille XXL à porter en robe · portée quelques fois, comme neuve"],
+  "rl-camisola-azul":["Pull bleu Big Pony","Grosse maille, grand logo rouge, coupe courte · taille L (taille petit) · porté quelques fois"],
+  "moschino-botas-neve":["Bottes de neige noires","Matelassées, bande logo et cœur rouge à l'arrière · pointure 39 · portées une fois"],
+  "nike-mind-002":["Baskets Nike Mind 002 bordeaux","Semelle à nodules sensoriels · neuves, jamais portées, avec étiquette"],
+  "adidas-legging":["Legging de sport vieux rose","Taille haute, 3 bandes roses sur la jambe · taille XL · neuf, jamais porté"],
+  "shein-vestido-zebra":["Robe courte zébrée","Satin léger, décolleté portefeuille, épaules froncées, volant sur le côté"],
+  "vestido-floral-preto":["Robe moulante fleurie","Fond noir à fleurs corail, panneaux latéraux noirs, manches longues, tissu chaud · taille M · porté 2 fois"],
+  "body-leopardo":["Body en tulle imprimé léopard","Tulle transparent, décolleté portefeuille, manches ballon"],
+  "rl-camisola-rosa":["Pull col roulé rose","Maille torsadée · étiquette L, a rétréci au lavage : taille comme un M · porté 2-3 fois"],
+  "pepe-parka":["Parka matelassée noire","Capuche fausse fourrure amovible, ceinture à boucle · taille XL · portée une fois"],
+  "pepe-coturno":["Rangers noires","Cuir noir, semelle crantée, bride avec logo · pointure 39 · portées une fois"],
+  "zara-slingback-perolas":["Escarpins slingback à perles","Bout pointu en vinyle transparent avec perles et strass, bride élastique · pointure 39 · portés, marques sur la semelle intérieure"],
+  "sandalia-prata":["Sandales à talon argentées","Brides métallisées et pailletées, boucle à la cheville · pointure 39 · portées"],
+  "asics-noosa":["Baskets Noosa Tri 14","Pointure 39 · portées une fois"],
+  "versace-bolsa":["Sac rose à chaîne dorée","Porté, avec traces d'usure : petit défaut de revêtement au coin supérieur · vraies photos sur WhatsApp"],
+  "shein-blusa-rosa":["Blouse en satin rose à plumes","Taille L · jamais portée"],
+  "blueman-saida-praia":["Cache-maillot tropical","Caftan long en tissu léger, imprimé tropical · taille L · porté une fois"],
+  "blueman-vestido-mata":["Robe Mata Atlântica","Robe foulard en pointe, imprimé jungle, cordon noué au cou · taille M · jamais portée"],
+  "sarong-bali-seda":["Paréo en soie de Bali","Soie naturelle de Bali, imprimé batik bordeaux et rose · se porte en jupe, robe ou foulard · neuf"],
+  "vestido-rio":["Robe longue tropicale","Découpes latérales avec anneau, bretelles fines, imprimé noix de cajou et palmiers · neuf"],
+  "versace-oculos":["Lunettes de soleil oversize Medusa","Monture Luxottica · jamais portées"],
+  "guess-bolsa-laranja":["Sac double corail","Deux pochettes zippées, chaîne et bandoulière réglable · comme neuf"],
+  "ck-bolsa-prata":["Sac argenté à chaîne","Texture métallisée effet serpent, bandoulière chaîne"],
+  "guess-bolsa-preta":["Sac noir à chaînes","Anses chaîne argentée avec médaillon · porté, avec traces d'usure"],
+  "guess-bolsa-aba":["Sac noir à rabat et chaîne","Logo 4G argenté, bandoulière chaîne · porté, avec traces d'usure"],
+  "adidas-bolsa":["Cabas en vernis noir","Doublure vert fluo · acheté en boutique · neuf, jamais utilisé"],
+  "guess-casaco-1":["Long manteau matelassé beige","Taille XL"],
+  "guess-casaco-2":["Manteau matelassé bordeaux","Taille L · porté quelques fois"],
+  "versace-casaco":["Coupe-vent imprimé roses","Taille M (IT 42) · jamais porté · authenticité vérifiée par Certilogo"],
+  "guess-biker":["Veste biker marron","Taille L · similicuir · portée une fois"],
+  "zara-gabardina":["Trench marron","Taille M · neuf, jamais porté, avec étiquette"],
+  "salsa-dupla-face":["Manteau réversible camel","Taille L · comme neuf · deux manteaux en un : suédine ou fourrure"],
+  "pelo-camel":["Manteau fausse fourrure camel","Taille L · neuf, jamais porté"],
+  "pelo-rosa":["Manteau fausse fourrure fuchsia","Taille L (40) · neuf, jamais porté"],
+  "shein-bomber-lantejoulas":["Bomber à sequins","Sequins multicolores · taille L"],
+  "primark-jaq":["Veste biker verte","Similicuir · taille 40"]
+};
+const TR_DE = {
+  "zara-bomber-organza":["Transparente Bomberjacke aus schwarzem Organza", "Leichter, durchsichtiger Organza, Rippbündchen an Ärmeln, Kragen und Saum, Reißverschluss und Taschen · Größe L · neu, nie getragen"],
+  "adidas-casaco-bordo":["Trainingsjacke in Bordeaux", "Oversize-Schnitt, Stehkragen, Reißverschluss und Seitentaschen · Größe 2XL · neu, nie getragen"],
+  "gucci-gframe":["Uhr G-Frame YA147404", "Perlmutt-Zifferblatt in Grün und Rot mit Bienen, Edelstahl, Schweizer Quarzwerk · bei Farfetch gekauft · mit Box und Etikett · wenige Male getragen, Armband mit Gebrauchsspuren · neue Batterie vor dem Versand"],
+  "shein-body-azul":["Metallic-Body in Türkis", "Glänzender Glitzerstoff, runder Ausschnitt und breite Träger · Größe L · neu, nie getragen, noch verpackt"],
+  "shein-body-dourado":["Metallic-Body in Gold", "Glänzender Glitzerstoff, runder Ausschnitt und breite Träger · Größe L · neu, nie getragen, noch verpackt"],
+  "shein-camisa-caramelo":["Karamellfarbene Bluse mit schwarzem Print", "Leichter, transparenter Chiffon, Puffärmel mit Manschetten · Größe L · 2-mal getragen"],
+  "kimono-dourado-ibiza":["Goldener Strandkimono mit Fransen","Offenes Gewebe mit glänzendem Goldfaden, Fransensaum · Einheitsgröße · neu, noch verpackt"],
+  "rl-camisa-linho-rosa":["Rosa Leinen-Hemdkleid","100% Leinen, Button-down-Kragen, Oversize-Hemd Größe XL, als Kleid zu tragen · wenige Male getragen, wie neu"],
+  "rl-camisa-linho":["Gelbes Leinen-Hemdkleid","100% Leinen, Oversize-Hemd Größe XXL, als Kleid zu tragen · wenige Male getragen, wie neu"],
+  "rl-camisola-azul":["Blauer Big-Pony-Pullover","Grobstrick, großes rotes Logo, kurzer Schnitt · Größe L (fällt klein aus) · wenige Male getragen"],
+  "moschino-botas-neve":["Schwarze Schneestiefel","Gesteppt, Logoband und rotes Herz hinten · Größe 39 · einmal getragen"],
+  "nike-mind-002":["Nike Mind 002 Sneaker in Bordeaux","Sohle mit sensorischen Noppen · neu, nie getragen, mit Etikett"],
+  "adidas-legging":["Sportleggings in Altrosa","Hoher Bund, 3 rosa Streifen am Bein · Größe XL · neu, nie getragen"],
+  "shein-vestido-zebra":["Kurzes Kleid mit Zebramuster","Leichter Satin, Wickelausschnitt, Puffschultern, seitlicher Volant"],
+  "vestido-floral-preto":["Figurbetontes Blumenkleid","Schwarz mit korallfarbenen Blumen, schwarze Seiteneinsätze, lange Ärmel, warmer Stoff · Größe M · 2 Mal getragen"],
+  "body-leopardo":["Body aus Tüll mit Leopardenmuster","Transparenter Tüll, Wickelausschnitt, Ballonärmel"],
+  "rl-camisola-rosa":["Rosa Rollkragenpullover","Zopfstrick · Etikett L, beim Waschen eingelaufen: passt wie M · 2-3 Mal getragen"],
+  "pepe-parka":["Schwarzer Steppparka","Abnehmbare Kapuze mit Kunstfell, Gürtel mit Schnalle · Größe XL · einmal getragen"],
+  "pepe-coturno":["Schwarze Schnürstiefel","Schwarzes Leder, Profilsohle, Riemen mit Logo · Größe 39 · einmal getragen"],
+  "zara-slingback-perolas":["Slingback-Pumps mit Perlen","Spitze Kappe aus transparentem Vinyl mit Perlen und Strass, elastischer Riemen · Größe 39 · getragen, Spuren auf der Innensohle"],
+  "sandalia-prata":["Silberne Riemchensandalen mit Absatz","Metallic- und Glitzerriemen, Knöchelschnalle · Größe 39 · getragen"],
+  "asics-noosa":["Laufschuhe Noosa Tri 14","Größe 39 · einmal getragen"],
+  "versace-bolsa":["Rosa Tasche mit Goldkette","Getragen, mit Gebrauchsspuren: kleiner Beschichtungsfehler an der oberen Ecke · echte Fotos per WhatsApp"],
+  "shein-blusa-rosa":["Rosa Satinbluse mit Federn","Größe L · nie getragen"],
+  "blueman-saida-praia":["Tropischer Strand-Kaftan","Langer Kaftan aus leichtem Stoff, Tropenmuster · Größe L · einmal getragen"],
+  "blueman-vestido-mata":["Kleid Mata Atlântica","Tuchkleid mit Spitze, Dschungelmuster, Kordel-Neckholder · Größe M · nie getragen"],
+  "sarong-bali-seda":["Seiden-Sarong aus Bali","Reine Seide aus Bali, Batikmuster in Bordeaux und Rosa · als Rock, Kleid oder Tuch tragbar · neu"],
+  "vestido-rio":["Langes Tropenkleid","Seitliche Cut-outs mit Ring, dünne Träger, Cashew- und Palmenmuster · neu"],
+  "versace-oculos":["Oversize-Sonnenbrille Medusa","Luxottica-Gestell · nie getragen"],
+  "guess-bolsa-laranja":["Koralle Doppeltasche","Zwei Reißverschlusstaschen, Kette und verstellbarer Riemen · wie neu"],
+  "ck-bolsa-prata":["Silberne Kettentasche","Metallic-Schlangenoptik, Kettenriemen"],
+  "guess-bolsa-preta":["Schwarze Tasche mit Ketten","Silberne Kettenhenkel mit Medaillon · getragen, mit Gebrauchsspuren"],
+  "guess-bolsa-aba":["Schwarze Klappentasche mit Kette","Silbernes 4G-Logo, Kettenriemen · getragen, mit Gebrauchsspuren"],
+  "adidas-bolsa":["Schwarzer Lack-Shopper","Neongrünes Futter · im Laden gekauft · neu, nie benutzt"],
+  "guess-casaco-1":["Langer beiger Steppmantel","Größe XL"],
+  "guess-casaco-2":["Bordeauxroter Steppmantel","Größe L · wenige Male getragen"],
+  "versace-casaco":["Windjacke mit Rosenmuster","Größe M (IT 42) · nie getragen · Echtheit von Certilogo bestätigt"],
+  "guess-biker":["Braune Bikerjacke","Größe L · Kunstleder · einmal getragen"],
+  "zara-gabardina":["Brauner Trenchcoat","Größe M · neu, nie getragen, mit Etikett"],
+  "salsa-dupla-face":["Wendemantel in Camel","Größe L · wie neu · zwei Mäntel in einem: Wildleder-Optik oder Fell"],
+  "pelo-camel":["Kunstfellmantel in Camel","Größe L · neu, nie getragen"],
+  "pelo-rosa":["Kunstfellmantel in Fuchsia","Größe L (40) · neu, nie getragen"],
+  "shein-bomber-lantejoulas":["Pailletten-Bomberjacke","Bunte Pailletten · Größe L"],
+  "primark-jaq":["Grüne Bikerjacke","Kunstleder · Größe 40"]
+};
+const TR_RU = {
+  "zara-bomber-organza":["Прозрачный бомбер из чёрной органзы", "Лёгкая прозрачная органза, манжеты, воротник и низ в рубчик, молния и карманы · размер L · новый, не ношенный"],
+  "adidas-casaco-bordo":["Спортивная куртка бордового цвета", "Оверсайз, высокий воротник, молния и боковые карманы · размер 2XL · новая, не ношенная"],
+  "gucci-gframe":["Часы G-Frame YA147404", "Перламутровый циферблат зелёно-красного цвета с пчёлами, нержавеющая сталь, швейцарский кварц · куплены на Farfetch · с коробкой и биркой · носились несколько раз, ремешок со следами носки · новая батарейка перед отправкой"],
+  "shein-body-azul":["Бирюзовое боди металлик", "Блестящая ткань с мерцанием, круглый вырез и широкие бретели · размер L · новое, не ношенное, в упаковке"],
+  "shein-body-dourado":["Золотое боди металлик", "Блестящая ткань с мерцанием, круглый вырез и широкие бретели · размер L · новое, не ношенное, в упаковке"],
+  "shein-camisa-caramelo":["Карамельная рубашка с чёрным принтом", "Лёгкий прозрачный шифон, объёмные рукава с манжетами · размер L · надевалась 2 раза"],
+  "kimono-dourado-ibiza":["Золотое пляжное кимоно с бахромой","Ажурное плетение с блестящей золотой нитью, бахрома по низу · единый размер · новое, в упаковке"],
+  "rl-camisa-linho-rosa":["Розовое льняное платье-рубашка","100% лён, воротник на пуговицах, оверсайз-рубашка XL, носится как платье · надевалась несколько раз, как новая"],
+  "rl-camisa-linho":["Жёлтое льняное платье-рубашка","100% лён, оверсайз-рубашка XXL, носится как платье · надевалась несколько раз, как новая"],
+  "rl-camisola-azul":["Синий свитер Big Pony","Крупная вязка, большой красный логотип, укороченный крой · размер L (маломерит) · надевался несколько раз"],
+  "moschino-botas-neve":["Чёрные зимние дутики","Стёганые, лента с логотипом и красное сердце сзади · размер 39 · надевались один раз"],
+  "nike-mind-002":["Кроссовки Nike Mind 002 бордового цвета","Подошва с сенсорными узлами · новые, не носились, с биркой"],
+  "adidas-legging":["Спортивные леггинсы пыльно-розового цвета","Высокая талия, 3 розовые полоски на штанине · размер XL · новые, не носились"],
+  "shein-vestido-zebra":["Короткое платье с зебровым принтом","Лёгкий атлас, запахной вырез, объёмные плечи, боковой волан"],
+  "vestido-floral-preto":["Облегающее платье с цветами","Чёрный фон с коралловыми цветами, чёрные боковые вставки, длинный рукав, тёплая ткань · размер M · надевалось 2 раза"],
+  "body-leopardo":["Боди из сетки с леопардовым принтом","Прозрачная сетка, запахной вырез, рукава-фонарики"],
+  "rl-camisola-rosa":["Розовый свитер с высоким горлом","Вязка косами · на бирке L, сел после стирки: подойдёт на M · надевался 2-3 раза"],
+  "pepe-parka":["Чёрная стёганая парка","Съёмный капюшон с искусственным мехом, пояс с пряжкой · размер XL · надевалась один раз"],
+  "pepe-coturno":["Чёрные ботинки на шнуровке","Чёрная кожа, рифлёная подошва, ремешок с логотипом · размер 39 · надевались один раз"],
+  "zara-slingback-perolas":["Туфли слингбэк с жемчугом","Острый мысок из прозрачного винила с жемчугом и стразами, эластичный ремешок · размер 39 · б/у, следы на стельке"],
+  "sandalia-prata":["Серебристые босоножки на каблуке","Металлизированные ремешки с блеском, пряжка на щиколотке · размер 39 · б/у"],
+  "asics-noosa":["Кроссовки Noosa Tri 14","Размер 39 · надевались один раз"],
+  "versace-bolsa":["Розовая сумка с золотой цепью","Б/у, со следами носки: небольшой дефект покрытия в верхнем углу · реальные фото в WhatsApp"],
+  "shein-blusa-rosa":["Розовая атласная блузка с перьями","Размер L · не носилась"],
+  "blueman-saida-praia":["Тропическая пляжная накидка","Длинный кафтан из лёгкой ткани, тропический принт · размер L · надевалась один раз"],
+  "blueman-vestido-mata":["Платье Mata Atlântica","Платье-платок с острым углом, принт джунгли, завязка-шнур на шее · размер M · не носилось"],
+  "sarong-bali-seda":["Шёлковый саронг с Бали","Натуральный шёлк с Бали, батик бордовых и розовых тонов · носится как юбка, платье или платок · новый"],
+  "vestido-rio":["Длинное тропическое платье","Боковые вырезы с кольцом, тонкие бретели, принт с кешью и пальмами · новое"],
+  "versace-oculos":["Солнцезащитные очки оверсайз Medusa","Оправа Luxottica · не носились"],
+  "guess-bolsa-laranja":["Двойная сумка кораллового цвета","Два отделения на молнии, цепочка и регулируемый ремень · как новая"],
+  "ck-bolsa-prata":["Серебристая сумка на цепочке","Металлизированная фактура под змею, ремень-цепочка"],
+  "guess-bolsa-preta":["Чёрная сумка с цепями","Серебристые ручки-цепи с медальоном · б/у, со следами носки"],
+  "guess-bolsa-aba":["Чёрная сумка с клапаном и цепочкой","Серебристый логотип 4G, ремень-цепочка · б/у, со следами носки"],
+  "adidas-bolsa":["Чёрная лакированная сумка-шопер","Неоново-зелёная подкладка · куплена в магазине · новая, не использовалась"],
+  "guess-casaco-1":["Длинное бежевое стёганое пальто","Размер XL"],
+  "guess-casaco-2":["Бордовое стёганое пальто","Размер L · надевалось несколько раз"],
+  "versace-casaco":["Ветровка с розами","Размер M (IT 42) · не носилась · подлинность подтверждена Certilogo"],
+  "guess-biker":["Коричневая куртка-косуха","Размер L · искусственная кожа · надевалась один раз"],
+  "zara-gabardina":["Коричневый тренч","Размер M · новый, не носился, с биркой"],
+  "salsa-dupla-face":["Двустороннее пальто цвета кэмел","Размер L · как новое · два пальто в одном: замша или мех"],
+  "pelo-camel":["Шуба из искусственного меха цвета кэмел","Размер L · новая, не носилась"],
+  "pelo-rosa":["Шуба из искусственного меха цвета фуксии","Размер L (40) · новая, не носилась"],
+  "shein-bomber-lantejoulas":["Бомбер с пайетками","Разноцветные пайетки · размер L"],
+  "primark-jaq":["Зелёная куртка-косуха","Искусственная кожа · размер 40"]
+};
+
+const TR = { en:EN, es:TR_ES, fr:TR_FR, de:TR_DE, ru:TR_RU };
+const LANGS = ["pt","en","es","fr","de","ru"];
+let LANG = "pt";
+try { const saved = localStorage.getItem("bc-lang"); if (LANGS.includes(saved)) LANG = saved; } catch(e) {}
+const T = () => UI[LANG];
+const nomeDe = p => (TR[LANG] && TR[LANG][p.id]) ? TR[LANG][p.id][0] : p.nome;
+const detDe  = p => (TR[LANG] && TR[LANG][p.id]) ? TR[LANG][p.id][1] : p.detalhe;
+let FILTRO = "all";
+let ORDEM = "novo";
+function aplicarIdioma(){
+  document.documentElement.lang = LANG==="pt" ? "pt-PT" : LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el => { const v = T()[el.dataset.i18n]; if (typeof v === "string") el.textContent = v; });
+  const cta = document.getElementById("cta-wa");
+  if (cta) cta.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(T().ctaMsg)}`;
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang===LANG ? "true" : "false"));
+  render(FILTRO);
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => {
+  LANG = b.dataset.lang;
+  try { localStorage.setItem("bc-lang", LANG); } catch(e) {}
+  aplicarIdioma();
+}));
+
+const grid = document.getElementById("grid");
+const euro = n => n.toLocaleString("pt-PT",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+
+function waLink(p){
+  const txt = T().msg(nomeDe(p), p.marca, euro(p.preco));
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
+}
+
+function render(f){
+  FILTRO = f;
+  grid.innerHTML = "";
+  const k = PECAS.findIndex(x => x.id === "versace-oculos");
+  let lista = PECAS.slice(0, k).reverse().concat(PECAS.slice(k));
+  if (ORDEM === "barato") lista = lista.slice().sort((a,b) => a.preco - b.preco);
+  if (ORDEM === "caro") lista = lista.slice().sort((a,b) => b.preco - a.preco);
+  lista = lista.filter(p => p.status !== "vendido").concat(lista.filter(p => p.status === "vendido"));
+  lista.filter(p => (p.foto || p.fotos) && (f==="all" || p.cat===f)).forEach(p => {
+    const cls = ST[p.status] || "ok"; const label = T().st[p.status] || T().st.disponivel;
+    const card = document.createElement("article");
+    card.className = "card" + (p.status==="vendido" ? " sold" : "");
+    const fotos = p.fotos || (p.foto ? [p.foto] : []);
+    const photo = fotos.length
+      ? `<img src="${fotos[0]}" alt="${nomeDe(p)}" data-i="0" data-id="${p.id}">${fotos.length>1?`<span class="count">1/${fotos.length} · ${T().more}</span>`:""}`
+      : `<div class="ph"><svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 30 V24 a5 5 0 1 0 -5 -5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M32 30 L7 48 Q4 51 8 52 H56 Q60 51 57 48 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>Foto em breve</div>`;
+    const btn = p.status==="vendido"
+      ? `<span class="buy">${T().st.vendido}</span>`
+      : (WHATSAPP
+          ? `<a class="buy" href="${waLink(p)}" target="_blank" rel="noopener"><span class="lg">${T().buy}</span><span class="sm">${T().buyShort}</span></a>`
+          : `<button type="button" class="buy" id="buy-${p.id}" data-id="${p.id}">Comprar pelo WhatsApp</button>`);
+    card.innerHTML = `
+      <div class="photo">${photo}<span class="status ${cls}">${label}</span>${p.ilustrativa?`<span class="count">Imagem ilustrativa</span>`:""}</div>
+      <div class="body">
+        <span class="brandlabel">${p.marca}</span>
+        <h2 class="title">${nomeDe(p)}</h2>
+        <span class="meta">${detDe(p)}</span>
+        <div class="row"><span class="price">${euro(p.preco)}</span>${btn}</div>
+        <span class="note" id="note-${p.id}">O WhatsApp da loja ainda está a ser configurado. Volte em breve!</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("ordem").addEventListener("change", e => { ORDEM = e.target.value; render(FILTRO); });
+
+grid.addEventListener("click", e => {
+  const img = e.target.closest(".photo img");
+  if (img) {
+    abrirDetalhe(img.dataset.id, 0);
+    return;
+  }
+  const t = e.target.closest(".card .title");
+  if (t) { const im = t.closest(".card").querySelector(".photo img"); if (im) abrirDetalhe(im.dataset.id, 0); return; }
+  const b = e.target.closest("button.buy");
+  if (!b) return;
+  document.getElementById("note-" + b.dataset.id).classList.add("show");
+});
+
+document.querySelectorAll(".filters button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x===b ? "true" : "false"));
+    render(b.dataset.f);
+  });
+});
+
+aplicarIdioma();
+</script>
+<dialog id="det" aria-label="Detalhe da peça"></dialog>
+<script>
+const det = document.getElementById("det");
+let DP = null, DI = 0;
+function abrirDetalhe(id, i){
+  DP = PECAS.find(x => x.id === id); DI = i || 0;
+  pintarDetalhe();
+  try { det.showModal(); } catch(e) { det.setAttribute("open",""); }
+}
+function pintarDetalhe(){
+  const p = DP, fotos = p.fotos || [p.foto];
+  const cls = ST[p.status] || "ok", label = T().st[p.status] || T().st.disponivel;
+  const nav = fotos.length > 1 ? `<button type="button" class="nav prev" aria-label="‹">‹</button><button type="button" class="nav next" aria-label="›">›</button><span class="dots"><span>${DI+1}/${fotos.length}</span></span>` : "";
+  const btn = p.status==="vendido" ? `<span class="buy">${T().st.vendido}</span>` : `<a class="buy" href="${waLink(p)}" target="_blank" rel="noopener"><span class="lg">${T().buy}</span><span class="sm">${T().buyShort}</span></a>`;
+  det.innerHTML = `<button type="button" class="x">‹ ${T().back}</button>
+    <div class="dimg"><img src="${fotos[DI]}" alt="${nomeDe(p)}">${nav}<span class="status ${cls}">${label}</span></div>
+    <div class="dbody"><span class="brandlabel">${p.marca}</span><h2 class="title">${nomeDe(p)}</h2><span class="meta">${detDe(p)}</span>
+    <div class="row"><span class="price">${euro(p.preco)}</span>${btn}</div><button type="button" class="voltar">${T().backShop}</button></div>`;
+}
+det.addEventListener("click", e => {
+  if (e.target === det || e.target.closest(".x") || e.target.closest(".voltar")) { det.close(); return; }
+  const fotos = DP.fotos || [DP.foto];
+  if (e.target.closest(".next") || (e.target.closest(".dimg img") && fotos.length > 1)) { DI = (DI+1) % fotos.length; pintarDetalhe(); }
+  else if (e.target.closest(".prev")) { DI = (DI-1+fotos.length) % fotos.length; pintarDetalhe(); }
+});
+let tx = null;
+det.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, {passive:true});
+det.addEventListener("touchend", e => {
+  if (tx === null || !DP) return; const dx = e.changedTouches[0].clientX - tx; tx = null;
+  const fotos = DP.fotos || [DP.foto]; if (fotos.length < 2 || Math.abs(dx) < 40) return;
+  DI = (DI + (dx < 0 ? 1 : -1) + fotos.length) % fotos.length; pintarDetalhe();
+});
+</script>
+</body>
+</html>
