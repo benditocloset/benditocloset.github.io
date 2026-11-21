@@ -14,7 +14,7 @@
 <style>
   :root { --gold:#c9a36a; --cream:#ece2d2; --ink:#0b0b0b; --line:rgba(201,163,106,.35); --soft:#b8ab97; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--ink); color:var(--cream); font:400 16px/1.65 Montserrat, system-ui, sans-serif; }
+  body { margin:0; background:#000; color:var(--cream); font:400 16px/1.65 Montserrat, system-ui, sans-serif; }
   a { color:var(--gold); }
   header { text-align:center; padding:26px 20px 6px; }
   header img { width:min(260px, 64vw); height:auto; }
@@ -30,6 +30,7 @@
   .btn { display:inline-block; background:var(--gold); color:var(--ink); text-decoration:none; padding:14px 22px; font-weight:600; letter-spacing:.04em; border-radius:2px; }
   .btn.ghost { background:transparent; color:var(--gold); border:1px solid var(--gold); }
   .hero { text-align:center; padding:20px 0 10px; }
+  .btns { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:6px; }
   .hero .lead { margin:0 auto 22px; }
   .grid { display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); margin-top:20px; }
   .card { background:#141414; border:1px solid #242424; padding:22px; }
@@ -65,8 +66,10 @@
     <div class="eyebrow">Lojas online para quem está a começar</div>
     <h1>Gostou desta loja?<br><em>Eu crio a sua.</em></h1>
     <p class="lead">Sou a Marianna Werneck, fundadora do Bendito Closet e profissional de tecnologia. Crio lojas online bonitas e profissionais para brechós e pequenos negócios, a vender pelo WhatsApp, sem mensalidades de plataforma. E oriento nos primeiros passos.</p>
-    <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Quero%20uma%20loja%20online%20como%20o%20Bendito%20Closet.">Falar comigo no WhatsApp</a>
-    &nbsp; <a class="btn ghost" href="#pacotes">Ver pacotes</a>
+    <div class="btns">
+      <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Quero%20uma%20loja%20online%20como%20o%20Bendito%20Closet.">Falar comigo no WhatsApp</a>
+      <a class="btn ghost" href="#pacotes">Ver pacotes</a>
+    </div>
   </section>
 
   <h2>O exemplo: o Bendito Closet</h2>
