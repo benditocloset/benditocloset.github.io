@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crie a sua loja online · por Marianna Werneck, Bendito Closet</title>
+<meta name="description" content="Loja online profissional para quem está a começar: site próprio, várias línguas, catálogo no Instagram, venda pelo WhatsApp e orientação. Por Marianna Werneck, fundadora do Bendito Closet.">
+<meta property="og:title" content="Crie a sua loja online · Marianna Werneck">
+<meta property="og:description" content="Loja online profissional para quem está a começar, a vender pelo WhatsApp e sem mensalidades de plataforma.">
+<meta property="og:image" content="https://benditocloset.pt/imprensa/fotos/12-site-computador.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --gold:#c9a36a; --cream:#ece2d2; --ink:#0b0b0b; --line:rgba(201,163,106,.35); --soft:#b8ab97; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ink); color:var(--cream); font:400 16px/1.65 Montserrat, system-ui, sans-serif; }
+  a { color:var(--gold); }
+  header { text-align:center; padding:26px 20px 6px; }
+  header img { width:min(260px, 64vw); height:auto; }
+  main { max-width:1000px; margin:0 auto; padding:10px 20px 60px; }
+  .eyebrow { letter-spacing:.32em; text-transform:uppercase; color:var(--gold); font-size:12.5px; font-weight:600; }
+  h1, h2, h3 { font-family:"Cormorant Garamond", Georgia, serif; font-weight:600; color:#fff; }
+  h1 { font-size:clamp(34px, 6vw, 56px); line-height:1.08; margin:14px 0 14px; }
+  h1 em { color:var(--gold); }
+  h2 { font-size:clamp(28px, 4.4vw, 38px); margin:64px 0 10px; line-height:1.15; }
+  h3 { font-size:24px; margin:0 0 6px; }
+  .lead { font-size:18px; color:#fff; max-width:720px; }
+  .muted { color:var(--soft); font-size:14.5px; }
+  .btn { display:inline-block; background:var(--gold); color:var(--ink); text-decoration:none; padding:14px 22px; font-weight:600; letter-spacing:.04em; border-radius:2px; }
+  .btn.ghost { background:transparent; color:var(--gold); border:1px solid var(--gold); }
+  .hero { text-align:center; padding:20px 0 10px; }
+  .hero .lead { margin:0 auto 22px; }
+  .grid { display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); margin-top:20px; }
+  .card { background:#141414; border:1px solid #242424; padding:22px; }
+  .card .ico { font-size:22px; color:var(--gold); }
+  .pk { border:1px solid var(--line); padding:26px; background:#121212; display:flex; flex-direction:column; }
+  .pk.star { border-color:var(--gold); background:#17130d; }
+  .pk .tag { font-size:11px; letter-spacing:.2em; color:var(--ink); background:var(--gold); padding:3px 8px; align-self:flex-start; font-weight:600; margin-bottom:10px; }
+  .price { font-family:"Cormorant Garamond", Georgia, serif; font-size:40px; color:#fff; line-height:1; margin:8px 0 4px; }
+  .price small { font-family:Montserrat, sans-serif; font-size:13px; color:var(--soft); }
+  .pk ul { padding-left:18px; margin:12px 0 18px; flex:1; }
+  .pk li { margin-bottom:6px; }
+  .cmp { width:100%; border-collapse:collapse; margin-top:18px; font-size:15px; }
+  .cmp th, .cmp td { border-bottom:1px solid #262626; padding:12px 10px; text-align:left; vertical-align:top; }
+  .cmp th { color:var(--gold); font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase; }
+  .steps { counter-reset:s; display:grid; gap:14px; margin-top:20px; }
+  .step { display:flex; gap:16px; align-items:flex-start; background:#141414; border:1px solid #242424; padding:18px 20px; }
+  .step::before { counter-increment:s; content:counter(s); font-family:"Cormorant Garamond", serif; font-size:34px; color:var(--gold); line-height:1; min-width:26px; }
+  .shots { display:grid; grid-template-columns:3fr 1fr; gap:16px; margin-top:20px; align-items:start; }
+  .shots img { width:100%; height:auto; display:block; border:1px solid #2a2a2a; }
+  details { border-bottom:1px solid #262626; padding:14px 0; }
+  summary { cursor:pointer; color:#fff; font-weight:500; }
+  details p { margin:10px 0 0; color:var(--cream); }
+  .cta { text-align:center; border:1px solid var(--line); padding:36px 22px; margin-top:64px; background:#121212; }
+  footer { text-align:center; border-top:1px solid var(--line); padding:26px 20px 40px; font-size:14px; color:var(--soft); }
+  footer .brand { letter-spacing:.4em; color:var(--gold); font-weight:500; margin-bottom:6px; }
+  @media (max-width:640px){ .shots { grid-template-columns:1fr; } .shots a:last-child img { max-width:240px; margin:0 auto; } .cmp { font-size:13.5px; } }
+</style>
+</head>
+<body>
+<header><a href="/"><img src="/imprensa/fotos/14-logo-bendito-closet.jpg" alt="Bendito Closet"></a></header>
+<main>
+  <section class="hero">
+    <div class="eyebrow">Lojas online para quem está a começar</div>
+    <h1>Gostou desta loja?<br><em>Eu crio a sua.</em></h1>
+    <p class="lead">Sou a Marianna Werneck, fundadora do Bendito Closet e profissional de tecnologia. Crio lojas online bonitas e profissionais para brechós e pequenos negócios, a vender pelo WhatsApp, sem mensalidades de plataforma. E oriento nos primeiros passos.</p>
+    <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Quero%20uma%20loja%20online%20como%20o%20Bendito%20Closet.">Falar comigo no WhatsApp</a>
+    &nbsp; <a class="btn ghost" href="#pacotes">Ver pacotes</a>
+  </section>
+
+  <h2>O exemplo: o Bendito Closet</h2>
+  <p class="muted">A minha própria loja. Site em seis línguas, catálogo ligado ao Instagram e ao Facebook, compra pelo WhatsApp, página de imprensa e e-mail com domínio próprio.</p>
+  <div class="shots">
+    <a href="/"><img src="/imprensa/fotos/12-site-computador.jpg" alt="Bendito Closet no computador" loading="lazy"></a>
+    <a href="/"><img src="/imprensa/fotos/13-site-telemovel.jpg" alt="Bendito Closet no telemóvel" loading="lazy"></a>
+  </div>
+
+  <h2>Porque vender pelo WhatsApp é melhor para começar</h2>
+  <div class="grid">
+    <div class="card"><div class="ico">€</div><h3>Custos baixíssimos</h3><p>Paga só o domínio (cerca de 10 € por ano). Sem mensalidade de plataforma e sem comissão por venda.</p></div>
+    <div class="card"><div class="ico">✦</div><h3>Venda com conversa</h3><p>A cliente tira dúvidas, pede mais fotos e decide consigo. Em moda e segunda mão, isso fecha mais vendas do que um carrinho.</p></div>
+    <div class="card"><div class="ico">◎</div><h3>Aspeto profissional</h3><p>Site próprio, com a sua marca, em várias línguas, rápido no telemóvel e com o catálogo no Instagram e no Facebook.</p></div>
+    <div class="card"><div class="ico">↗</div><h3>Pronta para crescer</h3><p>Quando as vendas aumentarem e quiser pagamento automático, ajudo a passar para uma plataforma como a Shopify.</p></div>
+  </div>
+  <table class="cmp">
+    <tr><th></th><th>A sua loja comigo</th><th>Plataformas com carrinho</th></tr>
+    <tr><td>Custo mensal</td><td>Nenhum (só o domínio por ano)</td><td>Mensalidade + comissões</td></tr>
+    <tr><td>Como vende</td><td>WhatsApp, com conversa</td><td>Carrinho e pagamento online</td></tr>
+    <tr><td>Ideal para</td><td>Quem está a começar</td><td>Quem já vende muito</td></tr>
+  </table>
+
+  <h2 id="pacotes">Pacotes</h2>
+  <p class="muted">Valores para Portugal. Para o Brasil, peça orçamento.</p>
+  <div class="grid">
+    <div class="pk">
+      <h3>Essencial</h3>
+      <div class="price">desde 800 €</div>
+      <ul>
+        <li>Loja online com a sua marca, no telemóvel e no computador</li>
+        <li>Até 3 línguas</li>
+        <li>Botão de compra pelo WhatsApp em cada peça</li>
+        <li>Ligação do domínio e e-mail profissional</li>
+        <li>Catálogo para Instagram e Facebook</li>
+        <li>Até 30 peças carregadas</li>
+      </ul>
+      <a class="btn ghost" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Tenho%20interesse%20no%20pacote%20Essencial.">Quero este</a>
+    </div>
+    <div class="pk star">
+      <span class="tag">RECOMENDADO</span>
+      <h3>Completo</h3>
+      <div class="price">desde 1.500 €</div>
+      <ul>
+        <li>Tudo do Essencial, até 6 línguas</li>
+        <li>Identidade visual: cores, tipografia e estilo</li>
+        <li>Fotos editoriais das peças</li>
+        <li>Posts prontos para o Instagram</li>
+        <li>Mentoria: fotos, preços, Instagram e WhatsApp</li>
+      </ul>
+      <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Tenho%20interesse%20no%20pacote%20Completo.">Quero este</a>
+    </div>
+    <div class="pk">
+      <h3>Lançamento com imprensa</h3>
+      <div class="price">desde 2.500 €</div>
+      <ul>
+        <li>Tudo do Completo</li>
+        <li>Comunicado de imprensa e papel timbrado</li>
+        <li>Página de imprensa com fotos para descarregar</li>
+        <li>Lista de jornalistas escolhida para o seu nicho e envio</li>
+      </ul>
+      <a class="btn ghost" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Tenho%20interesse%20no%20pacote%20Lan%C3%A7amento%20com%20imprensa.">Quero este</a>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:14px">Extras: consultoria avulsa · manutenção mensal (peças novas, preços, vendidos). O domínio é sempre registado em nome do cliente.</p>
+
+  <h2>Como funciona</h2>
+  <div class="steps">
+    <div class="step"><div><b>Conversa inicial.</b> Percebo o seu negócio, o que vende e o que precisa. Sem compromisso.</div></div>
+    <div class="step"><div><b>Proposta.</b> Envio o pacote, o valor e o prazo por escrito.</div></div>
+    <div class="step"><div><b>Início.</b> 50% do valor para começar. Envia-me os materiais da lista abaixo.</div></div>
+    <div class="step"><div><b>Criação.</b> Loja pronta em até 2 semanas após receber todos os materiais. Inclui 2 rondas de ajustes.</div></div>
+    <div class="step"><div><b>Entrega.</b> Pagamento dos restantes 50%, a loja vai para o ar e explico-lhe como funciona. 30 dias de suporte incluídos.</div></div>
+  </div>
+
+  <h2>O que precisa de me enviar</h2>
+  <div class="grid">
+    <div class="card"><h3>Peças</h3><p>Fotos de cada peça, nome, marca, tamanho, estado e preço.</p></div>
+    <div class="card"><h3>Marca</h3><p>Nome, logótipo (se tiver), cores de que gosta e lojas que admira.</p></div>
+    <div class="card"><h3>Contactos</h3><p>Número de WhatsApp, Instagram, e-mail e formas de pagamento e envio.</p></div>
+    <div class="card"><h3>Domínio</h3><p>O nome que quer para o site. Ajudo a registá-lo em seu nome.</p></div>
+  </div>
+
+  <h2>Perguntas frequentes</h2>
+  <details><summary>Quanto tempo demora?</summary><p>Até 2 semanas a contar da receção de todos os materiais. Se os materiais se atrasarem, o prazo ajusta-se.</p></details>
+  <details><summary>Como é o pagamento?</summary><p>50% no início e 50% na entrega, por transferência, MB WAY ou Revolut.</p></details>
+  <details><summary>Tenho custos mensais?</summary><p>Não há mensalidade de plataforma. Paga apenas o domínio por ano e, se quiser, o e-mail profissional e a manutenção.</p></details>
+  <details><summary>E se eu quiser mudanças depois?</summary><p>Estão incluídas 2 rondas de ajustes e 30 dias de suporte. Depois disso, pode optar pela manutenção mensal ou por pedidos avulsos.</p></details>
+  <details><summary>Trabalha com clientes no Brasil?</summary><p>Sim, à distância. Para imprensa no Brasil, o eventual custo de serviços de mailing é à parte. Peça orçamento.</p></details>
+
+  <div class="cta">
+    <div class="eyebrow">Vamos conversar?</div>
+    <h2 style="margin:10px 0 14px">Conte-me o que quer vender</h2>
+    <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Quero%20uma%20loja%20online%20como%20o%20Bendito%20Closet.">Falar no WhatsApp</a>
+    <p class="muted" style="margin-top:14px">ou escreva para <a href="mailto:ola@benditocloset.pt">ola@benditocloset.pt</a></p>
+  </div>
+</main>
+<footer>
+  <div class="brand">BENDITO CLOSET</div>
+  <a href="/">Ver a loja</a> · <a href="/imprensa/">Imprensa</a> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a> · Porto, Portugal
+</footer>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c0a83955793e4716ab45e052546e41f7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
