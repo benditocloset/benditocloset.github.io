@@ -329,5 +329,38 @@ document.getElementById("order").addEventListener("click",()=>{
 document.getElementById("ev").addEventListener("submit",e=>{e.preventDefault();show(`Numa loja real, o pedido de orçamento seguia já preenchido para a pâtisserie.${DEMO}`);});
 BOX=[0,1,3]; paint();
 </script>
+<script>
+window.DEMO = {
+  nome:"Maison Amande", assistente:"Maison Amande", icone:"🥐", cor:"#3B2A2F", corTexto:"#FBF7F1",
+  fonte:'"Jost",system-ui,sans-serif', fonteTitulo:'"Bodoni Moda",serif',
+  saudacao:"Bonjour! 🥐 Sou o assistente da Maison Amande. Posso ajudar com sabores, encomendas, entregas ou eventos. O que procura hoje?",
+  sugestoes:["Que sabores há?","Entregam em casa?","Quanto custa a caixa de 12?","Bolo para casamento","Têm sem glúten?"],
+  respostas:[
+    {k:["sabor","macaron","gosto"], r:"Temos 8 sabores de macaron: framboesa, pistácio, baunilha, chocolate, limão, lavanda, caramelo salgado e rosa. 💕 O mais pedido é o caramelo salgado. Quer que lhe monte uma caixa?"},
+    {k:["caixa de 12","12"], r:"A caixa de 12 macarons custa 28 € e pode escolher os sabores todos. A de 6 custa 15 €. Pode montá-la aqui no site, na secção Caixas."},
+    {k:["caixa de 6","6 macarons","preco","preço","quanto","custa"], r:"A caixa de 6 macarons custa 15 € e a de 12 custa 28 €. Os bolos individuais vão de 4,80 € (éclair de pistácio) a 5,90 € (Paris-Brest)."},
+    {k:["entrega","casa","domicilio","enviar","entregam"], r:"Entregamos no Porto, de terça a domingo. As encomendas fazem-se com 24 horas de antecedência. Também pode levantar na loja, das 9h às 19h."},
+    {k:["casamento","evento","batizado","festa","aniversario","torre"], r:"Que bom! 💍 A torre de macarons começa nos 120 € e as caixinhas para convidados desde 4 € cada. Diga-me a data e o número de convidados e eu passo o pedido de orçamento à equipa."},
+    {k:["gluten","glúten","alerg","lactose","vegan"], r:"Os macarons são feitos com farinha de amêndoa, sem farinha de trigo, mas são preparados numa cozinha que usa glúten. Para alergias, a equipa confirma consigo antes da encomenda."},
+    {k:["horario","horário","aberto","abre","fecha"], r:"Estamos abertos de terça a domingo, das 9h às 19h. À segunda descansamos. 😊"},
+    {k:["pagamento","pagar","mb way","multibanco"], r:"Pode pagar por MB WAY ou cartão na entrega ou no levantamento."},
+    {k:["ola","olá","bom dia","boa tarde","bonjour"], r:"Olá! 😊 Em que posso ajudar? Posso falar de sabores, preços, entregas ou eventos."},
+    {k:["obrigad"], r:"De nada! Bon appétit 🥐"}
+  ],
+  fallback:"Boa pergunta! Nesta demonstração só tenho algumas respostas preparadas. Numa loja real, a IA conhece o catálogo todo e responde a isto. Experimente perguntar por sabores, preços, entregas ou eventos.",
+  google:{ url:"maisonamande.pt", pesquisas:[
+    {q:"macarons porto entrega", titulo:"Maison Amande · Macarons e pâtisserie francesa no Porto",
+     desc:"Macarons feitos à mão todas as manhãs, com amêndoa do Douro. Monte a sua caixa online e receba em casa no Porto ou levante na loja.",
+     meta:"Aberto · terça a domingo, 9h às 19h",
+     links:[["Monte a sua caixa","Escolha 6 ou 12 macarons, entre 8 sabores."],["A coleção","Éclairs, mil-folhas, Paris-Brest e mais."],["Eventos","Torres de macarons e mesas de doces."],["Entregas","Encomendas com 24 horas, no Porto."]]},
+    {q:"caixa de macarons para oferecer", produtos:[
+      {n:"Caixa de 6 macarons", pr:"15,00 €", ic:"🎁", bg:"#F4DEDA"},{n:"Caixa de 12 macarons", pr:"28,00 €", ic:"🎀", bg:"#EEF2E4"},{n:"Éclair de pistácio", pr:"4,80 €", ic:"🥖", bg:"#FBF1E2"}],
+     titulo:"Caixa de macarons à sua escolha · Maison Amande", desc:"Escolha os sabores e o tamanho da caixa: framboesa, pistácio, caramelo salgado, rosa e mais. Laço dourado incluído.", meta:"Desde 15,00 € · Em stock"},
+    {q:"torre de macarons casamento porto", titulo:"Torres de macarons para casamentos · Maison Amande",
+     desc:"Torres de macarons nas cores do seu casamento, desde 120 €. Caixinhas personalizadas para convidados desde 4 € por unidade. Peça orçamento online.", meta:"Desde 120,00 €"}
+  ]}
+};
+</script>
+<script src="/lojas/exemplos/demo.js"></script>
 </body>
 </html>

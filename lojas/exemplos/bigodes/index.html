@@ -336,5 +336,38 @@ document.querySelector('[data-demo="caixa"]').addEventListener("click", () => sh
 document.getElementById("book").addEventListener("submit", e => { e.preventDefault(); show(`Numa loja real, o pedido de marcação seguia já preenchido para o WhatsApp da loja.${DEMO}`); });
 render();
 </script>
+<script>
+window.DEMO = {
+  nome:"Bigodes & Companhia", assistente:"Bigodes & Companhia", icone:"🐾", cor:"#12403C", corTexto:"#FFF6EC",
+  fonte:'"DM Sans",system-ui,sans-serif', fonteTitulo:'"Fraunces",serif', antesDe:"footer",
+  saudacao:"Olá! 🐾 Sou o assistente da Bigodes & Companhia. Posso ajudar a escolher produtos, marcar banho ou falar da caixa mensal. Tem gato ou cão?",
+  sugestoes:["Tenho um gato","Quanto custa o banho?","Como funciona a caixa mensal?","Entregam hoje?","Petiscos sem corantes"],
+  respostas:[
+    {k:["gato","gata","gatinho"], r:"Adoramos gatos! 🐱 Os favoritos são a cama nuvem (39 €), o arranhador torre (45 €) e o rato de feltro com erva-gateira (6 €). Para mimar, o petisco de sardinha custa 4 €."},
+    {k:["cao","cão","cadela","cachorro"], r:"Para cães, recomendo a bola que salta (9 €), a trela de passeio (22 €) e os biscoitos de abóbora caseiros (7 €). Se ele come depressa demais, o comedouro lento (15 €) ajuda muito. 🐶"},
+    {k:["banho","tosquia","marcar","spa"], r:"O banho completo custa desde 20 €, a tosquia desde 30 € e o spa para gatos desde 15 €. Pode marcar aqui no site em 30 segundos e nós confirmamos o horário pelo WhatsApp."},
+    {k:["caixa","mensal","subscri"], r:"A caixa Bigodes custa 24 € por mês e traz 2 brinquedos, 3 petiscos naturais e um mimo da época. A entrega no Porto é grátis e pode pausar ou cancelar quando quiser."},
+    {k:["entrega","hoje","casa","enviar","entregam"], r:"Sim! Entregamos em casa no próprio dia, no Porto, de bicicleta. 🚲 Também pode levantar na loja."},
+    {k:["petisco","corante","natural","snack"], r:"Todos os petiscos são sem corantes: osso de ruminar (5 €), petisco de sardinha para gatos (4 €) e biscoitos de abóbora para cães (7 €)."},
+    {k:["pagamento","pagar","mb way"], r:"Pode pagar por MB WAY. Depois de enviar o pedido pelo WhatsApp, confirmamos em minutos."},
+    {k:["preco","preço","quanto","custa"], r:"Os produtos vão de 4 € (petisco de sardinha) a 45 € (arranhador torre). Diga-me o que procura e eu digo-lhe o preço certo."},
+    {k:["ola","olá","bom dia","boa tarde"], r:"Olá! 😊 Tem gato, cão ou os dois?"},
+    {k:["obrigad"], r:"De nada! Festinhas ao seu bigodudo 🐾"}
+  ],
+  fallback:"Boa pergunta! Nesta demonstração só tenho algumas respostas preparadas. Numa loja real, a IA conhece o catálogo todo e responde a isto. Experimente perguntar por gatos, cães, banhos ou entregas.",
+  google:{ url:"bigodesecompanhia.pt", pesquisas:[
+    {q:"loja de animais porto entrega no mesmo dia", titulo:"Bigodes & Companhia · Loja para gatos e cães no Porto",
+     desc:"Camas, brinquedos, petiscos naturais e banhos com marcação. Escolha online, confirme pelo WhatsApp e receba em casa no próprio dia, no Porto.",
+     meta:"Entrega no próprio dia · Pagamento MB WAY",
+     links:[["Loja","Produtos para gatos, cães e petiscos."],["Banho & tosquia","Marque online em 30 segundos."],["Caixa mensal","Uma surpresa por mês, 24 €."],["Como comprar","Escolhe, confirma, recebe."]]},
+    {q:"arranhador para gatos", produtos:[
+      {n:"Arranhador torre 60 cm", pr:"45,00 €", ic:"🐈", bg:"#FFE4B8"},{n:"Cama nuvem", pr:"39,00 €", ic:"☁️", bg:"#BFE3E0"},{n:"Túnel de esconder", pr:"19,00 €", ic:"🌀", bg:"#FFC94A"}],
+     titulo:"Arranhador torre em sisal natural · Bigodes & Companhia", desc:"Sisal natural e plataforma no topo, 60 cm. Entrega no Porto no próprio dia.", meta:"45,00 € · Em stock"},
+    {q:"banho para cão porto", titulo:"Banho e tosquia para cães e gatos no Porto · Bigodes & Companhia",
+     desc:"Banho completo desde 20 €, tosquia desde 30 € e spa para gatos desde 15 €. Marque online e confirmamos pelo WhatsApp.", meta:"Desde 15,00 €"}
+  ]}
+};
+</script>
+<script src="/lojas/exemplos/demo.js"></script>
 </body>
 </html>
