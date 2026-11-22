@@ -59,6 +59,14 @@
   footer { text-align:center; border-top:1px solid var(--line); padding:26px 20px 40px; font-size:14px; color:var(--soft); }
   footer .brand { letter-spacing:.4em; color:var(--gold); font-weight:500; margin-bottom:6px; }
   @media (max-width:640px){ .shots { grid-template-columns:1fr; } .shots a:last-child img { max-width:240px; margin:0 auto; } .cmp { font-size:13.5px; } }
+  .ex { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:20px; }
+  .exc { display:flex; flex-direction:column; text-decoration:none; color:inherit; border:1px solid #2a2a2a; background:#0f0f0f; transition:border-color .2s; }
+  .exc:hover { border-color:var(--gold); }
+  .exc img { width:100%; aspect-ratio:16/10; object-fit:cover; object-position:top; display:block; }
+  .exc b { font-family:"Cormorant Garamond",serif; font-size:24px; font-weight:600; color:var(--cream); margin:14px 16px 4px; }
+  .exc span { font-size:13.5px; color:var(--soft); margin:0 16px; flex:1; line-height:1.5; }
+  .exc i { font-style:normal; color:var(--gold); font-size:13px; letter-spacing:1.5px; text-transform:uppercase; margin:14px 16px 16px; }
+  @media (max-width:800px){ .ex { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -70,29 +78,24 @@
     <p class="lead">Sou a Marianna Werneck, fundadora do Bendito Closet e profissional de tecnologia. Crio lojas online bonitas e profissionais para brechós e pequenos negócios, a vender pelo WhatsApp, sem mensalidades de plataforma. E oriento nos primeiros passos.</p>
     <div class="btns">
       <a class="btn" href="https://wa.me/351936796783?text=Ol%C3%A1%20Marianna!%20Quero%20uma%20loja%20online%20como%20o%20Bendito%20Closet.">Falar comigo no WhatsApp</a>
+      <a class="btn ghost" href="#exemplos">Ver exemplos</a>
       <a class="btn ghost" href="#pacotes">Ver pacotes</a>
     </div>
   </section>
 
-  <h2>O exemplo: o Bendito Closet</h2>
-  <p class="muted">A minha própria loja. Site em seis línguas, catálogo ligado ao Instagram e ao Facebook, compra pelo WhatsApp, página de imprensa e e-mail com domínio próprio.</p>
-  <div class="shots">
-    <a href="/"><img src="/imprensa/fotos/12-site-computador.jpg" alt="Bendito Closet no computador" loading="lazy"></a>
-    <a href="/"><img src="/imprensa/fotos/13-site-telemovel.jpg" alt="Bendito Closet no telemóvel" loading="lazy"></a>
+  <h2 id="exemplos">Lojas que criei</h2>
+  <p class="muted">Toque para ver cada site a funcionar. Cada negócio tem um estilo próprio.</p>
+  <div class="ex">
+    <a class="exc" href="/"><img src="/imprensa/fotos/12-site-computador.jpg" alt="Bendito Closet" loading="lazy"><b>Bendito Closet</b><span>Brechó de marcas · a minha loja real · 6 línguas, catálogo no Instagram, imprensa</span><i>Ver o site →</i></a>
+    <a class="exc" href="/lojas/exemplos/maison-amande/"><img src="/lojas/exemplos/maison-amande/capa-computador.jpg" alt="Maison Amande" loading="lazy"><b>Maison Amande</b><span>Pâtisserie de luxo · projeto conceito · caixa de macarons à escolha, encomendas para eventos</span><i>Ver o site →</i></a>
+    <a class="exc" href="/lojas/exemplos/bigodes/"><img src="/lojas/exemplos/bigodes/capa-computador.jpg" alt="Bigodes &amp; Companhia" loading="lazy"><b>Bigodes &amp; Companhia</b><span>Loja para gatos e cães · projeto conceito · carrinho, caixa mensal, marcação de banhos</span><i>Ver o site →</i></a>
   </div>
-
-  <h2>Outros exemplos</h2>
-  <p class="muted">Projetos conceito: negócios inventados por mim para mostrar estilos diferentes. Toque para ver o site a funcionar.</p>
-  <div class="shots">
-    <a href="/lojas/exemplos/bigodes/"><img src="/lojas/exemplos/bigodes/capa-computador.jpg" alt="Bigodes &amp; Companhia, loja conceito para gatos e cães, no computador" loading="lazy"></a>
-    <a href="/lojas/exemplos/bigodes/"><img src="/lojas/exemplos/bigodes/capa-telemovel.jpg" alt="Bigodes &amp; Companhia no telemóvel" loading="lazy"></a>
-  </div>
-  <p class="muted" style="margin-top:10px"><a href="/lojas/exemplos/bigodes/" style="color:var(--gold)">Bigodes &amp; Companhia</a> · loja de bairro para gatos e cães, com carrinho, caixa mensal e marcação de banhos.</p>
+  <p class="muted" style="font-size:13px;margin-top:12px">Projeto conceito: negócio inventado por mim para mostrar estilos diferentes.</p>
 
   <h2>Porque vender pelo WhatsApp é melhor para começar</h2>
   <div class="grid">
     <div class="card"><div class="ico">€</div><h3>Custos baixíssimos</h3><p>Paga só o domínio (cerca de 10 € por ano). Sem mensalidade de plataforma e sem comissão por venda.</p></div>
-    <div class="card"><div class="ico">✦</div><h3>Venda com conversa</h3><p>A cliente tira dúvidas, pede mais fotos e decide consigo. Em moda e segunda mão, isso fecha mais vendas do que um carrinho.</p></div>
+    <div class="card"><div class="ico">✦</div><h3>Venda com conversa</h3><p>A cliente junta as peças no carrinho e o pedido chega ao seu WhatsApp. Tira dúvidas, pede mais fotos e decide consigo: isso fecha mais vendas.</p></div>
     <div class="card"><div class="ico">◎</div><h3>Aspeto profissional</h3><p>Site próprio, com a sua marca, em várias línguas, rápido no telemóvel e com o catálogo no Instagram e no Facebook.</p></div>
     <div class="card"><div class="ico">↗</div><h3>Pronta para crescer</h3><p>Quando as vendas aumentarem e quiser pagamento automático, ajudo a passar para uma plataforma como a Shopify.</p></div>
   </div>

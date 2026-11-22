@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison Amande · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: pâtisserie fictícia de luxo no Porto, criada por Marianna Werneck para mostrar o tipo de site que pode ter para o seu negócio.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FBF7F1;--blush:#F4DEDA;--rose:#E9B9B3;--pist:#BCCBA8;--plum:#3B2A2F;--gold:#B08A52;--muted:#7C6A6C;--line:#E7D9CE;--paper:#FFFDF9}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--plum);font-family:"Jost",system-ui,sans-serif;font-size:17px;line-height:1.6}
+a{color:inherit}
+.concept{background:var(--plum);color:#F4DEDA;font-size:13.5px;text-align:center;padding:10px 16px;line-height:1.4;letter-spacing:.2px}
+.concept a{color:#E8C98F;font-weight:600;white-space:nowrap}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.serif{font-family:"Bodoni Moda",Georgia,serif}
+
+header{border-bottom:1px solid var(--line)}
+.bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-top:22px;padding-bottom:22px}
+.bar nav{display:flex;gap:26px;font-size:13px;letter-spacing:2.2px;text-transform:uppercase}
+.bar nav a{text-decoration:none}
+.bar nav a:hover{color:var(--gold)}
+.bar nav.r{justify-content:flex-end}
+.logo{text-align:center;text-decoration:none}
+.logo b{display:block;font-family:"Bodoni Moda",serif;font-weight:500;font-size:30px;letter-spacing:7px;line-height:1}
+.logo span{display:block;font-size:10.5px;letter-spacing:4.5px;text-transform:uppercase;color:var(--gold);margin-top:7px}
+.bag{background:none;border:1px solid var(--plum);border-radius:999px;padding:8px 16px;font:inherit;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--plum)}
+
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:64px 0 72px}
+.kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+h1{font-family:"Bodoni Moda",serif;font-weight:400;font-size:clamp(44px,6.2vw,80px);line-height:1.02;letter-spacing:-1px;margin:18px 0 22px}
+h1 i{color:#B5636A}
+.lead{color:var(--muted);font-size:18px;max-width:28em;margin:0 0 32px}
+.btn{display:inline-block;text-decoration:none;font:inherit;font-size:13px;letter-spacing:2.4px;text-transform:uppercase;padding:16px 28px;border:1px solid var(--plum);cursor:pointer;background:transparent;color:var(--plum);transition:background .2s,color .2s}
+.btn.dark{background:var(--plum);color:var(--cream)}
+.btn:hover{background:var(--gold);border-color:var(--gold);color:#fff}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.arch{aspect-ratio:4/5;background:var(--blush);border-radius:999px 999px 0 0;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.arch svg{width:88%;height:auto;margin-bottom:6%}
+.arch .seal{position:absolute;right:7%;top:12%;width:104px;height:104px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;text-align:center;font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px;line-height:1.2;color:var(--gold);transform:rotate(10deg);background:rgba(251,247,241,.6)}
+
+.strip{background:var(--plum);color:#F4DEDA;overflow:hidden;white-space:nowrap;padding:14px 0;font-size:13px;letter-spacing:3px;text-transform:uppercase}
+.strip div{display:inline-block;animation:run 32s linear infinite}
+.strip span{margin:0 28px}.strip i{color:#E8C98F;font-style:normal}
+@keyframes run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.strip div{animation:none}}
+
+section{padding:88px 0}
+.head{text-align:center;max-width:640px;margin:0 auto 46px}
+h2{font-family:"Bodoni Moda",serif;font-weight:400;font-size:clamp(34px,4.4vw,52px);line-height:1.08;margin:12px 0 12px}
+h2 i{color:#B5636A}
+.head p{color:var(--muted);margin:0}
+
+.coll{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.item{background:var(--paper);border:1px solid var(--line);text-align:center;padding:0 0 26px;display:flex;flex-direction:column}
+.item .pic{aspect-ratio:5/4;display:grid;place-items:center;margin-bottom:20px}
+.item .pic svg{width:78%;height:auto}
+.item small{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.item h3{font-family:"Bodoni Moda",serif;font-weight:500;font-size:25px;margin:6px 18px 6px}
+.item p{color:var(--muted);font-size:15px;margin:0 26px 16px;flex:1}
+.item .pr{font-family:"Bodoni Moda",serif;font-size:20px;margin-bottom:14px}
+.item .btn{align-self:center;padding:12px 22px;font-size:12px}
+
+.builder{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;background:var(--blush);padding:56px}
+.sizes{display:flex;gap:10px;margin:0 0 22px}
+.size{flex:1;border:1px solid var(--plum);background:transparent;font:inherit;padding:14px;cursor:pointer;text-align:left;color:var(--plum)}
+.size b{display:block;font-family:"Bodoni Moda",serif;font-weight:500;font-size:20px}
+.size span{font-size:13px;color:var(--muted)}
+.size[aria-pressed="true"]{background:var(--plum);color:var(--cream)}
+.size[aria-pressed="true"] span{color:#E7CFC9}
+.flavors{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.fl{background:var(--paper);border:1px solid transparent;padding:12px 6px 10px;cursor:pointer;font:inherit;font-size:13px;color:var(--plum);display:flex;flex-direction:column;align-items:center;gap:6px;line-height:1.2}
+.fl:hover{border-color:var(--gold)}
+.fl svg{width:46px;height:auto}
+.boxwrap{background:var(--paper);padding:28px;text-align:center}
+.box{display:grid;gap:10px;margin:0 auto 18px;padding:18px;border:2px solid var(--plum);background:#fff;max-width:420px}
+.slot{aspect-ratio:1;border-radius:50%;border:1px dashed var(--rose);display:grid;place-items:center;cursor:pointer}
+.slot svg{width:100%;height:auto}
+.boxinfo{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.boxinfo .tot{font-family:"Bodoni Moda",serif;font-size:24px}
+.hint{font-size:13px;color:var(--muted);margin:0 0 14px}
+.clear{background:none;border:0;font:inherit;font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+
+.events{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.events ul{list-style:none;padding:0;margin:0 0 30px}
+.events li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}
+.events li span{color:var(--muted)}
+.tower{background:var(--pist);aspect-ratio:1;display:grid;place-items:center}
+.tower svg{width:86%}
+
+form.ev{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form.ev label{display:flex;flex-direction:column;gap:6px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+form.ev input,form.ev select{font:inherit;font-size:16px;padding:12px;border:1px solid var(--line);background:var(--paper);color:var(--plum);letter-spacing:0;text-transform:none}
+form.ev .btn{grid-column:1/-1}
+
+.story{text-align:center;max-width:760px;margin:0 auto}
+.story blockquote{font-family:"Bodoni Moda",serif;font-style:italic;font-size:clamp(24px,3vw,34px);line-height:1.35;margin:18px 0 22px}
+.story p{color:var(--muted)}
+
+footer{background:var(--plum);color:#D9C6C2;padding:60px 0 30px;font-size:14px}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+footer .logo{text-align:left}
+footer .logo b{color:var(--cream);font-size:24px}
+footer h4{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#E8C98F;margin:0 0 12px;font-weight:500}
+footer a{color:#D9C6C2;text-decoration:none;display:block;margin:5px 0}
+footer .made{border-top:1px solid rgba(255,255,255,.12);margin-top:36px;padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer .made a{display:inline;color:#E8C98F}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(calc(100% + 40px));visibility:hidden;background:var(--plum);color:var(--cream);padding:15px 20px;max-width:min(92vw,470px);font-size:14px;line-height:1.5;box-shadow:0 12px 40px rgba(0,0,0,.25);transition:transform .25s,visibility .25s;z-index:20}
+.toast.on{transform:translateX(-50%) translateY(0);visibility:visible}
+.toast a{color:#E8C98F;font-weight:600}
+
+@media (max-width:900px){
+  .bar{grid-template-columns:1fr auto}
+  .bar nav.l,.bar nav.r a{display:none}
+  .logo{text-align:left}
+  .logo b{font-size:20px;letter-spacing:4px}.logo span{font-size:9px;letter-spacing:3.5px}
+  .hero,.builder,.events{grid-template-columns:1fr}
+  .hero{padding-top:36px;gap:36px}
+  .builder{padding:30px 20px;gap:30px}
+  .coll{grid-template-columns:1fr 1fr;gap:16px}
+  .item h3{font-size:20px;margin:6px 10px}.item p{margin:0 12px 14px;font-size:14px}
+  section{padding:64px 0}
+  footer .cols{grid-template-columns:1fr}
+  form.ev{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .coll{grid-template-columns:1fr}
+  .flavors{grid-template-columns:repeat(4,1fr);gap:8px}
+  .fl{font-size:11.5px;padding:10px 4px 8px}.fl svg{width:38px}
+  .bag{padding:7px 12px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="concept">✦ Projeto conceito: pâtisserie fictícia criada por Marianna Werneck para mostrar o que posso fazer pelo seu negócio. <a href="/lojas/">Quero um site assim →</a></div>
+
+<header>
+  <div class="wrap bar">
+    <nav class="l"><a href="#colecao">Coleção</a><a href="#caixa">Caixas</a><a href="#eventos">Eventos</a></nav>
+    <a class="logo" href="#"><b>MAISON AMANDE</b><span>Pâtisserie · Porto</span></a>
+    <nav class="r"><a href="#maison">A Maison</a><button class="bag" type="button" id="bag">Saco · <span id="n">0</span></button></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <span class="kicker">Feito à mão, todas as manhãs</span>
+      <h1>A arte do <i>macaron</i>, no coração do Porto.</h1>
+      <p class="lead">Pâtisserie francesa com ingredientes portugueses: amêndoa do Douro, framboesas da Beira e chocolate de origem. Encomende online e levante na loja ou receba em casa.</p>
+      <div class="ctas"><a class="btn dark" href="#caixa">Monte a sua caixa</a><a class="btn" href="#colecao">Ver a coleção</a></div>
+    </div>
+    <div class="arch" aria-hidden="true">
+      <div class="seal">Maison<br>Amande<br>desde<br>2026</div>
+      <svg id="heroTower" viewBox="0 70 400 350"></svg>
+    </div>
+  </div>
+</div>
+
+<div class="strip" aria-hidden="true"><div>
+  <span>Macarons</span><i>✦</i><span>Éclairs</span><i>✦</i><span>Mil-folhas</span><i>✦</i><span>Encomendas com 24 horas</span><i>✦</i><span>Entrega no Porto</span><i>✦</i><span>Caixas de presente</span><i>✦</i>
+  <span>Macarons</span><i>✦</i><span>Éclairs</span><i>✦</i><span>Mil-folhas</span><i>✦</i><span>Encomendas com 24 horas</span><i>✦</i><span>Entrega no Porto</span><i>✦</i><span>Caixas de presente</span><i>✦</i>
+</div></div>
+
+<section id="colecao">
+  <div class="wrap">
+    <div class="head"><span class="kicker">La collection</span><h2>As nossas <i>criações</i></h2><p>Seis clássicos da pâtisserie parisiense, feitos em pequenas quantidades. Quando acabam, só amanhã.</p></div>
+    <div class="coll" id="coll"></div>
+  </div>
+</section>
+
+<section id="caixa" style="padding-top:0">
+  <div class="wrap">
+    <div class="builder">
+      <div>
+        <span class="kicker">Coffret sur mesure</span>
+        <h2>Monte a sua <i>caixa</i> de macarons</h2>
+        <p class="hint">Escolha o tamanho e toque nos sabores para encher a caixa. Toque num macaron da caixa para o tirar.</p>
+        <div class="sizes" role="group" aria-label="Tamanho da caixa">
+          <button class="size" type="button" data-s="6" aria-pressed="true"><b>Caixa de 6</b><span>15 €</span></button>
+          <button class="size" type="button" data-s="12" aria-pressed="false"><b>Caixa de 12</b><span>28 €</span></button>
+        </div>
+        <div class="flavors" id="flavors"></div>
+      </div>
+      <div class="boxwrap">
+        <div class="box" id="box"></div>
+        <div class="boxinfo">
+          <div style="text-align:left"><div class="tot" id="tot">0 de 6</div><button class="clear" type="button" id="clear">Esvaziar caixa</button></div>
+          <button class="btn dark" type="button" id="order">Encomendar caixa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="eventos" style="padding-top:0">
+  <div class="wrap events">
+    <div class="tower" aria-hidden="true"><svg id="evTower" viewBox="0 170 400 250"></svg></div>
+    <div>
+      <span class="kicker">Mariages &amp; événements</span>
+      <h2>Para os dias que <i>merecem</i> ser lembrados</h2>
+      <ul>
+        <li>Torre de macarons <span>desde 120 €</span></li>
+        <li>Mesa de doces para eventos <span>sob orçamento</span></li>
+        <li>Caixas personalizadas para convidados <span>desde 4 € / un.</span></li>
+      </ul>
+      <form class="ev" id="ev">
+        <label>Tipo de evento<select><option>Casamento</option><option>Batizado</option><option>Aniversário</option><option>Empresa</option></select></label>
+        <label>Data<input type="date"></label>
+        <label>Número de convidados<input type="number" min="1" placeholder="Ex.: 80"></label>
+        <label>Cores preferidas<input type="text" placeholder="Ex.: rosa e dourado"></label>
+        <button class="btn dark" type="submit">Pedir orçamento</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="maison" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap story">
+    <span class="kicker">A Maison</span>
+    <blockquote>“Um macaron perfeito é estaladiço por fora, macio por dentro e desaparece em duas dentadas.”</blockquote>
+    <p>A Maison Amande é uma pâtisserie imaginada para este exemplo. Num projeto real, aqui ficaria a história do seu negócio, as suas fotos e a sua equipa.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="logo" href="#"><b>MAISON AMANDE</b><span style="color:#E8C98F">Pâtisserie · Porto</span></a><p style="margin-top:16px">Pâtisserie fictícia, criada como exemplo. Os produtos e preços desta página não estão à venda.</p></div>
+      <div><h4>Loja</h4><a href="#colecao">Coleção</a><a href="#caixa">Caixas de macarons</a><a href="#eventos">Eventos</a></div>
+      <div><h4>Horário</h4>Terça a domingo<br>9h às 19h</div>
+    </div>
+    <div class="made"><span>Site criado por Marianna Werneck · projeto conceito</span><span>Quer um site assim para o seu negócio? <a href="/lojas/">Veja os pacotes</a></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ---------- desenhos ---------- */
+function shade(hex, k){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=n>>8&255,b=n&255; const f=v=>Math.max(0,Math.min(255,Math.round(k<0?v*(1+k):v+(255-v)*k))); return "#"+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,"0")).join(""); }
+function mac(c, fill, x, y, w){ // macaron de perfil, largura w, canto sup. esq. (x,y)
+  const h=w*.62, s=w/100, d=shade(c,-.14), l=shade(c,.35);
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <ellipse cx="50" cy="60" rx="48" ry="6" fill="#000" opacity=".06"/>
+    <path d="M4 40 Q4 52 50 54 Q96 52 96 40 L96 44 Q96 58 50 59 Q4 58 4 44Z" fill="${d}"/>
+    <path d="M4 40 h92 v4 Q50 50 4 44Z" fill="${d}"/>
+    <path d="M6 38 Q50 44 94 38 L94 41 Q50 47 6 41Z" fill="${l}" opacity=".7"/>
+    <rect x="8" y="27" width="84" height="12" rx="5" fill="${fill}"/>
+    <path d="M6 28 Q50 34 94 28 L94 31 Q50 36 6 31Z" fill="${l}" opacity=".7"/>
+    <path d="M4 28 Q4 2 50 2 Q96 2 96 28 Q50 34 4 28Z" fill="${c}"/>
+    <path d="M18 14 Q34 6 54 7" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity=".45"/>
+  </g>`;
+}
+function macTop(c){ // macaron visto de cima
+  return `<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="44" fill="${shade(c,-.16)}"/><circle cx="50" cy="48" r="44" fill="${c}"/><path d="M24 32 Q38 18 58 18" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".45"/></svg>`;
+}
+const FL = [
+  {n:"Framboesa", c:"#E58A99", f:"#C8475E"},
+  {n:"Pistácio",  c:"#B5C98F", f:"#EFE7C8"},
+  {n:"Baunilha",  c:"#F3E6C8", f:"#FFFFFF"},
+  {n:"Chocolate", c:"#7A4B3A", f:"#3E2219"},
+  {n:"Limão",     c:"#F2DB7A", f:"#FFF4C2"},
+  {n:"Lavanda",   c:"#C7B6E0", f:"#F3EEF9"},
+  {n:"Caramelo salgado", c:"#D9A46C", f:"#9C5B25"},
+  {n:"Rosa",      c:"#F2C4C9", f:"#FFFFFF"}
+];
+function tower(id, rows, w0){
+  const svg=document.getElementById(id); let out=""; let i=0;
+  rows.forEach((n,r)=>{ const w=w0, y=360-r*w*.5, total=n*w*.94, x0=(400-total)/2;
+    for(let k=0;k<n;k++){ const f=FL[(i++)%FL.length]; out+=mac(f.c,f.f,x0+k*w*.94,y,w); } });
+  svg.innerHTML = `<ellipse cx="200" cy="400" rx="170" ry="10" fill="#000" opacity=".06"/>` + out;
+}
+tower("heroTower",[5,4,4,3,2,1],80);
+tower("evTower",[6,5,4,3,2,1],64);
+
+const ART = {
+  eclair:`<svg viewBox="0 0 240 160"><ellipse cx="120" cy="120" rx="100" ry="10" fill="#000" opacity=".07"/><rect x="24" y="66" width="192" height="50" rx="25" fill="#D9A46C"/><rect x="24" y="90" width="192" height="26" rx="13" fill="#C08A4E"/><rect x="28" y="58" width="184" height="30" rx="15" fill="#A9C27F"/><path d="M50 66 h140" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".4"/><g fill="#6E8B4A"><circle cx="70" cy="66" r="4"/><circle cx="105" cy="70" r="3.5"/><circle cx="140" cy="65" r="4"/><circle cx="172" cy="70" r="3.5"/></g></svg>`,
+  millefeuille:`<svg viewBox="0 0 240 160"><ellipse cx="120" cy="134" rx="96" ry="9" fill="#000" opacity=".07"/><rect x="34" y="112" width="172" height="18" rx="4" fill="#C9894A"/><rect x="34" y="96" width="172" height="16" fill="#FBEFD8"/><rect x="34" y="80" width="172" height="16" rx="3" fill="#D39A5C"/><rect x="34" y="64" width="172" height="16" fill="#FBEFD8"/><rect x="34" y="46" width="172" height="18" rx="4" fill="#FFFBF4"/><path d="M44 50 q12 8 24 0 t24 0 t24 0 t24 0 t24 0 t24 0" stroke="#7A4B3A" stroke-width="3" fill="none"/><g fill="#FBEFD8"><circle cx="48" cy="104" r="6"/><circle cx="76" cy="104" r="6"/><circle cx="104" cy="104" r="6"/><circle cx="132" cy="104" r="6"/><circle cx="160" cy="104" r="6"/><circle cx="188" cy="104" r="6"/></g></svg>`,
+  tarte:`<svg viewBox="0 0 240 170"><ellipse cx="120" cy="140" rx="100" ry="14" fill="#000" opacity=".07"/><path d="M24 104 Q24 134 120 136 Q216 134 216 104Z" fill="#D9A46C"/><ellipse cx="120" cy="104" rx="96" ry="30" fill="#E8B97E"/><ellipse cx="120" cy="100" rx="84" ry="24" fill="#FBEFD8"/>${Array.from({length:22},(_,i)=>{const a=i/22*Math.PI*2,r=i%2?40:66;return `<circle cx="${120+Math.cos(a)*r}" cy="${98+Math.sin(a)*r*.32}" r="11" fill="#D2465F"/><circle cx="${117+Math.cos(a)*r}" cy="${95+Math.sin(a)*r*.32}" r="3" fill="#F08A9C"/>`}).join("")}<circle cx="120" cy="96" r="11" fill="#D2465F"/><path d="M128 84 q10 -14 22 -8 q-8 12 -22 8z" fill="#7FA35A"/></svg>`,
+  parisbrest:`<svg viewBox="0 0 240 170"><ellipse cx="120" cy="140" rx="98" ry="12" fill="#000" opacity=".07"/><ellipse cx="120" cy="116" rx="92" ry="30" fill="#C9894A"/><ellipse cx="120" cy="104" rx="88" ry="26" fill="#E3C49A"/>${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;return `<path d="M${120+Math.cos(a)*70} ${100+Math.sin(a)*20} q8 -12 16 0" fill="#F2E3C8" stroke="#E3C49A" stroke-width="2"/>`}).join("")}<ellipse cx="120" cy="84" rx="88" ry="26" fill="#D39A5C"/><ellipse cx="120" cy="80" rx="40" ry="10" fill="#F5E9D6"/><g fill="#FFFFFF" opacity=".9"><circle cx="70" cy="76" r="2"/><circle cx="160" cy="72" r="2"/><circle cx="104" cy="66" r="2"/><circle cx="182" cy="86" r="2"/><circle cx="58" cy="90" r="2"/></g><g fill="#F7EAD2"><ellipse cx="80" cy="70" rx="7" ry="3"/><ellipse cx="146" cy="68" rx="7" ry="3"/><ellipse cx="174" cy="80" rx="6" ry="3"/></g></svg>`,
+  religieuse:`<svg viewBox="0 0 240 190"><ellipse cx="120" cy="170" rx="70" ry="10" fill="#000" opacity=".07"/><ellipse cx="120" cy="136" rx="62" ry="34" fill="#D39A5C"/><path d="M62 128 Q120 92 178 128 Q150 118 120 118 Q90 118 62 128Z" fill="#7A4B3A"/><ellipse cx="120" cy="120" rx="58" ry="14" fill="#7A4B3A"/><path d="M70 104 q10 -8 20 0 t20 0 t20 0 t20 0 t20 0" stroke="#FBEFD8" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="120" cy="74" rx="36" ry="24" fill="#D39A5C"/><ellipse cx="120" cy="62" rx="34" ry="12" fill="#7A4B3A"/><circle cx="120" cy="46" r="7" fill="#FBEFD8"/></svg>`,
+  coffret:`<svg viewBox="0 0 240 170"><ellipse cx="120" cy="146" rx="100" ry="10" fill="#000" opacity=".07"/><rect x="30" y="56" width="180" height="86" fill="#3B2A2F"/><rect x="38" y="64" width="164" height="70" fill="#F4DEDA"/>${[0,1,2,3,4,5].map(i=>{const f=FL[i],x=46+(i%3)*52,y=i<3?66:100;return mac(f.c,f.f,x,y,44)}).join("")}<path d="M120 56 v86" stroke="#B08A52" stroke-width="5"/><path d="M120 50 q-26 -26 -34 0 q26 4 34 0 q8 4 34 0 q-8 -26 -34 0z" fill="none" stroke="#B08A52" stroke-width="5"/></svg>`
+};
+const COL = [
+  {k:"Le classique", n:"Éclair de pistácio", d:"Massa choux, creme de pistácio e pistácios torrados.", pr:"4,80 €", a:"eclair", bg:"#EEF2E4"},
+  {k:"Signature", n:"Mil-folhas de baunilha", d:"Massa folhada caramelizada e creme de baunilha de Madagáscar.", pr:"5,50 €", a:"millefeuille", bg:"#FBF1E2"},
+  {k:"De saison", n:"Tarte de framboesa", d:"Massa sablée, creme de amêndoa e framboesas frescas.", pr:"5,20 €", a:"tarte", bg:"#F7E3E3"},
+  {k:"Le classique", n:"Paris-Brest", d:"Coroa de choux com praliné de avelã e amêndoa.", pr:"5,90 €", a:"parisbrest", bg:"#F5EADB"},
+  {k:"Tradition", n:"Religieuse de café", d:"Dois choux recheados de creme de café, cobertos de fondant.", pr:"4,90 €", a:"religieuse", bg:"#EFE5DF"},
+  {k:"Pour offrir", n:"Coffret de 6 macarons", d:"Os seis sabores da casa, numa caixa com laço dourado.", pr:"15 €", a:"coffret", bg:"#F4DEDA"}
+];
+document.getElementById("coll").innerHTML = COL.map(p => `
+  <article class="item"><div class="pic" style="background:${p.bg}">${ART[p.a]}</div>
+    <small>${p.k}</small><h3>${p.n}</h3><p>${p.d}</p><div class="pr">${p.pr}</div>
+    <button class="btn" type="button" data-n="${p.n}">Juntar ao saco</button></article>`).join("");
+
+/* ---------- interação ---------- */
+const toast=document.getElementById("toast"); let tt, N=0;
+const DEMO=' <a href="/lojas/">Isto é um exemplo. Quero um site assim →</a>';
+function show(h){ toast.innerHTML=h; toast.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>toast.classList.remove("on"),4200); }
+document.getElementById("coll").addEventListener("click", e => { const b=e.target.closest("[data-n]"); if(!b) return; N++; document.getElementById("n").textContent=N; show(`✦ <b>${b.dataset.n}</b> foi para o saco.`); });
+document.getElementById("bag").addEventListener("click", () => show(N ? `Numa loja real, o saco seguia para o WhatsApp da pâtisserie, com a lista, o total e o dia de levantamento.${DEMO}` : "O saco está vazio."));
+
+let SIZE=6, BOX=[];
+const fEl=document.getElementById("flavors"), bEl=document.getElementById("box");
+fEl.innerHTML = FL.map((f,i)=>`<button class="fl" type="button" data-i="${i}" aria-label="Juntar ${f.n}">${macTop(f.c)}${f.n}</button>`).join("");
+function paint(){
+  bEl.style.gridTemplateColumns = `repeat(${SIZE===6?3:4},1fr)`;
+  bEl.innerHTML = Array.from({length:SIZE},(_,i)=> BOX[i]!==undefined ? `<div class="slot" data-k="${i}" title="Tirar">${macTop(FL[BOX[i]].c)}</div>` : `<div class="slot"></div>`).join("");
+  document.getElementById("tot").textContent = `${BOX.length} de ${SIZE}`;
+}
+fEl.addEventListener("click", e => { const b=e.target.closest(".fl"); if(!b) return; if(BOX.length>=SIZE){ show("A caixa está cheia. Toque num macaron para o tirar."); return; } BOX.push(+b.dataset.i); paint(); });
+bEl.addEventListener("click", e => { const s=e.target.closest("[data-k]"); if(!s) return; BOX.splice(+s.dataset.k,1); paint(); });
+document.querySelectorAll(".size").forEach(b=>b.addEventListener("click",()=>{ SIZE=+b.dataset.s; BOX=BOX.slice(0,SIZE); document.querySelectorAll(".size").forEach(x=>x.setAttribute("aria-pressed",x===b)); paint(); }));
+document.getElementById("clear").addEventListener("click",()=>{BOX=[];paint();});
+document.getElementById("order").addEventListener("click",()=>{
+  if(BOX.length<SIZE){ show(`Faltam ${SIZE-BOX.length} macarons para encher a caixa.`); return; }
+  const c={}; BOX.forEach(i=>c[FL[i].n]=(c[FL[i].n]||0)+1);
+  show(`Numa loja real, seguia para o WhatsApp: “Caixa de ${SIZE}: ${Object.entries(c).map(([k,v])=>v+" "+k).join(", ")}”.${DEMO}`);
+});
+document.getElementById("ev").addEventListener("submit",e=>{e.preventDefault();show(`Numa loja real, o pedido de orçamento seguia já preenchido para a pâtisserie.${DEMO}`);});
+BOX=[0,1,3]; paint();
+</script>
+</body>
+</html>
