@@ -230,7 +230,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
   <main class="grid" id="grid"></main>
 
   <section class="how" aria-label="Como comprar">
-    <div class="step"><span class="n">1</span><div><h3 data-i18n="s1t">Escolha a peça</h3><p data-i18n="s1p">Toque em “Comprar pelo WhatsApp”. A mensagem já vai com o nome da peça.</p></div></div>
+    <div class="step"><span class="n">1</span><div><h3 data-i18n="s1t">Escolha a peça</h3><p data-i18n="s1p">Toque em “Comprar agora”. Abre o WhatsApp com a mensagem já pronta, com o nome da peça.</p></div></div>
     <div class="step"><span class="n">2</span><div><h3 data-i18n="s2t">Combine o pagamento</h3><p data-i18n="s2p">MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.</p></div></div>
     <div class="step"><span class="n">3</span><div><h3 data-i18n="s3t">Receba em casa</h3><p data-i18n="s3p">Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento. Portes combinados pelo WhatsApp, grátis em compras acima de 100 €.</p></div></div>
   </section>
@@ -352,11 +352,11 @@ const UI = {
       ctaT:"Procura uma marca ou peça que não está aqui?", ctaP:"Há novas peças a chegar todas as semanas. Escolha a marca e enviamos fotos pelo WhatsApp.", ctaB:"Perguntar no WhatsApp",
       qBrand:"Que marca procura?", qType:"Que tipo de peça?", opt:"(opcional)", other:"Outra", otherPh:"Escreva a marca", hintBrand:"Escolha uma marca primeiro.", hintOther:"Escreva o nome da marca.",
       askMsg:(b,t)=>`Olá! Vim pelo site da Bendito Closet. Procuro ${({bolsas:"uma bolsa",casacos:"um casaco",roupas:"roupa",sapatos:"sapatos",acessorios:"um acessório"})[t]||"peças"} da marca ${b}. Têm alguma coisa disponível?`,
-      sortLabel:"Ordenar:", sortNew:"Novidades", sortLow:"Preço: mais baratos", sortHigh:"Preço: mais caros", buyShort:"Comprar", back:"Voltar", backShop:"Voltar à loja", fAll:"Tudo", fBolsas:"Bolsas", fCasacos:"Casacos", fRoupas:"Roupas", fSapatos:"Sapatos", fAcess:"Acessórios",
-      s1t:"Escolha a peça", s1p:"Toque em “Comprar pelo WhatsApp”. A mensagem já vai com o nome da peça.",
+      sortLabel:"Ordenar:", sortNew:"Novidades", sortLow:"Preço: mais baratos", sortHigh:"Preço: mais caros", buyShort:"Comprar agora", back:"Voltar", backShop:"Voltar à loja", fAll:"Tudo", fBolsas:"Bolsas", fCasacos:"Casacos", fRoupas:"Roupas", fSapatos:"Sapatos", fAcess:"Acessórios",
+      s1t:"Escolha a peça", s1p:"Toque em “Comprar agora”. Abre o WhatsApp com a mensagem já pronta, com o nome da peça.",
       s2t:"Combine o pagamento", s2p:"MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.",
       s3t:"Receba em casa", s3p:"Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento, para Portugal e toda a Europa. Portes combinados pelo WhatsApp, grátis em compras acima de 100 € em Portugal.",
-      buy:"Comprar pelo WhatsApp", more:"toque para ver mais", st:{disponivel:"Disponível",reservado:"Reservado",vendido:"Vendido"},
+      buy:"Comprar agora", more:"toque para ver mais", st:{disponivel:"Peça única",reservado:"Reservado",vendido:"Vendido"},
       msg:(n,m,pr)=>`Olá! Tenho interesse em: ${n} (${m}) – ${pr}. Ainda está disponível?`},
   en:{cuT:"Sell your pieces with us", cuP:"Have designer clothes, shoes or accessories in good condition that you no longer wear? We curate, photograph and sell them for you. You are paid, minus our commission, once the piece is sold and the buyer has received it.", cuB:"Talk to us on WhatsApp", rvNote:"We only publish reviews from customers who bought from us, after confirming the purchase.", rvT:"Reviews", rvIntro:"Bought from Bendito Closet? Tell us how it went. We publish your review with your first name and city only.", rvStars:"Your rating", rvName:"First name", rvCity:"City", rvItem:"Item you bought", rvText:"Your review", rvOk:"I agree to this review being published on the website with my first name and city.", rvSend:"Send review on WhatsApp", rvNeed:"Please fill in the rating, name, city and review.", rvNeedOk:"Please tick the consent box so we can publish it.", rvStar:"stars", rvBought:"bought", rvMsg:(e,n,c,i,t)=>`Review for the Bendito Closet website ${"⭐".repeat(e)}\nName: ${n}\nCity: ${c}\nItem: ${i||"-"}\nReview: ${t}\n✅ I agree to it being published on the website with my first name and city.`,
       h1:"Hand-picked pre-loved fashion",
@@ -366,11 +366,11 @@ const UI = {
       ctaT:"Looking for a brand or piece that isn't here?", ctaP:"New pieces arrive every week. Pick a brand and we'll send photos on WhatsApp.", ctaB:"Ask on WhatsApp",
       qBrand:"Which brand are you looking for?", qType:"What kind of item?", opt:"(optional)", other:"Other", otherPh:"Type the brand", hintBrand:"Choose a brand first.", hintOther:"Type the brand name.",
       askMsg:(b,t)=>`Hi! I found you through the Bendito Closet website. I'm looking for ${({bolsas:"a bag",casacos:"a coat",roupas:"clothing",sapatos:"shoes",acessorios:"an accessory"})[t]||"pieces"} from ${b}. Do you have anything available?`,
-      sortLabel:"Sort:", sortNew:"Newest", sortLow:"Price: low to high", sortHigh:"Price: high to low", buyShort:"Buy", back:"Back", backShop:"Back to shop", fAll:"All", fBolsas:"Bags", fCasacos:"Coats", fRoupas:"Clothing", fSapatos:"Shoes", fAcess:"Accessories",
-      s1t:"Choose your piece", s1p:"Tap “Buy on WhatsApp”. The message already includes the item name.",
+      sortLabel:"Sort:", sortNew:"Newest", sortLow:"Price: low to high", sortHigh:"Price: high to low", buyShort:"Buy now", back:"Back", backShop:"Back to shop", fAll:"All", fBolsas:"Bags", fCasacos:"Coats", fRoupas:"Clothing", fSapatos:"Shoes", fAcess:"Accessories",
+      s1t:"Choose your piece", s1p:"Tap “Buy now”. WhatsApp opens with a ready message that includes the item name.",
       s2t:"Arrange payment", s2p:"MB WAY, bank transfer or Revolut. The item is reserved for you for 24 hours.",
       s3t:"Delivered to your door", s3p:"Shipped with CTT, with tracking, within 2 working days of payment, to Portugal and all of Europe. Postage agreed on WhatsApp, free on orders over €100 in Portugal.",
-      buy:"Buy on WhatsApp", more:"tap to see more", st:{disponivel:"Available",reservado:"Reserved",vendido:"Sold"},
+      buy:"Buy now", more:"tap to see more", st:{disponivel:"One of a kind",reservado:"Reserved",vendido:"Sold"},
       msg:(n,m,pr)=>`Hi! I'm interested in: ${n} (${m}) – ${pr}. Is it still available?`}
 };
 const EN = {
@@ -439,11 +439,11 @@ Object.assign(UI, {
       ctaT:"¿Buscas una marca o pieza que no está aquí?", ctaP:"Llegan piezas nuevas cada semana. Elige la marca y te enviamos fotos por WhatsApp.", ctaB:"Preguntar por WhatsApp",
       qBrand:"¿Qué marca buscas?", qType:"¿Qué tipo de pieza?", opt:"(opcional)", other:"Otra", otherPh:"Escribe la marca", hintBrand:"Elige una marca primero.", hintOther:"Escribe el nombre de la marca.",
       askMsg:(b,t)=>`¡Hola! Vengo de la web de Bendito Closet. Busco ${({bolsas:"un bolso",casacos:"un abrigo",roupas:"ropa",sapatos:"zapatos",acessorios:"un accesorio"})[t]||"piezas"} de la marca ${b}. ¿Tenéis algo disponible?`,
-      sortLabel:"Ordenar:", sortNew:"Novedades", sortLow:"Precio: más baratos", sortHigh:"Precio: más caros", buyShort:"Comprar", back:"Volver", backShop:"Volver a la tienda", fAll:"Todo", fBolsas:"Bolsos", fCasacos:"Abrigos", fRoupas:"Ropa", fSapatos:"Zapatos", fAcess:"Accesorios",
-      s1t:"Elige la pieza", s1p:"Toca «Comprar por WhatsApp». El mensaje ya incluye el nombre de la pieza.",
+      sortLabel:"Ordenar:", sortNew:"Novedades", sortLow:"Precio: más baratos", sortHigh:"Precio: más caros", buyShort:"Comprar ya", back:"Volver", backShop:"Volver a la tienda", fAll:"Todo", fBolsas:"Bolsos", fCasacos:"Abrigos", fRoupas:"Ropa", fSapatos:"Zapatos", fAcess:"Accesorios",
+      s1t:"Elige la pieza", s1p:"Toca «Comprar ya». Se abre WhatsApp con el mensaje listo y el nombre de la pieza.",
       s2t:"Acuerda el pago", s2p:"MB WAY, transferencia bancaria o Revolut. La pieza queda reservada para ti durante 24 horas.",
       s3t:"Recíbelo en casa", s3p:"Enviamos por CTT, con número de seguimiento, en un máximo de 2 días laborables tras el pago, a Portugal y toda Europa. Gastos de envío por WhatsApp, gratis a partir de 100 € en Portugal.",
-      buy:"Comprar por WhatsApp", more:"toca para ver más", st:{disponivel:"Disponible",reservado:"Reservado",vendido:"Vendido"},
+      buy:"Comprar ya", more:"toca para ver más", st:{disponivel:"Pieza única",reservado:"Reservado",vendido:"Vendido"},
       msg:(n,m,pr)=>`¡Hola! Me interesa: ${n} (${m}) – ${pr}. ¿Sigue disponible?`},
   fr:{cuT:"Vendez vos pièces avec nous", cuP:"Vous avez des vêtements, chaussures ou accessoires de marque en bon état que vous ne portez plus ? Nous sélectionnons, photographions et vendons pour vous. Vous êtes payée, commission déduite, une fois la pièce vendue et reçue par la cliente.", cuB:"Nous écrire sur WhatsApp", rvNote:"Nous ne publions que les avis de clientes ayant acheté chez nous, après vérification de l'achat.", rvT:"Avis", rvIntro:"Vous avez acheté chez Bendito Closet ? Racontez-nous. Nous publions votre avis avec votre prénom et votre ville uniquement.", rvStars:"Votre note", rvName:"Prénom", rvCity:"Ville", rvItem:"Pièce achetée", rvText:"Votre avis", rvOk:"J'autorise la publication de cet avis sur le site, avec mon prénom et ma ville.", rvSend:"Envoyer l'avis sur WhatsApp", rvNeed:"Indiquez la note, le prénom, la ville et l'avis.", rvNeedOk:"Cochez l'autorisation pour que nous puissions le publier.", rvStar:"étoiles", rvBought:"a acheté", rvMsg:(e,n,c,i,t)=>`Avis pour le site Bendito Closet ${"⭐".repeat(e)}\nPrénom: ${n}\nVille: ${c}\nPièce: ${i||"-"}\nAvis: ${t}\n✅ J'autorise sa publication sur le site avec mon prénom et ma ville.`,
       h1:"Mode de seconde main choisie avec soin",
@@ -454,10 +454,10 @@ Object.assign(UI, {
       qBrand:"Quelle marque cherchez-vous ?", qType:"Quel type de pièce ?", opt:"(facultatif)", other:"Autre", otherPh:"Écrivez la marque", hintBrand:"Choisissez d'abord une marque.", hintOther:"Écrivez le nom de la marque.",
       askMsg:(b,t)=>`Bonjour ! Je viens du site Bendito Closet. Je cherche ${({bolsas:"un sac",casacos:"un manteau",roupas:"des vêtements",sapatos:"des chaussures",acessorios:"un accessoire"})[t]||"des pièces"} de la marque ${b}. Avez-vous quelque chose de disponible ?`,
       sortLabel:"Trier :", sortNew:"Nouveautés", sortLow:"Prix croissant", sortHigh:"Prix décroissant", buyShort:"Acheter", back:"Retour", backShop:"Retour à la boutique", fAll:"Tout", fBolsas:"Sacs", fCasacos:"Manteaux", fRoupas:"Vêtements", fSapatos:"Chaussures", fAcess:"Accessoires",
-      s1t:"Choisissez la pièce", s1p:"Touchez « Acheter sur WhatsApp ». Le message contient déjà le nom de la pièce.",
+      s1t:"Choisissez la pièce", s1p:"Touchez « Acheter maintenant ». WhatsApp s’ouvre avec un message prêt, avec le nom de la pièce.",
       s2t:"Convenez du paiement", s2p:"MB WAY, virement bancaire ou Revolut. La pièce vous est réservée pendant 24 heures.",
       s3t:"Recevez-la chez vous", s3p:"Envoi par CTT, avec suivi, sous 2 jours ouvrés après paiement, au Portugal et dans toute l'Europe. Frais de port convenus sur WhatsApp, offerts dès 100 € au Portugal.",
-      buy:"Acheter sur WhatsApp", more:"touchez pour voir plus", st:{disponivel:"Disponible",reservado:"Réservé",vendido:"Vendu"},
+      buy:"Acheter maintenant", more:"touchez pour voir plus", st:{disponivel:"Pièce unique",reservado:"Réservé",vendido:"Vendu"},
       msg:(n,m,pr)=>`Bonjour ! Je suis intéressée par : ${n} (${m}) – ${pr}. Est-ce toujours disponible ?`},
   de:{cuT:"Verkaufe deine Teile bei uns", cuP:"Du hast Markenkleidung, Schuhe oder Accessoires in gutem Zustand, die du nicht mehr trägst? Wir wählen aus, fotografieren und verkaufen für dich. Du erhältst den Erlös abzüglich unserer Provision, sobald das Teil verkauft und bei der Käuferin angekommen ist.", cuB:"Schreib uns auf WhatsApp", rvNote:"Wir veröffentlichen nur Bewertungen von Kundinnen, die bei uns gekauft haben, nach Prüfung des Kaufs.", rvT:"Bewertungen", rvIntro:"Bei Bendito Closet gekauft? Erzähl uns, wie es war. Wir veröffentlichen deine Bewertung nur mit Vorname und Stadt.", rvStars:"Deine Bewertung", rvName:"Vorname", rvCity:"Stadt", rvItem:"Gekauftes Teil", rvText:"Dein Kommentar", rvOk:"Ich bin einverstanden, dass diese Bewertung mit meinem Vornamen und meiner Stadt auf der Website erscheint.", rvSend:"Bewertung per WhatsApp senden", rvNeed:"Bitte Sterne, Vorname, Stadt und Kommentar ausfüllen.", rvNeedOk:"Bitte die Einwilligung ankreuzen, damit wir sie veröffentlichen können.", rvStar:"Sterne", rvBought:"kaufte", rvMsg:(e,n,c,i,t)=>`Bewertung für die Website von Bendito Closet ${"⭐".repeat(e)}\nName: ${n}\nStadt: ${c}\nTeil: ${i||"-"}\nBewertung: ${t}\n✅ Ich bin mit der Veröffentlichung mit Vorname und Stadt einverstanden.`,
       h1:"Handverlesene Second-Hand-Mode",
@@ -467,11 +467,11 @@ Object.assign(UI, {
       ctaT:"Du suchst eine Marke oder ein Teil, das hier fehlt?", ctaP:"Jede Woche kommen neue Teile dazu. Wähl die Marke, und wir schicken dir Fotos per WhatsApp.", ctaB:"Auf WhatsApp fragen",
       qBrand:"Welche Marke suchst du?", qType:"Welche Art von Teil?", opt:"(optional)", other:"Andere", otherPh:"Marke eingeben", hintBrand:"Wähl zuerst eine Marke.", hintOther:"Gib den Markennamen ein.",
       askMsg:(b,t)=>`Hallo! Ich komme von der Website von Bendito Closet. Ich suche ${({bolsas:"eine Tasche",casacos:"eine Jacke",roupas:"Kleidung",sapatos:"Schuhe",acessorios:"ein Accessoire"})[t]||"Teile"} von ${b}. Habt ihr etwas verfügbar?`,
-      sortLabel:"Sortieren:", sortNew:"Neuheiten", sortLow:"Preis aufsteigend", sortHigh:"Preis absteigend", buyShort:"Kaufen", back:"Zurück", backShop:"Zurück zum Shop", fAll:"Alle", fBolsas:"Taschen", fCasacos:"Mäntel", fRoupas:"Kleidung", fSapatos:"Schuhe", fAcess:"Accessoires",
-      s1t:"Teil auswählen", s1p:"Tippe auf „Über WhatsApp kaufen“. Die Nachricht enthält schon den Namen des Teils.",
+      sortLabel:"Sortieren:", sortNew:"Neuheiten", sortLow:"Preis aufsteigend", sortHigh:"Preis absteigend", buyShort:"Jetzt kaufen", back:"Zurück", backShop:"Zurück zum Shop", fAll:"Alle", fBolsas:"Taschen", fCasacos:"Mäntel", fRoupas:"Kleidung", fSapatos:"Schuhe", fAcess:"Accessoires",
+      s1t:"Teil auswählen", s1p:"Tippe auf „Jetzt kaufen“. WhatsApp öffnet sich mit einer fertigen Nachricht mit dem Namen des Teils.",
       s2t:"Zahlung vereinbaren", s2p:"MB WAY, Banküberweisung oder Revolut. Das Teil wird 24 Stunden für dich reserviert.",
       s3t:"Lieferung nach Hause", s3p:"Versand mit CTT und Sendungsverfolgung innerhalb von 2 Werktagen nach Zahlung, nach Portugal und in ganz Europa. Versandkosten per WhatsApp, kostenlos ab 100 € innerhalb Portugals.",
-      buy:"Über WhatsApp kaufen", more:"tippen für mehr", st:{disponivel:"Verfügbar",reservado:"Reserviert",vendido:"Verkauft"},
+      buy:"Jetzt kaufen", more:"tippen für mehr", st:{disponivel:"Einzelstück",reservado:"Reserviert",vendido:"Verkauft"},
       msg:(n,m,pr)=>`Hallo! Ich interessiere mich für: ${n} (${m}) – ${pr}. Ist es noch verfügbar?`},
   ru:{cuT:"Продайте свои вещи через нас", cuP:"У вас есть брендовая одежда, обувь или аксессуары в хорошем состоянии, которые вы больше не носите? Мы отберём, сфотографируем и продадим их за вас. Вы получите деньги за вычетом нашей комиссии, когда вещь будет продана и получена покупательницей.", cuB:"Написать нам в WhatsApp", rvNote:"Мы публикуем только отзывы покупательниц, после проверки покупки.", rvT:"Отзывы", rvIntro:"Покупали в Bendito Closet? Расскажите, как всё прошло. Мы публикуем отзыв только с именем и городом.", rvStars:"Ваша оценка", rvName:"Имя", rvCity:"Город", rvItem:"Что вы купили", rvText:"Ваш отзыв", rvOk:"Я согласна на публикацию этого отзыва на сайте с моим именем и городом.", rvSend:"Отправить отзыв в WhatsApp", rvNeed:"Укажите оценку, имя, город и отзыв.", rvNeedOk:"Отметьте согласие, чтобы мы могли опубликовать отзыв.", rvStar:"звёзд", rvBought:"купила", rvMsg:(e,n,c,i,t)=>`Отзыв для сайта Bendito Closet ${"⭐".repeat(e)}\nИмя: ${n}\nГород: ${c}\nПокупка: ${i||"-"}\nОтзыв: ${t}\n✅ Согласна на публикацию на сайте с именем и городом.`,
       h1:"Тщательно отобранная мода секонд-хенд",
@@ -482,10 +482,10 @@ Object.assign(UI, {
       qBrand:"Какой бренд вы ищете?", qType:"Какой тип вещи?", opt:"(необязательно)", other:"Другой", otherPh:"Введите бренд", hintBrand:"Сначала выберите бренд.", hintOther:"Введите название бренда.",
       askMsg:(b,t)=>`Здравствуйте! Я с сайта Bendito Closet. Ищу ${({bolsas:"сумку",casacos:"верхнюю одежду",roupas:"одежду",sapatos:"обувь",acessorios:"аксессуар"})[t]||"вещи"} бренда ${b}. Есть что-нибудь в наличии?`,
       sortLabel:"Сортировка:", sortNew:"Новинки", sortLow:"Сначала дешёвые", sortHigh:"Сначала дорогие", buyShort:"Купить", back:"Назад", backShop:"Вернуться в магазин", fAll:"Все", fBolsas:"Сумки", fCasacos:"Верхняя одежда", fRoupas:"Одежда", fSapatos:"Обувь", fAcess:"Аксессуары",
-      s1t:"Выберите вещь", s1p:"Нажмите «Купить через WhatsApp». В сообщении уже будет название вещи.",
+      s1t:"Выберите вещь", s1p:"Нажмите «Купить сейчас». Откроется WhatsApp с готовым сообщением и названием вещи.",
       s2t:"Договоритесь об оплате", s2p:"MB WAY, банковский перевод или Revolut. Вещь бронируется за вами на 24 часа.",
       s3t:"Получите дома", s3p:"Отправляем почтой CTT с трек-номером в течение 2 рабочих дней после оплаты — по Португалии и всей Европе. Стоимость доставки — в WhatsApp, бесплатно по Португалии от 100 €.",
-      buy:"Купить через WhatsApp", more:"нажмите, чтобы увидеть ещё", st:{disponivel:"В наличии",reservado:"Забронировано",vendido:"Продано"},
+      buy:"Купить сейчас", more:"нажмите, чтобы увидеть ещё", st:{disponivel:"Единственный экземпляр",reservado:"Забронировано",vendido:"Продано"},
       msg:(n,m,pr)=>`Здравствуйте! Меня интересует: ${n} (${m}) – ${pr}. Ещё доступно?`}
 });
 const TR_ES = {
