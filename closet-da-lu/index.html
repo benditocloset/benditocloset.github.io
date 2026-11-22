@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Closet da Lu · Bendito Closet (prévia)</title>
+<meta property="og:title" content="Closet da Lu · no Bendito Closet">
+<meta property="og:description" content="Peças escolhidas do armário da Lu, com a curadoria do Bendito Closet.">
+<meta property="og:image" content="https://benditocloset.pt/img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--surface:#161214;--ink:#F4ECE4;--muted:#B4A79F;--line:#33292C;
+  --rose:#9E1B3F;--rose-soft:#2A1219;--halo:#D9A85B;--ok:#7FCB9C;
+  --display:"Cormorant Garamond",Georgia,serif;--body:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+.preview{position:sticky;top:0;z-index:5;background:var(--halo);color:#0B0A0B;font-size:13px;font-weight:600;text-align:center;padding:8px 16px}
+
+header{padding:16px 0 0;display:flex;justify-content:center}
+.brand{display:block;width:min(300px,70%)}
+.brand img{width:100%;height:auto;display:block}
+
+.hero{display:grid;justify-items:center;text-align:center;gap:14px;padding:8px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(40px,7vw,64px);line-height:1;margin:0;color:var(--halo)}
+.hero p{margin:0;color:var(--muted);max-width:52ch}
+.facts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.fact{font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px}
+
+.lu{display:flex;gap:16px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:18px 20px;margin:28px 0 4px}
+.avatar{flex:none;width:72px;height:72px;border-radius:50%;background:var(--rose-soft);border:2px solid var(--halo);display:grid;place-items:center;font-family:var(--display);font-size:34px;font-weight:700;color:var(--halo)}
+.lu h2{font-family:var(--display);font-size:24px;margin:0 0 2px}
+.lu p{margin:0;color:var(--muted);font-size:15px}
+.lu .todo{color:var(--halo);font-style:italic}
+
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:24px 0 20px}
+.filters button{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--halo);color:#0B0A0B;border-color:var(--halo)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding-bottom:36px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.photo{aspect-ratio:4/5;background:var(--rose-soft);display:grid;place-items:center;position:relative}
+.ph{display:grid;justify-items:center;gap:10px;color:var(--halo);font-size:13px;font-weight:600;text-align:center;padding:0 16px}
+.ph svg{opacity:.85}
+.tagl{position:absolute;top:10px;left:10px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--halo);color:var(--halo)}
+.body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.brandlabel{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.title{font-family:var(--display);font-weight:600;font-size:22px;line-height:1.2;margin:0}
+.meta{font-size:13px;color:var(--muted)}
+.row{display:flex;flex-direction:column;gap:8px;margin-top:auto;padding-top:10px}
+.price{font-family:var(--display);font-weight:700;font-size:22px}
+.buy{font-size:14px;font-weight:600;text-align:center;text-decoration:none;background:var(--line);color:var(--muted);border-radius:10px;padding:10px 14px}
+
+.how{border:1px dashed var(--halo);border-radius:14px;padding:20px;margin-bottom:28px;display:grid;gap:12px}
+.how h2{font-family:var(--display);font-size:24px;margin:0}
+.how ol{margin:0;padding-left:20px;color:var(--muted);display:grid;gap:6px}
+.how b{color:var(--ink)}
+
+.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding-bottom:36px}
+.cta a{font-size:15px;font-weight:600;text-decoration:none;border-radius:10px;padding:12px 20px;min-height:44px;display:inline-flex;align-items:center}
+.cta .main{background:var(--rose);color:#fff}
+.cta .alt{border:1px solid var(--line);color:var(--ink)}
+
+footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between}
+@media (max-width:520px){.lu{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<div class="preview">Prévia · as peças da Lu entram aqui assim que chegarem as fotos</div>
+<div class="wrap">
+  <header>
+    <a class="brand" href="/" aria-label="Bendito Closet — início"><img src="/img/logo.jpg" alt="Bendito Closet" width="1000" height="667"></a>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow">Bendito Closet apresenta</span>
+    <h1>Closet da Lu</h1>
+    <p>Peças escolhidas a dedo do armário da Lu, com a curadoria, as fotos e o envio do Bendito Closet. Cada peça é única: quando sai, sai.</p>
+    <div class="facts">
+      <span class="fact">Envio para Portugal e toda a Europa</span>
+      <span class="fact">MB WAY, transferência ou Revolut</span>
+      <span class="fact">Peças verificadas por nós</span>
+    </div>
+  </section>
+
+  <section class="lu" aria-label="Sobre a Lu">
+    <div class="avatar" aria-hidden="true">L</div>
+    <div>
+      <h2>Quem é a Lu</h2>
+      <p class="todo">Aqui entra uma frase sobre a Lu, escrita por ela (e uma foto, se quiser).</p>
+    </div>
+  </section>
+
+  <nav class="filters" aria-label="Filtrar peças">
+    <button type="button" aria-pressed="true" data-f="all">Tudo</button>
+    <button type="button" aria-pressed="false" data-f="roupas">Roupas</button>
+    <button type="button" aria-pressed="false" data-f="sapatos">Sapatos</button>
+    <button type="button" aria-pressed="false" data-f="bolsas">Bolsas</button>
+    <button type="button" aria-pressed="false" data-f="acessorios">Acessórios</button>
+  </nav>
+
+  <section class="grid" id="grid" aria-label="Peças do Closet da Lu"></section>
+
+  <section class="how" aria-labelledby="how-t">
+    <h2 id="how-t">Como funciona</h2>
+    <ol>
+      <li><b>Escolha a peça</b> e carregue em "Quero esta peça".</li>
+      <li><b>Falamos pelo WhatsApp</b> para confirmar tamanho, portes e pagamento.</li>
+      <li><b>Nós enviamos</b> a peça para a sua morada, bem embalada.</li>
+    </ol>
+  </section>
+
+  <div class="cta">
+    <a class="main" href="https://wa.me/351936796783?text=Ol%C3%A1!%20Vi%20o%20Closet%20da%20Lu%20no%20Bendito%20Closet." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="alt" href="/">Ver a loja do Bendito Closet</a>
+  </div>
+
+  <footer>
+    <span>© Bendito Closet · Closet da Lu</span>
+    <span>WhatsApp: +351 936 796 783 · Instagram: <a href="https://www.instagram.com/benditocloset.pt/" target="_blank" rel="noopener">@benditocloset.pt</a></span>
+  </footer>
+</div>
+
+<script>
+/* Prévia: lugares vazios até chegarem as fotos e os dados das peças da Lu */
+const LUGARES = [
+  {cat:"roupas", n:"Roupas"}, {cat:"sapatos", n:"Sapatos"},
+  {cat:"bolsas", n:"Bolsas"}, {cat:"acessorios", n:"Acessórios"}
+];
+const cabide = '<svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7a2 2 0 1 1 2-2"/><path d="M12 7v1.5L3 15a1.5 1.5 0 0 0 .9 2.7h16.2A1.5 1.5 0 0 0 21 15l-9-6.5"/></svg>';
+function render(f){
+  document.getElementById('grid').innerHTML = LUGARES.map((p,i)=>
+    (f==='all'||f===p.cat) ? `<article class="card">
+      <div class="photo"><span class="tagl">Closet da Lu</span><div class="ph">${cabide}<span>Foto da peça ${i+1}<br>em breve</span></div></div>
+      <div class="body">
+        <span class="brandlabel">Marca</span>
+        <h3 class="title">Nome da peça</h3>
+        <span class="meta">${p.n} · tamanho · estado</span>
+        <div class="row"><span class="price">— €</span><span class="buy">Quero esta peça</span></div>
+      </div></article>` : '').join('');
+}
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed', x===b));
+  render(b.dataset.f);
+}));
+render('all');
+</script>
+</body>
+</html>
