@@ -226,7 +226,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 <a id="bf" class="bf" href="#grid" hidden></a>
 <div class="wrap">
   <header>
-    <div class="lang" role="group" aria-label="Idioma / Language"><button type="button" id="lang-pt" data-lang="pt" aria-pressed="true">PT</button><button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button><button type="button" id="lang-es" data-lang="es" aria-pressed="false">ES</button><button type="button" id="lang-fr" data-lang="fr" aria-pressed="false">FR</button><button type="button" id="lang-de" data-lang="de" aria-pressed="false">DE</button><button type="button" id="lang-ru" data-lang="ru" aria-pressed="false">RU</button></div>
+    <div class="lang" role="group" aria-label="Idioma / Language"><button type="button" id="lang-pt" data-lang="pt" aria-pressed="true">PT</button><button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button><button type="button" id="lang-es" data-lang="es" aria-pressed="false">ES</button><button type="button" id="lang-fr" data-lang="fr" aria-pressed="false">FR</button><button type="button" id="lang-de" data-lang="de" aria-pressed="false">DE</button><button type="button" id="lang-it" data-lang="it" aria-pressed="false">IT</button></div>
     <a class="brand" href="#" aria-label="Bendito Closet — início"><img src="img/logo.jpg" alt="Bendito Closet" width="1000" height="667"></a>
   </header>
 
@@ -515,20 +515,20 @@ Object.assign(UI, {
       s3t:"Lieferung nach Hause", s3p:"Versand mit CTT und Sendungsverfolgung innerhalb von 2 Werktagen nach Zahlung, nach Portugal und in ganz Europa. Versandkosten per WhatsApp, kostenlos ab 100 € innerhalb Portugals.",
       buy:"Jetzt kaufen", more:"tippen für mehr", st:{disponivel:"Einzelstück",reservado:"Reserviert",vendido:"Verkauft"},
       msg:(n,m,pr)=>`Hallo! Ich interessiere mich für: ${n} (${m}) – ${pr}. Ist es noch verfügbar?`},
-  ru:{cuT:"Продайте свои вещи через нас", cuP:"У вас есть брендовая одежда, обувь или аксессуары в хорошем состоянии, которые вы больше не носите? Мы отберём, сфотографируем и продадим их за вас. Вы получите деньги за вычетом нашей комиссии, когда вещь будет продана и получена покупательницей.", cuB:"Написать нам в WhatsApp", rvNote:"Мы публикуем только отзывы покупательниц, после проверки покупки.", rvT:"Отзывы", rvIntro:"Покупали в Bendito Closet? Расскажите, как всё прошло. Мы публикуем отзыв только с именем и городом.", rvStars:"Ваша оценка", rvName:"Имя", rvCity:"Город", rvItem:"Что вы купили", rvText:"Ваш отзыв", rvOk:"Я согласна на публикацию этого отзыва на сайте с моим именем и городом.", rvSend:"Отправить отзыв в WhatsApp", rvNeed:"Укажите оценку, имя, город и отзыв.", rvNeedOk:"Отметьте согласие, чтобы мы могли опубликовать отзыв.", rvStar:"звёзд", rvBought:"купила", rvMsg:(e,n,c,i,t)=>`Отзыв для сайта Bendito Closet ${"⭐".repeat(e)}\nИмя: ${n}\nГород: ${c}\nПокупка: ${i||"-"}\nОтзыв: ${t}\n✅ Согласна на публикацию на сайте с именем и городом.`,
-      h1:"Тщательно отобранная мода секонд-хенд",
-      intro:"Сумки, пальто, одежда и аксессуары в хорошем состоянии — из моего гардероба в ваш. Каждая вещь уникальна: продана — значит продана.",
-      f1:"Доставка по Португалии и всей Европе (доставка оплачивается отдельно)", f2:"Бесплатная доставка по Португалии от 100 €", f3:"MB WAY, банковский перевод или Revolut", press:"Пресса: релиз и фото", mkshop:"Создайте свой интернет-магазин ✦",
-      brands:"Оригинальные вещи Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa и других брендов.",
-      ctaT:"Ищете бренд или вещь, которой здесь нет?", ctaP:"Новые вещи появляются каждую неделю. Выберите бренд, и мы пришлём фото в WhatsApp.", ctaB:"Спросить в WhatsApp",
-      qBrand:"Какой бренд вы ищете?", qType:"Какой тип вещи?", opt:"(необязательно)", other:"Другой", otherPh:"Введите бренд", hintBrand:"Сначала выберите бренд.", hintOther:"Введите название бренда.",
-      askMsg:(b,t)=>`Здравствуйте! Я с сайта Bendito Closet. Ищу ${({bolsas:"сумку",casacos:"верхнюю одежду",roupas:"одежду",sapatos:"обувь",acessorios:"аксессуар"})[t]||"вещи"} бренда ${b}. Есть что-нибудь в наличии?`,
-      sortLabel:"Сортировка:", sortNew:"Новинки", sortLow:"Сначала дешёвые", sortHigh:"Сначала дорогие", buyShort:"Купить", back:"Назад", backShop:"Вернуться в магазин", fAll:"Все", fBolsas:"Сумки", fCasacos:"Верхняя одежда", fRoupas:"Одежда", fSapatos:"Обувь", fAcess:"Аксессуары",
-      s1t:"Выберите вещь", s1p:"Нажмите «Купить сейчас». Откроется WhatsApp с готовым сообщением и названием вещи.",
-      s2t:"Договоритесь об оплате", s2p:"MB WAY, банковский перевод или Revolut. Вещь бронируется за вами на 24 часа.",
-      s3t:"Получите дома", s3p:"Отправляем почтой CTT с трек-номером в течение 2 рабочих дней после оплаты — по Португалии и всей Европе. Стоимость доставки — в WhatsApp, бесплатно по Португалии от 100 €.",
-      buy:"Купить сейчас", more:"нажмите, чтобы увидеть ещё", st:{disponivel:"Единственный экземпляр",reservado:"Забронировано",vendido:"Продано"},
-      msg:(n,m,pr)=>`Здравствуйте! Меня интересует: ${n} (${m}) – ${pr}. Ещё доступно?`}
+  it:{cuT:"Vendi i tuoi capi con noi", cuP:"Hai abiti, scarpe o accessori di marca in buone condizioni che non usi più? Li selezioniamo, li fotografiamo e li vendiamo per te. Ricevi il ricavato, meno la nostra commissione, quando il capo è venduto e la cliente lo ha ricevuto.", cuB:"Scrivici su WhatsApp", rvNote:"Pubblichiamo solo recensioni di clienti che hanno acquistato da noi, dopo aver verificato l'acquisto.", rvT:"Recensioni", rvIntro:"Hai acquistato su Bendito Closet? Raccontaci com'è andata. Pubblichiamo la tua recensione solo con nome e città.", rvStars:"Il tuo voto", rvName:"Nome", rvCity:"Città", rvItem:"Capo acquistato", rvText:"La tua recensione", rvOk:"Autorizzo la pubblicazione di questa recensione sul sito, con il mio nome e la mia città.", rvSend:"Invia la recensione su WhatsApp", rvNeed:"Compila il voto, il nome, la città e la recensione.", rvNeedOk:"Spunta l'autorizzazione per permetterci di pubblicarla.", rvStar:"stelle", rvBought:"ha acquistato", rvMsg:(e,n,c,i,t)=>`Recensione per il sito Bendito Closet ${"⭐".repeat(e)}\nNome: ${n}\nCittà: ${c}\nCapo: ${i||"-"}\nRecensione: ${t}\n✅ Autorizzo la pubblicazione sul sito con il mio nome e la mia città.`,
+      h1:"Moda di seconda mano scelta con cura",
+      intro:"Borse, cappotti, abiti e accessori in buone condizioni, dal mio armadio al tuo. Ogni capo è unico: quando va via, va via.",
+      f1:"Spedizione in Portogallo e in tutta Europa (spese a parte)", f2:"Spedizione gratuita sopra i 100 € in Portogallo", f3:"MB WAY, bonifico bancario o Revolut", press:"Stampa: comunicato e foto", mkshop:"Crea il tuo negozio online ✦",
+      brands:"Capi originali Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e altri marchi.",
+      ctaT:"Cerchi un marchio o un capo che non trovi qui?", ctaP:"Arrivano capi nuovi ogni settimana. Scegli il marchio e ti mandiamo le foto su WhatsApp.", ctaB:"Chiedi su WhatsApp",
+      qBrand:"Che marchio cerchi?", qType:"Che tipo di capo?", opt:"(facoltativo)", other:"Altro", otherPh:"Scrivi il marchio", hintBrand:"Prima scegli un marchio.", hintOther:"Scrivi il nome del marchio.",
+      askMsg:(b,t)=>`Ciao! Vengo dal sito di Bendito Closet. Cerco ${({bolsas:"una borsa",casacos:"un cappotto",roupas:"abbigliamento",sapatos:"scarpe",acessorios:"un accessorio"})[t]||"capi"} del marchio ${b}. Avete qualcosa di disponibile?`,
+      sortLabel:"Ordina:", sortNew:"Novità", sortLow:"Prezzo crescente", sortHigh:"Prezzo decrescente", buyShort:"Compra ora", back:"Indietro", backShop:"Torna al negozio", fAll:"Tutto", fBolsas:"Borse", fCasacos:"Cappotti", fRoupas:"Abbigliamento", fSapatos:"Scarpe", fAcess:"Accessori",
+      s1t:"Scegli il capo", s1p:"Tocca «Compra ora». Si apre WhatsApp con il messaggio già pronto e il nome del capo.",
+      s2t:"Concorda il pagamento", s2p:"MB WAY, bonifico bancario o Revolut. Il capo resta riservato per te per 24 ore.",
+      s3t:"Ricevilo a casa", s3p:"Spediamo con CTT, con tracciamento, entro 2 giorni lavorativi dal pagamento, in Portogallo e in tutta Europa. Spese di spedizione concordate su WhatsApp, gratuite sopra i 100 € in Portogallo.",
+      buy:"Compra ora", more:"tocca per vedere di più", st:{disponivel:"Pezzo unico",reservado:"Riservato",vendido:"Venduto"},
+      msg:(n,m,pr)=>`Ciao! Mi interessa: ${n} (${m}) – ${pr}. È ancora disponibile?`}
 });
 const TR_ES = {
   "zara-bomber-organza":["Bomber transparente de organza negra", "Organza ligera y transparente, puños, cuello y bajo de canalé, cremallera y bolsillos · talla L · nueva, sin usar"],
@@ -701,66 +701,66 @@ const TR_DE = {
   "shein-bomber-lantejoulas":["Pailletten-Bomberjacke","Bunte Pailletten · Größe L"],
   "primark-jaq":["Grüne Bikerjacke","Kunstleder · Größe 40"]
 };
-const TR_RU = {
-  "zara-bomber-organza":["Прозрачный бомбер из чёрной органзы", "Лёгкая прозрачная органза, манжеты, воротник и низ в рубчик, молния и карманы · размер L · новый, не ношенный"],
-  "adidas-casaco-bordo":["Спортивная куртка бордового цвета", "Оверсайз, высокий воротник, молния и боковые карманы · размер 2XL · новая, не ношенная"],
-  "gucci-gframe":["Часы G-Frame YA147404", "Перламутровый циферблат зелёно-красного цвета с пчёлами, нержавеющая сталь, швейцарский кварц · куплены на Farfetch · с коробкой и биркой · носились несколько раз, ремешок со следами носки · новая батарейка перед отправкой"],
-  "shein-body-azul":["Бирюзовое боди металлик", "Блестящая ткань с мерцанием, круглый вырез и широкие бретели · размер L · новое, не ношенное, в упаковке"],
-  "shein-body-dourado":["Золотое боди металлик", "Блестящая ткань с мерцанием, круглый вырез и широкие бретели · размер L · новое, не ношенное, в упаковке"],
-  "shein-camisa-caramelo":["Карамельная рубашка с чёрным принтом", "Лёгкий прозрачный шифон, объёмные рукава с манжетами · размер L · надевалась 2 раза"],
-  "kimono-dourado-ibiza":["Золотое пляжное кимоно с бахромой","Ажурное плетение с блестящей золотой нитью, бахрома по низу · единый размер · новое, в упаковке"],
-  "rl-camisa-linho-rosa":["Розовое льняное платье-рубашка","100% лён, воротник на пуговицах, оверсайз-рубашка XL, носится как платье · надевалась несколько раз, как новая"],
-  "rl-camisa-linho":["Жёлтое льняное платье-рубашка","100% лён, оверсайз-рубашка XXL, носится как платье · надевалась несколько раз, как новая"],
-  "rl-camisola-azul":["Синий свитер Big Pony","Крупная вязка, большой красный логотип, укороченный крой · размер L (маломерит) · надевался несколько раз"],
-  "moschino-coturnos-bordo":["Бордовые кожаные ботинки","Шнуровка, боковая молния, рифлёная подошва, логотип Moschino сбоку · куплены в About You · размер 39 · надевались всего несколько раз"],
-  "moschino-botas-neve":["Чёрные зимние дутики","Стёганые, лента с логотипом и красное сердце сзади · размер 39 · надевались один раз"],
-  "decathlon-botas-neve":["Фиолетовые зимние сапоги с мехом","Стёганые, отворот из фиолетового искусственного меха, боковая молния, нескользящая подошва · размер 39 · ни разу не надевались"],
-  "nike-mind-002":["Кроссовки Nike Mind 002 бордового цвета","Размер 39 · подошва с сенсорными узлами · новые, не носились, с биркой"],
-  "golden-goose-superstar":["Кеды Super-Star с золотыми блёстками","Розовая звезда, зелёные шнурки, подошва с эффектом потёртости · размер 39 · надевались всего 2 раза · задник примят и деформирован, так как их носили как мюли с примятым задником, и так они отлично смотрятся · реальные фото в WhatsApp"],
-  "ch-espadrilles-tartan":["Эспадрильи в жёлтую клетку тартан","Ткань в клетку: жёлтый, оранжевый, красный и чёрный, чёрный кант, подошва из джута · размер 38, но свободные: подойдут на 38/39 · надевались 3 раза · несколько выбившихся ниток по краям ткани"],
-  "shein-slingback-tricolor":["Трёхцветные слингбэки: белый, розовый, голубой","Острый носок, ремешок с пряжкой на щиколотке, низкий устойчивый каблук · размер 39 · надевались всего несколько раз · сумка на фото только для образа и не продаётся"],
-  "shein-sapatos-lantejoulas":["Туфли с пайетками на завязках","Острый носок, переливающиеся пайетки на чёрном, завязки вокруг щиколотки, шпилька · размер 39 · надевались один раз · сочетаются с бомбером с пайетками из магазина"],
-  "adidas-legging":["Спортивные леггинсы пыльно-розового цвета","Высокая талия, 3 розовые полоски на штанине · размер XL · новые, не носились"],
-  "shein-vestido-zebra":["Короткое платье с зебровым принтом","Лёгкий атлас, запахной вырез, объёмные плечи, боковой волан"],
-  "vestido-floral-preto":["Облегающее платье с цветами","Чёрный фон с коралловыми цветами, чёрные боковые вставки, длинный рукав, тёплая ткань · размер M · надевалось 2 раза"],
-  "body-leopardo":["Боди из сетки с леопардовым принтом","Прозрачная сетка, запахной вырез, рукава-фонарики"],
-  "rl-camisola-rosa":["Розовый свитер с высоким горлом","Вязка косами · на бирке L, сел после стирки: подойдёт на M · надевался 2-3 раза"],
-  "pepe-parka":["Чёрная стёганая парка","Съёмный капюшон с искусственным мехом, пояс с пряжкой · размер XL · надевалась один раз"],
-  "pepe-coturno":["Чёрные ботинки на шнуровке","Чёрная кожа, рифлёная подошва, ремешок с логотипом · размер 39 · надевались один раз"],
-  "zara-slingback-perolas":["Туфли слингбэк с жемчугом","Острый мысок из прозрачного винила с жемчугом и стразами, эластичный ремешок · размер 39 · б/у, следы на стельке"],
-  "zara-botas-camurca":["Коричневые замшевые сапоги до колена","Голенище со сборками до колена, острый носок, шпилька · размер 39 · ни разу не надевались"],
-  "primark-botas-atacadores":["Чёрные высокие сапоги на шнуровке","До колена, шнуровка спереди по всей высоте, круглый носок, низкий устойчивый каблук · размер 39 · ни разу не надевались"],
-  "melissa-mules-anabela":["Чёрные мюли на танкетке","Глянцевый чёрный пластик, открытый носок, платформа-танкетка с белой полоской на подошве · размер 39 · б/у"],
-  "sandalia-prata":["Серебристые босоножки на каблуке","Металлизированные ремешки с блеском, пряжка на щиколотке · размер 39 · б/у"],
-  "aboutyou-botins-camurca":["Замшевые ботильоны цвета кэмел","Низкое голенище до щиколотки, круглый носок, боковая молния, декоративная строчка · размер 39 · ни разу не надевались · сумка на фото только для образа и не продаётся"],
-  "asics-noosa":["Кроссовки Noosa Tri 14","Размер 39 · надевались один раз"],
-  "versace-bolsa":["Розовая сумка с золотой цепью","Б/у, со следами носки: небольшой дефект покрытия в верхнем углу · реальные фото в WhatsApp"],
-  "shein-blusa-rosa":["Розовая атласная блузка с перьями","Размер L · не носилась"],
-  "blueman-saida-praia":["Тропическая пляжная накидка","Длинный кафтан из лёгкой ткани, тропический принт · размер L · надевалась один раз"],
-  "blueman-vestido-mata":["Платье Mata Atlântica","Платье-платок с острым углом, принт джунгли, завязка-шнур на шее · размер M · не носилось"],
-  "sarong-bali-seda":["Шёлковый саронг с Бали","Натуральный шёлк с Бали, батик бордовых и розовых тонов · носится как юбка, платье или платок · новый"],
-  "vestido-rio":["Длинное тропическое платье","Боковые вырезы с кольцом, тонкие бретели, принт с кешью и пальмами · новое"],
-  "versace-oculos":["Солнцезащитные очки оверсайз Medusa","Оправа Luxottica · не носились"],
-  "guess-bolsa-laranja":["Двойная сумка кораллового цвета","Два отделения на молнии, цепочка и регулируемый ремень · как новая"],
-  "ck-bolsa-prata":["Серебристая сумка на цепочке","Металлизированная фактура под змею, ремень-цепочка"],
-  "guess-bolsa-preta":["Чёрная сумка с цепями","Серебристые ручки-цепи с медальоном · б/у, со следами носки"],
-  "guess-bolsa-aba":["Чёрная сумка с клапаном и цепочкой","Серебристый логотип 4G, ремень-цепочка · б/у, со следами носки"],
-  "adidas-bolsa":["Чёрная лакированная сумка-шопер","Неоново-зелёная подкладка · куплена в магазине · новая, не использовалась"],
-  "guess-casaco-1":["Длинное бежевое стёганое пальто","Размер XL"],
-  "guess-casaco-2":["Бордовое стёганое пальто","Размер L · надевалось несколько раз"],
-  "versace-casaco":["Ветровка с розами","Размер M (IT 42) · не носилась · подлинность подтверждена Certilogo"],
-  "guess-biker":["Коричневая куртка-косуха","Размер L · искусственная кожа · надевалась один раз"],
-  "zara-gabardina":["Коричневый тренч","Размер M · новый, не носился, с биркой"],
-  "zara-casaco-vermelho":["Пальто под замшу кирпично-красного цвета","Длина до колена, лацканы, без застёжки · размер M · надевалось всего несколько раз · бирка слегка окрасилась от цвета пальто"],
-  "salsa-dupla-face":["Двустороннее пальто цвета кэмел","Размер L · как новое · два пальто в одном: замша или мех"],
-  "pelo-camel":["Шуба из искусственного меха цвета кэмел","Размер L · новая, не носилась"],
-  "pelo-rosa":["Шуба из искусственного меха цвета фуксии","Размер L (40) · новая, не носилась"],
-  "shein-bomber-lantejoulas":["Бомбер с пайетками","Разноцветные пайетки · размер L"],
-  "primark-jaq":["Зелёная куртка-косуха","Искусственная кожа · размер 40"]
+const TR_IT = {
+  "zara-bomber-organza":["Bomber trasparente in organza nera", "Organza leggera e trasparente, polsini, colletto e fondo a coste, zip e tasche · taglia L · nuovo, mai indossato"],
+  "adidas-casaco-bordo":["Giacca da tuta bordeaux", "Vestibilità oversize, collo alto, zip e tasche laterali · taglia 2XL · nuova, mai indossata"],
+  "gucci-gframe":["Orologio G-Frame YA147404", "Quadrante in madreperla verde e rosso con api, acciaio inossidabile, quarzo svizzero · acquistato su Farfetch · con scatola ed etichetta · indossato poche volte, cinturino con segni d'uso · batteria nuova inserita prima della spedizione"],
+  "shein-body-azul":["Body turchese metallizzato", "Tessuto lucido e brillante, scollo rotondo e spalline larghe · taglia L · nuovo, mai indossato, ancora nella confezione"],
+  "shein-body-dourado":["Body oro metallizzato", "Tessuto lucido e brillante, scollo rotondo e spalline larghe · taglia L · nuovo, mai indossato, ancora nella confezione"],
+  "shein-camisa-caramelo":["Camicia caramello con stampa nera", "Chiffon leggero e trasparente, maniche a sbuffo con polsini · taglia L · indossata 2 volte"],
+  "kimono-dourado-ibiza":["Kimono da spiaggia dorato con frange","Trama traforata con filo dorato brillante, frange sul fondo · taglia unica · nuovo, ancora nella confezione"],
+  "rl-camisa-linho-rosa":["Abito chemisier in lino rosa","100% lino, collo button-down, camicia oversize XL da indossare come abito · indossato poche volte, come nuovo"],
+  "rl-camisa-linho":["Abito chemisier in lino giallo","100% lino, camicia oversize XXL da indossare come abito · indossato poche volte, come nuovo"],
+  "rl-camisola-azul":["Maglione blu Big Pony","Maglia grossa, grande logo rosso, taglio corto · taglia L (veste piccolo) · indossato poche volte"],
+  "moschino-coturnos-bordo":["Anfibi in pelle bordeaux","Stringati, zip laterale, suola carrarmato, logo Moschino sul lato · acquistati su About You · taglia 39 · indossati solo poche volte"],
+  "moschino-botas-neve":["Doposci neri","Imbottiti, fascia con logo e cuore rosso sul retro · taglia 39 · indossati una volta"],
+  "decathlon-botas-neve":["Doposci viola con pelliccia","Trapuntati, risvolto in pelliccia sintetica viola, zip laterale, suola antiscivolo · taglia 39 · mai indossati"],
+  "nike-mind-002":["Sneakers Nike Mind 002 bordeaux","Taglia 39 · suola con nodi sensoriali · nuove, mai indossate, con etichetta"],
+  "golden-goose-superstar":["Sneakers Super-Star glitter oro","Stella fucsia, lacci verdi, suola effetto vissuto · taglia 39 · indossate solo 2 volte · il tallone è piegato e deformato perché sono state usate come mule, con il tallone abbassato, e così stanno benissimo · foto reali su WhatsApp"],
+  "ch-espadrilles-tartan":["Espadrillas tartan gialle","Tessuto a quadri giallo, arancione, rosso e nero, profilo nero, suola in juta · taglia 38 ma comode: vanno bene per 38/39 · indossate 3 volte · qualche filo allentato sui bordi del tessuto"],
+  "shein-slingback-tricolor":["Slingback tricolore bianco, rosa e azzurro","Punta, cinturino alla caviglia con fibbia, tacco basso e largo · taglia 39 · indossate solo poche volte · la borsa nella foto è solo styling e non è in vendita"],
+  "shein-sapatos-lantejoulas":["Décolleté con paillettes e lacci","Punta, paillettes iridescenti su nero, lacci intorno alla caviglia, tacco a spillo · taglia 39 · indossate una volta · abbinate al bomber con paillettes del negozio"],
+  "adidas-legging":["Leggings sportivi rosa cipria","Vita alta, 3 strisce rosa sulla gamba · taglia XL · nuovi, mai indossati"],
+  "shein-vestido-zebra":["Mini abito zebrato","Raso leggero, scollo incrociato, spalle a sbuffo, volant laterale"],
+  "vestido-floral-preto":["Abito aderente a fiori","Fondo nero con fiori corallo, inserti laterali neri, maniche lunghe, tessuto caldo · taglia M · indossato 2 volte"],
+  "body-leopardo":["Body in rete leopardato","Rete trasparente, scollo incrociato, maniche a palloncino"],
+  "rl-camisola-rosa":["Dolcevita rosa a trecce","Maglia a trecce · etichetta L, si è ristretto lavandolo: veste come una M · indossato 2-3 volte"],
+  "pepe-parka":["Parka imbottito nero","Cappuccio staccabile con pelliccia sintetica, cintura con fibbia · taglia XL · indossato una volta"],
+  "pepe-coturno":["Anfibi neri","Pelle nera, suola carrarmato, cinturino con logo · taglia 39 · indossati una volta"],
+  "zara-slingback-perolas":["Slingback con perle","Punta in vinile trasparente con perle e strass, cinturino elastico · taglia 39 · usate, segni sulla soletta"],
+  "zara-botas-camurca":["Stivali al ginocchio in camoscio marrone","Gambale arricciato al ginocchio, punta, tacco a spillo · taglia 39 · mai indossati"],
+  "primark-botas-atacadores":["Stivali alti neri stringati","Al ginocchio, allacciatura frontale per tutta l'altezza, punta tonda, tacco basso e largo · taglia 39 · mai indossati"],
+  "melissa-mules-anabela":["Mule neri con zeppa","Plastica nera lucida, punta aperta, zeppa con sottile riga bianca sulla suola · taglia 39 · usati"],
+  "sandalia-prata":["Sandali argento con tacco","Cinturini metallizzati e glitterati, fibbia alla caviglia · taglia 39 · usati"],
+  "aboutyou-botins-camurca":["Stivaletti in camoscio color cammello","Gambale alla caviglia, punta tonda, zip laterale, cuciture decorative · taglia 39 · mai indossati · la borsa nella foto è solo styling e non è in vendita"],
+  "asics-noosa":["Scarpe da running Noosa Tri 14","Taglia 39 · indossate una volta"],
+  "versace-bolsa":["Borsa rosa con catena dorata","Usata, con segni d'uso: piccolo difetto del rivestimento sull'angolo superiore · foto reali su WhatsApp"],
+  "shein-blusa-rosa":["Blusa in raso rosa con piume","Taglia L · mai indossata"],
+  "blueman-saida-praia":["Copricostume tropicale","Caftano lungo e leggero, stampa tropicale · taglia L · indossato una volta"],
+  "blueman-vestido-mata":["Abito Mata Atlântica","Abito a fazzoletto con punta, stampa giungla, allacciatura al collo con cordoncino · taglia M · mai indossato"],
+  "sarong-bali-seda":["Sarong di seta di Bali","Seta pura di Bali, batik nei toni bordeaux e rosa · da indossare come gonna, abito o foulard · nuovo"],
+  "vestido-rio":["Abito lungo tropicale","Aperture laterali con anello, spalline sottili, stampa con anacardi e palme · nuovo"],
+  "versace-oculos":["Occhiali da sole oversize Medusa","Montatura Luxottica · mai indossati"],
+  "guess-bolsa-laranja":["Borsa doppia color corallo","Due scomparti con zip, catena e tracolla regolabile · come nuova"],
+  "ck-bolsa-prata":["Borsa argento con catena","Texture metallizzata effetto pitone, tracolla a catena"],
+  "guess-bolsa-preta":["Borsa nera con catene","Manici a catena argento con medaglione · usata, con segni d'uso"],
+  "guess-bolsa-aba":["Borsa nera con patta e catena","Logo 4G argento, tracolla a catena · usata, con segni d'uso"],
+  "adidas-bolsa":["Borsa shopper nera in vernice","Fodera verde neon · acquistata in negozio · nuova, mai usata"],
+  "guess-casaco-1":["Piumino lungo beige","Taglia XL"],
+  "guess-casaco-2":["Piumino bordeaux","Taglia L · indossato poche volte"],
+  "versace-casaco":["Giacca a vento con rose","Taglia M (IT 42) · mai indossata · autenticità verificata da Certilogo"],
+  "guess-biker":["Giacca biker marrone","Taglia L · ecopelle · indossata una volta"],
+  "zara-gabardina":["Trench marrone","Taglia M · nuovo, mai indossato, con etichetta"],
+  "zara-casaco-vermelho":["Cappotto effetto camoscio rosso mattone","Lunghezza al ginocchio, revers, senza chiusura · taglia M · indossato solo poche volte · etichetta leggermente tinta dal colore del cappotto"],
+  "salsa-dupla-face":["Cappotto double face color cammello","Taglia L · come nuovo · due cappotti in uno: camoscio o pelliccia"],
+  "pelo-camel":["Pelliccia sintetica color cammello","Taglia L · nuova, mai indossata"],
+  "pelo-rosa":["Pelliccia sintetica fucsia","Taglia L (40) · nuova, mai indossata"],
+  "shein-bomber-lantejoulas":["Bomber con paillettes","Paillettes multicolore · taglia L"],
+  "primark-jaq":["Giacca biker verde","Ecopelle · taglia 40"]
 };
 
-const TR = { en:EN, es:TR_ES, fr:TR_FR, de:TR_DE, ru:TR_RU };
-const LANGS = ["pt","en","es","fr","de","ru"];
+const TR = { en:EN, es:TR_ES, fr:TR_FR, de:TR_DE, it:TR_IT };
+const LANGS = ["pt","en","es","fr","de","it"];
 let LANG = "pt";
 try { const saved = localStorage.getItem("bc-lang"); if (LANGS.includes(saved)) LANG = saved; } catch(e) {}
 const T = () => UI[LANG];
@@ -842,7 +842,7 @@ const BF_TXT = {
   es:{aviso:"<b>Black Friday Bendito</b> · del 27 al 29 de noviembre · 15% en todo. ¡Elige ya tus favoritas!", ativa:"<b>Black Friday Bendito</b> · 15% en todo hasta el domingo 29 de noviembre · precios ya rebajados", msg:"(precio Black Friday, -15%)"},
   fr:{aviso:"<b>Black Friday Bendito</b> · du 27 au 29 novembre · -15% sur tout. Repérez vos favorites !", ativa:"<b>Black Friday Bendito</b> · -15% sur tout jusqu'au dimanche 29 novembre · prix déjà réduits", msg:"(prix Black Friday, -15%)"},
   de:{aviso:"<b>Bendito Black Friday</b> · 27.–29. November · 15% auf alles. Merk dir schon deine Favoriten!", ativa:"<b>Bendito Black Friday</b> · 15% auf alles bis Sonntag, 29. November · Preise bereits reduziert", msg:"(Black-Friday-Preis, -15%)"},
-  ru:{aviso:"<b>Black Friday Bendito</b> · 27–29 ноября · скидка 15% на всё. Выберите любимые вещи уже сейчас!", ativa:"<b>Black Friday Bendito</b> · скидка 15% на всё до воскресенья, 29 ноября · цены уже со скидкой", msg:"(цена Black Friday, -15%)"}
+  it:{aviso:"<b>Black Friday Bendito</b> · dal 27 al 29 novembre · 15% su tutto. Scegli subito i tuoi preferiti!", ativa:"<b>Black Friday Bendito</b> · 15% su tutto fino a domenica 29 novembre · prezzi già scontati", msg:"(prezzo Black Friday, -15%)"}
 };
 const precoFinal = p => BF_ATIVA && p.status!=="vendido" ? Math.round(p.preco*(1-BF_DESC)) : p.preco;
 const precoHTML = p => precoFinal(p)!==p.preco ? `<s>${euro(p.preco)}</s>${euro(precoFinal(p))}` : euro(p.preco);
@@ -859,7 +859,7 @@ const BAG_TXT = {
   es:{add:"+ Añadir a la bolsa", addS:"+ Bolsa", inB:"✓ En la bolsa", inS:"✓ En la bolsa", title:"Tu bolsa", empty:"Tu bolsa está vacía. Toca «+ Añadir a la bolsa» en una pieza.", rm:"Quitar", total:"Total", send:"Enviar pedido por WhatsApp", free:"Envío gratis en Portugal ✓", miss:v=>`Faltan ${v} para el envío gratis en Portugal`, label:"Bolsa", msg:(l,t)=>`¡Hola! Quiero pedir estas piezas de la web de Bendito Closet:\n${l}\nTotal: ${t}\n¿Siguen disponibles?`},
   fr:{add:"+ Ajouter au panier", addS:"+ Panier", inB:"✓ Dans le panier", inS:"✓ Panier", title:"Votre panier", empty:"Votre panier est vide. Touchez « + Ajouter au panier » sur une pièce.", rm:"Retirer", total:"Total", send:"Envoyer la commande sur WhatsApp", free:"Livraison offerte au Portugal ✓", miss:v=>`Encore ${v} pour la livraison offerte au Portugal`, label:"Panier", msg:(l,t)=>`Bonjour ! Je souhaite commander ces pièces du site Bendito Closet :\n${l}\nTotal : ${t}\nSont-elles toujours disponibles ?`},
   de:{add:"+ In die Tasche", addS:"+ Tasche", inB:"✓ In der Tasche", inS:"✓ Tasche", title:"Deine Tasche", empty:"Deine Tasche ist leer. Tippe bei einem Teil auf „+ In die Tasche“.", rm:"Entfernen", total:"Summe", send:"Bestellung per WhatsApp senden", free:"Kostenloser Versand in Portugal ✓", miss:v=>`Noch ${v} bis zum kostenlosen Versand in Portugal`, label:"Tasche", msg:(l,t)=>`Hallo! Ich möchte diese Teile von der Website von Bendito Closet bestellen:\n${l}\nSumme: ${t}\nSind sie noch verfügbar?`},
-  ru:{add:"+ В корзину", addS:"+ Корзина", inB:"✓ В корзине", inS:"✓ В корзине", title:"Ваша корзина", empty:"Корзина пуста. Нажмите «+ В корзину» у вещи.", rm:"Убрать", total:"Итого", send:"Отправить заказ в WhatsApp", free:"Бесплатная доставка по Португалии ✓", miss:v=>`Ещё ${v} до бесплатной доставки по Португалии`, label:"Корзина", msg:(l,t)=>`Здравствуйте! Хочу заказать эти вещи с сайта Bendito Closet:\n${l}\nИтого: ${t}\nОни ещё в наличии?`}
+  it:{add:"+ Aggiungi alla borsa", addS:"+ Borsa", inB:"✓ Nella borsa", inS:"✓ Nella borsa", title:"La tua borsa", empty:"La borsa è vuota. Tocca «+ Aggiungi alla borsa» su un capo.", rm:"Rimuovi", total:"Totale", send:"Invia l'ordine su WhatsApp", free:"Spedizione gratuita in Portogallo ✓", miss:v=>`Mancano ${v} per la spedizione gratuita in Portogallo`, label:"Borsa", msg:(l,t)=>`Ciao! Vorrei ordinare questi capi dal sito di Bendito Closet:\n${l}\nTotale: ${t}\nSono ancora disponibili?`}
 };
 const BT = () => BAG_TXT[LANG] || BAG_TXT.pt;
 let BAG = [];
