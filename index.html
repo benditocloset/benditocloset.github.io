@@ -180,9 +180,13 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #det .dbody .buy .lg{display:inline} #det .dbody .buy .sm{display:none}
 #det button:focus-visible,#det a:focus-visible{outline:3px solid var(--halo);outline-offset:2px}
 @media (prefers-reduced-motion: no-preference){.card{transition:transform .15s ease}.card:hover{transform:translateY(-2px)}}
+.bf{display:block;background:var(--rose);color:#fff;text-align:center;padding:11px 16px;font-weight:600;font-size:14px;line-height:1.4;text-decoration:none;letter-spacing:.2px}
+.bf b{color:#FFE2A8}
+.price s{font-size:.68em;color:var(--muted);font-weight:400;margin-right:5px}
 </style>
 </head>
 <body>
+<a id="bf" class="bf" href="#grid" hidden></a>
 <div class="wrap">
   <header>
     <div class="lang" role="group" aria-label="Idioma / Language"><button type="button" id="lang-pt" data-lang="pt" aria-pressed="true">PT</button><button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button><button type="button" id="lang-es" data-lang="es" aria-pressed="false">ES</button><button type="button" id="lang-fr" data-lang="fr" aria-pressed="false">FR</button><button type="button" id="lang-de" data-lang="de" aria-pressed="false">DE</button><button type="button" id="lang-ru" data-lang="ru" aria-pressed="false">RU</button></div>
@@ -729,6 +733,7 @@ let ORDEM = "novo";
 function aplicarIdioma(){
   document.documentElement.lang = LANG==="pt" ? "pt-PT" : LANG;
   document.querySelectorAll("[data-i18n]").forEach(el => { const v = T()[el.dataset.i18n]; if (typeof v === "string") el.textContent = v; });
+  try { pintarBF(); } catch(e) {}
   const other = document.getElementById("ask-other");
   if (other) { other.placeholder = T().otherPh; other.setAttribute("aria-label", T().otherPh); }
   atualizarPedido();
@@ -785,8 +790,32 @@ document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click
 const grid = document.getElementById("grid");
 const euro = n => n.toLocaleString("pt-PT",{style:"currency",currency:"EUR",maximumFractionDigits:0});
 
+/* BLACK FRIDAY: 27 a 29 de novembro de 2026 (Lisboa = UTC em novembro).
+   Antes: faixa de aviso. Durante: faixa + preços com desconto. Depois: desaparece sozinho.
+   Testar: ?bf=on (como durante) ou ?bf=aviso (como antes). */
+const BF_INI = Date.UTC(2026,10,27,0,0), BF_FIM = Date.UTC(2026,10,30,0,0), BF_DESC = 0.15;
+const BF_NOW = Date.now(), BF_Q = location.search;
+const BF_ATIVA = /[?&]bf=on/.test(BF_Q) || (!/[?&]bf=/.test(BF_Q) && BF_NOW >= BF_INI && BF_NOW < BF_FIM);
+const BF_AVISO = !BF_ATIVA && (/[?&]bf=aviso/.test(BF_Q) || (!/[?&]bf=/.test(BF_Q) && BF_NOW < BF_INI));
+const BF_TXT = {
+  pt:{aviso:"<b>Black Friday Bendito</b> · 27 a 29 de novembro · 15% em tudo. Guarde já as suas favoritas!", ativa:"<b>Black Friday Bendito</b> · 15% em tudo até domingo, 29 de novembro · preços já com desconto", msg:"(preço Black Friday, -15%)"},
+  en:{aviso:"<b>Bendito Black Friday</b> · 27–29 November · 15% off everything. Pick your favourites now!", ativa:"<b>Bendito Black Friday</b> · 15% off everything until Sunday 29 November · prices already reduced", msg:"(Black Friday price, -15%)"},
+  es:{aviso:"<b>Black Friday Bendito</b> · del 27 al 29 de noviembre · 15% en todo. ¡Elige ya tus favoritas!", ativa:"<b>Black Friday Bendito</b> · 15% en todo hasta el domingo 29 de noviembre · precios ya rebajados", msg:"(precio Black Friday, -15%)"},
+  fr:{aviso:"<b>Black Friday Bendito</b> · du 27 au 29 novembre · -15% sur tout. Repérez vos favorites !", ativa:"<b>Black Friday Bendito</b> · -15% sur tout jusqu'au dimanche 29 novembre · prix déjà réduits", msg:"(prix Black Friday, -15%)"},
+  de:{aviso:"<b>Bendito Black Friday</b> · 27.–29. November · 15% auf alles. Merk dir schon deine Favoriten!", ativa:"<b>Bendito Black Friday</b> · 15% auf alles bis Sonntag, 29. November · Preise bereits reduziert", msg:"(Black-Friday-Preis, -15%)"},
+  ru:{aviso:"<b>Black Friday Bendito</b> · 27–29 ноября · скидка 15% на всё. Выберите любимые вещи уже сейчас!", ativa:"<b>Black Friday Bendito</b> · скидка 15% на всё до воскресенья, 29 ноября · цены уже со скидкой", msg:"(цена Black Friday, -15%)"}
+};
+const precoFinal = p => BF_ATIVA && p.status!=="vendido" ? Math.round(p.preco*(1-BF_DESC)) : p.preco;
+const precoHTML = p => precoFinal(p)!==p.preco ? `<s>${euro(p.preco)}</s>${euro(precoFinal(p))}` : euro(p.preco);
+function pintarBF(){
+  const el = document.getElementById("bf"); if (!el) return;
+  const t = BF_TXT[LANG] || BF_TXT.pt;
+  if (BF_ATIVA || BF_AVISO) { el.innerHTML = BF_ATIVA ? t.ativa : t.aviso; el.hidden = false; } else el.hidden = true;
+}
+
 function waLink(p){
-  const txt = T().msg(nomeDe(p), p.marca, euro(p.preco));
+  const bft = BF_ATIVA ? " " + (BF_TXT[LANG]||BF_TXT.pt).msg : "";
+  const txt = T().msg(nomeDe(p), p.marca, euro(precoFinal(p)) + bft);
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
 }
 
@@ -817,7 +846,7 @@ function render(f){
         <span class="brandlabel">${p.marca}</span>
         <h2 class="title">${nomeDe(p)}</h2>
         <span class="meta">${detDe(p)}</span>
-        <div class="row"><span class="price">${euro(p.preco)}</span>${btn}</div>
+        <div class="row"><span class="price">${precoHTML(p)}</span>${btn}</div>
         <span class="note" id="note-${p.id}">O WhatsApp da loja ainda está a ser configurado. Volte em breve!</span>
       </div>`;
     grid.appendChild(card);
@@ -896,7 +925,7 @@ function pintarDetalhe(){
   det.innerHTML = `<button type="button" class="x">‹ ${T().back}</button>
     <div class="dimg"><img src="${fotos[DI]}" alt="${nomeDe(p)}">${nav}<span class="status ${cls}">${label}</span></div>
     <div class="dbody"><span class="brandlabel">${p.marca}</span><h2 class="title">${nomeDe(p)}</h2><span class="meta">${detDe(p)}</span>
-    <div class="row"><span class="price">${euro(p.preco)}</span>${btn}</div><button type="button" class="voltar">${T().backShop}</button></div>`;
+    <div class="row"><span class="price">${precoHTML(p)}</span>${btn}</div><button type="button" class="voltar">${T().backShop}</button></div>`;
 }
 det.addEventListener("click", e => {
   if (e.target === det || e.target.closest(".x") || e.target.closest(".voltar")) { det.close(); return; }
