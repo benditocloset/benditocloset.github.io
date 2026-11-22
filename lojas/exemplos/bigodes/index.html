@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bigodes &amp; Companhia · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: loja online fictícia para gatos e cães, criada por Marianna Werneck para mostrar o tipo de site que pode ter para o seu negócio.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FFF6EC;--paper:#FFFDF9;--teal:#12403C;--tomato:#F25C2A;--butter:#FFC94A;--sky:#BFE3E0;--pink:#F9C6C9;--ink:#1E2524;--muted:#5D6866;--line:#EADBC8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;font-size:17px;line-height:1.55}
+a{color:inherit}
+.concept{background:var(--ink);color:#fff;font-size:14px;text-align:center;padding:10px 16px;line-height:1.4}
+.concept a{color:var(--butter);font-weight:700;white-space:nowrap}
+.wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:"Fraunces",serif;font-weight:800;font-size:24px;color:var(--teal);letter-spacing:-.3px}
+.logo svg{flex:none}
+.menu{display:flex;gap:22px;font-weight:500;font-size:15px}
+.menu a{text-decoration:none;color:var(--teal)}
+.menu a:hover{color:var(--tomato)}
+.cartbtn{background:var(--teal);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.cartbtn b{background:var(--butter);color:var(--teal);border-radius:999px;min-width:22px;height:22px;display:inline-grid;place-items:center;font-size:13px}
+
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding:30px 0 60px}
+.pill{display:inline-block;background:var(--butter);color:var(--teal);font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+h1{font-family:"Fraunces",serif;font-weight:800;color:var(--teal);font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-1.5px;margin:18px 0 18px}
+h1 em{font-style:normal;color:var(--tomato)}
+.lead{font-size:19px;color:var(--muted);max-width:30em;margin:0 0 26px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;border-radius:14px;padding:15px 22px;font-size:16px;border:2px solid var(--teal);cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--tomato);border-color:var(--tomato);color:#fff;box-shadow:0 6px 0 #C2421A}
+.btn.primary:active{transform:translateY(3px);box-shadow:0 3px 0 #C2421A}
+.btn.ghost{background:transparent;color:var(--teal)}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;font-size:14px;color:var(--muted)}
+.trust span::before{content:"✓ ";color:var(--tomato);font-weight:700}
+.art{position:relative;aspect-ratio:1/1;border-radius:40px;background:var(--sky);overflow:hidden}
+.art .sun{position:absolute;width:46%;aspect-ratio:1;border-radius:50%;background:var(--butter);right:8%;top:8%}
+.art svg{position:absolute;inset:auto 0 0 0;width:100%;height:auto}
+.sticker{position:absolute;left:6%;top:8%;background:#fff;border-radius:18px;padding:12px 16px;font-weight:700;color:var(--teal);box-shadow:0 10px 30px rgba(18,64,60,.15);transform:rotate(-4deg);font-size:15px}
+.sticker small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+
+section{padding:56px 0}
+h2{font-family:"Fraunces",serif;font-weight:800;color:var(--teal);font-size:clamp(30px,4vw,44px);letter-spacing:-.8px;line-height:1.08;margin:0 0 10px}
+.sub{color:var(--muted);margin:0 0 28px;max-width:38em}
+.tabs{display:flex;gap:10px;margin:0 0 26px;flex-wrap:wrap}
+.tab{border:2px solid var(--teal);background:transparent;color:var(--teal);font:inherit;font-weight:700;padding:9px 18px;border-radius:999px;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--teal);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:var(--paper);border-radius:24px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .15s}
+.card:hover{transform:translateY(-4px)}
+.card .pic{aspect-ratio:1/1;display:grid;place-items:center;position:relative}
+.card .pic svg{width:72%;height:auto}
+.card .tag{position:absolute;left:12px;top:12px;background:#fff;color:var(--teal);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-family:"Fraunces",serif;font-size:20px;line-height:1.15;color:var(--teal);margin:0}
+.card p{margin:0;color:var(--muted);font-size:14px;flex:1}
+.card .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.price{font-weight:700;font-size:20px;color:var(--ink)}
+.add{background:var(--tomato);color:#fff;border:0;border-radius:12px;width:44px;height:44px;font-size:24px;font-weight:700;cursor:pointer;line-height:1}
+.add:active{transform:scale(.94)}
+
+.box{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--teal);color:#fff;border-radius:36px;overflow:hidden}
+.box .txt{padding:48px}
+.box h2{color:#fff}
+.box .sub{color:#CFE3E0}
+.box ul{list-style:none;padding:0;margin:0 0 28px;display:grid;gap:10px}
+.box li::before{content:"🐾 "}
+.box .price-big{font-family:"Fraunces",serif;font-size:44px;font-weight:800;color:var(--butter);margin:0 0 20px}
+.box .price-big small{font-size:18px;font-family:"DM Sans";color:#CFE3E0;font-weight:500}
+.box .vis{background:var(--butter);display:grid;place-items:center;padding:30px}
+.box .vis svg{width:80%;height:auto}
+
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.svc{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:28px}
+.svc .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:28px;margin-bottom:14px}
+.svc h3{font-family:"Fraunces",serif;color:var(--teal);font-size:22px;margin:0 0 6px}
+.svc p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.svc b{color:var(--tomato)}
+.book{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:24px;margin-top:22px}
+.book label{display:flex;flex-direction:column;font-size:13px;font-weight:700;color:var(--teal);gap:6px}
+.book select,.book input{font:inherit;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+.book .btn{grid-column:1/-1;justify-content:center}
+
+.about{display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:center}
+.about .blob{aspect-ratio:1;background:var(--pink);border-radius:46% 54% 58% 42%/48% 44% 56% 52%;display:grid;place-items:center}
+.about .blob svg{width:70%}
+.about p{color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.step{background:var(--paper);border-radius:18px;padding:16px;border:1px solid var(--line);font-size:14px;color:var(--muted)}
+.step b{display:block;font-family:"Fraunces",serif;color:var(--teal);font-size:18px;margin-bottom:2px}
+
+footer{background:var(--teal);color:#CFE3E0;margin-top:40px;padding:48px 0 30px;font-size:14px}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+footer h4{color:#fff;font-family:"Fraunces",serif;font-size:18px;margin:0 0 10px}
+footer a{color:#CFE3E0;text-decoration:none;display:block;margin:4px 0}
+footer .made{border-top:1px solid rgba(255,255,255,.15);margin-top:30px;padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer .made a{display:inline;color:var(--butter);font-weight:700}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(calc(100% + 40px));visibility:hidden;background:var(--ink);color:#fff;padding:14px 18px;border-radius:16px;max-width:min(92vw,460px);font-size:14px;line-height:1.45;box-shadow:0 12px 40px rgba(0,0,0,.25);transition:transform .25s,visibility .25s;z-index:20}
+.toast.on{transform:translateX(-50%) translateY(0);visibility:visible}
+.toast a{color:var(--butter);font-weight:700}
+
+@media (max-width:900px){
+  .menu{display:none}
+  .hero{grid-template-columns:1fr;padding-top:10px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .box,.about{grid-template-columns:1fr}
+  .box .txt{padding:32px 26px}
+  .services{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  footer .cols{grid-template-columns:1fr}
+  .book{grid-template-columns:1fr}
+}
+@media (max-width:420px){
+  .card h3{font-size:17px}.card .body{padding:12px 13px 14px}.price{font-size:17px}.add{width:38px;height:38px}
+  .cartbtn span{display:none}
+  .logo{font-size:19px;gap:8px}.logo svg{width:32px;height:32px}
+}
+</style>
+</head>
+<body>
+
+<div class="concept">✦ Projeto conceito: loja fictícia criada por Marianna Werneck para mostrar o que posso fazer pelo seu negócio. <a href="/lojas/">Quero uma assim →</a></div>
+
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="22" r="15" fill="#F25C2A"/><path d="M8 14 L10 3 L18 10 Z M32 14 L30 3 L22 10 Z" fill="#F25C2A"/><circle cx="15" cy="21" r="2" fill="#12403C"/><circle cx="25" cy="21" r="2" fill="#12403C"/><path d="M18 26 q2 2 4 0" stroke="#12403C" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M4 24 h8 M4 28 l8 -2 M36 24 h-8 M36 28 l-8 -2" stroke="#12403C" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Bigodes &amp; Companhia
+    </a>
+    <div class="menu"><a href="#loja">Loja</a><a href="#caixa">Caixa mensal</a><a href="#servicos">Banho &amp; tosquia</a><a href="#sobre">Sobre nós</a></div>
+    <button class="cartbtn" type="button" id="cart" aria-label="Carrinho">🛒 <span>Carrinho</span> <b id="count">0</b></button>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <span class="pill">Loja de bairro · Porto</span>
+      <h1>Tudo para quem tem <em>bigodes</em>, patas e muito mimo.</h1>
+      <p class="lead">Camas, brinquedos, petiscos naturais e banhos com marcação. Escolhe online, confirmamos pelo WhatsApp e entregamos em casa no próprio dia, no Porto.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#loja">Ver a loja</a>
+        <a class="btn ghost" href="#servicos">Marcar banho</a>
+      </div>
+      <div class="trust"><span>Entrega no próprio dia</span><span>Petiscos sem corantes</span><span>Pagamento MB WAY</span></div>
+    </div>
+    <div class="art" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="sticker">Novidade 🐟<small>Petiscos de sardinha</small></div>
+      <svg viewBox="0 0 500 360">
+        <path d="M0 290 Q250 250 500 290 V360 H0Z" fill="#12403C"/>
+        <!-- dog -->
+        <g transform="translate(250 70)">
+          <ellipse cx="110" cy="210" rx="95" ry="70" fill="#E8A35B"/>
+          <circle cx="90" cy="110" r="78" fill="#E8A35B"/>
+          <path d="M20 80 Q-5 150 30 190 Q55 150 45 90Z" fill="#9C5B2E"/>
+          <path d="M160 80 Q185 150 150 190 Q125 150 135 90Z" fill="#9C5B2E"/>
+          <ellipse cx="90" cy="150" rx="40" ry="30" fill="#FFE7C7"/>
+          <ellipse cx="90" cy="134" rx="14" ry="10" fill="#1E2524"/>
+          <circle cx="62" cy="100" r="8" fill="#1E2524"/><circle cx="118" cy="100" r="8" fill="#1E2524"/>
+          <circle cx="65" cy="97" r="2.5" fill="#fff"/><circle cx="121" cy="97" r="2.5" fill="#fff"/>
+          <path d="M90 145 V158 M75 160 Q90 172 105 160" stroke="#1E2524" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M84 166 q6 18 12 0" fill="#F25C2A"/>
+          <rect x="40" y="178" width="100" height="16" rx="8" fill="#F25C2A"/><circle cx="90" cy="202" r="10" fill="#FFC94A"/>
+        </g>
+        <!-- cat -->
+        <g transform="translate(70 120)">
+          <path d="M150 170 Q210 150 200 90 Q196 70 210 60" stroke="#1E2524" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <ellipse cx="100" cy="175" rx="80" ry="60" fill="#3A4A48"/>
+          <circle cx="90" cy="90" r="62" fill="#3A4A48"/>
+          <path d="M38 62 L36 0 L82 36Z M142 62 L144 0 L98 36Z" fill="#3A4A48"/>
+          <path d="M46 52 L45 18 L70 38Z M134 52 L135 18 L110 38Z" fill="#F9C6C9"/>
+          <ellipse cx="68" cy="88" rx="10" ry="13" fill="#FFC94A"/><ellipse cx="112" cy="88" rx="10" ry="13" fill="#FFC94A"/>
+          <ellipse cx="68" cy="89" rx="3.5" ry="10" fill="#1E2524"/><ellipse cx="112" cy="89" rx="3.5" ry="10" fill="#1E2524"/>
+          <path d="M84 108 h12 l-6 7z" fill="#F9C6C9"/>
+          <path d="M90 115 q-8 10 -16 4 M90 115 q8 10 16 4" stroke="#1E2524" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M20 104 h44 M22 118 l42 -8 M160 104 h-44 M158 118 l-42 -8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="100" cy="190" rx="40" ry="34" fill="#55696A"/>
+        </g>
+      </svg>
+    </div>
+  </header>
+</div>
+
+<section id="loja">
+  <div class="wrap">
+    <h2>A loja</h2>
+    <p class="sub">Escolhidos por quem tem três gatos e um cão em casa. Junte ao carrinho e envie o pedido pelo WhatsApp: confirmamos em minutos.</p>
+    <div class="tabs" role="group" aria-label="Filtrar">
+      <button class="tab" type="button" data-f="all" aria-pressed="true">Tudo</button>
+      <button class="tab" type="button" data-f="gato" aria-pressed="false">🐱 Gatos</button>
+      <button class="tab" type="button" data-f="cao" aria-pressed="false">🐶 Cães</button>
+      <button class="tab" type="button" data-f="petisco" aria-pressed="false">🦴 Petiscos</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="caixa">
+  <div class="wrap">
+    <div class="box">
+      <div class="txt">
+        <h2>A caixa Bigodes, todos os meses</h2>
+        <p class="sub">Uma surpresa por mês, escolhida para o seu animal. Pausa ou cancela quando quiser.</p>
+        <ul>
+          <li>2 brinquedos novos</li>
+          <li>3 embalagens de petiscos naturais</li>
+          <li>1 mimo da época (Natal, verão, aniversário)</li>
+          <li>Entrega grátis no Porto</li>
+        </ul>
+        <p class="price-big">24 € <small>/ mês</small></p>
+        <button class="btn primary" type="button" data-demo="caixa">Quero a caixa</button>
+      </div>
+      <div class="vis" aria-hidden="true">
+        <svg viewBox="0 0 300 260">
+          <path d="M40 110 L150 70 L260 110 L150 150Z" fill="#E86A3E"/>
+          <path d="M40 110 V210 L150 250 V150Z" fill="#F25C2A"/>
+          <path d="M260 110 V210 L150 250 V150Z" fill="#C2421A"/>
+          <path d="M90 92 L200 132 V160 L180 152 V132" fill="none" stroke="#FFF6EC" stroke-width="10" stroke-linejoin="round"/>
+          <circle cx="110" cy="45" r="22" fill="#12403C"/><path d="M96 30 L98 12 L110 24Z M124 30 L122 12 L110 24Z" fill="#12403C"/>
+          <circle cx="104" cy="44" r="3" fill="#FFC94A"/><circle cx="116" cy="44" r="3" fill="#FFC94A"/>
+          <path d="M175 40 q20 -30 40 0 q-20 30 -40 0z" fill="#12403C"/><path d="M215 40 l14 -10 v20z" fill="#12403C"/>
+          <circle cx="240" cy="70" r="12" fill="#FFF6EC"/><path d="M228 70 h24 M240 58 v24" stroke="#F25C2A" stroke-width="3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicos">
+  <div class="wrap">
+    <h2>Banho &amp; tosquia</h2>
+    <p class="sub">Marque online em 30 segundos. Nós confirmamos o horário pelo WhatsApp.</p>
+    <div class="services">
+      <div class="svc"><div class="ic" style="background:var(--sky)">🛁</div><h3>Banho completo</h3><p>Banho, secagem, escovagem, unhas e perfume suave.</p><b>desde 20 €</b></div>
+      <div class="svc"><div class="ic" style="background:var(--butter)">✂️</div><h3>Tosquia</h3><p>Corte à medida da raça, ou ao gosto do dono.</p><b>desde 30 €</b></div>
+      <div class="svc"><div class="ic" style="background:var(--pink)">🐱</div><h3>Spa para gatos</h3><p>Escovagem e corte de unhas, com calma e sem pressas.</p><b>desde 15 €</b></div>
+    </div>
+    <form class="book" id="book">
+      <label>Serviço<select><option>Banho completo</option><option>Tosquia</option><option>Spa para gatos</option></select></label>
+      <label>Tamanho do animal<select><option>Pequeno (até 10 kg)</option><option>Médio (10 a 25 kg)</option><option>Grande (mais de 25 kg)</option><option>Gato</option></select></label>
+      <label>Dia preferido<input type="date"></label>
+      <label>Nome do animal<input type="text" placeholder="Ex.: Pantufa"></label>
+      <button class="btn primary" type="submit">Pedir marcação pelo WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<section id="sobre">
+  <div class="wrap about">
+    <div class="blob" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><circle cx="100" cy="110" r="60" fill="#F25C2A"/><path d="M48 85 L45 30 L90 62Z M152 85 L155 30 L110 62Z" fill="#F25C2A"/><circle cx="80" cy="105" r="7" fill="#12403C"/><circle cx="120" cy="105" r="7" fill="#12403C"/><path d="M92 125 q8 8 16 0" stroke="#12403C" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 115 h45 M22 132 l43 -8 M180 115 h-45 M178 132 l-43 -8" stroke="#12403C" stroke-width="4" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <h2>Uma loja pequena, com muito pelo</h2>
+      <p>A Bigodes &amp; Companhia é uma loja de bairro imaginada para este exemplo: atendimento próximo, produtos escolhidos um a um e entregas de bicicleta. Num projeto real, aqui ficaria a história do seu negócio, com as suas fotos.</p>
+      <div class="steps">
+        <div class="step"><b>1. Escolhe</b>Junta os produtos ao carrinho.</div>
+        <div class="step"><b>2. Confirma</b>O pedido segue pelo WhatsApp.</div>
+        <div class="step"><b>3. Recebe</b>Entrega em casa ou levanta na loja.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>Bigodes &amp; Companhia</h4>Loja fictícia, criada como exemplo. Os produtos, preços e serviços desta página não estão à venda.</div>
+      <div><h4>Loja</h4><a href="#loja">Gatos</a><a href="#loja">Cães</a><a href="#caixa">Caixa mensal</a></div>
+      <div><h4>Ajuda</h4><a href="#servicos">Marcações</a><a href="#sobre">Como comprar</a></div>
+    </div>
+    <div class="made"><span>Site criado por Marianna Werneck · projeto conceito</span><span>Quer um site assim para o seu negócio? <a href="/lojas/">Veja os pacotes</a></span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const ART = {
+  cama:`<svg viewBox="0 0 200 160"><ellipse cx="100" cy="115" rx="90" ry="38" fill="#12403C"/><ellipse cx="100" cy="105" rx="70" ry="26" fill="#FFF6EC"/><circle cx="92" cy="88" r="26" fill="#3A4A48"/><path d="M72 76 L70 50 L90 64Z M112 76 L114 50 L94 64Z" fill="#3A4A48"/><path d="M80 90 q5 -5 10 0 M98 90 q5 -5 10 0" stroke="#FFC94A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="120" cy="104" rx="30" ry="12" fill="#3A4A48"/><text x="150" y="60" font-family="Fraunces,serif" font-size="22" font-weight="800" fill="#12403C">z z</text></svg>`,
+  arranhador:`<svg viewBox="0 0 200 200"><rect x="40" y="170" width="120" height="16" rx="6" fill="#12403C"/><rect x="88" y="60" width="24" height="112" fill="#E8C79A"/><path d="M88 75 h24 M88 92 h24 M88 109 h24 M88 126 h24 M88 143 h24 M88 160 h24" stroke="#C9A06E" stroke-width="3"/><rect x="55" y="40" width="90" height="24" rx="8" fill="#F25C2A"/><path d="M130 64 v30" stroke="#12403C" stroke-width="2"/><circle cx="130" cy="100" r="9" fill="#FFC94A"/></svg>`,
+  rato:`<svg viewBox="0 0 200 160"><ellipse cx="95" cy="95" rx="60" ry="38" fill="#9AA6A4"/><circle cx="58" cy="62" r="18" fill="#9AA6A4"/><circle cx="58" cy="62" r="9" fill="#F9C6C9"/><circle cx="48" cy="92" r="5" fill="#1E2524"/><circle cx="36" cy="100" r="4" fill="#F9C6C9"/><path d="M155 100 q30 10 25 35 q-5 15 -20 10" stroke="#9AA6A4" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M30 104 h-16 M30 110 l-14 4" stroke="#1E2524" stroke-width="2" stroke-linecap="round"/></svg>`,
+  fonte:`<svg viewBox="0 0 200 180"><ellipse cx="100" cy="150" rx="80" ry="18" fill="#12403C"/><path d="M30 110 Q100 175 170 110 Z" fill="#FFF6EC"/><ellipse cx="100" cy="110" rx="70" ry="16" fill="#7CC6C0"/><path d="M100 110 V60 q0 -18 18 -18" stroke="#FFF6EC" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M118 42 q14 20 4 40 M118 42 q-6 28 -10 50" stroke="#7CC6C0" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`,
+  coleira:`<svg viewBox="0 0 200 180"><ellipse cx="100" cy="85" rx="70" ry="50" fill="none" stroke="#F25C2A" stroke-width="18"/><rect x="150" y="70" width="30" height="30" rx="6" fill="#FFC94A"/><circle cx="100" cy="148" r="16" fill="#FFC94A"/><path d="M100 132 v-14" stroke="#9C7A2E" stroke-width="3"/><text x="92" y="154" font-size="16" font-weight="700" fill="#12403C" font-family="DM Sans">♥</text></svg>`,
+  bola:`<svg viewBox="0 0 200 180"><circle cx="90" cy="95" r="58" fill="#C8E05A"/><path d="M40 70 q50 30 0 60 M140 70 q-50 30 0 60" stroke="#fff" stroke-width="7" fill="none"/><path d="M150 40 l20 -10 M158 58 l24 0 M150 76 l20 10" stroke="#F25C2A" stroke-width="5" stroke-linecap="round"/></svg>`,
+  trela:`<svg viewBox="0 0 200 180"><path d="M40 40 q20 -20 40 0 q-20 20 -40 0z" fill="none" stroke="#12403C" stroke-width="10"/><path d="M80 40 Q160 40 140 110 Q130 140 150 150" stroke="#12403C" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="152" cy="156" r="10" fill="none" stroke="#FFC94A" stroke-width="6"/><rect x="60" y="30" width="16" height="22" rx="4" fill="#F25C2A"/></svg>`,
+  osso:`<svg viewBox="0 0 200 160"><g transform="rotate(-20 100 80)"><rect x="50" y="68" width="100" height="24" rx="10" fill="#FFF6EC"/><circle cx="50" cy="66" r="18" fill="#FFF6EC"/><circle cx="50" cy="94" r="18" fill="#FFF6EC"/><circle cx="150" cy="66" r="18" fill="#FFF6EC"/><circle cx="150" cy="94" r="18" fill="#FFF6EC"/></g></svg>`,
+  sardinha:`<svg viewBox="0 0 200 160"><rect x="40" y="30" width="120" height="110" rx="14" fill="#12403C"/><rect x="52" y="44" width="96" height="40" rx="8" fill="#FFF6EC"/><path d="M62 64 q30 -22 64 0 q-34 22 -64 0z" fill="#7CC6C0"/><path d="M126 64 l14 -10 v20z" fill="#7CC6C0"/><circle cx="74" cy="62" r="3" fill="#12403C"/><text x="100" y="118" text-anchor="middle" font-family="Fraunces,serif" font-weight="800" font-size="20" fill="#FFC94A">sardinha</text></svg>`,
+  tunel:`<svg viewBox="0 0 200 160"><ellipse cx="100" cy="128" rx="85" ry="14" fill="#12403C" opacity=".25"/><path d="M30 120 Q30 40 100 40 Q170 40 170 120Z" fill="#F25C2A"/><path d="M55 120 Q55 66 100 66 Q145 66 145 120Z" fill="#12403C"/><path d="M60 52 q6 34 0 68 M100 40 v80 M140 52 q-6 34 0 68" stroke="#C2421A" stroke-width="3" fill="none"/><ellipse cx="88" cy="106" rx="6" ry="8" fill="#FFC94A"/><ellipse cx="112" cy="106" rx="6" ry="8" fill="#FFC94A"/><ellipse cx="88" cy="107" rx="2" ry="6" fill="#12403C"/><ellipse cx="112" cy="107" rx="2" ry="6" fill="#12403C"/></svg>`,
+  comedouro:`<svg viewBox="0 0 200 160"><path d="M30 80 h140 l-14 50 h-112z" fill="#12403C"/><ellipse cx="100" cy="80" rx="70" ry="16" fill="#7CC6C0"/><path d="M60 80 q20 -16 40 0 q20 -16 40 0" stroke="#12403C" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="80" cy="76" r="5" fill="#9C5B2E"/><circle cx="120" cy="78" r="5" fill="#9C5B2E"/><circle cx="100" cy="72" r="5" fill="#9C5B2E"/></svg>`,
+  biscoito:`<svg viewBox="0 0 200 160"><path d="M60 30 h80 l10 20 v80 a10 10 0 0 1 -10 10 h-80 a10 10 0 0 1 -10 -10 v-80z" fill="#F25C2A"/><rect x="50" y="30" width="100" height="16" fill="#C2421A"/><circle cx="100" cy="92" r="28" fill="#E8C79A"/><circle cx="90" cy="86" r="4" fill="#9C5B2E"/><circle cx="108" cy="96" r="4" fill="#9C5B2E"/><circle cx="96" cy="104" r="3" fill="#9C5B2E"/></svg>`
+};
+const P = [
+  {n:"Cama nuvem",       d:"Almofada fofa e lavável, para sestas longas.",           pr:39, c:"gato", a:"cama",       bg:"#BFE3E0", t:"Mais vendido"},
+  {n:"Arranhador torre", d:"Sisal natural e plataforma no topo, 60 cm.",              pr:45, c:"gato", a:"arranhador", bg:"#FFE4B8"},
+  {n:"Rato de feltro",   d:"Com erva-gateira. Feito à mão em Portugal.",              pr:6,  c:"gato", a:"rato",       bg:"#F9C6C9"},
+  {n:"Fonte de água",    d:"Água sempre fresca e silenciosa, 2 litros.",              pr:32, c:"gato", a:"fonte",      bg:"#FFF0D6", t:"Novo"},
+  {n:"Túnel de esconder",d:"Dobrável, com bola pendurada. Para gatos curiosos.",     pr:19, c:"gato", a:"tunel",      bg:"#FFC94A"},
+  {n:"Coleira com nome", d:"Medalha gravada com o nome e o seu contacto.",            pr:18, c:"cao",  a:"coleira",    bg:"#BFE3E0"},
+  {n:"Bola que salta",   d:"Borracha natural, resistente a dentadas.",                pr:9,  c:"cao",  a:"bola",       bg:"#FFF0D6"},
+  {n:"Trela de passeio", d:"Corda macia com mosquetão, 1,5 m.",                       pr:22, c:"cao",  a:"trela",      bg:"#F9C6C9"},
+  {n:"Comedouro lento",  d:"Para cães que comem depressa demais.",                   pr:15, c:"cao",  a:"comedouro",  bg:"#FFE4B8"},
+  {n:"Osso de ruminar",  d:"100% natural, para dentes limpos.",                       pr:5,  c:"petisco", a:"osso",    bg:"#12403C"},
+  {n:"Petisco de sardinha", d:"Para gatos. Só peixe, sem corantes.",                  pr:4,  c:"petisco", a:"sardinha",bg:"#FFC94A", t:"Novo"},
+  {n:"Biscoitos de abóbora", d:"Para cães. Receita caseira, 200 g.",                  pr:7,  c:"petisco", a:"biscoito",bg:"#FFE4B8"},
+];
+const grid = document.getElementById("grid"), toast = document.getElementById("toast");
+let F = "all", N = 0, tt;
+function render(){
+  grid.innerHTML = P.filter(p => F==="all" || p.c===F).map((p,i) => `
+    <article class="card">
+      <div class="pic" style="background:${p.bg}">${p.t?`<span class="tag">${p.t}</span>`:""}${ART[p.a]}</div>
+      <div class="body"><h3>${p.n}</h3><p>${p.d}</p>
+        <div class="row"><span class="price">${p.pr} €</span><button class="add" type="button" aria-label="Juntar ${p.n} ao carrinho" data-n="${p.n}">+</button></div>
+      </div>
+    </article>`).join("");
+}
+function show(html){ toast.innerHTML = html; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("on"), 4200); }
+const DEMO = ' <a href="/lojas/">Isto é um exemplo. Quero uma loja assim →</a>';
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {
+  F = b.dataset.f; document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-pressed", x===b)); render();
+}));
+grid.addEventListener("click", e => {
+  const b = e.target.closest(".add"); if (!b) return;
+  N++; document.getElementById("count").textContent = N;
+  show(`🐾 <b>${b.dataset.n}</b> foi para o carrinho.`);
+});
+document.getElementById("cart").addEventListener("click", () => show(N ? `Numa loja real, este botão enviava os ${N} produto(s) para o WhatsApp da loja, já com a lista e o total.${DEMO}` : `O carrinho está vazio. Toque no + de um produto.`));
+document.querySelector('[data-demo="caixa"]').addEventListener("click", () => show(`Numa loja real, aqui a cliente pedia a caixa mensal pelo WhatsApp.${DEMO}`));
+document.getElementById("book").addEventListener("submit", e => { e.preventDefault(); show(`Numa loja real, o pedido de marcação seguia já preenchido para o WhatsApp da loja.${DEMO}`); });
+render();
+</script>
+</body>
+</html>
