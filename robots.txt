@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://benditocloset.pt/sitemap.xml

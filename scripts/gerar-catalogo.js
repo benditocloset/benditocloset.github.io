@@ -37,3 +37,37 @@ for (const p of PECAS) {
 }
 fs.writeFileSync(path.join(root, "catalogo.csv"), linhas.join("\n") + "\n");
 console.log(`catalogo.csv: ${n} peças`);
+
+// ── SEO para o Google: sitemap.xml + dados estruturados (JSON-LD) no index.html ──
+const hoje = new Date().toISOString().slice(0, 10);
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const paginas = ["/", "/looks/", "/lojas/", "/imprensa/", "/lojas/exemplos/maison-amande/", "/lojas/exemplos/bigodes/"];
+const disp = PECAS.filter(p => p.foto && p.status === "disponivel");
+const urls = [...paginas.map(u => SITE + u), ...disp.map(p => `${SITE}/?peca=${encodeURIComponent(p.id)}`)];
+fs.writeFileSync(path.join(root, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  urls.map(u => `  <url><loc>${esc(u)}</loc><lastmod>${hoje}</lastmod></url>`).join("\n") + `\n</urlset>\n`);
+const ld = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "OnlineStore", "@id": SITE + "/#loja", name: "Bendito Closet", url: SITE + "/",
+      logo: SITE + "/img/logo.jpg", image: SITE + "/img/logo.jpg",
+      description: "Brechó online de moda de marca em segunda mão: bolsas, casacos, roupas, sapatos e acessórios. Peças únicas, envio para Portugal e toda a Europa.",
+      areaServed: "Europe", sameAs: ["https://www.instagram.com/benditocloset.pt/"] },
+    { "@type": "ItemList", name: "Peças disponíveis", itemListElement: disp.map((p, i) => ({
+      "@type": "ListItem", position: i + 1, item: {
+        "@type": "Product", name: `${p.marca} – ${p.nome}`, sku: p.id, brand: { "@type": "Brand", name: p.marca },
+        image: (p.fotos && p.fotos.length ? p.fotos : [p.foto]).map(f => `${SITE}/${f}`),
+        description: `${p.nome}. ${p.detalhe || ""}`.trim(),
+        url: `${SITE}/?peca=${encodeURIComponent(p.id)}`,
+        offers: { "@type": "Offer", price: Number(p.preco).toFixed(2), priceCurrency: "EUR",
+          availability: "https://schema.org/InStock",
+          itemCondition: condicao(p.detalhe) === "new" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+          url: `${SITE}/?peca=${encodeURIComponent(p.id)}`, seller: { "@id": SITE + "/#loja" } } } })) }
+  ]
+};
+const bloco = `<script type="application/ld+json" id="ld">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>`;
+let novo = html.replace(/<script type="application\/ld\+json" id="ld">[\s\S]*?<\/script>/, bloco);
+if (novo === html && !html.includes('id="ld"')) novo = html.replace("</head>", bloco + "\n</head>");
+fs.writeFileSync(path.join(root, "index.html"), novo);
+console.log(`sitemap.xml: ${urls.length} links · JSON-LD: ${disp.length} produtos`);
