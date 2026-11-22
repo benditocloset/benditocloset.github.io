@@ -183,6 +183,43 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 .bf{display:block;background:var(--rose);color:#fff;text-align:center;padding:11px 16px;font-weight:600;font-size:14px;line-height:1.4;text-decoration:none;letter-spacing:.2px}
 .bf b{color:#FFE2A8}
 .price s{font-size:.68em;color:var(--muted);font-weight:400;margin-right:5px}
+.addbag{font:inherit;font-size:13.5px;font-weight:600;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;text-align:center}
+.addbag:hover{border-color:var(--halo);color:var(--halo)}
+.addbag.in{border-color:var(--ok);color:var(--ok)}
+.addbag .sm{display:none}
+#det .addbag{width:100%;padding:12px;font-size:15px}
+#bagbtn{position:fixed;top:12px;right:12px;z-index:30;display:flex;align-items:center;gap:7px;background:var(--halo);color:#1a1214;border:0;border-radius:999px;padding:9px 14px 9px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}
+#bagbtn svg{width:20px;height:20px}
+#bagbtn b{background:#1a1214;color:var(--halo);min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px}
+#bagbtn.pulse{animation:pulse .5s}
+@keyframes pulse{50%{transform:scale(1.12)}}
+#saco{border:0;padding:0;margin:0 0 0 auto;height:100dvh;max-height:100dvh;width:min(440px,100vw);background:var(--bg);color:var(--ink);border-left:1px solid var(--line)}
+#saco::backdrop{background:rgba(0,0,0,.75)}
+#saco .sh{display:flex;justify-content:space-between;align-items:center;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+#saco .sh h2{margin:0;font-family:var(--display);font-size:24px}
+#saco .sx{border:0;background:transparent;color:var(--ink);font-size:28px;cursor:pointer;line-height:1}
+#saco .sl{padding:6px 18px;overflow:auto;max-height:calc(100dvh - 300px)}
+#saco .it{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+#saco .it img{width:64px;height:80px;object-fit:cover;border-radius:8px}
+#saco .it small{display:block;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+#saco .it span{font-size:14px;line-height:1.3}
+#saco .it .rm{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0;margin-top:4px}
+#saco .it .p{font-weight:700;white-space:nowrap}
+#saco .it .p s{color:var(--muted);font-weight:400;font-size:12px;margin-right:4px}
+#saco .sf{padding:16px 18px 22px;border-top:1px solid var(--line)}
+#saco .tot{display:flex;justify-content:space-between;font-size:18px;font-weight:700;margin-bottom:6px}
+#saco .ship{font-size:13px;color:var(--muted);margin:0 0 14px}
+#saco .ship.ok{color:var(--ok)}
+#saco .send{display:block;text-align:center;width:100%;font-size:16px;padding:14px}
+#saco .empty{color:var(--muted);text-align:center;padding:40px 10px}
+@media (max-width:640px){
+  .addbag{font-size:12.5px;padding:7px 8px}
+  .addbag .lg{display:none} .addbag .sm{display:inline}
+  #det .addbag .lg{display:inline} #det .addbag .sm{display:none}
+  #bagbtn{top:8px;right:8px;padding:8px 11px 8px 10px;font-size:13px}
+  #bagbtn .t{display:none}
+  .bf{padding-right:74px;text-align:left}
+}
 </style>
 </head>
 <body>
@@ -734,6 +771,7 @@ function aplicarIdioma(){
   document.documentElement.lang = LANG==="pt" ? "pt-PT" : LANG;
   document.querySelectorAll("[data-i18n]").forEach(el => { const v = T()[el.dataset.i18n]; if (typeof v === "string") el.textContent = v; });
   try { pintarBF(); } catch(e) {}
+  try { bagCount(); } catch(e) {}
   const other = document.getElementById("ask-other");
   if (other) { other.placeholder = T().otherPh; other.setAttribute("aria-label", T().otherPh); }
   atualizarPedido();
@@ -813,6 +851,54 @@ function pintarBF(){
   if (BF_ATIVA || BF_AVISO) { el.innerHTML = BF_ATIVA ? t.ativa : t.aviso; el.hidden = false; } else el.hidden = true;
 }
 
+/* SACO: a cliente junta várias peças e envia um só pedido pelo WhatsApp */
+const BAG_TXT = {
+  pt:{add:"+ Juntar ao saco", addS:"+ Saco", inB:"✓ No saco", inS:"✓ No saco", title:"O seu saco", empty:"O saco está vazio. Toque em “+ Juntar ao saco” numa peça.", rm:"Tirar", total:"Total", send:"Enviar pedido pelo WhatsApp", free:"Portes grátis em Portugal ✓", miss:v=>`Faltam ${v} para portes grátis em Portugal`, label:"Saco", msg:(l,t)=>`Olá! Quero encomendar estas peças do site Bendito Closet:\n${l}\nTotal: ${t}\nAinda estão disponíveis?`},
+  en:{add:"+ Add to bag", addS:"+ Bag", inB:"✓ In your bag", inS:"✓ In bag", title:"Your bag", empty:"Your bag is empty. Tap “+ Add to bag” on a piece.", rm:"Remove", total:"Total", send:"Send order on WhatsApp", free:"Free shipping in Portugal ✓", miss:v=>`${v} more for free shipping in Portugal`, label:"Bag", msg:(l,t)=>`Hi! I'd like to order these pieces from the Bendito Closet website:\n${l}\nTotal: ${t}\nAre they still available?`},
+  es:{add:"+ Añadir a la bolsa", addS:"+ Bolsa", inB:"✓ En la bolsa", inS:"✓ En la bolsa", title:"Tu bolsa", empty:"Tu bolsa está vacía. Toca «+ Añadir a la bolsa» en una pieza.", rm:"Quitar", total:"Total", send:"Enviar pedido por WhatsApp", free:"Envío gratis en Portugal ✓", miss:v=>`Faltan ${v} para el envío gratis en Portugal`, label:"Bolsa", msg:(l,t)=>`¡Hola! Quiero pedir estas piezas de la web de Bendito Closet:\n${l}\nTotal: ${t}\n¿Siguen disponibles?`},
+  fr:{add:"+ Ajouter au panier", addS:"+ Panier", inB:"✓ Dans le panier", inS:"✓ Panier", title:"Votre panier", empty:"Votre panier est vide. Touchez « + Ajouter au panier » sur une pièce.", rm:"Retirer", total:"Total", send:"Envoyer la commande sur WhatsApp", free:"Livraison offerte au Portugal ✓", miss:v=>`Encore ${v} pour la livraison offerte au Portugal`, label:"Panier", msg:(l,t)=>`Bonjour ! Je souhaite commander ces pièces du site Bendito Closet :\n${l}\nTotal : ${t}\nSont-elles toujours disponibles ?`},
+  de:{add:"+ In die Tasche", addS:"+ Tasche", inB:"✓ In der Tasche", inS:"✓ Tasche", title:"Deine Tasche", empty:"Deine Tasche ist leer. Tippe bei einem Teil auf „+ In die Tasche“.", rm:"Entfernen", total:"Summe", send:"Bestellung per WhatsApp senden", free:"Kostenloser Versand in Portugal ✓", miss:v=>`Noch ${v} bis zum kostenlosen Versand in Portugal`, label:"Tasche", msg:(l,t)=>`Hallo! Ich möchte diese Teile von der Website von Bendito Closet bestellen:\n${l}\nSumme: ${t}\nSind sie noch verfügbar?`},
+  ru:{add:"+ В корзину", addS:"+ Корзина", inB:"✓ В корзине", inS:"✓ В корзине", title:"Ваша корзина", empty:"Корзина пуста. Нажмите «+ В корзину» у вещи.", rm:"Убрать", total:"Итого", send:"Отправить заказ в WhatsApp", free:"Бесплатная доставка по Португалии ✓", miss:v=>`Ещё ${v} до бесплатной доставки по Португалии`, label:"Корзина", msg:(l,t)=>`Здравствуйте! Хочу заказать эти вещи с сайта Bendito Closet:\n${l}\nИтого: ${t}\nОни ещё в наличии?`}
+};
+const BT = () => BAG_TXT[LANG] || BAG_TXT.pt;
+let BAG = [];
+try { BAG = JSON.parse(localStorage.getItem("bc-saco") || "[]"); } catch(e) { BAG = []; }
+function bagValid(){ BAG = BAG.filter(id => { const p = PECAS.find(x => x.id === id); return p && p.status !== "vendido"; }); }
+function bagSave(){ try { localStorage.setItem("bc-saco", JSON.stringify(BAG)); } catch(e) {} }
+function bagBtn(p){ const inn = BAG.includes(p.id); return `<button type="button" class="addbag${inn?" in":""}" data-bag="${p.id}"><span class="lg">${inn?BT().inB:BT().add}</span><span class="sm">${inn?BT().inS:BT().addS}</span></button>`; }
+function bagCount(){
+  const b = document.getElementById("bagn"); if (b) b.textContent = BAG.length;
+  const t = document.querySelector("#bagbtn .t"); if (t) t.textContent = BT().label;
+}
+function bagToggle(id){
+  const i = BAG.indexOf(id);
+  if (i >= 0) BAG.splice(i,1); else BAG.push(id);
+  bagSave(); bagCount();
+  document.querySelectorAll(`[data-bag="${CSS.escape(id)}"]`).forEach(el => { el.outerHTML = bagBtn(PECAS.find(x=>x.id===id)); });
+  if (i < 0) { const bb = document.getElementById("bagbtn"); bb.classList.remove("pulse"); void bb.offsetWidth; bb.classList.add("pulse"); }
+}
+function bagTotal(){ return BAG.reduce((s,id) => s + precoFinal(PECAS.find(x=>x.id===id)), 0); }
+function bagPaint(){
+  const d = document.getElementById("saco"), t = BT();
+  const items = BAG.map(id => PECAS.find(x=>x.id===id));
+  const tot = bagTotal(), falta = 100 - tot;
+  const lista = items.map(p => `• ${nomeDe(p)} (${p.marca}) – ${euro(precoFinal(p))}`).join("\n");
+  const bft = BF_ATIVA ? " " + (BF_TXT[LANG]||BF_TXT.pt).msg : "";
+  const href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(t.msg(lista, euro(tot) + bft))}`;
+  d.innerHTML = `<div class="sh"><h2>${t.title}</h2><button type="button" class="sx" aria-label="Fechar">×</button></div>
+    ${items.length ? `<div class="sl">${items.map(p => `<div class="it"><img src="${(p.fotos||[p.foto])[0]}" alt=""><div><small>${p.marca}</small><span>${nomeDe(p)}</span><br><button type="button" class="rm" data-rm="${p.id}">${t.rm}</button></div><div class="p">${precoHTML(p)}</div></div>`).join("")}</div>
+    <div class="sf"><div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><a class="buy send" href="${href}" target="_blank" rel="noopener">${t.send}</a></div>`
+    : `<p class="empty">${t.empty}</p>`}`;
+}
+function bagOpen(){ bagValid(); bagPaint(); const d = document.getElementById("saco"); try { d.showModal(); } catch(e) { d.setAttribute("open",""); } }
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-bag]"); if (a) { e.preventDefault(); e.stopPropagation(); bagToggle(a.dataset.bag); return; }
+  if (e.target.closest("#bagbtn")) { bagOpen(); return; }
+  const d = document.getElementById("saco");
+  if (e.target === d || e.target.closest("#saco .sx")) { d.close(); return; }
+  const r = e.target.closest("[data-rm]"); if (r) { bagToggle(r.dataset.rm); bagPaint(); }
+}, true);
+
 function waLink(p){
   const bft = BF_ATIVA ? " " + (BF_TXT[LANG]||BF_TXT.pt).msg : "";
   const txt = T().msg(nomeDe(p), p.marca, euro(precoFinal(p)) + bft);
@@ -838,7 +924,7 @@ function render(f){
     const btn = p.status==="vendido"
       ? `<span class="buy">${T().st.vendido}</span>`
       : (WHATSAPP
-          ? `<a class="buy" href="${waLink(p)}" target="_blank" rel="noopener"><span class="lg">${T().buy}</span><span class="sm">${T().buyShort}</span></a>`
+          ? `<a class="buy" href="${waLink(p)}" target="_blank" rel="noopener"><span class="lg">${T().buy}</span><span class="sm">${T().buyShort}</span></a>${bagBtn(p)}`
           : `<button type="button" class="buy" id="buy-${p.id}" data-id="${p.id}">Comprar pelo WhatsApp</button>`);
     card.innerHTML = `
       <div class="photo">${photo}<span class="status ${cls}">${label}</span>${p.ilustrativa?`<span class="count">Imagem ilustrativa</span>`:""}</div>
@@ -905,9 +991,12 @@ document.querySelectorAll("#rv-stars button").forEach(b => b.addEventListener("c
   });
 }
 { const _ap = aplicarIdioma; aplicarIdioma = function(){ _ap(); renderAval(); pintarEstrelas(); }; }
+bagValid(); bagSave(); document.addEventListener("DOMContentLoaded", bagCount);
 aplicarIdioma();
 </script>
 <dialog id="det" aria-label="Detalhe da peça"></dialog>
+<button type="button" id="bagbtn" aria-label="Abrir o saco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="t">Saco</span><b id="bagn">0</b></button>
+<dialog id="saco" aria-label="Saco"></dialog>
 <script>
 const det = document.getElementById("det");
 let DP = null, DI = 0;
@@ -922,10 +1011,11 @@ function pintarDetalhe(){
   const cls = ST[p.status] || "ok", label = T().st[p.status] || T().st.disponivel;
   const nav = fotos.length > 1 ? `<button type="button" class="nav prev" aria-label="‹">‹</button><button type="button" class="nav next" aria-label="›">›</button><span class="dots"><span>${DI+1}/${fotos.length}</span></span>` : "";
   const btn = p.status==="vendido" ? `<span class="buy">${T().st.vendido}</span>` : `<a class="buy" href="${waLink(p)}" target="_blank" rel="noopener"><span class="lg">${T().buy}</span><span class="sm">${T().buyShort}</span></a>`;
+  const bb = p.status==="vendido" ? "" : bagBtn(p);
   det.innerHTML = `<button type="button" class="x">‹ ${T().back}</button>
     <div class="dimg"><img src="${fotos[DI]}" alt="${nomeDe(p)}">${nav}<span class="status ${cls}">${label}</span></div>
     <div class="dbody"><span class="brandlabel">${p.marca}</span><h2 class="title">${nomeDe(p)}</h2><span class="meta">${detDe(p)}</span>
-    <div class="row"><span class="price">${precoHTML(p)}</span>${btn}</div><button type="button" class="voltar">${T().backShop}</button></div>`;
+    <div class="row"><span class="price">${precoHTML(p)}</span>${btn}</div>${bb}<button type="button" class="voltar">${T().backShop}</button></div>`;
 }
 det.addEventListener("click", e => {
   if (e.target === det || e.target.closest(".x") || e.target.closest(".voltar")) { det.close(); return; }
