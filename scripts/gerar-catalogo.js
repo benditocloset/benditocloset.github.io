@@ -41,7 +41,7 @@ console.log(`catalogo.csv: ${n} peças`);
 // ── SEO para o Google: sitemap.xml + dados estruturados (JSON-LD) no index.html ──
 const hoje = new Date().toISOString().slice(0, 10);
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-const paginas = ["/", "/looks/", "/lojas/", "/imprensa/", "/lojas/exemplos/maison-amande/", "/lojas/exemplos/bigodes/"];
+const paginas = ["/", "/looks/", "/lojas/", "/imprensa/", "/closet-da-lu/", "/lojas/exemplos/maison-amande/", "/lojas/exemplos/bigodes/"];
 const disp = PECAS.filter(p => p.foto && p.status === "disponivel");
 const urls = [...paginas.map(u => SITE + u), ...disp.map(p => `${SITE}/?peca=${encodeURIComponent(p.id)}`)];
 fs.writeFileSync(path.join(root, "sitemap.xml"),
