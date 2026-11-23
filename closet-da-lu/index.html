@@ -246,7 +246,11 @@ document.querySelectorAll(".filters button").forEach(b => b.addEventListener("cl
   document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x===b));
   render(b.dataset.f);
 }));
-render("all");
+const FIM = new Date("2027-01-01T00:00:00");
+if (new Date() >= FIM) {
+  document.querySelector(".filters").remove();
+  document.getElementById("grid").innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0">O Closet da Lu terminou. Veja as peças disponíveis na <a href="/" style="color:var(--halo)">loja do Bendito Closet</a>.</p>';
+} else { render("all"); }
 </script>
 </body>
 </html>
