@@ -143,7 +143,7 @@ footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--muted);f
 const PECAS_LU = [
   { id:"lu-tommy-jeans-skinny", cat:"roupas", marca:"Tommy Hilfiger", nome:"Calça jeans skinny azul",
     detalhe:"Modelo mid rise skinny · tamanho 31/32 · pouquíssimo uso", preco:30, status:"disponivel",
-    fotos:["/img/lu/tommy-jeans-frente.jpg","/img/lu/tommy-jeans-costas.jpg"] },
+    fotos:[] },  // à espera da foto com modelo
 ];
 const WA = "351936796783";
 const ST = { disponivel:["Peça única","ok"], reservado:["Reservada","res"], vendido:["Vendida","sold"] };
@@ -168,7 +168,7 @@ function card(p){
 const embreve = `<article class="card"><div class="photo"><div class="ph">${cabide}<span>Mais peças da Lu<br>a caminho</span></div></div>
   <div class="body"><span class="meta">Siga o <a href="https://www.instagram.com/benditocloset.pt/" target="_blank" rel="noopener">@benditocloset.pt</a> para saber quando chegam.</span></div></article>`;
 function render(f){
-  const lista = PECAS_LU.filter(p => f==="all" || p.cat===f);
+  const lista = PECAS_LU.filter(p => p.fotos.length && (f==="all" || p.cat===f));  // sem foto não aparece
   document.getElementById("grid").innerHTML = lista.map(card).join("") + embreve;
 }
 document.getElementById("grid").addEventListener("click", e => {
