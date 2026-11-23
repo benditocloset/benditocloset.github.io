@@ -132,6 +132,7 @@ header{position:relative}
 .rv .stars{color:var(--halo);letter-spacing:2px;font-size:16px}
 .rv blockquote{margin:0;font-family:var(--display);font-size:20px;line-height:1.35}
 .rv figcaption{font-size:13px;color:var(--muted)}
+.rv blockquote{white-space:pre-line}
 .rv .reply{border-left:2px solid var(--halo);padding:4px 0 2px 12px;margin-top:4px;font-size:14px;line-height:1.5}
 .rv .reply b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--halo);margin-bottom:2px}
 .rv-form{background:var(--surface);border:1px solid var(--halo);border-radius:14px;padding:18px 20px;display:grid;gap:12px;max-width:640px}
@@ -404,6 +405,7 @@ const PECAS = [
    Exemplo: { nome:"Ana", cidade:"Lisboa", peca:"Vestido floral", texto:"…", estrelas:5, resposta:"Obrigada, Ana! …" }
    "resposta" é a resposta da Marianna. Se ficar vazia, aparece a resposta automática (rvAuto). */
 const AVALIACOES = [
+  {"nome": "Fernanda Marquise", "cidade": "Porto", "estrelas": 5, "peca": "Bolsa Chanel", "texto": "Comprei uma bolsa Chanel através do Bendito Closet que ainda nem estava anunciada no site. Falei com a Marianna pela opção “Outros” e ela foi super querida comigo. Como moro perto, ainda teve a simpatia de me entregar a bolsa pessoalmente!\n\nFiquei muito feliz com a compra! A bolsa está em ótimo estado, muito bem conservada e adorei a experiência. Foi tudo muito simples e agradável. Recomendo de coração o Bendito Closet! ❤️", "resposta": "Obrigada, Fernanda! Foi um gosto entregar-lhe a bolsa em mão. Que a use muito e com muito carinho. 💛"},
 ];
 
 const ST = { disponivel:"ok", reservado:"res", vendido:"sold" };
