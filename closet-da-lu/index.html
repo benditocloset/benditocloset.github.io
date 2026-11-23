@@ -233,7 +233,7 @@ const embreve = `<article class="card"><div class="photo"><div class="ph">${cabi
   <div class="body"><span class="meta">Siga o <a href="https://www.instagram.com/benditocloset.pt/" target="_blank" rel="noopener">@benditocloset.pt</a> para saber quando chegam.</span></div></article>`;
 function render(f){
   const lista = PECAS_LU.filter(p => p.fotos.length && (f==="all" || p.cat===f));  // sem foto não aparece
-  document.getElementById("grid").innerHTML = lista.map(card).join("") + embreve;
+  document.getElementById("grid").innerHTML = lista.map(card).join("");
 }
 document.getElementById("grid").addEventListener("click", e => {
   const ph = e.target.closest(".photo[data-i]"); if (!ph) return;
