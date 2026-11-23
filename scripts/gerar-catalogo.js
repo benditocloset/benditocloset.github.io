@@ -47,13 +47,18 @@ const urls = [...paginas.map(u => SITE + u), ...disp.map(p => `${SITE}/?peca=${e
 fs.writeFileSync(path.join(root, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   urls.map(u => `  <url><loc>${esc(u)}</loc><lastmod>${hoje}</lastmod></url>`).join("\n") + `\n</urlset>\n`);
+const PAISES = ["PT","ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT","CH","NO","GB"];
+const DEVOLUCAO = { "@type": "MerchantReturnPolicy", applicableCountry: PAISES,
+  returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow", merchantReturnDays: 14,
+  returnMethod: "https://schema.org/ReturnByMail", returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+  merchantReturnLink: SITE + "/#devolucoes" };
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
     { "@type": "OnlineStore", "@id": SITE + "/#loja", name: "Bendito Closet", url: SITE + "/",
       logo: SITE + "/img/logo.jpg", image: SITE + "/img/logo.jpg",
       description: "Brechó online de moda de marca em segunda mão: bolsas, casacos, roupas, sapatos e acessórios. Peças únicas, envio para Portugal e toda a Europa.",
-      areaServed: "Europe", sameAs: ["https://www.instagram.com/benditocloset.pt/"] },
+      areaServed: "Europe", hasMerchantReturnPolicy: DEVOLUCAO, sameAs: ["https://www.instagram.com/benditocloset.pt/"] },
     { "@type": "ItemList", name: "Peças disponíveis", itemListElement: disp.map((p, i) => ({
       "@type": "ListItem", position: i + 1, item: {
         "@type": "Product", name: `${p.marca} – ${p.nome}`, sku: p.id, brand: { "@type": "Brand", name: p.marca },
@@ -63,7 +68,8 @@ const ld = {
         offers: { "@type": "Offer", price: Number(p.preco).toFixed(2), priceCurrency: "EUR",
           availability: "https://schema.org/InStock",
           itemCondition: condicao(p.detalhe) === "new" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-          url: `${SITE}/?peca=${encodeURIComponent(p.id)}`, seller: { "@id": SITE + "/#loja" } } } })) }
+          url: `${SITE}/?peca=${encodeURIComponent(p.id)}`, seller: { "@id": SITE + "/#loja" },
+          hasMerchantReturnPolicy: DEVOLUCAO } } })) }
   ]
 };
 const bloco = `<script type="application/ld+json" id="ld">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>`;
