@@ -6,7 +6,8 @@
 //   média   (sapatos, bolsas):    PT continental 10 € · Açores/Madeira 10 € · Europa 24 €
 //   grande  (casacos):            PT continental 12 € · Açores/Madeira 10 € · Europa 24 €
 //   Preço do link ≥ 100 €: portes grátis em Portugal (continente e ilhas); Europa paga.
-// Black Friday: preço = round(preço × 0,85), igual ao site (precoFinal).
+// Black Friday: não há links próprios — o site preenche BLACKFRIDAY15 / BENDITO10BF no checkout.
+// O campo "bf" fica só como referência do preço com −15%.
 const fs = require("fs"), path = require("path"), vm = require("vm");
 const root = path.join(__dirname, "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
