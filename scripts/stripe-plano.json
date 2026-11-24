@@ -1,0 +1,1175 @@
+[
+ {
+  "id": "versace-bolsa",
+  "nome": "Versace Jeans Couture – Bolsa rosa com corrente dourada",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/versace-bolsa-modelo.jpg",
+  "normal": {
+   "preco": 80,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 68,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "shein-blusa-rosa",
+  "nome": "Shein – Blusa cetim rosa com plumas",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/shein-blusa-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "blueman-saida-praia",
+  "nome": "Blue Man – Saída de praia tropical",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/blueman-modelo.jpg",
+  "normal": {
+   "preco": 60,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 51,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "blueman-vestido-mata",
+  "nome": "Blue Man – Vestido Mata Atlântica",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/blueman-vestido-modelo.jpg",
+  "normal": {
+   "preco": 50,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 43,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "sarong-bali-seda",
+  "nome": "Bali – Sarong de seda de Bali",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/sarong-vestido-modelo.jpg",
+  "normal": {
+   "preco": 60,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 51,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "vestido-rio",
+  "nome": "Feito no Brasil – Vestido longo tropical",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/vestido-rio-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "asics-noosa",
+  "nome": "ASICS – Ténis Noosa Tri 14",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/asics-produto.jpg",
+  "normal": {
+   "preco": 60,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 51,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "melissa-mules-anabela",
+  "nome": "Melissa – Sandálias mule anabela pretas",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/melissa-mules-anabela-modelo.jpg",
+  "normal": {
+   "preco": 25,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 21,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "sandalia-prata",
+  "nome": "About You – Sandália de salto prateada",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/sandalia-prata-modelo.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "aboutyou-botins-camurca",
+  "nome": "About You – Botins de camurça camel",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/aboutyou-botins-camurca-modelo.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "zara-slingback-perolas",
+  "nome": "Zara – Sapato slingback com pérolas",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/zara-perolas-produto.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "zara-botas-camurca",
+  "nome": "Zara – Botas altas de camurça castanhas",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/zara-botas-camurca-modelo.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "primark-botas-atacadores",
+  "nome": "Primark – Botas altas pretas com atacadores",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/primark-botas-atacadores-modelo.jpg",
+  "normal": {
+   "preco": 12,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 10,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "pepe-coturno",
+  "nome": "Pepe Jeans – Botas de cano curto pretas",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/pepe-botas-produto.jpg",
+  "normal": {
+   "preco": 45,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 38,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "body-leopardo",
+  "nome": "Feito no Brasil – Body leopardo em tule",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/body-leopardo-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "vestido-floral-preto",
+  "nome": "Feito no Brasil – Vestido justo floral",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/vestido-floral-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "shein-vestido-zebra",
+  "nome": "Shein – Vestido curto zebra",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/shein-zebra-modelo.jpg",
+  "normal": {
+   "preco": 8,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 7,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "adidas-legging",
+  "nome": "Adidas – Leggings de desporto rosa-velho",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/adidas-legging-modelo.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "nike-mind-002",
+  "nome": "Nike – Ténis Nike Mind 002 bordô",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/nike-mind-modelo.jpg",
+  "normal": {
+   "preco": 110,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 94,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "golden-goose-superstar",
+  "nome": "Golden Goose – Ténis Super-Star glitter dourado",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/golden-goose-superstar-modelo.jpg",
+  "normal": {
+   "preco": 100,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 85,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "ch-espadrilles-tartan",
+  "nome": "Carolina Herrera – Espadrilles xadrez tartan amarelo",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/ch-espadrilles-tartan-modelo.jpg",
+  "normal": {
+   "preco": 80,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 68,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "shein-slingback-tricolor",
+  "nome": "Shein – Slingback tricolor branco, rosa e azul",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/shein-slingback-tricolor-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "shein-sapatos-lantejoulas",
+  "nome": "Shein – Sapatos de lantejoulas com atacadores",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/shein-sapatos-lantejoulas-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "moschino-coturnos-bordo",
+  "nome": "Moschino – Coturnos de pele bordô",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/moschino-coturnos-bordo-modelo.jpg",
+  "normal": {
+   "preco": 80,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 68,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "moschino-botas-neve",
+  "nome": "Love Moschino – Botas de neve pretas",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/moschino-botas-produto.jpg",
+  "normal": {
+   "preco": 70,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 60,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "decathlon-botas-neve",
+  "nome": "Decathlon – Botas de neve roxas com pelo",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/decathlon-botas-neve-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "rl-camisola-azul",
+  "nome": "Ralph Lauren – Camisola azul com Big Pony",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/rl-camisola-azul-modelo.jpg",
+  "normal": {
+   "preco": 80,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 68,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "rl-camisa-linho",
+  "nome": "Polo Ralph Lauren – Camisa-vestido de linho amarela",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/rl-camisa-linho-modelo.jpg",
+  "normal": {
+   "preco": 70,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 60,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "rl-camisa-linho-rosa",
+  "nome": "Polo Ralph Lauren – Camisa-vestido de linho rosa",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/rl-camisa-linho-rosa-modelo.jpg",
+  "normal": {
+   "preco": 70,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 60,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "kimono-dourado-ibiza",
+  "nome": "Comprado em Ibiza – Kimono de praia dourado com franjas",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/kimono-dourado-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "shein-camisa-caramelo",
+  "nome": "Shein – Camisa caramelo com estampa preta",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/shein-camisa-caramelo-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "shein-body-dourado",
+  "nome": "Shein – Body dourado metalizado",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/shein-body-dourado-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "shein-body-azul",
+  "nome": "Shein – Body azul-turquesa metalizado",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/shein-body-azul-modelo.jpg",
+  "normal": {
+   "preco": 10,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 9,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "gucci-gframe",
+  "nome": "Gucci – Relógio G-Frame YA147404",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/gucci-gframe-modelo.jpg",
+  "normal": {
+   "preco": 300,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 255,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "adidas-casaco-bordo",
+  "nome": "Adidas – Casaco de fato de treino bordô",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/adidas-casaco-bordo-modelo.jpg",
+  "normal": {
+   "preco": 30,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 26,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "zara-bomber-organza",
+  "nome": "Zara – Bomber transparente em organza preta",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/zara-bomber-organza-modelo.jpg",
+  "normal": {
+   "preco": 15,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 13,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "versace-oculos",
+  "nome": "Versace – Óculos de sol oversized Medusa",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/versace-oculos-modelo.jpg",
+  "normal": {
+   "preco": 130,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 111,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 12
+   }
+  }
+ },
+ {
+  "id": "guess-bolsa-laranja",
+  "nome": "Guess – Bolsa dupla coral",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/guess-bolsa-coral-modelo.jpg",
+  "normal": {
+   "preco": 50,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 43,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "ck-bolsa-prata",
+  "nome": "Calvin Klein Jeans – Bolsa prateada com corrente",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/ck-bolsa-modelo.jpg",
+  "normal": {
+   "preco": 50,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 43,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "guess-bolsa-preta",
+  "nome": "Guess – Bolsa preta com correntes",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/guess-bolsa-preta-modelo.jpg",
+  "normal": {
+   "preco": 35,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 30,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "guess-bolsa-aba",
+  "nome": "Guess – Bolsa preta com aba e corrente",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/guess-bolsa-aba-modelo.jpg",
+  "normal": {
+   "preco": 30,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 26,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "adidas-bolsa",
+  "nome": "Adidas – Bolsa shopper verniz preto",
+  "tam": "media",
+  "foto": "https://benditocloset.pt/img/adidas-modelo.jpg",
+  "normal": {
+   "preco": 25,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 21,
+   "portes": {
+    "cont": 10,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "guess-casaco-1",
+  "nome": "Guess – Casaco comprido bege",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/guess-bege-modelo.jpg",
+  "normal": {
+   "preco": 120,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 102,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "guess-casaco-2",
+  "nome": "Guess – Casaco acolchoado vinho",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/guess-vinho-modelo.jpg",
+  "normal": {
+   "preco": 120,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 102,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "versace-casaco",
+  "nome": "Versace Jeans Couture – Casaco corta-vento com rosas",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/versace-casaco-modelo.jpg",
+  "normal": {
+   "preco": 120,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 102,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "pepe-parka",
+  "nome": "Pepe Jeans – Parka acolchoada preta",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/pepe-parka-modelo.jpg",
+  "normal": {
+   "preco": 60,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 51,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "guess-biker",
+  "nome": "Guess – Casaco biker castanho",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/guess-biker-modelo.jpg",
+  "normal": {
+   "preco": 120,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 102,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "zara-gabardina",
+  "nome": "Zara – Gabardina castanha",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/zara-gabardina-modelo.jpg",
+  "normal": {
+   "preco": 45,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 38,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "zara-casaco-vermelho",
+  "nome": "Zara – Casaco efeito camurça vermelho-tijolo",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/zara-casaco-vermelho-modelo.jpg",
+  "normal": {
+   "preco": 30,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 26,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "salsa-dupla-face",
+  "nome": "Salsa – Casaco dupla face camel",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/salsa-camurca.jpg",
+  "normal": {
+   "preco": 100,
+   "portes": {
+    "pt_gratis": 0,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 85,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "pelo-camel",
+  "nome": "Madame Cocó – Casaco de pelo camel",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/pelo-camel-modelo.jpg",
+  "normal": {
+   "preco": 80,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 68,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "pelo-rosa",
+  "nome": "About You – Casaco de pelo rosa fúcsia",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/pelo-rosa-modelo.jpg",
+  "normal": {
+   "preco": 40,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 34,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "shein-bomber-lantejoulas",
+  "nome": "Shein – Casaco bomber de lantejoulas",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/shein-bomber-modelo.jpg",
+  "normal": {
+   "preco": 20,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 17,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ },
+ {
+  "id": "primark-jaq",
+  "nome": "Primark – Jaqueta biker verde",
+  "tam": "grande",
+  "foto": "https://benditocloset.pt/img/biker-verde-modelo.jpg",
+  "normal": {
+   "preco": 8,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  },
+  "bf": {
+   "preco": 7,
+   "portes": {
+    "cont": 12,
+    "ilhas": 10,
+    "europa": 24
+   }
+  }
+ }
+]
