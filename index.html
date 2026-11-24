@@ -216,7 +216,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #det .addbag{width:100%;padding:12px;font-size:15px}
 .duvida{display:block;text-align:center;font-size:12.5px;color:var(--muted);text-decoration:underline;margin-top:8px}
 #det .duvida{font-size:14px;margin:12px 0 4px}
-#bagbtn{display:none!important;position:fixed;top:12px;right:12px;z-index:30;display:flex;align-items:center;gap:7px;background:var(--halo);color:#1a1214;border:0;border-radius:999px;padding:9px 14px 9px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}
+#bagbtn{position:fixed;top:12px;right:12px;z-index:30;display:flex;align-items:center;gap:7px;background:var(--halo);color:#1a1214;border:0;border-radius:999px;padding:9px 14px 9px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}
 #bagbtn svg{width:20px;height:20px}
 #bagbtn b{background:#1a1214;color:var(--halo);min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px}
 #bagbtn.pulse{animation:pulse .5s}
@@ -1051,7 +1051,7 @@ function render(f){
     const btn = p.status==="vendido"
       ? `<span class="buy">${T().st.vendido}</span>`
       : (WHATSAPP
-          ? `${buyBtns(p)}${duvLink(p)}`
+          ? `${buyBtns(p)}${bagBtn(p)}${duvLink(p)}`
           : `<button type="button" class="buy" id="buy-${p.id}" data-id="${p.id}">Comprar pelo WhatsApp</button>`);
     card.innerHTML = `
       <div class="photo">${photo}<span class="status ${cls}">${label}</span>${p.ilustrativa?`<span class="count">Imagem ilustrativa</span>`:""}</div>
@@ -1178,7 +1178,7 @@ function pintarDetalhe(){
   const cls = ST[p.status] || "ok", label = T().st[p.status] || T().st.disponivel;
   const nav = fotos.length > 1 ? `<button type="button" class="nav prev" aria-label="‹">‹</button><button type="button" class="nav next" aria-label="›">›</button><span class="dots"><span>${DI+1}/${fotos.length}</span></span>` : "";
   const btn = p.status==="vendido" ? `<span class="buy">${T().st.vendido}</span>` : buyBtns(p);
-  const bb = p.status==="vendido" ? "" : duvLink(p);
+  const bb = p.status==="vendido" ? "" : bagBtn(p) + duvLink(p);
   det.innerHTML = `<button type="button" class="x">‹ ${T().back}</button>
     <div class="dimg"><img src="${fotos[DI]}" alt="${nomeDe(p)}">${nav}<span class="status ${cls}">${label}</span></div>
     <div class="dbody"><span class="brandlabel">${p.marca}</span><h2 class="title">${nomeDe(p)}</h2><span class="meta">${detDe(p)}</span>
