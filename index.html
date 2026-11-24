@@ -217,6 +217,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #det .addbag{width:100%;padding:12px;font-size:15px}
 .duvida{display:block;text-align:center;font-size:12.5px;color:var(--muted);text-decoration:underline;margin-top:8px}
 #det .duvida{font-size:14px;margin:12px 0 4px}
+.cta .ask .q,.cta .chips,#ask-other,#ask-hint{display:none!important}
 #bagbtn{position:fixed;top:12px;right:12px;z-index:30;display:flex;align-items:center;gap:7px;background:var(--halo);color:#1a1214;border:0;border-radius:999px;padding:9px 14px 9px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}
 #bagbtn svg{width:20px;height:20px}
 #bagbtn b{background:#1a1214;color:var(--halo);min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;font-size:12px;padding:0 6px}
@@ -289,22 +290,6 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
     </div>
   </section>
 
-  <section class="cta" aria-label="Contacto">
-    <div>
-      <p class="brands" data-i18n="brands">Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.</p>
-      <strong data-i18n="ctaT">Procura uma marca ou peça que não está aqui?</strong>
-      <p data-i18n="ctaP">Há novas peças a chegar todas as semanas. Escolha a marca e enviamos fotos pelo WhatsApp.</p>
-    </div>
-    <div class="ask">
-      <p class="q" id="q-brand" data-i18n="qBrand">Que marca procura?</p>
-      <div class="chips" id="ask-brand" role="group" aria-labelledby="q-brand"><button type="button" data-b="Guess" aria-pressed="false">Guess</button><button type="button" data-b="Versace" aria-pressed="false">Versace</button><button type="button" data-b="Ralph Lauren" aria-pressed="false">Ralph Lauren</button><button type="button" data-b="Calvin Klein" aria-pressed="false">Calvin Klein</button><button type="button" data-b="Zara" aria-pressed="false">Zara</button><button type="button" data-b="Adidas" aria-pressed="false">Adidas</button><button type="button" data-b="outra" aria-pressed="false" data-i18n="other">Outra</button></div>
-      <input type="text" id="ask-other" maxlength="40" autocomplete="off" placeholder="Escreva a marca" aria-label="Escreva a marca" hidden>
-      <p class="q" id="q-type"><span data-i18n="qType">Que tipo de peça?</span> <span class="opt" data-i18n="opt">(opcional)</span></p>
-      <div class="chips" id="ask-type" role="group" aria-labelledby="q-type"><button type="button" data-t="bolsas" aria-pressed="false" data-i18n="fBolsas">Bolsas</button><button type="button" data-t="casacos" aria-pressed="false" data-i18n="fCasacos">Casacos</button><button type="button" data-t="roupas" aria-pressed="false" data-i18n="fRoupas">Roupas</button><button type="button" data-t="sapatos" aria-pressed="false" data-i18n="fSapatos">Sapatos</button><button type="button" data-t="acessorios" aria-pressed="false" data-i18n="fAcess">Acessórios</button></div>
-      <a id="cta-wa" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-i18n="ctaB">Perguntar no WhatsApp</a>
-      <p class="hint" id="ask-hint" role="alert" hidden></p>
-    </div>
-  </section>
 
   <nav class="filters" aria-label="Filtrar peças">
     <button type="button" id="f-all" data-f="all" aria-pressed="true" data-i18n="fAll">Tudo</button>
@@ -323,6 +308,23 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
     <div class="step"><span class="n">2</span><div><h3 data-i18n="s2t">Combine o pagamento</h3><p data-i18n="s2p">MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.</p></div></div>
     <div class="step"><span class="n">3</span><div><h3 data-i18n="s3t">Receba em casa</h3><p data-i18n="s3p">Enviamos por CTT, com código de seguimento, em até 2 dias úteis após o pagamento. Portes combinados pelo WhatsApp, grátis em compras acima de 100 €.</p></div></div>
     <div class="step" id="devolucoes"><span class="n">4</span><div><h3 data-i18n="s4t">Devoluções em 14 dias</h3><p data-i18n="s4p">Pode devolver a peça até 14 dias depois de a receber. Avise-nos primeiro pelo WhatsApp. A peça tem de voltar no mesmo estado em que a enviámos, sem uso e com etiqueta, se tiver. Os portes da devolução ficam a cargo da cliente. Devolvemos o valor pago assim que recebermos a peça.</p></div></div>
+  </section>
+
+  <section class="cta" aria-label="Contacto">
+    <div>
+      <p class="brands" data-i18n="brands">Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.</p>
+      <strong data-i18n="ctaT">Procura uma marca ou peça que não está aqui?</strong>
+      <p data-i18n="ctaP">Há peças novas todas as semanas. Diga-me o que procura e envio fotos pelo WhatsApp.</p>
+    </div>
+    <div class="ask">
+      <p class="q" id="q-brand" data-i18n="qBrand">Que marca procura?</p>
+      <div class="chips" id="ask-brand" role="group" aria-labelledby="q-brand"><button type="button" data-b="Guess" aria-pressed="false">Guess</button><button type="button" data-b="Versace" aria-pressed="false">Versace</button><button type="button" data-b="Ralph Lauren" aria-pressed="false">Ralph Lauren</button><button type="button" data-b="Calvin Klein" aria-pressed="false">Calvin Klein</button><button type="button" data-b="Zara" aria-pressed="false">Zara</button><button type="button" data-b="Adidas" aria-pressed="false">Adidas</button><button type="button" data-b="outra" aria-pressed="false" data-i18n="other">Outra</button></div>
+      <input type="text" id="ask-other" maxlength="40" autocomplete="off" placeholder="Escreva a marca" aria-label="Escreva a marca" hidden>
+      <p class="q" id="q-type"><span data-i18n="qType">Que tipo de peça?</span> <span class="opt" data-i18n="opt">(opcional)</span></p>
+      <div class="chips" id="ask-type" role="group" aria-labelledby="q-type"><button type="button" data-t="bolsas" aria-pressed="false" data-i18n="fBolsas">Bolsas</button><button type="button" data-t="casacos" aria-pressed="false" data-i18n="fCasacos">Casacos</button><button type="button" data-t="roupas" aria-pressed="false" data-i18n="fRoupas">Roupas</button><button type="button" data-t="sapatos" aria-pressed="false" data-i18n="fSapatos">Sapatos</button><button type="button" data-t="acessorios" aria-pressed="false" data-i18n="fAcess">Acessórios</button></div>
+      <a id="cta-wa" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-i18n="ctaB">Perguntar no WhatsApp</a>
+      <p class="hint" id="ask-hint" role="alert" hidden></p>
+    </div>
   </section>
 
   <section class="consign" id="quem-sou" aria-labelledby="ab-title">
@@ -477,7 +479,7 @@ const UI = {
       intro:"Bolsas, casacos, roupas e acessórios em bom estado, direto do meu armário para o seu. Cada peça é única: quando sai, sai.",
       f1:"Envio para Portugal e toda a Europa (portes à parte)", f2:"Portes grátis acima de 100 € em Portugal", f3:"Cartão, MB WAY, Apple Pay, Google Pay ou Klarna", press:"Imprensa: comunicado e fotos", mkshop:"Crie a sua loja online ✦", looks:"Looks da semana ✦",
       brands:"Peças originais de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e mais.",
-      ctaT:"Procura uma marca ou peça que não está aqui?", ctaP:"Há novas peças a chegar todas as semanas. Escolha a marca e enviamos fotos pelo WhatsApp.", ctaB:"Perguntar no WhatsApp",
+      ctaT:"Procura uma marca ou peça que não está aqui?", ctaP:"Há peças novas todas as semanas. Diga-me o que procura e envio fotos pelo WhatsApp.", ctaB:"Perguntar no WhatsApp",
       qBrand:"Que marca procura?", qType:"Que tipo de peça?", opt:"(opcional)", other:"Outra", otherPh:"Escreva a marca", hintBrand:"Escolha uma marca primeiro.", hintOther:"Escreva o nome da marca.",
       askMsg:(b,t)=>`Olá! Vim pelo site da Bendito Closet. Procuro ${({bolsas:"uma bolsa",casacos:"um casaco",roupas:"roupa",sapatos:"sapatos",acessorios:"um acessório"})[t]||"peças"} da marca ${b}. Têm alguma coisa disponível?`,
       sortLabel:"Ordenar:", sortNew:"Novidades", sortLow:"Preço: mais baratos", sortHigh:"Preço: mais caros", buyShort:"Comprar agora", back:"Voltar", backShop:"Voltar à loja", fAll:"Tudo", fBolsas:"Bolsas", fCasacos:"Casacos", fRoupas:"Roupas", fSapatos:"Sapatos", fAcess:"Acessórios",
@@ -491,7 +493,7 @@ const UI = {
       intro:"Bags, coats, clothing and accessories in great condition, from my wardrobe to yours. Every piece is one of a kind: once it's gone, it's gone.",
       f1:"Shipping to Portugal and all of Europe (postage extra)", f2:"Free shipping over €100 in Portugal", f3:"Card, MB WAY, Apple Pay, Google Pay or Klarna", press:"Press: release and photos", mkshop:"Build your own online shop ✦", looks:"Looks of the week ✦",
       brands:"Original pieces from Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa and more.",
-      ctaT:"Looking for a brand or piece that isn't here?", ctaP:"New pieces arrive every week. Pick a brand and we'll send photos on WhatsApp.", ctaB:"Ask on WhatsApp",
+      ctaT:"Looking for a brand or piece that isn't here?", ctaP:"New pieces arrive every week. Tell me what you're looking for and I'll send photos on WhatsApp.", ctaB:"Ask on WhatsApp",
       qBrand:"Which brand are you looking for?", qType:"What kind of item?", opt:"(optional)", other:"Other", otherPh:"Type the brand", hintBrand:"Choose a brand first.", hintOther:"Type the brand name.",
       askMsg:(b,t)=>`Hi! I found you through the Bendito Closet website. I'm looking for ${({bolsas:"a bag",casacos:"a coat",roupas:"clothing",sapatos:"shoes",acessorios:"an accessory"})[t]||"pieces"} from ${b}. Do you have anything available?`,
       sortLabel:"Sort:", sortNew:"Newest", sortLow:"Price: low to high", sortHigh:"Price: high to low", buyShort:"Buy now", back:"Back", backShop:"Back to shop", fAll:"All", fBolsas:"Bags", fCasacos:"Coats", fRoupas:"Clothing", fSapatos:"Shoes", fAcess:"Accessories",
@@ -565,7 +567,7 @@ Object.assign(UI, {
       intro:"Bolsos, abrigos, ropa y accesorios en buen estado, de mi armario al tuyo. Cada pieza es única: cuando se va, se va.",
       f1:"Envíos a Portugal y toda Europa (gastos de envío aparte)", f2:"Envío gratis a partir de 100 € en Portugal", f3:"Tarjeta, MB WAY, Apple Pay, Google Pay o Klarna", press:"Prensa: comunicado y fotos", mkshop:"Crea tu tienda online ✦", looks:"Looks de la semana ✦",
       brands:"Piezas originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa y más.",
-      ctaT:"¿Buscas una marca o pieza que no está aquí?", ctaP:"Llegan piezas nuevas cada semana. Elige la marca y te enviamos fotos por WhatsApp.", ctaB:"Preguntar por WhatsApp",
+      ctaT:"¿Buscas una marca o pieza que no está aquí?", ctaP:"Llegan prendas nuevas cada semana. Dime qué buscas y te envío fotos por WhatsApp.", ctaB:"Preguntar por WhatsApp",
       qBrand:"¿Qué marca buscas?", qType:"¿Qué tipo de pieza?", opt:"(opcional)", other:"Otra", otherPh:"Escribe la marca", hintBrand:"Elige una marca primero.", hintOther:"Escribe el nombre de la marca.",
       askMsg:(b,t)=>`¡Hola! Vengo de la web de Bendito Closet. Busco ${({bolsas:"un bolso",casacos:"un abrigo",roupas:"ropa",sapatos:"zapatos",acessorios:"un accesorio"})[t]||"piezas"} de la marca ${b}. ¿Tenéis algo disponible?`,
       sortLabel:"Ordenar:", sortNew:"Novedades", sortLow:"Precio: más baratos", sortHigh:"Precio: más caros", buyShort:"Comprar ya", back:"Volver", backShop:"Volver a la tienda", fAll:"Todo", fBolsas:"Bolsos", fCasacos:"Abrigos", fRoupas:"Ropa", fSapatos:"Zapatos", fAcess:"Accesorios",
@@ -579,7 +581,7 @@ Object.assign(UI, {
       intro:"Sacs, manteaux, vêtements et accessoires en bon état, de mon dressing au vôtre. Chaque pièce est unique : une fois partie, elle est partie.",
       f1:"Livraison au Portugal et dans toute l'Europe (frais de port en sus)", f2:"Livraison offerte dès 100 € au Portugal", f3:"Carte, MB WAY, Apple Pay, Google Pay ou Klarna", press:"Presse : communiqué et photos", mkshop:"Créez votre boutique en ligne ✦", looks:"Looks de la semaine ✦",
       brands:"Pièces originales de Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa et plus.",
-      ctaT:"Vous cherchez une marque ou une pièce absente ?", ctaP:"De nouvelles pièces arrivent chaque semaine. Choisissez la marque et nous vous enverrons des photos sur WhatsApp.", ctaB:"Demander sur WhatsApp",
+      ctaT:"Vous cherchez une marque ou une pièce absente ?", ctaP:"De nouvelles pièces arrivent chaque semaine. Dites-moi ce que vous cherchez et je vous envoie des photos sur WhatsApp.", ctaB:"Demander sur WhatsApp",
       qBrand:"Quelle marque cherchez-vous ?", qType:"Quel type de pièce ?", opt:"(facultatif)", other:"Autre", otherPh:"Écrivez la marque", hintBrand:"Choisissez d'abord une marque.", hintOther:"Écrivez le nom de la marque.",
       askMsg:(b,t)=>`Bonjour ! Je viens du site Bendito Closet. Je cherche ${({bolsas:"un sac",casacos:"un manteau",roupas:"des vêtements",sapatos:"des chaussures",acessorios:"un accessoire"})[t]||"des pièces"} de la marque ${b}. Avez-vous quelque chose de disponible ?`,
       sortLabel:"Trier :", sortNew:"Nouveautés", sortLow:"Prix croissant", sortHigh:"Prix décroissant", buyShort:"Acheter", back:"Retour", backShop:"Retour à la boutique", fAll:"Tout", fBolsas:"Sacs", fCasacos:"Manteaux", fRoupas:"Vêtements", fSapatos:"Chaussures", fAcess:"Accessoires",
@@ -593,7 +595,7 @@ Object.assign(UI, {
       intro:"Taschen, Mäntel, Kleidung und Accessoires in gutem Zustand, aus meinem Kleiderschrank in deinen. Jedes Stück ist ein Unikat: Weg ist weg.",
       f1:"Versand nach Portugal und in ganz Europa (zzgl. Versandkosten)", f2:"Kostenloser Versand ab 100 € innerhalb Portugals", f3:"Karte, MB WAY, Apple Pay, Google Pay oder Klarna", press:"Presse: Mitteilung und Fotos", mkshop:"Erstelle deinen eigenen Onlineshop ✦", looks:"Looks der Woche ✦",
       brands:"Originalteile von Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa und mehr.",
-      ctaT:"Du suchst eine Marke oder ein Teil, das hier fehlt?", ctaP:"Jede Woche kommen neue Teile dazu. Wähl die Marke, und wir schicken dir Fotos per WhatsApp.", ctaB:"Auf WhatsApp fragen",
+      ctaT:"Du suchst eine Marke oder ein Teil, das hier fehlt?", ctaP:"Jede Woche kommen neue Teile. Sag mir, was du suchst, und ich schicke dir Fotos auf WhatsApp.", ctaB:"Auf WhatsApp fragen",
       qBrand:"Welche Marke suchst du?", qType:"Welche Art von Teil?", opt:"(optional)", other:"Andere", otherPh:"Marke eingeben", hintBrand:"Wähl zuerst eine Marke.", hintOther:"Gib den Markennamen ein.",
       askMsg:(b,t)=>`Hallo! Ich komme von der Website von Bendito Closet. Ich suche ${({bolsas:"eine Tasche",casacos:"eine Jacke",roupas:"Kleidung",sapatos:"Schuhe",acessorios:"ein Accessoire"})[t]||"Teile"} von ${b}. Habt ihr etwas verfügbar?`,
       sortLabel:"Sortieren:", sortNew:"Neuheiten", sortLow:"Preis aufsteigend", sortHigh:"Preis absteigend", buyShort:"Jetzt kaufen", back:"Zurück", backShop:"Zurück zum Shop", fAll:"Alle", fBolsas:"Taschen", fCasacos:"Mäntel", fRoupas:"Kleidung", fSapatos:"Schuhe", fAcess:"Accessoires",
@@ -607,7 +609,7 @@ Object.assign(UI, {
       intro:"Borse, cappotti, abiti e accessori in buone condizioni, dal mio armadio al tuo. Ogni capo è unico: quando va via, va via.",
       f1:"Spedizione in Portogallo e in tutta Europa (spese a parte)", f2:"Spedizione gratuita sopra i 100 € in Portogallo", f3:"Carta, MB WAY, Apple Pay, Google Pay o Klarna", press:"Stampa: comunicato e foto", mkshop:"Crea il tuo negozio online ✦", looks:"Look della settimana ✦",
       brands:"Capi originali Guess, Versace Jeans Couture, Calvin Klein, Zara, Salsa e altri marchi.",
-      ctaT:"Cerchi un marchio o un capo che non trovi qui?", ctaP:"Arrivano capi nuovi ogni settimana. Scegli il marchio e ti mandiamo le foto su WhatsApp.", ctaB:"Chiedi su WhatsApp",
+      ctaT:"Cerchi un marchio o un capo che non trovi qui?", ctaP:"Ogni settimana arrivano capi nuovi. Dimmi cosa cerchi e ti mando le foto su WhatsApp.", ctaB:"Chiedi su WhatsApp",
       qBrand:"Che marchio cerchi?", qType:"Che tipo di capo?", opt:"(facoltativo)", other:"Altro", otherPh:"Scrivi il marchio", hintBrand:"Prima scegli un marchio.", hintOther:"Scrivi il nome del marchio.",
       askMsg:(b,t)=>`Ciao! Vengo dal sito di Bendito Closet. Cerco ${({bolsas:"una borsa",casacos:"un cappotto",roupas:"abbigliamento",sapatos:"scarpe",acessorios:"un accessorio"})[t]||"capi"} del marchio ${b}. Avete qualcosa di disponibile?`,
       sortLabel:"Ordina:", sortNew:"Novità", sortLow:"Prezzo crescente", sortHigh:"Prezzo decrescente", buyShort:"Compra ora", back:"Indietro", backShop:"Torna al negozio", fAll:"Tutto", fBolsas:"Borse", fCasacos:"Cappotti", fRoupas:"Abbigliamento", fSapatos:"Scarpe", fAcess:"Accessori",
@@ -903,7 +905,7 @@ document.querySelectorAll("#ask-type button").forEach(b => b.addEventListener("c
 { const o = document.getElementById("ask-other"); if (o) o.addEventListener("input", atualizarPedido); }
 { const a = document.getElementById("cta-wa");
   if (a) a.addEventListener("click", e => {
-    if (marcaPedido()) return;
+    return;
     e.preventDefault();
     const h = document.getElementById("ask-hint");
     if (h) { h.textContent = ASK_B === "outra" ? T().hintOther : T().hintBrand; h.hidden = false; }
