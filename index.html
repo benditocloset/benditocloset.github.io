@@ -267,6 +267,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
   .bf{padding-right:74px;text-align:left}
 }
 
+.paga[hidden]{display:none!important}
 .paga{position:relative;margin:26px 0 8px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#1a0a10 0%,#2A1219 55%,#120a06 100%);display:grid;grid-template-columns:1.15fr .85fr;align-items:stretch;min-height:360px}
 .paga .tx{padding:34px 30px;display:flex;flex-direction:column;justify-content:center;gap:12px;position:relative;z-index:1}
 .paga .k{color:var(--halo);font-size:12px;font-weight:700;letter-spacing:.22em}
@@ -311,7 +312,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
     </div>
   </section>
 
-  <section class="paga" id="pagamentos" aria-labelledby="pg-t">
+  <section class="paga" id="pagamentos" aria-labelledby="pg-t" hidden>
     <div class="tx">
       <span class="k" data-i18n="pgK">AGORA PODE PAGAR COM</span>
       <h2 id="pg-t" data-i18n="pgT">Multibanco, cartão de crédito e Klarna</h2>
