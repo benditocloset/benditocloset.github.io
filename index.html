@@ -960,7 +960,7 @@ function bagToggle(id){
   if (i < 0) { const bb = document.getElementById("bagbtn"); bb.classList.remove("pulse"); void bb.offsetWidth; bb.classList.add("pulse"); }
 }
 let CUPAO = ""; try { CUPAO = localStorage.getItem("bc-cupao") || ""; } catch(e) {}
-const CUP_OK = c => c === "BENDITO10" && !BF_ATIVA;
+const CUP_OK = c => c === "BENDITO10";
 function bagSub(){ return BAG.reduce((s,id) => s + precoFinal(PECAS.find(x=>x.id===id)), 0); }
 function bagTotal(){ const t = bagSub(); return CUP_OK(CUPAO) ? Math.round(t*0.9*100)/100 : t; }
 function bagPaint(){
