@@ -34,4 +34,4 @@ const plano = PECAS.filter(p => p.status !== "vendido" && (p.foto || p.fotos)).m
   };
 });
 fs.writeFileSync(path.join(__dirname, "stripe-plano.json"), JSON.stringify(plano, null, 1) + "\n");
-console.log(`stripe-plano.json: ${plano.length} peças, ${plano.length * 2} links`);
+console.log(`stripe-plano.json: ${plano.length} peças`);

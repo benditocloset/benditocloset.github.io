@@ -1,5 +1,27 @@
 [
  {
+  "id": "adidas-calca-castanha",
+  "nome": "Adidas – Calça de fato de treino castanha",
+  "tam": "pequena",
+  "foto": "https://benditocloset.pt/img/adidas-calca-castanha-modelo.jpg",
+  "normal": {
+   "preco": 30,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  },
+  "bf": {
+   "preco": 26,
+   "portes": {
+    "cont": 6,
+    "ilhas": 6,
+    "europa": 12
+   }
+  }
+ },
+ {
   "id": "versace-bolsa",
   "nome": "Versace Jeans Couture – Bolsa rosa com corrente dourada",
   "tam": "media",
