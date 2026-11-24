@@ -979,7 +979,7 @@ function bagPaint(){
     : `<p class="empty">${t.empty}</p>`}`;
 }
 document.addEventListener("submit", e => { if (e.target.id !== "cpform") return; e.preventDefault();
-  CUPAO = document.getElementById("cpin").value.trim().toUpperCase(); try { localStorage.setItem("bc-cupao", CUPAO); } catch(x) {} bagPaint(); });
+  CUPAO = document.getElementById("cpin").value.trim().toUpperCase(); try { localStorage.setItem("bc-cupao", CUPAO); } catch(x) {} bagPaint(); try { render(FILTRO); } catch(x) {} });
 function bagOpen(){ bagValid(); bagPaint(); const d = document.getElementById("saco"); try { d.showModal(); } catch(e) { d.setAttribute("open",""); } }
 document.addEventListener("click", e => {
   const a = e.target.closest("[data-bag]"); if (a) { e.preventDefault(); e.stopPropagation(); bagToggle(a.dataset.bag); return; }
@@ -991,7 +991,8 @@ document.addEventListener("click", e => {
 
 function waLink(p){
   const bft = BF_ATIVA ? " " + (BF_TXT[LANG]||BF_TXT.pt).msg : "";
-  const txt = T().msg(nomeDe(p), p.marca, euro(precoFinal(p)) + bft);
+  const pr = CUP_OK(CUPAO) ? `${euro(precoFinal(p))} → ${euro(Math.round(precoFinal(p)*0.9*100)/100)} · ${T().cpMsg}` : euro(precoFinal(p));
+  const txt = T().msg(nomeDe(p), p.marca, pr + bft);
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
 }
 
@@ -1120,7 +1121,7 @@ aplicarIdioma();
     h.hidden = true;
     try { fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
       body: JSON.stringify({ email: em, lingua: LANG, origem: "Pop-up 10% do site", consentimento: "Sim", _subject: "Nova inscrição no Bendito Closet (cupão 10%)", _template: "table", _captcha: "false" }), keepalive:true }).catch(()=>{}); } catch(x) {}
-    try { localStorage.setItem("bc-cupao", "BENDITO10"); } catch(x) {} if (typeof CUPAO !== "undefined") CUPAO = "BENDITO10";
+    try { localStorage.setItem("bc-cupao", "BENDITO10"); } catch(x) {} if (typeof CUPAO !== "undefined") CUPAO = "BENDITO10"; try { render(FILTRO); } catch(x) {}
     document.getElementById("pop-a").hidden = true; document.getElementById("pop-d").hidden = false;
     try { localStorage.setItem("bc-pop", "inscrita"); } catch(x) {}
   });
