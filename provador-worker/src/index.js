@@ -4,11 +4,12 @@ const ALLOWED = ["https://benditocloset.pt", "https://www.benditocloset.pt"];
 // Instruções para a IA: vestir só a peça da loja (a foto da loja mostra uma modelo; ignorar o resto do look dela)
 const KEEP = " Preserve the person's face exactly as in the original photo: same identity, features, skin, expression and hair; do not retouch or change the face. The garment fabric is fully opaque: sleeves and body fully cover the skin underneath, with no tattoos or skin showing through, and the print follows the garment's natural folds without distortion. Keep the hands, phone and accessories unchanged.";
 // Se a pessoa estiver de roupa interior ou fato de banho, completar com um básico (t-shirt branca e calças de ganga)
+const NEVER_BARE = " If no skirt, shorts or trousers are visible on the lower body (bare legs up to the hips, a long shirt or top with nothing underneath, underwear or swimwear), dress the lower body in classic mid-blue straight-leg jeans. If the upper body is only in underwear or swimwear, dress it in a plain white crew-neck t-shirt. Never leave the person partly undressed.";
 const FILL = {
   bottoms: " If the person's upper body is in underwear, a bra or swimwear, dress it in a plain white crew-neck t-shirt.",
-  shoes: " If the person is in underwear, lingerie or swimwear, dress them in a plain white crew-neck t-shirt and classic mid-blue straight-leg jeans.",
-  bags: " If the person is in underwear, lingerie or swimwear, dress them in a plain white crew-neck t-shirt and classic mid-blue straight-leg jeans.",
-  accessories: " If the person is in underwear, lingerie or swimwear, dress them in a plain white crew-neck t-shirt and classic mid-blue straight-leg jeans."
+  shoes: NEVER_BARE,
+  bags: NEVER_BARE,
+  accessories: NEVER_BARE
 };
 const JEANS_BARE = " If the person has nothing on the lower body (bare legs up to the hips, or only underwear or swimwear), dress the lower body in classic mid-blue straight-leg jeans; never leave the person without clothing on the lower body.";
 const JEANS_ALL = " Also replace whatever they wear on the lower body (skirt, shorts, dress hem, underwear) with classic mid-blue straight-leg jeans.";
