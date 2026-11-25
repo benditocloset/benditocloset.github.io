@@ -1403,7 +1403,7 @@ det.addEventListener("close", () => { try { history.replaceState(null, "", locat
   let ev = null; addEventListener("beforeinstallprompt", e => { e.preventDefault(); ev = e; });
   btn.addEventListener("click", async () => {
     if (ev) { ev.prompt(); try { await ev.userChoice; } catch(e) {} ev = null; return; }
-    const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua), inapp = /CriOS|FxiOS|EdgiOS|GSA\/|Instagram|FBAN|FBAV|TikTok|musical_ly|Line\//.test(ua);
+    const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua), inapp = /GSA\/|Instagram|FBAN|FBAV|TikTok|musical_ly|Line\//.test(ua), crios = /CriOS|EdgiOS/.test(ua);
     if (ios && inapp) {
       const M = {pt:["Este navegador não deixa instalar apps.","Copie o link, abra o <b>Safari</b>, cole o link e depois toque em <b>Partilhar ⬆️ → “Adicionar ao ecrã principal”</b>.","Copiar o link","Link copiado ✓ Agora abra o Safari e cole."],
         en:["This browser can't install apps.","Copy the link, open <b>Safari</b>, paste it, then tap <b>Share ⬆️ → “Add to Home Screen”</b>.","Copy the link","Link copied ✓ Now open Safari and paste it."],
@@ -1414,6 +1414,11 @@ det.addEventListener("close", () => { try { history.replaceState(null, "", locat
       const t = M || ["This browser can't install apps.","Copy the link, open <b>Safari</b>, paste it, then tap <b>Share ⬆️ → “Add to Home Screen”</b>.","Copy the link","Link copied ✓"];
       document.getElementById("app-how").innerHTML = `<b>${t[0]}</b><br>${t[1]}<br><button type="button" id="app-copy" style="margin-top:14px;border:0;border-radius:999px;padding:12px 18px;background:var(--rose,#9E1B3F);color:#fff;font:600 15px inherit;cursor:pointer">${t[2]}</button>`;
       document.getElementById("app-copy").onclick = async e => { const u = "https://benditocloset.pt/"; try { await navigator.clipboard.writeText(u); } catch(_) { const i = document.createElement("input"); i.value = u; document.body.appendChild(i); i.select(); try { document.execCommand("copy"); } catch(__) {} i.remove(); } e.target.textContent = t[3]; };
+    } else if (ios && crios) {
+      const pt = LANG === "pt";
+      document.getElementById("app-how").innerHTML = pt
+        ? '<div style="text-align:left"><b>iPhone (no Chrome):</b><br>1. Toque no botão <b>Partilhar ⬆</b>, em cima, à direita do endereço.<br>2. Deslize e toque em <b>“Adicionar ao ecrã principal”</b> (ou <b>“Adicionar à Tela de Início”</b>).<br>3. Toque em <b>Adicionar</b>: o ícone Bendito aparece no telemóvel.<br><br><small>Não aparece a opção? Atualize o Chrome na App Store ou use o Safari.</small></div>'
+        : '<div style="text-align:left"><b>iPhone (in Chrome):</b><br>1. Tap the <b>Share ⬆</b> button at the top, right of the address bar.<br>2. Scroll and tap <b>“Add to Home Screen”</b>.<br>3. Tap <b>Add</b>: the Bendito icon appears on your phone.<br><br><small>Option missing? Update Chrome in the App Store or use Safari.</small></div>';
     } else document.getElementById("app-how").innerHTML = (UI[LANG] || UI.pt).apHow;
     try { d.showModal(); } catch(e) { d.setAttribute("open",""); }
   });
