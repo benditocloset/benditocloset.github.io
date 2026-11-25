@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
+<script>
+(function(){try{
+  var s=localStorage.getItem('bc-lang');
+  var l=(navigator.languages&&navigator.languages[0])||navigator.language||'pt';
+  var en = s ? s!=='pt' : !/^pt/i.test(l);
+  if(en) location.replace('/lojas/en/'+location.search+location.hash);
+}catch(e){}})();
+</script>
 <!-- Google tag (Google Ads) com consentimento: nada é medido até a visitante aceitar -->
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,6 +23,10 @@
 <script src="/cookies.js" defer></script>
 
 <meta charset="utf-8">
+<link rel="alternate" hreflang="pt-PT" href="https://benditocloset.pt/lojas/">
+<link rel="alternate" hreflang="en" href="https://benditocloset.pt/lojas/en/">
+<link rel="alternate" hreflang="x-default" href="https://benditocloset.pt/lojas/">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crie a sua loja online · por Marianna Werneck, Bendito Closet</title>
 <meta name="description" content="Loja online profissional para quem está a começar: site próprio, várias línguas, catálogo no Instagram, venda pelo WhatsApp e orientação. Por Marianna Werneck, fundadora do Bendito Closet.">
@@ -87,10 +99,14 @@
   .dif .card { background:rgba(0,0,0,.35); border-color:var(--line); }
   .dif .card h3 { font-size:24px; margin:8px 0 6px; }
   .dif .small { font-size:12.5px; color:var(--soft); margin-top:16px; }
+  .lang { position:absolute; top:16px; right:16px; display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; font-size:12.5px; font-weight:600; letter-spacing:.08em; z-index:5; }
+  .lang a { padding:7px 12px; color:var(--gold); text-decoration:none; }
+  .lang a.on { background:var(--gold); color:var(--ink); }
+  header { position:relative; }
 </style>
 </head>
 <body>
-<header><a href="/"><img src="/imprensa/fotos/14-logo-bendito-closet.jpg" alt="Bendito Closet"></a></header>
+<header><nav class="lang" aria-label="Idioma / Language"><a href="/lojas/" lang="pt-PT" class="on" onclick="try{localStorage.setItem('bc-lang','pt')}catch(e){}">PT</a><a href="/lojas/en/" lang="en" class="" onclick="try{localStorage.setItem('bc-lang','en')}catch(e){}">EN</a></nav><a href="/"><img src="/imprensa/fotos/14-logo-bendito-closet.jpg" alt="Bendito Closet"></a></header>
 <main>
   <section class="hero">
     <div class="eyebrow">Lojas online · Marianna Werneck</div>
