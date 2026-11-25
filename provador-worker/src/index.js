@@ -28,6 +28,16 @@ const PROMPT = {
   accessories: "Add only the accessory from the product photo (e.g. watch, sunglasses, scarf) to the person, worn naturally; ignore the rest of the outfit in the product photo. Keep everything else the same.",
   auto: "Dress the person in the main garment from the product photo only. Keep face, body, pose, hair and background."
 };
+// Aviso por e-mail à Marianna (1 vez por dia por motivo) quando o provador enche ou os créditos acabam
+async function avisar(env, motivo, texto) {
+  const day = new Date().toISOString().slice(0, 10), k = `aviso:${day}:${motivo}`;
+  if (await env.LIMITS.get(k)) return;
+  await env.LIMITS.put(k, "1", { expirationTtl: 172800 });
+  try {
+    await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json", "Origin": "https://benditocloset.pt", "Referer": "https://benditocloset.pt/provador/" },
+      body: JSON.stringify({ _subject: "Provador com IA: " + texto, mensagem: texto + " Veja os créditos em app.fashn.ai/api (Top up para comprar mais).", _template: "table" }) });
+  } catch (e) {}
+}
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
@@ -44,7 +54,7 @@ export default {
       const nIp = +((await env.LIMITS.get(kIp)) || 0), nAll = +((await env.LIMITS.get(kAll)) || 0);
       const dono = env.OWNER_TOKEN && req.headers.get("X-Bendito-Dono") === env.OWNER_TOKEN;
       if (!dono && nIp >= PER) return j({ error: "limit_user" }, 429);
-      if (!dono && nAll >= TOTAL) return j({ error: "limit_day" }, 429);
+      if (!dono && nAll >= TOTAL) { await avisar(env, "cheio", `o provador chegou ao limite de ${TOTAL} provas de hoje.`); return j({ error: "limit_day" }, 429); }
       let b; try { b = await req.json(); } catch (e) { return j({ error: "bad_json" }, 400); }
       if (typeof b.model_image !== "string" || !/^data:image\/(jpeg|png|webp);base64,/.test(b.model_image) || b.model_image.length > 4e6) return j({ error: "bad_image" }, 400);
       if (typeof b.garment_image !== "string" || !/^https:\/\/benditocloset\.pt\//.test(b.garment_image)) return j({ error: "bad_garment" }, 400);
@@ -55,7 +65,7 @@ export default {
       if (!r.ok || !o.id) {
         const det = String((o.error && (o.error.name || o.error.message || o.error)) || r.status);
         // Sem créditos na FASHN: mostrar "provador cheio hoje" em vez de erro
-        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) return j({ error: "limit_day" }, 429);
+        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) { await avisar(env, "creditos", "os créditos da FASHN acabaram e o provador está parado."); return j({ error: "limit_day" }, 429); }
         return j({ error: "fashn", detail: det }, 502);
       }
       if (!dono) {
@@ -80,7 +90,7 @@ export default {
       const nIp = +((await env.LIMITS.get(kIp)) || 0), nAll = +((await env.LIMITS.get(kAll)) || 0);
       const dono = env.OWNER_TOKEN && req.headers.get("X-Bendito-Dono") === env.OWNER_TOKEN;
       if (!dono && nIp >= PER) return j({ error: "limit_user" }, 429);
-      if (!dono && nAll >= TOTAL) return j({ error: "limit_day" }, 429);
+      if (!dono && nAll >= TOTAL) { await avisar(env, "cheio", `o provador chegou ao limite de ${TOTAL} provas de hoje.`); return j({ error: "limit_day" }, 429); }
       let b; try { b = await req.json(); } catch (e) { return j({ error: "bad_json" }, 400); }
       if (typeof b.face_image !== "string" || !/^data:image\/(jpeg|png|webp);base64,/.test(b.face_image) || b.face_image.length > 4e6) return j({ error: "bad_image" }, 400);
       const r = await fetch("https://api.fashn.ai/v1/run", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.FASHN_KEY },
@@ -89,7 +99,7 @@ export default {
       if (!r.ok || !o.id) {
         const det = String((o.error && (o.error.name || o.error.message || o.error)) || r.status);
         // Sem créditos na FASHN: mostrar "provador cheio hoje" em vez de erro
-        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) return j({ error: "limit_day" }, 429);
+        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) { await avisar(env, "creditos", "os créditos da FASHN acabaram e o provador está parado."); return j({ error: "limit_day" }, 429); }
         return j({ error: "fashn", detail: det }, 502);
       }
       if (!dono) {
