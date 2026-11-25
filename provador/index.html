@@ -55,7 +55,7 @@ h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;fon
     <h2><b>1</b><span data-t="s1">A sua foto</span></h2>
     <label class="btn" style="position:relative"><input type="file" id="file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"><span id="fileT" data-t="pick">🖼️ Escolher foto da galeria</span></label>
     <div class="me" id="me" hidden><img id="meImg" alt=""><p class="small" style="margin:0" id="meOk"></p></div>
-    <p class="small" data-t="tip">Use uma foto em que se veja o corpo, pelo menos até à cintura (para calças e vestidos, o corpo inteiro), de frente e com boa luz. Evite selfies ao espelho com reflexos. Uma peça de cada vez: depois pode juntar outra ao mesmo look.</p>
+    <p class="small" data-t="tip">Use uma foto em que se veja o corpo, pelo menos até à cintura (para calças e vestidos, o corpo inteiro), de frente e com boa luz. Evite selfies ao espelho com reflexos. Tem 5 provas por dia e cada peça provada usa 1 prova, por isso escolha bem a foto antes de provar.</p>
   </div>
 
   <div class="step">
@@ -68,7 +68,8 @@ h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;fon
   <div class="step">
     <h2><b>3</b><span data-t="s3">Provar</span></h2>
     <button class="btn go" id="go" type="button" data-t="go">✨ Provar em mim</button>
-    <p class="small" data-t="priv">A sua foto é enviada à FASHN AI só para gerar a imagem e é apagada depois. O Bendito não a guarda. 5 provas por dia.</p>
+    <p class="small" id="cost" style="color:var(--ink);font-weight:600"></p>
+    <p class="small" data-t="priv">A sua foto é enviada à FASHN AI só para gerar a imagem e é apagada depois. O Bendito não a guarda.</p>
   </div>
 
   <div class="step res" id="res" hidden></div>
@@ -79,13 +80,22 @@ const $=s=>document.querySelector(s);
 const TRYON_API="https://bendito-provador-ia.nn45hn9bvr.workers.dev";
 const VTO={"adidas-calca-castanha": "bottoms", "shein-blusa-rosa": "tops", "blueman-saida-praia": "one-pieces", "blueman-vestido-mata": "one-pieces", "sarong-bali-seda": "one-pieces", "vestido-rio": "one-pieces", "body-leopardo": "tops", "vestido-floral-preto": "one-pieces", "shein-vestido-zebra": "one-pieces", "adidas-legging": "bottoms", "rl-camisola-azul": "tops", "rl-camisa-linho": "one-pieces", "rl-camisa-linho-rosa": "one-pieces", "kimono-dourado-ibiza": "one-pieces", "shein-camisa-caramelo": "tops", "shein-body-dourado": "tops", "shein-body-azul": "tops", "adidas-casaco-bordo": "tops", "zara-bomber-organza": "tops", "guess-casaco-1": "tops", "guess-casaco-2": "tops", "versace-casaco": "tops", "pepe-parka": "tops", "guess-biker": "tops", "zara-gabardina": "tops", "zara-casaco-vermelho": "tops", "salsa-dupla-face": "tops", "pelo-camel": "tops", "pelo-rosa": "tops", "shein-bomber-lantejoulas": "tops", "primark-jaq": "tops"};
 let LANG="pt";try{LANG=(new URLSearchParams(location.search).get("lang")||localStorage.getItem("bc-lang")||(/^pt/i.test(navigator.language||"pt")?"pt":"en"))}catch(e){}LANG=/^pt/.test(LANG)?"pt":"en";
-const TX={pt:{},en:{eb:"New · AI fitting room",h1:"Try it on you",lead:"Pick a photo of yourself and a piece from the closet. The AI shows the piece on you in about 20 seconds.",s1:"Your photo",pick:"🖼️ Pick a photo from my gallery",pick2:"🖼️ Change photo",ok:"Photo ready ✓ Full body, half body, just your face or even a screenshot works.",tip:"Use a photo that shows your body, at least down to the waist (full body for trousers and dresses), front-facing, good light. Screenshots are fine.",s2:"The piece",loading:"Opening the closet…",s3:"Try it on",go:"✨ Try it on me",priv:"Your photo is sent to FASHN AI only to create the image and is then deleted. Bendito never keeps it. 5 try-ons a day.",game:"Build the look",jeansT:"👖 When trying only tops or jackets, also dress me in classic jeans (if I'm wearing a skirt, short dress or underwear)"}};
+const TX={pt:{},en:{eb:"New · AI fitting room",h1:"Try it on you",lead:"Pick a photo of yourself and a piece from the closet. The AI shows the piece on you in about 20 seconds.",s1:"Your photo",pick:"🖼️ Pick a photo from my gallery",pick2:"🖼️ Change photo",ok:"Photo ready ✓ Full body, half body, just your face or even a screenshot works.",tip:"Use a photo that shows your body, at least down to the waist (full body for trousers and dresses), front-facing, good light. Screenshots are fine.",s2:"The piece",loading:"Opening the closet…",s3:"Try it on",go:"✨ Try it on me",priv:"Your photo is sent to FASHN AI only to create the image and is then deleted. Bendito never keeps it.",game:"Build the look",jeansT:"👖 When trying only tops or jackets, also dress me in classic jeans (if I'm wearing a skirt, short dress or underwear)"}};
 const M={pt:{pick2:"🖼️ Trocar a foto",need:"Primeiro escolha uma foto sua.",needP:"Agora escolha uma peça.",wait:"A vestir a peça em si… (cerca de 20 segundos)",check:"A verificar a foto…",okp:"Foto pronta ✓",okFull:"Foto pronta ✓ Corpo inteiro: pode provar qualquer peça.",okHalf:"Foto pronta ✓ Meio corpo: dá para blusas, camisas e casacos. Para calças e vestidos, use uma foto de corpo inteiro.",noBody:"Esta foto só mostra o rosto. A IA precisa de ver o corpo, pelo menos até à cintura. Escolha outra foto (assim não gasta uma prova).",needLegs:"Para calças, saias e vestidos a IA precisa de ver o corpo inteiro. Escolha uma foto de corpo inteiro ou uma blusa/casaco.",err:"Não consegui gerar a prova desta vez. Tente outra foto, com o rosto bem visível e boa luz.",lim:"Já usou as 5 provas de hoje. Volte amanhã!",day:"O provador está cheio hoje. Volte amanhã!",bad:"Não consegui abrir esta foto. Tente outra.",buy:"Quero esta peça",save:"Guardar a foto",again:"Provar outra peça",stack:"Juntar outra peça a este look",stackOk:"Agora a sua foto é este look ✓ Escolha a próxima peça (por exemplo, a blusa para combinar com as calças).",cover:"Fazer a capa de revista com esta foto",before:"Antes",after:"Com a peça"},
  en:{pick2:"🖼️ Change photo",need:"First pick a photo of yourself.",needP:"Now pick a piece.",wait:"Dressing you up… (about 20 seconds)",check:"Checking the photo…",okp:"Photo ready ✓",okFull:"Photo ready ✓ Full body: you can try any piece.",okHalf:"Photo ready ✓ Half body: works for tops, shirts and jackets. For trousers and dresses, use a full-body photo.",noBody:"This photo only shows your face. The AI needs to see your body, at least down to the waist. Pick another photo (so you don't use up a try-on).",needLegs:"For trousers, skirts and dresses the AI needs to see your full body. Pick a full-body photo, or a top/jacket.",err:"Couldn't create the try-on this time. Try another photo with your face clearly visible and good light.",lim:"You've used today's 5 try-ons. Come back tomorrow!",day:"The fitting room is full today. Come back tomorrow!",bad:"Couldn't open this photo. Try another one.",buy:"I want this piece",save:"Save the photo",again:"Try another piece",stack:"Add another piece to this look",stackOk:"Your photo is now this look ✓ Pick the next piece (for example, a top to go with the trousers).",cover:"Make a magazine cover with this photo",before:"Before",after:"Wearing it"}}[LANG];
 if(LANG==="en"){document.documentElement.lang="en";document.querySelectorAll("[data-t]").forEach(e=>{const v=TX.en[e.dataset.t];if(v)e.textContent=v})}
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
 let ME=null,MEsrc="",P=[],PICK=[],BUSY=false,BODY=null;
 let DONO="";try{const d=new URLSearchParams(location.search).get("dono");if(d)localStorage.setItem("bc-dono",d);DONO=localStorage.getItem("bc-dono")||""}catch(e){}
+let LEFT=null,PER=5,ISDONO=false;
+function cost(){const n=PICK.length,el=$("#cost");if(!el)return;const pt=LANG==="pt";
+ if(ISDONO){el.textContent=pt?"Acesso de dona: provas sem limite.":"Owner access: unlimited try-ons.";return}
+ if(LEFT===null){el.textContent="";return}
+ const tem=pt?`Tem ${LEFT} de ${PER} provas hoje.`:`You have ${LEFT} of ${PER} try-ons left today.`;
+ if(!n){el.textContent=tem+(pt?" Cada peça usa 1 prova.":" Each piece uses 1 try-on.");return}
+ if(n>LEFT){el.textContent=tem+(pt?` Escolheu ${n} peças: não chega para todas. Tire ${n-LEFT} ou volte amanhã.`:` You picked ${n} pieces: not enough left. Remove ${n-LEFT} or come back tomorrow.`);el.style.color="#A21B3F";return}
+ const r=LEFT-n;el.style.color="";el.textContent=tem+(pt?` ${n===1?"Esta peça usa 1 prova":"Estas "+n+" peças usam "+n+" provas"}: ${r===1?"fica 1":"ficam "+r} para depois.`:` This uses ${n}: ${r} left after.`)}
+async function refreshLeft(){try{const h={};if(DONO)h["X-Bendito-Dono"]=DONO;const o=await (await fetch(TRYON_API+"/left",{headers:h})).json();LEFT=o.left;PER=o.per||5;ISDONO=!!o.dono}catch(e){}cost()}
 let PL=null;async function poseModel(){if(PL)return PL;const v=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs");const fs=await v.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");PL=await v.PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"},runningMode:"IMAGE",numPoses:1});return PL}
 /* Verifica no telemóvel (sem gastar créditos) se a foto mostra o corpo: ombros e, se possível, ancas */
 async function bodyCheck(img){try{const pl=await Promise.race([poseModel(),new Promise((_,r)=>setTimeout(()=>r("t"),12000))]);const r=pl.detect(img);const L=r&&r.landmarks&&r.landmarks[0];if(!L)return {sh:false,hip:false};
@@ -96,7 +106,7 @@ function trimShot(i){return new Promise(res=>{try{const w=i.naturalWidth,h=i.nat
  const flat=y=>{let s=0,s2=0;for(let xx=0;xx<cw;xx+=2){const o=(y*cw+xx)*4,l=(d[o]+d[o+1]+d[o+2])/3;s+=l;s2+=l*l}const n=Math.ceil(cw/2),m=s/n;return s2/n-m*m<40};
  let t=0,b=ch-1;while(t<ch*.4&&flat(t))t++;while(b>ch*.6&&flat(b))b--;let T=t/k,B=(b+1)/k;if((B-T)/w>1.85){T+=(B-T)*.10;B-=(B-T)*.11}
  if(T<2&&B>h-2){res(i);return}const o=document.createElement("canvas");o.width=w;o.height=Math.round(B-T);o.getContext("2d").drawImage(i,0,T,w,B-T,0,0,w,B-T);const n=new Image();n.onload=()=>res(n);n.onerror=()=>res(i);n.src=o.toDataURL("image/jpeg",.92)}catch(e){res(i)}})}
-function ready(){$("#go").disabled=BUSY||(BODY&&BODY!=="wait"&&!BODY.sh)}
+function ready(){$("#go").disabled=BUSY||(BODY&&BODY!=="wait"&&!BODY.sh)||(!ISDONO&&LEFT!==null&&PICK.length>LEFT);cost()}
 $("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const i=new Image();
  i.onload=async()=>{ME=await trimShot(i);MEsrc=shrink(ME,1600);$("#meImg").src=MEsrc;$("#me").hidden=false;$("#fileT").textContent=M.pick2;BODY="wait";$("#meOk").textContent=M.check;ready();BODY=await bodyCheck(ME);$("#meOk").textContent=!BODY?M.okp:!BODY.sh?M.noBody:BODY.hip?M.okFull:M.okHalf;$("#meOk").style.color=BODY&&!BODY.sh?"#A21B3F":"";ready();
    if(!PICK.length)$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
@@ -133,9 +143,10 @@ $("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
   $("#again").onclick=()=>{$("#res").hidden=true;$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
   $("#stack").onclick=()=>{const n=new Image();n.onload=()=>{ME=n;MEsrc=shrink(n,1600);$("#meImg").src=MEsrc;BODY={sh:true,hip:true};$("#meOk").textContent=M.stackOk;$("#meOk").style.color="";$("#res").hidden=true;PICK=[];paint();ready();$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};n.src=src};
   try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}
- }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready()}};
+ }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready();refreshLeft()}};
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
  P=all.filter(p=>p.status!=="vendido"&&VTO[p.id]&&(p.foto||(p.fotos&&p.fotos[0]))).map(p=>({id:p.id,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));
+refreshLeft();
  const q=new URLSearchParams(location.search).get("peca");if(q&&P.some(p=>p.id===q))PICK=[q];paint()}).catch(()=>{$("#pcs").textContent="—"});
 })();
 </script>

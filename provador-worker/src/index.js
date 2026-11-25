@@ -43,6 +43,13 @@ export default {
       }
       return j({ id: o.id, left: PER - nIp - 1 });
     }
+    if (url.pathname === "/left" && req.method === "GET") {
+      // Quantas provas a pessoa ainda tem hoje (não gasta nada)
+      const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
+      const PER = +(env.PER_DAY || 3), dono = env.OWNER_TOKEN && req.headers.get("X-Bendito-Dono") === env.OWNER_TOKEN;
+      const nIp = +((await env.LIMITS.get(`ip:${day}:${ip}`)) || 0);
+      return j({ per: PER, left: dono ? 999 : Math.max(0, PER - nIp), dono: !!dono });
+    }
     if (url.pathname === "/face" && req.method === "POST") {
       // Só o rosto na foto: a FASHN cria um corpo (meio corpo) a partir do rosto, para depois provar a peça. Conta como 1 prova.
       const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
