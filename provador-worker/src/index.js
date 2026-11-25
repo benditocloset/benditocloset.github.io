@@ -2,6 +2,7 @@
 // Segredos/ligações na Cloudflare: FASHN_KEY (segredo), LIMITS (KV). Opcionais: PER_DAY (3), TOTAL_DAY (40).
 const ALLOWED = ["https://benditocloset.pt", "https://www.benditocloset.pt"];
 // Instruções para a IA: vestir só a peça da loja (a foto da loja mostra uma modelo; ignorar o resto do look dela)
+const KEEP = " Preserve the person's face exactly as in the original photo: same identity, features, skin, expression and hair; do not retouch or change the face. The garment fabric is fully opaque: sleeves and body fully cover the skin underneath, with no tattoos or skin showing through, and the print follows the garment's natural folds without distortion. Keep the hands, phone and accessories unchanged.";
 const JEANS_BARE = " If the person's legs are bare or they are in underwear or swimwear, also dress them in classic mid-blue straight-leg jeans.";
 const JEANS_ALL = " Also replace whatever they wear on the lower body (skirt, shorts, dress hem, underwear) with classic mid-blue straight-leg jeans.";
 const PROMPT = {
@@ -32,7 +33,7 @@ export default {
       if (typeof b.garment_image !== "string" || !/^https:\/\/benditocloset\.pt\//.test(b.garment_image)) return j({ error: "bad_garment" }, 400);
       const category = ["tops", "bottoms", "one-pieces"].includes(b.category) ? b.category : "auto";
       const r = await fetch("https://api.fashn.ai/v1/run", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.FASHN_KEY },
-        body: JSON.stringify({ model_name: "tryon-max", inputs: { model_image: b.model_image, product_image: b.garment_image, prompt: (PROMPT[category] || PROMPT.auto) + (category === "tops" ? (b.jeans ? JEANS_ALL : JEANS_BARE) : ""), resolution: "1k", generation_mode: "fast", return_base64: true, output_format: "jpeg" } }) });
+        body: JSON.stringify({ model_name: "tryon-max", inputs: { model_image: b.model_image, product_image: b.garment_image, prompt: (PROMPT[category] || PROMPT.auto) + KEEP + (category === "tops" ? (b.jeans ? JEANS_ALL : JEANS_BARE) : ""), resolution: "1k", generation_mode: "balanced", return_base64: true, output_format: "jpeg" } }) });
       let o = {}; try { o = await r.json(); } catch (e) {}
       if (!r.ok || !o.id) return j({ error: "fashn", detail: (o.error && (o.error.name || o.error.message || o.error)) || r.status }, 502);
       if (!dono) {
