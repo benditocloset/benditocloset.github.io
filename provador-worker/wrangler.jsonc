@@ -4,5 +4,5 @@
   "compatibility_date": "2026-11-01",
   "workers_dev": true,
   "kv_namespaces": [{ "binding": "LIMITS", "id": "6dee5a7c9eb5443792f6023cccd7c3e5" }],
-  "vars": { "PER_DAY": "3", "TOTAL_DAY": "40" }
+  "vars": { "PER_DAY": "5", "TOTAL_DAY": "40" }
 }
