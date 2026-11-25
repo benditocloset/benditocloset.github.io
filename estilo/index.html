@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Qual é o seu estilo? · Bendito Closet</title>
+<meta name="description" content="5 perguntas, 1 minuto: descubra o seu estilo e as peças do Bendito Closet que são a sua cara.">
+<meta property="og:title" content="Qual é o seu estilo? · Bendito Closet">
+<meta property="og:description" content="5 perguntas, 1 minuto. Descubra o seu estilo e partilhe no story.">
+<meta property="og:image" content="https://benditocloset.pt/estilo/og.jpg">
+<meta name="theme-color" content="#1C1517">
+<link rel="icon" href="/favicon.ico">
+<link rel="canonical" href="https://benditocloset.pt/estilo/">
+<style>
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-500-italic.woff2) format("woff2");font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+:root{--bg:#FAF6F0;--ink:#1C1517;--muted:#6F625C;--line:#E9DFD3;--rose:#9E1B3F;--pink:#E7A6B8}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.top{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--ink);color:#fff}
+.top a{text-decoration:none;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.top a b{font-family:"Bodoni Moda",serif;font-weight:400;letter-spacing:.18em}
+.top .sp{margin-left:auto}
+.lang{display:flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:2px}
+.lang button{border:0;background:none;color:#fff;font:600 12px "DM Sans";letter-spacing:.08em;padding:6px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--pink);color:var(--ink)}
+main{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+.eyebrow{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--rose);font-weight:600}
+h1{font-family:"Bodoni Moda",serif;font-weight:400;font-size:clamp(46px,11vw,84px);line-height:.95;margin:10px 0 14px;letter-spacing:-.01em}
+h1 em,h2 em{font-style:italic;color:var(--rose)}
+.lead{color:var(--muted);margin:0 0 22px;max-width:520px;font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:15px 22px;font:600 14px "DM Sans";letter-spacing:.04em;cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.rose{background:var(--rose);border-color:var(--rose);color:#fff}
+.teaser{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:28px 0 8px}
+.teaser img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px;background:#eee;display:block}
+.teaser img:nth-child(odd){transform:rotate(-2deg)}.teaser img:nth-child(even){transform:rotate(2deg) translateY(8px)}
+.prog{display:flex;gap:6px;margin-bottom:18px}
+.prog i{flex:1;height:4px;border-radius:4px;background:var(--line)}
+.prog i.on{background:var(--rose)}
+h2{font-family:"Bodoni Moda",serif;font-weight:400;font-size:clamp(30px,7vw,46px);line-height:1.05;margin:6px 0 20px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:620px){.opts{grid-template-columns:repeat(3,1fr)}}
+.opt{border:1px solid var(--line);background:#fff;border-radius:14px;padding:0;overflow:hidden;cursor:pointer;text-align:left;font:inherit;color:var(--ink);display:flex;flex-direction:column;transition:transform .15s,border-color .15s,box-shadow .15s}
+.opt:hover{transform:translateY(-2px);border-color:var(--ink);box-shadow:0 14px 26px -18px rgba(28,21,23,.6)}
+.opt img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#eee}
+.opt span{padding:10px 12px 12px;font-size:14px;line-height:1.3;font-weight:500}
+.opt.pick{border-color:var(--rose);outline:2px solid var(--rose)}
+.back{border:0;background:none;color:var(--muted);font:500 13px "DM Sans";cursor:pointer;padding:0;margin-top:18px}
+.res-card{width:100%;max-width:460px;aspect-ratio:4/5;border-radius:8px;box-shadow:0 30px 60px -28px rgba(28,21,23,.5);display:block;margin:6px 0 18px;background:#eee}
+.desc{font-size:16px;color:var(--ink);max-width:560px}
+.acts{display:grid;gap:10px;margin:20px 0}
+@media(min-width:560px){.acts{grid-template-columns:1fr 1fr}}
+.pcs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:10px 0 4px}
+@media(min-width:620px){.pcs{grid-template-columns:repeat(4,1fr)}}
+.pcs a{text-decoration:none;color:var(--ink)}
+.pcs img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px;display:block;background:#eee}
+.pcs small{display:block;margin-top:6px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcs b{font-size:14px}
+.lbl{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-top:26px}
+.more{margin-top:28px;padding:16px;border:1px solid var(--rose);border-radius:16px;background:#fff;display:grid;gap:10px}
+.more a{color:var(--rose);font-weight:600}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,150%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;transition:transform .3s;z-index:9;max-width:calc(100vw - 32px)}
+.toast{visibility:hidden}.toast.on{transform:translate(-50%,0);visibility:visible}
+footer{text-align:center;padding:24px 18px 40px;font-size:12.5px;color:var(--muted)}
+footer a{color:var(--rose)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top"><a href="/">← <b>BENDITO</b> CLOSET</a><a class="sp" href="/monta-o-look/" data-t="navGame">Monta o look</a><div class="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt">PT</button><button type="button" data-l="en">EN</button></div></div>
+<main>
+  <section id="intro">
+    <div class="eyebrow" data-t="eyebrow">Jogo · Novo</div>
+    <h1 data-h="h1">Qual é o seu <em>estilo?</em></h1>
+    <p class="lead" data-t="lead">5 perguntas, 1 minuto. No fim mostramos o seu estilo, as peças do closet que são a sua cara e uma imagem para partilhar no story.</p>
+    <button class="btn rose" type="button" id="start" data-t="start">Começar →</button>
+    <div class="teaser" id="teaser"></div>
+  </section>
+  <section id="quiz" hidden>
+    <div class="prog" id="prog"></div>
+    <div class="eyebrow" id="qn"></div>
+    <h2 id="qt"></h2>
+    <div class="opts" id="opts"></div>
+    <button class="back" type="button" id="back" data-t="back">← Voltar</button>
+  </section>
+  <section id="res" hidden>
+    <div class="eyebrow" data-t="resEy">O seu estilo é</div>
+    <h1 id="rname"></h1>
+    <canvas class="res-card" id="cv" width="1080" height="1350" aria-label=""></canvas>
+    <p class="desc" id="rdesc"></p>
+    <div class="acts">
+      <button class="btn dark" type="button" id="save" data-t="save">Guardar para o story</button>
+      <a class="btn rose" id="toLook" data-t="toLook">Fazer a minha capa com estas peças</a>
+      <button class="btn" type="button" id="share" data-t="share">Desafiar uma amiga</button>
+      <button class="btn" type="button" id="again" data-t="again">Fazer outra vez</button>
+    </div>
+    <div class="lbl" data-t="pcsL">As peças do closet com o seu estilo</div>
+    <div class="pcs" id="pcs"></div>
+    <div class="more">
+      <b data-t="moreT">✨ Quer ver estas peças vestidas em si?</b>
+      <span data-t="moreP">No Monta o look, ponha a sua foto e toque em "Provar com IA".</span>
+      <a href="/monta-o-look/" id="toAI" data-t="moreA">Ir ao provador →</a>
+    </div>
+  </section>
+</main>
+<footer><span data-t="foot">Bendito Closet · moda de marca em segunda mão, no Porto</span> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a></footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const qs=new URLSearchParams(location.search);
+let LANG=(()=>{let l=qs.get("lang");try{l=l||localStorage.getItem("bc-lang")}catch(e){}if(!l)l=/^pt/i.test(navigator.language||"pt")?"pt":"en";return /^pt/.test(l)?"pt":"en"})();
+
+const STY={
+ paris:{mood:"paris",bg:"#F2ECE3",ink:"#1C1517",acc:"#9E1B3F",
+  pt:["Chique","parisiense","Clássicos com um toque de luxo: um casaco bem cortado, um relógio que dura a vida toda e um sapato que brilha. Você não corre atrás de tendências, escolhe as que ficam."],
+  en:["Parisian","chic","Classics with a touch of luxury: a well-cut coat, a watch for life and a shoe that sparkles. You don't chase trends, you pick the ones that last."],
+  pieces:["guess-casaco-1","gucci-gframe","zara-slingback-perolas","versace-bolsa"],pool:["zara-gabardina","ch-espadrilles-tartan","guess-casaco-1","gucci-gframe","zara-slingback-perolas"]},
+ porto:{mood:"porto",bg:"#5A0F24",ink:"#F7E9EC",acc:"#E7A6B8",
+  pt:["Cool sem","esforço","Malha boa, jeans e uns ténis que toda a gente repara. Parece que se vestiu em dois minutos e, mesmo assim, é sempre a mais bem vestida da sala."],
+  en:["Effortlessly","cool","Good knitwear, jeans and sneakers everyone notices. You look like you got dressed in two minutes and you're still the best-dressed in the room."],
+  pieces:["rl-camisola-azul","pelo-camel","golden-goose-superstar","guess-bolsa-preta"],pool:["pepe-parka","zara-botas-camurca","rl-camisola-azul","pelo-camel","golden-goose-superstar"]},
+ noite:{mood:"noite",bg:"#0E0D0D",ink:"#FFFFFF",acc:"#E7A6B8",
+  pt:["A noite","é sua","Brilho, lantejoulas e óculos de diva. Para você, qualquer jantar é ocasião e qualquer ocasião pede um bocadinho mais."],
+  en:["The night","is yours","Sparkle, sequins and diva sunglasses. For you, any dinner is an occasion and every occasion deserves a little extra."],
+  pieces:["shein-bomber-lantejoulas","ck-bolsa-prata","shein-sapatos-lantejoulas","versace-oculos"],pool:["shein-body-dourado","guess-biker","shein-bomber-lantejoulas","ck-bolsa-prata","versace-oculos"]},
+ rio:{mood:"domingo",bg:"#0F4D43",ink:"#FFF6E5",acc:"#F2B544",
+  pt:["Carioca","de alma","Leveza, cor e cheiro a mar o ano inteiro. Vestido fluido, kimono, sandália: o seu estilo é verão, mesmo em dezembro."],
+  en:["Carioca","at heart","Lightness, colour and sea breeze all year round. Flowy dresses, kimonos, sandals: your style is summer, even in December."],
+  pieces:["blueman-vestido-mata","kimono-dourado-ibiza","sarong-bali-seda","melissa-mules-anabela"],pool:["blueman-saida-praia","vestido-rio","blueman-vestido-mata","kimono-dourado-ibiza","sarong-bali-seda"]},
+ sporty:{mood:"domingo",bg:"#E9E6E1",ink:"#1C1517",acc:"#5A0F24",
+  pt:["Sporty","luxe","Conforto com marca: casaco desportivo, legging boa e ténis que aguentam o dia todo. Do treino ao brunch sem trocar de roupa."],
+  en:["Sporty","luxe","Comfort with a label: track jacket, great leggings and sneakers that last all day. From the gym to brunch without changing."],
+  pieces:["adidas-casaco-bordo","adidas-legging","nike-mind-002","adidas-bolsa"],pool:["asics-noosa","adidas-calca-castanha","adidas-casaco-bordo","adidas-legging","nike-mind-002"]}
+};
+const KEYS=Object.keys(STY);
+const Q={
+ pt:[
+  ["Sábado à tarde. Onde está você?",{paris:"Numa esplanada, de óculos escuros",porto:"A passear pela Ribeira, de ténis",noite:"Já a escolher a roupa para logo à noite",rio:"Na praia, com os pés na areia",sporty:"Saí do treino direto para o brunch"}],
+  ["A peça que nunca falha:",{paris:"Um casaco bem cortado",porto:"Malha boa com jeans",noite:"Qualquer coisa que brilhe",rio:"Um vestido leve",sporty:"Uns ténis bons"}],
+  ["Escolha uma paleta:",{paris:"Bege, preto e um toque de vermelho",porto:"Azul-marinho e camel",noite:"Dourado e prateado",rio:"Verde, estampados e cor",sporty:"Branco com bordô"}],
+  ["A viagem dos sonhos:",{paris:"Paris, claro",porto:"De Lisboa ao Porto, de comboio",noite:"Ibiza, para dançar",rio:"Rio de Janeiro",sporty:"Nova Iorque, a correr no Central Park"}],
+  ["O elogio que mais gosta de ouvir:",{paris:"Está sempre elegante",porto:"Como é que está sempre gira sem esforço?",noite:"Ninguém brilha como você",rio:"Que energia boa a sua",sporty:"Está sempre pronta para tudo"}]
+ ],
+ en:[
+  ["Saturday afternoon. Where are you?",{paris:"At a café terrace, in sunglasses",porto:"Strolling by the river, in sneakers",noite:"Already picking tonight's outfit",rio:"At the beach, toes in the sand",sporty:"Straight from the gym to brunch"}],
+  ["The piece that never fails:",{paris:"A well-cut coat",porto:"Good knitwear with jeans",noite:"Anything that sparkles",rio:"A light dress",sporty:"Great sneakers"}],
+  ["Pick a palette:",{paris:"Beige, black and a touch of red",porto:"Navy and camel",noite:"Gold and silver",rio:"Green, prints and colour",sporty:"White with burgundy"}],
+  ["Dream trip:",{paris:"Paris, of course",porto:"Lisbon to Porto by train",noite:"Ibiza, to dance",rio:"Rio de Janeiro",sporty:"New York, running in Central Park"}],
+  ["The compliment you love most:",{paris:"You always look so elegant",porto:"How are you always effortlessly cute?",noite:"Nobody shines like you",rio:"You have such good energy",sporty:"You're always ready for anything"}]
+ ]
+};
+const TXT={
+ pt:{eyebrow:"Jogo · Novo",h1:'Qual é o seu <em>estilo?</em>',lead:"5 perguntas, 1 minuto. No fim mostramos o seu estilo, as peças do closet que são a sua cara e uma imagem para partilhar no story.",start:"Começar →",back:"← Voltar",resEy:"O seu estilo é",save:"Guardar para o story",toLook:"Fazer a minha capa com estas peças",share:"Desafiar uma amiga",again:"Fazer outra vez",pcsL:"As peças do closet com o seu estilo",moreT:"✨ Quer ver estas peças vestidas em si?",moreP:'No Monta o look, ponha a sua foto e toque em "Provar com IA".',moreA:"Ir ao provador →",foot:"Bendito Closet · moda de marca em segunda mão, no Porto",navGame:"Monta o look",
+  q:(i)=>`Pergunta ${i} de 5`,cardTop:"O MEU ESTILO É",cardBottom:"Descubra o seu em benditocloset.pt/estilo",saved:"Imagem pronta! Publique no story e marque @benditocloset.pt",shareText:(n)=>`Deu "${n}" no quiz do Bendito Closet ✨ Qual é o seu estilo?`,copied:"Link copiado!",sold:"vendida"},
+ en:{eyebrow:"Game · New",h1:'What\'s your <em>style?</em>',lead:"5 questions, 1 minute. At the end we show your style, the closet pieces that are so you, and an image to share on your story.",start:"Start →",back:"← Back",resEy:"Your style is",save:"Save for my story",toLook:"Make my cover with these pieces",share:"Challenge a friend",again:"Play again",pcsL:"Closet pieces in your style",moreT:"✨ Want to see these pieces on you?",moreP:'In Build the look, add your photo and tap "Try on with AI".',moreA:"Go to the fitting room →",foot:"Bendito Closet · pre-loved designer fashion from Porto",navGame:"Build the look",
+  q:(i)=>`Question ${i} of 5`,cardTop:"MY STYLE IS",cardBottom:"Find yours at benditocloset.pt/estilo",saved:"Image ready! Post it on your story and tag @benditocloset.pt",shareText:(n)=>`I got "${n}" on the Bendito Closet quiz ✨ What's your style?`,copied:"Link copied!",sold:"sold"}
+};
+const T=()=>TXT[LANG];
+let P={},ORD=[],ANS=[],STEP=0,RES=null;
+const IMG={};
+function img(src){if(IMG[src])return IMG[src];const i=new Image();IMG[src]=i;i.src="/"+src.replace(/^\//,"");return i}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),3200)}
+function foto(id){return P[id]?P[id].foto:null}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function applyLang(){
+  document.documentElement.lang=LANG==="pt"?"pt-PT":"en";
+  document.querySelectorAll("[data-t]").forEach(e=>{const v=T()[e.dataset.t];if(typeof v==="string")e.textContent=v});
+  document.querySelectorAll("[data-h]").forEach(e=>e.innerHTML=T()[e.dataset.h]);
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===LANG));
+  if(!$("#quiz").hidden)renderQ();
+  if(!$("#res").hidden&&RES)showRes(RES,true);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{LANG=b.dataset.l;try{localStorage.setItem("bc-lang",LANG)}catch(e){}applyLang()}));
+
+function teaser(){$("#teaser").innerHTML=KEYS.map(k=>{const f=foto(STY[k].pieces[0]);return f?`<img src="/${f}" alt="" loading="lazy">`:""}).join("")}
+
+function renderQ(){
+  const [qt,opts]=Q[LANG][STEP];
+  $("#prog").innerHTML=[0,1,2,3,4].map(i=>`<i class="${i<=STEP?"on":""}"></i>`).join("");
+  $("#qn").textContent=T().q(STEP+1);
+  $("#qt").textContent=qt;
+  $("#opts").innerHTML=ORD[STEP].map(k=>{const id=STY[k].pool[STEP],f=foto(id)||foto(STY[k].pieces[0]);return `<button type="button" class="opt${ANS[STEP]===k?" pick":""}" data-k="${k}">${f?`<img src="/${f}" alt="" loading="lazy">`:""}<span>${opts[k]}</span></button>`}).join("");
+  $("#back").style.visibility=STEP?"visible":"hidden";
+}
+$("#opts").addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;ANS[STEP]=b.dataset.k;b.classList.add("pick");
+  setTimeout(()=>{if(STEP<4){STEP++;renderQ();scrollTo({top:0,behavior:"smooth"})}else finish()},220)});
+$("#back").addEventListener("click",()=>{if(STEP>0){STEP--;renderQ()}});
+$("#start").addEventListener("click",begin);
+$("#again").addEventListener("click",()=>{history.replaceState(null,"",location.pathname);begin()});
+function begin(){ANS=[];STEP=0;RES=null;ORD=[0,1,2,3,4].map(()=>shuffle(KEYS));$("#intro").hidden=true;$("#res").hidden=true;$("#quiz").hidden=false;renderQ();scrollTo({top:0})}
+function finish(){
+  const sc={};KEYS.forEach(k=>sc[k]=0);ANS.forEach((k,i)=>sc[k]+=1+i*0.01);
+  const best=KEYS.reduce((a,b)=>sc[b]>sc[a]?b:a);
+  history.replaceState(null,"","?r="+best+(LANG==="en"?"&lang=en":""));
+  showRes(best);
+}
+function avail(k){return STY[k].pieces.filter(id=>P[id]).slice(0,4)}
+function showRes(k,keep){
+  RES=k;const s=STY[k],t=s[LANG];
+  $("#intro").hidden=true;$("#quiz").hidden=true;$("#res").hidden=false;
+  $("#rname").innerHTML=`${t[0]} <em>${t[1]}</em>`;
+  $("#rdesc").textContent=t[2];
+  const ids=avail(k);
+  $("#toLook").href=`/monta-o-look/?p=${ids.join(",")}&m=${s.mood}`;
+  $("#toAI").href=`/monta-o-look/?p=${ids.join(",")}&m=${s.mood}`;
+  $("#pcs").innerHTML=ids.map(id=>{const p=P[id];return `<a href="/?peca=${id}&utm_source=quiz"><img src="/${p.foto}" alt="${(p.marca+" "+p.nome).replace(/"/g,"")}" loading="lazy"><small>${p.marca}</small><b>${fmt(p.preco)}</b></a>`}).join("");
+  $("#cv").setAttribute("aria-label",t[0]+" "+t[1]);
+  draw();
+  if(!keep)scrollTo({top:0});
+}
+const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
+
+/* ---------- result card ---------- */
+function coverImg(c,i,x,y,w,h){const r=Math.max(w/i.naturalWidth,h/i.naturalHeight),iw=i.naturalWidth*r,ih=i.naturalHeight*r;c.drawImage(i,x+(w-iw)/2,y+(h-ih)*0.25,iw,ih)}
+function spaced(c,text,x,y,sp,align){let w=0;for(const ch of text)w+=c.measureText(ch).width+sp;w-=sp;let sx=align==="center"?x-w/2:x;c.textAlign="left";for(const ch of text){c.fillText(ch,sx,y);sx+=c.measureText(ch).width+sp}}
+const SL=[[70,640,330,410,-4],[375,600,330,410,2.5],[680,650,330,410,-2]];
+function draw(){
+  if(!RES)return;const c=$("#cv").getContext("2d"),s=STY[RES],t=s[LANG];
+  c.fillStyle=s.bg;c.fillRect(0,0,1080,1350);
+  c.fillStyle=s.ink;c.font='400 34px "Bodoni Moda", serif';spaced(c,"BENDITO CLOSET",540,92,14,"center");
+  c.globalAlpha=.35;c.fillRect(440,118,200,2);c.globalAlpha=1;
+  c.fillStyle=s.acc;c.font='600 30px "DM Sans", sans-serif';spaced(c,T().cardTop,540,215,10,"center");
+  c.fillStyle=s.ink;c.textAlign="center";
+  c.font='400 132px "Bodoni Moda", serif';c.fillText(t[0],540,365);
+  c.font='italic 400 150px "Bodoni Moda", serif';c.fillStyle=s.acc;c.fillText(t[1],540,520);
+  const ids=avail(RES).slice(0,3);
+  ids.forEach((id,n)=>{const p=P[id],i=img(p.foto),[x,y,w,h,r]=SL[n];
+    c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
+    c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=30;c.shadowOffsetY=14;c.fillStyle="#fff";c.fillRect(-w/2-14,-h/2-14,w+28,h+86);c.shadowColor="transparent";
+    if(i.complete&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h);i.addEventListener("load",draw,{once:true})}
+    c.fillStyle="#1C1517";c.font='600 22px "DM Sans", sans-serif';c.textAlign="center";
+    let lab=(p.marca||"").toUpperCase();while(c.measureText(lab).width>w-10&&lab.length>4)lab=lab.slice(0,-2)+"…";
+    c.fillText(lab,0,h/2+46);c.restore()});
+  c.fillStyle=s.ink;c.globalAlpha=.85;c.font='500 30px "DM Sans", sans-serif';c.textAlign="center";c.fillText(T().cardBottom,540,1270);c.globalAlpha=1;
+}
+async function blob(){return new Promise(r=>$("#cv").toBlob(r,"image/png"))}
+$("#save").addEventListener("click",async()=>{draw();const b=await blob();const f=new File([b],"meu-estilo-bendito.png",{type:"image/png"});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});toast(T().saved);return}catch(e){if(e.name==="AbortError")return}}
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast(T().saved)});
+$("#share").addEventListener("click",async()=>{const t=STY[RES][LANG],u="https://benditocloset.pt/estilo/",txt=T().shareText(t[0]+" "+t[1]);
+  if(navigator.share){try{await navigator.share({text:txt,url:u});return}catch(e){if(e.name==="AbortError")return}}
+  try{await navigator.clipboard.writeText(txt+" "+u);toast(T().copied)}catch(e){}});
+
+applyLang();
+fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{
+  const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
+  all.filter(p=>p.status!=="vendido"&&(p.foto||(p.fotos&&p.fotos[0]))).forEach(p=>P[p.id]={id:p.id,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")});
+  teaser();
+  const r=qs.get("r");if(r&&STY[r])showRes(r);
+  document.fonts&&document.fonts.ready.then(()=>{if(RES)draw()});
+});
+})();
+</script>
+</body>
+</html>
