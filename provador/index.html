@@ -167,7 +167,7 @@ $("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
   try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}
  }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready();refreshLeft()}};
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
- const CT={sapatos:"shoes",bolsas:"bags"};/* relógio e óculos ficam de fora: a IA ainda não os põe bem */all.forEach(p=>{if(!VTO[p.id]&&CT[p.cat])VTO[p.id]=CT[p.cat]});
+ const CT={sapatos:"shoes",bolsas:"bags"};if(DONO)CT.acessorios="accessories";/* relógio e óculos: só a dona vê, para testar (a IA ainda não os põe bem) */all.forEach(p=>{if(!VTO[p.id]&&CT[p.cat])VTO[p.id]=CT[p.cat]});
  P=all.filter(p=>p.status!=="vendido"&&VTO[p.id]&&(p.foto||(p.fotos&&p.fotos[0]))).map(p=>({id:p.id,marca:p.marca,nome:p.nome,preco:p.preco,tam:((p.detalhe||"").match(/tamanho\s+([A-Z0-9]+)/i)||[])[1]||"",foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));
 refreshLeft();
  const q=new URLSearchParams(location.search).get("peca");if(q&&P.some(p=>p.id===q))PICK=[q];paint()}).catch(()=>{$("#pcs").textContent="—"});
