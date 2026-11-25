@@ -16,9 +16,9 @@ const PECAS = vm.runInNewContext(html.match(/const PECAS = (\[[\s\S]*?\n\]);/)[1
 
 const TAM = { roupas: "pequena", acessorios: "pequena", sapatos: "media", bolsas: "media", casacos: "grande" };
 const PORTES = {
-  pequena: { cont: 6, ilhas: 6, europa: 12 },
+  pequena: { cont: 9, ilhas: 9, europa: 12 },
   media:   { cont: 10, ilhas: 10, europa: 24 },
-  grande:  { cont: 12, ilhas: 10, europa: 24 },
+  grande:  { cont: 12, ilhas: 12, europa: 24 },
 };
 const portes = (preco, tam) => preco >= 100
   ? { cont: 0, ilhas: PORTES[tam].ilhas, europa: PORTES[tam].europa }

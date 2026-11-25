@@ -7,16 +7,16 @@
   "normal": {
    "preco": 30,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 26,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -29,16 +29,16 @@
   "normal": {
    "preco": 30,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 26,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -73,16 +73,16 @@
   "normal": {
    "preco": 10,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 9,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -95,16 +95,16 @@
   "normal": {
    "preco": 60,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 51,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -117,16 +117,16 @@
   "normal": {
    "preco": 50,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 43,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -139,16 +139,16 @@
   "normal": {
    "preco": 60,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 51,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -161,16 +161,16 @@
   "normal": {
    "preco": 15,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 13,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -359,16 +359,16 @@
   "normal": {
    "preco": 15,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 13,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -381,16 +381,16 @@
   "normal": {
    "preco": 15,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 13,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -403,16 +403,16 @@
   "normal": {
    "preco": 8,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 7,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -425,16 +425,16 @@
   "normal": {
    "preco": 20,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 17,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -623,16 +623,16 @@
   "normal": {
    "preco": 80,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 68,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -645,16 +645,16 @@
   "normal": {
    "preco": 70,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 60,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -667,16 +667,16 @@
   "normal": {
    "preco": 70,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 60,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -689,16 +689,16 @@
   "normal": {
    "preco": 10,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 9,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -711,16 +711,16 @@
   "normal": {
    "preco": 10,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 9,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -733,16 +733,16 @@
   "normal": {
    "preco": 10,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 9,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -755,16 +755,16 @@
   "normal": {
    "preco": 10,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   },
   "bf": {
    "preco": 9,
    "portes": {
-    "cont": 6,
-    "ilhas": 6,
+    "cont": 9,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -778,7 +778,7 @@
    "preco": 300,
    "portes": {
     "cont": 0,
-    "ilhas": 6,
+    "ilhas": 9,
     "europa": 12
    }
   },
@@ -786,7 +786,7 @@
    "preco": 255,
    "portes": {
     "cont": 0,
-    "ilhas": 6,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -800,7 +800,7 @@
    "preco": 30,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -808,7 +808,7 @@
    "preco": 26,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -822,7 +822,7 @@
    "preco": 15,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -830,7 +830,7 @@
    "preco": 13,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -844,7 +844,7 @@
    "preco": 130,
    "portes": {
     "cont": 0,
-    "ilhas": 6,
+    "ilhas": 9,
     "europa": 12
    }
   },
@@ -852,7 +852,7 @@
    "preco": 111,
    "portes": {
     "cont": 0,
-    "ilhas": 6,
+    "ilhas": 9,
     "europa": 12
    }
   }
@@ -976,7 +976,7 @@
    "preco": 120,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -984,7 +984,7 @@
    "preco": 102,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -998,7 +998,7 @@
    "preco": 120,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1006,7 +1006,7 @@
    "preco": 102,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1020,7 +1020,7 @@
    "preco": 120,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1028,7 +1028,7 @@
    "preco": 102,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1042,7 +1042,7 @@
    "preco": 60,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1050,7 +1050,7 @@
    "preco": 51,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1064,7 +1064,7 @@
    "preco": 120,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1072,7 +1072,7 @@
    "preco": 102,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1086,7 +1086,7 @@
    "preco": 45,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1094,7 +1094,7 @@
    "preco": 38,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1108,7 +1108,7 @@
    "preco": 30,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1116,7 +1116,7 @@
    "preco": 26,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1130,7 +1130,7 @@
    "preco": 100,
    "portes": {
     "cont": 0,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1138,7 +1138,7 @@
    "preco": 85,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1152,7 +1152,7 @@
    "preco": 80,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1160,7 +1160,7 @@
    "preco": 68,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1174,7 +1174,7 @@
    "preco": 40,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1182,7 +1182,7 @@
    "preco": 34,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1196,7 +1196,7 @@
    "preco": 20,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1204,7 +1204,7 @@
    "preco": 17,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
@@ -1218,7 +1218,7 @@
    "preco": 8,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   },
@@ -1226,7 +1226,7 @@
    "preco": 7,
    "portes": {
     "cont": 12,
-    "ilhas": 10,
+    "ilhas": 12,
     "europa": 24
    }
   }
