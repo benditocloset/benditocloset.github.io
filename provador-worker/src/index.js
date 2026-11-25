@@ -9,6 +9,9 @@ const PROMPT = {
   tops: "Dress the person in the top/jacket from the product photo only. Keep the person's face, body, pose, hair and background.",
   bottoms: "Dress the person in the trousers/leggings from the product photo only. If the person wears a dress, replace it with these trousers and a simple plain fitted top in a neutral colour. Keep face, body, pose, hair and background.",
   "one-pieces": "Dress the person in the dress/one-piece from the product photo only, replacing their current outfit. Keep face, body, pose, hair and background.",
+  shoes: "Put the shoes/sneakers from the product photo on the person's feet only; ignore the rest of the outfit in the product photo. Keep everything else the same.",
+  bags: "Add the bag from the product photo to the person, carried naturally on the shoulder or in the hand; ignore the rest of the outfit in the product photo. Keep everything else the same.",
+  accessories: "Add only the accessory from the product photo (e.g. watch, sunglasses, scarf) to the person, worn naturally; ignore the rest of the outfit in the product photo. Keep everything else the same.",
   auto: "Dress the person in the main garment from the product photo only. Keep face, body, pose, hair and background."
 };
 export default {
@@ -31,7 +34,7 @@ export default {
       let b; try { b = await req.json(); } catch (e) { return j({ error: "bad_json" }, 400); }
       if (typeof b.model_image !== "string" || !/^data:image\/(jpeg|png|webp);base64,/.test(b.model_image) || b.model_image.length > 4e6) return j({ error: "bad_image" }, 400);
       if (typeof b.garment_image !== "string" || !/^https:\/\/benditocloset\.pt\//.test(b.garment_image)) return j({ error: "bad_garment" }, 400);
-      const category = ["tops", "bottoms", "one-pieces"].includes(b.category) ? b.category : "auto";
+      const category = ["tops", "bottoms", "one-pieces", "shoes", "bags", "accessories"].includes(b.category) ? b.category : "auto";
       const r = await fetch("https://api.fashn.ai/v1/run", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.FASHN_KEY },
         body: JSON.stringify({ model_name: "tryon-max", inputs: { model_image: b.model_image, product_image: b.garment_image, prompt: (PROMPT[category] || PROMPT.auto) + KEEP + (category === "tops" ? (b.jeans ? JEANS_ALL : JEANS_BARE) : ""), resolution: "1k", generation_mode: "balanced", return_base64: true, output_format: "jpeg" } }) });
       let o = {}; try { o = await r.json(); } catch (e) {}
