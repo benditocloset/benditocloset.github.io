@@ -75,6 +75,11 @@ export default {
       }
       return j({ id: o.id, left: PER - nIp - 1 });
     }
+    if (url.pathname === "/teste-aviso" && req.method === "POST") {
+      if (!(env.OWNER_TOKEN && req.headers.get("X-Bendito-Dono") === env.OWNER_TOKEN)) return j({ error: "no" }, 403);
+      await avisar(env, "teste", "teste do aviso (está tudo a funcionar).");
+      return j({ ok: true });
+    }
     if (url.pathname === "/left" && req.method === "GET") {
       // Quantas provas a pessoa ainda tem hoje (não gasta nada)
       const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
