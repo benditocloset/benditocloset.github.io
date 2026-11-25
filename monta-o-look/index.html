@@ -246,7 +246,7 @@ $("#save").onclick=async()=>{
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bendito-look.png";document.body.appendChild(a);a.click();a.remove();toast(t.saved)};
 
 /* ---------- provador com IA ---------- */
-const TRYON_API="https://bendito-provador-ia.nn45hn9bvr.workers.dev";
+const TRYON_API="";
 const VTO={"adidas-calca-castanha": "bottoms", "shein-blusa-rosa": "tops", "blueman-saida-praia": "one-pieces", "blueman-vestido-mata": "one-pieces", "sarong-bali-seda": "one-pieces", "vestido-rio": "one-pieces", "body-leopardo": "tops", "vestido-floral-preto": "one-pieces", "shein-vestido-zebra": "one-pieces", "adidas-legging": "bottoms", "rl-camisola-azul": "tops", "rl-camisa-linho": "one-pieces", "rl-camisa-linho-rosa": "one-pieces", "kimono-dourado-ibiza": "one-pieces", "shein-camisa-caramelo": "tops", "shein-body-dourado": "tops", "shein-body-azul": "tops", "adidas-casaco-bordo": "tops", "zara-bomber-organza": "tops", "guess-casaco-1": "tops", "guess-casaco-2": "tops", "versace-casaco": "tops", "pepe-parka": "tops", "guess-biker": "tops", "zara-gabardina": "tops", "zara-casaco-vermelho": "tops", "salsa-dupla-face": "tops", "pelo-camel": "tops", "pelo-rosa": "tops", "shein-bomber-lantejoulas": "tops", "primark-jaq": "tops"};
 let AIP=null;
 function aiUI(){const box=$("#ai");if(!TRYON_API||!BG){box.hidden=true;return}
