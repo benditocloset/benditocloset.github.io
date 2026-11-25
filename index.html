@@ -1404,6 +1404,23 @@ det.addEventListener("close", () => { try { history.replaceState(null, "", locat
   btn.addEventListener("click", async () => {
     if (ev) { ev.prompt(); try { await ev.userChoice; } catch(e) {} ev = null; return; }
     const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua), inapp = /GSA\/|Instagram|FBAN|FBAV|TikTok|musical_ly|Line\//.test(ua), crios = /CriOS|EdgiOS/.test(ua);
+    if (ios && !inapp) {
+      const pt = LANG === "pt", top = crios;
+      let tip = document.getElementById("app-tip");
+      if (!tip) {
+        tip = document.createElement("div"); tip.id = "app-tip";
+        tip.style.cssText = "position:fixed;left:12px;right:12px;z-index:9999;background:#1C1517;color:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 12px 40px rgba(0,0,0,.45);font:500 16px/1.4 inherit;text-align:center";
+        document.body.appendChild(tip);
+        const st = document.createElement("style"); st.textContent = "@keyframes bcb{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}@keyframes bct{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}"; document.head.appendChild(st);
+      }
+      tip.style.top = top ? "12px" : "auto"; tip.style.bottom = top ? "auto" : "96px";
+      const a = top ? '<div style="position:absolute;top:-6px;right:30px;font-size:30px;animation:bct 1s infinite">⬆️</div>' : '<div style="position:absolute;bottom:-40px;left:40px;font-size:34px;animation:bcb 1s infinite">⬇️</div>';
+      const step = top ? (pt ? "<b>⬆️ Partilhar</b> → <b>Adicionar à Tela de Início</b>" : "<b>⬆️ Share</b> → <b>Add to Home Screen</b>")
+                       : (pt ? "Toque em <b>☰</b> → <b>Partilhar ⬆️</b> → <b>Adicionar à Tela de Início</b>" : "Tap <b>☰</b> → <b>Share ⬆️</b> → <b>Add to Home Screen</b>");
+      tip.innerHTML = a + '<button type="button" aria-label="Fechar" style="position:absolute;top:6px;right:10px;border:0;background:none;color:#fff;font-size:22px;cursor:pointer" onclick="this.parentNode.remove()">×</button><img src="/img/app-192.png" alt="" style="width:44px;height:44px;border-radius:11px;display:block;margin:0 auto 8px">' + step;
+      clearTimeout(window.__bcTip); window.__bcTip = setTimeout(() => { const t = document.getElementById("app-tip"); if (t) t.remove(); }, 15000);
+      return;
+    }
     if (ios && inapp) {
       const M = {pt:["Este navegador não deixa instalar apps.","Copie o link, abra o <b>Safari</b>, cole o link e depois toque em <b>Partilhar ⬆️ → “Adicionar ao ecrã principal”</b>.","Copiar o link","Link copiado ✓ Agora abra o Safari e cole."],
         en:["This browser can't install apps.","Copy the link, open <b>Safari</b>, paste it, then tap <b>Share ⬆️ → “Add to Home Screen”</b>.","Copy the link","Link copied ✓ Now open Safari and paste it."],
