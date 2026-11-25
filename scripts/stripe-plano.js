@@ -5,7 +5,8 @@
 //   pequena (roupas, acessórios): PT continental 6 € · Açores/Madeira 6 € · Europa 12 €
 //   média   (sapatos, bolsas):    PT continental 10 € · Açores/Madeira 10 € · Europa 24 €
 //   grande  (casacos):            PT continental 12 € · Açores/Madeira 10 € · Europa 24 €
-//   Preço do link ≥ 100 €: portes grátis em Portugal (continente e ilhas); Europa paga.
+//   Preço do link ≥ 100 €: portes grátis só em Portugal continental; Açores/Madeira e Europa pagam.
+//   Links < 100 €: também têm "Só Portugal · Cacifo InPost" (5,50 € pequena, 6,50 € média/grande).
 // Black Friday: não há links próprios — o site preenche BLACKFRIDAY15 / BENDITO10BF no checkout.
 // O campo "bf" fica só como referência do preço com −15%.
 const fs = require("fs"), path = require("path"), vm = require("vm");
@@ -20,8 +21,8 @@ const PORTES = {
   grande:  { cont: 12, ilhas: 10, europa: 24 },
 };
 const portes = (preco, tam) => preco >= 100
-  ? { pt_gratis: 0, europa: PORTES[tam].europa }
-  : { ...PORTES[tam] };
+  ? { cont: 0, ilhas: PORTES[tam].ilhas, europa: PORTES[tam].europa }
+  : { ...PORTES[tam], inpost: tam === "pequena" ? 5.5 : 6.5 };
 
 const plano = PECAS.filter(p => p.status !== "vendido" && (p.foto || p.fotos)).map(p => {
   const tam = TAM[p.cat]; if (!tam) throw new Error(`Categoria sem tamanho: ${p.cat} (${p.id})`);
