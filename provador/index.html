@@ -89,7 +89,7 @@ let PL=null;async function poseModel(){if(PL)return PL;const v=await import("htt
 /* Verifica no telemóvel (sem gastar créditos) se a foto mostra o corpo: ombros e, se possível, ancas */
 async function bodyCheck(img){try{const pl=await Promise.race([poseModel(),new Promise((_,r)=>setTimeout(()=>r("t"),12000))]);const r=pl.detect(img);const L=r&&r.landmarks&&r.landmarks[0];if(!L)return {sh:false,hip:false};
  const ok=i=>L[i]&&L[i].y<0.98&&L[i].y>0&&L[i].x>0&&L[i].x<1&&(L[i].visibility===undefined||L[i].visibility>0.5);
- return {sh:ok(11)&&ok(12),hip:ok(23)||ok(24)}}catch(e){return null}}
+ const hip=ok(23)||ok(24),shY=Math.max(L[11].y,L[12].y);return {sh:ok(11)&&ok(12)&&(hip||shY<0.55),hip}}catch(e){return null}}
 function shrink(img,max){const r=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement("canvas");c.width=Math.round(img.naturalWidth*r);c.height=Math.round(img.naturalHeight*r);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.86)}
 function trimShot(i){return new Promise(res=>{try{const w=i.naturalWidth,h=i.naturalHeight,k=Math.min(1,200/w),cw=Math.max(1,Math.round(w*k)),ch=Math.max(1,Math.round(h*k)),c=document.createElement("canvas");c.width=cw;c.height=ch;const x=c.getContext("2d");x.drawImage(i,0,0,cw,ch);const d=x.getImageData(0,0,cw,ch).data;
  const flat=y=>{let s=0,s2=0;for(let xx=0;xx<cw;xx+=2){const o=(y*cw+xx)*4,l=(d[o]+d[o+1]+d[o+2])/3;s+=l;s2+=l*l}const n=Math.ceil(cw/2),m=s/n;return s2/n-m*m<40};
