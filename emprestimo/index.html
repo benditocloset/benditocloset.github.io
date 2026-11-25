@@ -58,7 +58,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <div class="box" id="pago" hidden style="border-color:#9B1B3A"><b>Pagamento recebido ✓</b> Pedido <span id="pcode"></span>. Vai receber o recibo da Stripe por e-mail e a Marianna confirma o envio das peças.</div>
 <div class="calc" id="caucao">
 <h2 style="margin-top:0">Pedir peças emprestadas</h2>
-<p class="steps">Faça o pedido aqui, sem trocar mensagens: escolha as peças e as datas, preencha os seus dados, assine o contrato e pague a caução e os portes. A caução é a soma do valor das peças e é-lhe devolvida.</p>
+<p class="steps">Faça o pedido aqui, sem trocar mensagens: escolha as peças e as datas, preencha os seus dados, assine o contrato e pague a caução. A caução é a soma do valor das peças e é-lhe devolvida. Os portes de ida e volta são por nossa conta.</p>
 
 <h3 class="h3">1. Peças</h3>
 <input type="search" id="q" placeholder="Procurar peça ou marca" aria-label="Procurar peça ou marca">
@@ -73,7 +73,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 </div>
 <p class="steps" id="dmsg">Empréstimo até 15 dias.</p>
 
-<h3 class="h3">3. Entrega e portes</h3>
+<h3 class="h3">3. Entrega</h3>
 <div id="ship"></div>
 <p class="steps" id="shipnote"></p>
 <div class="sum" id="sum"></div>
@@ -101,12 +101,12 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <div class="done" id="done" hidden>
 <p><b>Pedido <span id="code"></span> enviado ✓</b><br>Recebe a confirmação das peças e das datas por e-mail. Agora faça o pagamento:</p>
 <ol class="steps" id="manual">
-<li>No pagamento, escreva o valor total <b id="v2"></b> <button type="button" class="cp" data-cp="v">copiar</button></li>
+<li>No pagamento, escreva o valor <b id="v2"></b> <button type="button" class="cp" data-cp="v">copiar</button></li>
 <li>No campo das peças, escreva o código <b id="c2"></b> <button type="button" class="cp" data-cp="c">copiar</button></li>
 <li>Escolha «Sim, li e aceito o contrato» e pague.</li>
 </ol>
 <a class="pay" id="pay" href="https://buy.stripe.com/eVqdR26NA8fP77Q0MAcwg0X?locale=pt" target="_blank" rel="noopener">Pagar a caução</a>
-<p class="steps">A caução é devolvida até 7 dias depois de as peças voltarem em bom estado. Se alguma peça não estiver disponível nas datas pedidas, a caução e os portes são devolvidos na totalidade. A devolução já fica paga: enviamos-lhe a etiqueta com as peças.</p>
+<p class="steps">A caução é devolvida até 7 dias depois de as peças voltarem em bom estado. Se alguma peça não estiver disponível nas datas pedidas, a caução é devolvida na totalidade. Os portes de ida e volta são por nossa conta: enviamos-lhe a etiqueta com as peças.</p>
 <button type="button" class="cp" id="copy" style="font-size:14px;padding:8px 14px">Guardar cópia do contrato assinado (PDF)</button>
 </div>
 </div>
@@ -127,9 +127,9 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <h2>3. Caução</h2>
 <ol>
 <li>A caução é igual à <b>soma do valor das peças emprestadas</b> indicado no Acordo.</li>
-<li>A caução é paga no site da Bendito Closet antes da entrega das peças (cartão, MB WAY ou Multibanco), juntamente com os portes de ida e volta escolhidos no pedido. Os portes não são reembolsáveis, salvo se a Cedente não puder emprestar as peças.</li>
+<li>A caução é paga no site da Bendito Closet antes da entrega das peças (cartão, MB WAY ou Multibanco).</li>
 <li>Quando as peças forem devolvidas no estado em que foram entregues, a Cedente reembolsa a caução na totalidade, pelo mesmo meio de pagamento, <b>até 7 dias</b> depois de as receber e verificar. O prazo em que o reembolso aparece na conta depende do banco (normalmente 5 a 10 dias).</li>
-<li>Se alguma peça não estiver disponível nas datas pedidas e o Utilizador não aceitar outra, a Cedente reembolsa a caução e os portes na totalidade.</li>
+<li>Se alguma peça não estiver disponível nas datas pedidas e o Utilizador não aceitar outra, a Cedente reembolsa a caução na totalidade.</li>
 <li>Se houver valores a pagar nos termos da cláusula 5, a Cedente reembolsa apenas a parte da caução que sobrar.</li>
 </ol>
 
@@ -138,7 +138,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <li>Guardar e usar as peças com cuidado, protegendo-as de maquilhagem, autobronzeador, perfume, comida, bebida e fumo.</li>
 <li>Não alterar, cortar, coser, tingir, lavar ou limpar as peças, nem as vender, alugar ou emprestar a terceiros.</li>
 <li>Devolver todas as peças até à data do Acordo, no mesmo estado, com etiquetas, acessórios e embalagens, se os tiverem.</li>
-<li>Pagar no pedido os portes de ida e volta. A Cedente envia as peças com a etiqueta ou as instruções de devolução, e o Utilizador entrega a encomenda à transportadora até à data de devolução.</li>
+<li>Entregar a encomenda de devolução à transportadora até à data de devolução, com a etiqueta enviada pela Cedente. Os portes de ida e volta são pagos pela Cedente; se o Utilizador escolher outra forma de envio, os custos são seus.</li>
 </ol>
 
 <h2>5. Responsabilidade por defeito, dano ou perda</h2>
@@ -201,14 +201,14 @@ cv.addEventListener("pointermove",e=>{if(!draw)return;e.preventDefault();const p
 $("sigclr").addEventListener("click",()=>{cx.clearRect(0,0,cv.width,cv.height);strokes=0;pts=0;document.querySelector(".sigx").style.display="";check();});
 sizeSig();window.addEventListener("resize",()=>{if(!pts)sizeSig();});
 function sigPNG(){const w=600,h=Math.round(600*cv.height/cv.width),c=document.createElement("canvas");c.width=w;c.height=h;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,w,h);g.drawImage(cv,0,0,w,h);return c;}
-const SHIP=[{k:"ctt",n:"Portugal continental · CTT · 2 a 3 dias úteis",p:7,g:9},{k:"cex",n:"Portugal continental · Correos Express · 24h",p:10,g:12},{k:"ilhas",n:"Açores e Madeira · CTT · 3 a 5 dias úteis",p:9,g:12},{k:"eu",n:"Europa · DHL ou Correos Express",p:18,g:24},{k:"mao",n:"Levanto em mão (Ermesinde)",p:0,g:0}];
-let SH="ctt";
+const SHIP=[{k:"envio",n:"Envio para a minha morada · portes de ida e volta grátis",p:0,g:0},{k:"mao",n:"Levanto em mão (Ermesinde)",p:0,g:0}];
+let SH="envio";
 function big(){return sel().some(p=>!["roupas","acessorios"].includes(p.cat));}
-function portes(){const o=SHIP.find(x=>x.k===SH);return (big()?o.g:o.p)*2;}
-function renderShip(){const g=big();$("ship").innerHTML=SHIP.map(o=>`<label class="opt"><input type="radio" name="ent" value="${o.k}" ${o.k===SH?"checked":""}> <span style="flex:1">${o.n}</span><b>${o.p?fmt((g?o.g:o.p)*2):"grátis"}</b></label>`).join("");$("shipnote").textContent="Portes de ida e volta: enviamos as peças e a etiqueta para as devolver."+(g?" Preço para sapatos, malas ou casacos.":" Preço para roupa e acessórios.");}
+function portes(){return 0;}
+function renderShip(){const g=big();$("ship").innerHTML=SHIP.map(o=>`<label class="opt"><input type="radio" name="ent" value="${o.k}" ${o.k===SH?"checked":""}> <span style="flex:1">${o.n}</span></label>`).join("");$("shipnote").textContent=SH==="mao"?"Combinamos por e-mail a hora do levantamento e da devolução.":"Os portes de ida e volta são por nossa conta: enviamos as peças com a etiqueta para as devolver.";}
 $("ship").addEventListener("change",e=>{if(e.target.name==="ent"){SH=e.target.value;check();}});
 function ent(){return SHIP.find(x=>x.k===SH).n;}
-function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 15 dias.":(n>15?"Escolheu "+n+" dias. O empréstimo é de até 15 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (devolvida)</span><span>${fmt(V)}</span></div><div><span>Portes ida e volta</span><span>${portes()?fmt(portes()):"grátis"}</span></div><div class="t"><span>Total a pagar</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · total de "+fmt(T):"Enviar pedido";return p;}
+function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 15 dias.":(n>15?"Escolheu "+n+" dias. O empréstimo é de até 15 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (devolvida)</span><span>${fmt(V)}</span></div><div><span>Portes ida e volta</span><span>${SH==="mao"?"—":"grátis"}</span></div><div class="t"><span>Total a pagar</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · caução de "+fmt(T):"Enviar pedido";return p;}
 list.addEventListener("change",e=>{const c=e.target;if(c.type!=="checkbox")return;c.checked?S.add(c.value):S.delete(c.value);total();});
 q.addEventListener("input",render);
 $("d1").addEventListener("change",()=>{if($("d1").value){const a=new Date($("d1").value+"T12:00");$("d2").min=iso(a);const m=new Date(a);m.setDate(m.getDate()+15);$("d2").max=iso(m);}check();});
@@ -219,8 +219,8 @@ $("go").addEventListener("click",async()=>{
  const go=$("go");go.disabled=true;go.textContent="A enviar…";
  CODE="BC-"+Math.random().toString(36).slice(2,6).toUpperCase();
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
- const data={_subject:"Pedido de empréstimo "+CODE+" · total "+fmt(V+portes()),_template:"table",_captcha:"false",
-  "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":portes()?fmt(portes()):"grátis","Total a pagar":fmt(V+portes()),"Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
+ const data={_subject:"Pedido de empréstimo "+CODE+" · caução "+fmt(V),_template:"table",_captcha:"false",
+  "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":SH==="mao"?"—":"por conta da Bendito Closet","Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
   "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":$("mor").value.trim(),
   "Nome":$("nome").value.trim(),"E-mail":$("mail").value.trim(),_replyto:$("mail").value.trim(),"Telemóvel":$("tel").value.trim(),
   "Publicação/empresa":$("pub").value.trim(),"NIF":$("nif").value.trim(),"Produção e notas":$("obs").value.trim(),
@@ -237,7 +237,7 @@ $("go").addEventListener("click",async()=>{
  $("code").textContent=CODE;$("c2").textContent=CODE;$("v2").textContent=num(V+portes())+" €";
  const ref=(CODE+"_"+$("d1").value.replace(/-/g,"")+"_"+$("d2").value.replace(/-/g,"")).replace(/[^\w-]/g,"");
  $("pay").href="https://buy.stripe.com/eVqdR26NA8fP77Q0MAcwg0X?locale=pt&prefilled_email="+encodeURIComponent($("mail").value.trim())+"&client_reference_id="+ref;
- $("pay").textContent="Pagar "+fmt(V+portes())+(portes()?" (caução + portes)":" (caução)");if(wurl){$("pay").href=wurl;$("pay").removeAttribute("target");$("manual").hidden=true;}
+ $("pay").textContent="Pagar a caução de "+fmt(V);if(wurl){$("pay").href=wurl;$("pay").removeAttribute("target");$("manual").hidden=true;}
  go.hidden=true;$("done").hidden=false;$("signed").hidden=false;cv.style.pointerEvents="none";$("sigclr").hidden=true;$("done").scrollIntoView({behavior:"smooth",block:"center"});
 });
 $("copy")&&$("copy").addEventListener("click",()=>window.print());

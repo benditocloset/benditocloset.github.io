@@ -35,10 +35,11 @@ async function avisar(env, motivo) {
   await env.LIMITS.put(k, "1", { expirationTtl: 172800 });
   return motivo;
 }
-// Empréstimo de peças: cria o pagamento (caução + portes ida e volta) na Stripe com o valor calculado aqui,
+// Empréstimo de peças: cria o pagamento da caução na Stripe com o valor calculado aqui,
 // a partir dos preços publicados no site. Segredo na Cloudflare: STRIPE_KEY (chave restrita, só "Checkout Sessions: escrita").
-const PORTES = { ctt: [7, 9], cex: [10, 12], ilhas: [9, 12], eu: [18, 24], mao: [0, 0] };
-const PORTES_NOME = { ctt: "Portugal continental · CTT", cex: "Portugal continental · Correos Express", ilhas: "Açores e Madeira · CTT", eu: "Europa · DHL ou Correos Express", mao: "Levantamento em mão (Ermesinde)" };
+// Portes de ida e volta por conta da Bendito Closet (decisão de 25/11/2026): o pagamento é só a caução.
+const PORTES = { envio: [0, 0], mao: [0, 0] };
+const PORTES_NOME = { envio: "Envio para a morada (portes ida e volta pela Bendito Closet)", mao: "Levantamento em mão (Ermesinde)" };
 async function pecasDoSite() {
   const h = await (await fetch("https://benditocloset.pt/?w=" + Math.floor(Date.now() / 300000), { cf: { cacheTtl: 300 } })).text();
   const m = h.match(/const PECAS = (\[[\s\S]*?\n\]);/); const P = {};
