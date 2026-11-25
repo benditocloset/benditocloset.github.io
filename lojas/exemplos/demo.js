@@ -70,15 +70,16 @@
         msgs = chat.querySelector(".dm-msgs"), chips = chat.querySelector(".dm-chips"),
         form = chat.querySelector("form"), input = form.querySelector("input");
   const add = (t, me) => { const d = document.createElement("div"); d.className = "dm-m " + (me ? "dm-me" : "dm-bot"); d.textContent = t; msgs.appendChild(d); msgs.scrollTop = 1e6; };
-  const answer = q => { const n = norm(q); const hit = D.respostas.find(r => r.k.some(k => n.includes(norm(k)))); return hit ? hit.r : D.fallback; };
+  const EN = [[/flavou?r|taste/,"sabor"],[/box of 12|\b12\b/,"caixa de 12"],[/price|cost|how much/,"quanto"],[/deliver|shipping|home/,"entrega"],[/wedding|event|party|birthday|christening/,"casamento"],[/gluten|allerg|vegan|lactose/,"gluten"],[/open|hours|close/,"horario"],[/pay/,"pagar"],[/^(hi|hello|hey)\b|good (morning|afternoon)/,"ola"],[/thank/,"obrigad"],[/\bcats?\b|kitten/,"gato"],[/\bdogs?\b|puppy/,"cao"],[/bath|groom|wash/,"banho"],[/monthly|subscription|box/,"caixa"],[/today/,"hoje"],[/treat|snack/,"petisco"]];
+  const answer = q => { let n = norm(q); EN.forEach(([re, pt]) => { if (re.test(n)) n += " " + pt; }); const hit = D.respostas.find(r => r.k.some(k => n.includes(norm(k)))); return hit ? hit.r : D.fallback; };
   let busy = false;
   const ask = q => {
     if (!q.trim() || busy) return; busy = true; add(q, true); input.value = "";
     const t = document.createElement("div"); t.className = "dm-typing"; t.textContent = "a escrever…"; msgs.appendChild(t); msgs.scrollTop = 1e6;
     setTimeout(() => { t.remove(); add(answer(q)); busy = false; }, 700 + Math.random() * 600);
   };
-  chips.innerHTML = D.sugestoes.map(s => `<button type="button">${esc(s)}</button>`).join("");
-  chips.addEventListener("click", e => { if (e.target.tagName === "BUTTON") ask(e.target.textContent); });
+  chips.innerHTML = D.sugestoes.map(s => `<button type="button" data-q="${esc(s)}">${esc(s)}</button>`).join("");
+  chips.addEventListener("click", e => { if (e.target.tagName === "BUTTON") ask(e.target.dataset.q || e.target.textContent); });
   form.addEventListener("submit", e => { e.preventDefault(); ask(input.value); });
   let started = false;
   fab.addEventListener("click", () => { chat.classList.add("on"); fab.style.display = "none"; if (!started) { started = true; add(D.saudacao); } input.focus(); });

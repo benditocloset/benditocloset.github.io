@@ -59,6 +59,7 @@ input,select{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border
 footer{background:var(--tinta);color:#C9CED8;padding:40px 0;font-size:14px}
 @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:50px 22px 60px}.prato{max-width:220px;margin:0 auto}.menu,.dia{grid-template-columns:1fr}nav a:not(.cta){display:none}h2{font-size:32px}}
 </style>
+<script src="/lojas/exemplos/lang.js"></script>
 </head>
 <body>
 <header><div class="wrap bar"><a class="logo" href="#">Tasca da Ribeira<small>Porto · desde 1987</small></a><nav><a href="#menu">Menu</a><a href="#prato">Prato do dia</a><a class="cta" href="#reservar">Reservar</a></nav></div></header>
@@ -104,8 +105,8 @@ Sobremesas:[["🍮","Leite-creme queimado","Queimado na hora",4.5],["🥧","Past
 Bebidas:[["🍷","Vinho do Douro (copo)","Tinto ou branco",4],["🥤","Sumo natural de laranja","Espremido na hora",3.2]]};
 const Q={};let cat="Pratos";const fmt=v=>v.toFixed(2).replace(".",",")+" €";
 const tabs=document.querySelector(".tabs"),lista=document.getElementById("lista");
-Object.keys(M).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{cat=c;draw()};tabs.appendChild(b)});
-function draw(){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.textContent===cat));
+Object.keys(M).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.dataset.c=c;b.onclick=()=>{cat=c;draw()};tabs.appendChild(b)});
+function draw(){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===cat));
  lista.innerHTML=M[cat].map(([e,n,d,p])=>`<div class="item"><div class="e">${e}</div><div><h3>${n}</h3><p>${d}</p></div><div class="pr"><b>${fmt(p)}</b><div class="q"><button aria-label="Menos ${n}" data-n="${n}" data-d="-1">−</button><span>${Q[n]?Q[n].q:0}</span><button aria-label="Mais ${n}" data-n="${n}" data-d="1" data-p="${p}">+</button></div></div></div>`).join("")}
 lista.addEventListener("click",e=>{const b=e.target.closest("button[data-n]");if(!b)return;const n=b.dataset.n,price=+(b.dataset.p||(Q[n]&&Q[n].p)||0);Q[n]=Q[n]||{q:0,p:price};Q[n].q=Math.max(0,Q[n].q+ +b.dataset.d);if(!Q[n].q)delete Q[n];draw();total()});
 function total(){let t=0,n=0;for(const k in Q){t+=Q[k].q*Q[k].p;n+=Q[k].q}document.getElementById("tot").textContent=fmt(t);document.getElementById("nit").textContent=n;document.getElementById("cesto").classList.toggle("on",n>0)}

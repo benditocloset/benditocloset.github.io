@@ -46,6 +46,7 @@ body{margin:0;background:var(--fundo);color:var(--tinta);font:400 16px/1.55 "DM 
 .slot button[aria-pressed=true]{border-color:var(--verde);background:var(--menta);color:var(--verde)}
 @media(max-width:880px){.lado{grid-template-columns:1fr;gap:26px;padding:20px 0 0}.lado>div:first-child{padding:0 20px}.tel{width:100%;height:calc(100vh - 40px);min-height:640px;border-radius:0;padding:0;box-shadow:none;background:none}.ecr{border-radius:0}.top{padding-top:22px}}
 </style>
+<script src="/lojas/exemplos/lang.js"></script>
 </head>
 <body>
 <div class="lado">
@@ -73,8 +74,8 @@ const P={Fruta:[["🍊","Laranja do Algarve","1 kg",1.9],["🍎","Maçã de Alco
 Padaria:[["🥖","Broa de milho","Inteira",2.5],["🥐","Croissant","Unidade",0.9],["🍞","Pão alentejano","500 g",2.8],["🥨","Regueifa","Unidade",1.6]],
 Queijos:[["🧀","Queijo da Serra","Amanteigado",11.5],["🧈","Manteiga dos Açores","250 g",2.9],["🥚","Ovos caseiros","Dúzia",3.2],["🥛","Leite do dia","1 L",1.1]]};
 let cat="Fruta";const C={};const fmt=v=>v.toFixed(2).replace(".",",")+" €";const all=Object.values(P).flat();
-const cats=document.getElementById("cats");Object.keys(P).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{cat=c;draw()};cats.appendChild(b)});
-function draw(){cats.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.textContent===cat));
+const cats=document.getElementById("cats");Object.keys(P).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.dataset.c=c;b.onclick=()=>{cat=c;draw()};cats.appendChild(b)});
+function draw(){cats.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===cat));
  document.getElementById("lista").innerHTML=P[cat].map(p=>`<div class="pr"><span class="q" style="${C[p[1]]?"display:block":""}">${C[p[1]]||""}</span><div class="e">${p[0]}</div><b>${p[1]}</b><small>${p[2]}</small><div class="p">${fmt(p[3])}<button data-n="${p[1]}" aria-label="Juntar ${p[1]}">+</button></div></div>`).join("");
  let n=0,t=0;for(const k in C){const p=all.find(x=>x[1]===k);n+=C[k];t+=C[k]*p[3]}document.getElementById("n").textContent=n;document.getElementById("tot").textContent=fmt(t);document.getElementById("cesta").classList.toggle("on",n>0);
  document.getElementById("resumo").innerHTML=Object.entries(C).map(([k,q])=>`${q} × ${k}`).join("<br>")+`<br><b style="color:#16231D">Total: ${fmt(t)}</b>`}
