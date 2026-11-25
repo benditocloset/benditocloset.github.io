@@ -137,7 +137,10 @@ $("#pcs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)
  paint();ready()});
 async function poll(id){for(let i=0;i<50;i++){await new Promise(z=>setTimeout(z,2000));const s=await (await fetch(TRYON_API+"/status/"+id)).json();if(s.status==="completed"&&s.output&&s.output[0])return {out:s.output[0]};if(s.status==="failed")return {err:s.error||"failed"}}return {err:"timeout"}}
 const asData=o=>/^data:|^https?:/.test(o)?o:"data:image/jpeg;base64,"+o;
-async function run(path,body){const h={"Content-Type":"application/json"};if(DONO)h["X-Bendito-Dono"]=DONO;const r=await fetch(TRYON_API+path,{method:"POST",headers:h,body:JSON.stringify(body)});const o=await r.json().catch(()=>({}));return r.ok?o:{fail:o.error||"x"}}
+function notify(m){if(!m)return;const T={cheio:"o provador chegou ao limite de provas de hoje (ótimo sinal!).",creditos:"os créditos da FASHN acabaram e o provador está parado.",teste:"teste do aviso: está tudo a funcionar."}[m];if(!T)return;
+ fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({_subject:"Provador com IA: "+T,mensagem:T+" Para comprar mais créditos: app.fashn.ai/api → Top up. Para mudar o limite diário, fale com o Claude.",_template:"table"})}).catch(()=>{})}
+window.__notify=notify;
+async function run(path,body){const h={"Content-Type":"application/json"};if(DONO)h["X-Bendito-Dono"]=DONO;const r=await fetch(TRYON_API+path,{method:"POST",headers:h,body:JSON.stringify(body)});const o=await r.json().catch(()=>({}));notify(o.notify);return r.ok?o:{fail:o.error||"x"}}
 const show=h=>{const r=$("#res");r.hidden=false;r.innerHTML=h;r.scrollIntoView({behavior:"smooth",block:"start"})};
 const lim=e=>e==="limit_user"?M.lim:e==="limit_day"?M.day:M.err;
 $("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
