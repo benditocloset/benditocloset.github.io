@@ -98,8 +98,9 @@ footer a{color:var(--rose)}
     <div class="tools" id="tools" hidden>
       <button type="button" data-a="sm" aria-label="Diminuir">−</button><button type="button" data-a="lg" aria-label="Aumentar">+</button><button type="button" data-a="rl" aria-label="Rodar">⟲</button><button type="button" data-a="rr" aria-label="Rodar">⟳</button><button type="button" data-a="fl" aria-label="Espelhar">⇋</button><button type="button" data-a="up" data-t="front">Frente</button><button type="button" class="del" data-a="del" data-t="remove">Tirar</button>
     </div>
+    <p class="priv" id="inapp" style="display:none;background:#fff;border:1px solid var(--rose);border-radius:12px;padding:10px 12px;color:var(--ink)"></p>
     <div class="photo-row">
-      <label class="btn dark" style="flex:1"><input type="file" id="file" accept="image/*" hidden><span data-t="myphoto">📷 A minha foto</span></label>
+      <label class="btn dark" style="flex:1;position:relative"><input type="file" id="file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"><span data-t="myphoto">📷 A minha foto</span></label>
       <button class="btn" type="button" id="nophoto" data-t="nophoto">Manequim</button>
     </div>
     <div class="priv">🔒 <span data-t="priv">A sua foto fica só no seu telemóvel: não é enviada nem guardada por nós. Dica: foto de corpo inteiro, de frente, com fundo simples.</span></div>
@@ -233,8 +234,15 @@ Promise.all([fetch("/",{cache:"no-cache"}).then(r=>r.text()),fetch("/monta-o-loo
   TIPO=tp;const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
   P=all.filter(p=>p.status!=="vendido"&&(p.foto||(p.fotos&&p.fotos[0]))&&CATS.includes(p.cat)).map(p=>({id:p.id,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));
   tabs();(qs.get("p")||"").split(",").filter(Boolean).forEach(id=>{const p=P.find(x=>x.id===id);if(p)add(p)});select(-1);
-}).catch(()=>{$("#strip").textContent="—"});
+}).catch(()=>{$("#strip").innerHTML='<button type="button" class="btn" onclick="location.reload()">↻ '+(LANG==="pt"?"Tentar outra vez":"Try again")+'</button>'});
 })();
+</script>
+<script>
+(function(){var ua=navigator.userAgent;if(!/iPhone|iPad|iPod|Android/.test(ua))return;if(!/GSA\/|Instagram|FBAN|FBAV|TikTok|musical_ly|Line\//.test(ua))return;
+var pt=(document.documentElement.lang||"pt").indexOf("pt")===0,el=document.getElementById("inapp");if(!el)return;
+var ios=/iPhone|iPad|iPod/.test(ua);
+el.innerHTML=(pt?"⚠️ Está a abrir dentro de outra app. Se a foto não carregar, abra no "+(ios?"Safari":"Chrome")+": ":"⚠️ You're inside another app. If your photo won't load, open in "+(ios?"Safari":"Chrome")+": ")+'<button type="button" id="cpl" style="border:0;background:var(--rose);color:#fff;border-radius:999px;padding:6px 12px;font:600 13px inherit;cursor:pointer">'+(pt?"Copiar link":"Copy link")+"</button>";
+el.style.display="block";document.getElementById("cpl").onclick=function(e){var u="https://benditocloset.pt/monta-o-look/";(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(function(){}).then(function(){e.target.textContent=pt?"Copiado ✓ cole no "+(ios?"Safari":"Chrome"):"Copied ✓"})}})();
 </script>
 </body>
 </html>
