@@ -84,10 +84,13 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <label>Nome<input id="nome" autocomplete="name" required></label>
 <label>E-mail<input id="mail" type="email" autocomplete="email" required></label>
 <label>Telemóvel<input id="tel" type="tel" autocomplete="tel" required></label>
-<label>Publicação ou empresa<input id="pub" autocomplete="organization"></label>
+<label>Publicação ou empresa onde vão sair as peças *<input id="pub" autocomplete="organization" required placeholder="Ex.: revista, jornal, marca, agência"></label>
+<label>Site ou @ da publicação *<input id="link" required placeholder="Ex.: www.revista.pt ou @revista"></label>
 <label>NIF (opcional)<input id="nif" inputmode="numeric"></label>
 </div>
-<label>Produção (editorial, sessão, conteúdo…) e notas<textarea id="obs" rows="3"></textarea></label>
+<label>Produção: o que vão fazer e onde vai ser publicado *<textarea id="prod" rows="3" required placeholder="Ex.: editorial de moda de inverno, edição impressa de janeiro e Instagram"></textarea></label>
+<label>Data prevista de publicação *<input id="dpub" required placeholder="Ex.: janeiro de 2027"></label>
+<label>Notas (opcional)<textarea id="obs" rows="2"></textarea></label>
 
 <h3 class="h3">5. Assinatura do contrato</h3>
 <p class="steps">Leia o <a href="#contrato">contrato</a> abaixo e assine com o dedo (ou o rato) no quadro.</p>
@@ -120,7 +123,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <ol>
 <li>A Cedente empresta ao Utilizador as peças indicadas no pedido feito nesta página e confirmado pela Cedente por e-mail, com a indicação do <b>valor de cada peça</b>, da data de entrega e da data de devolução («Acordo»).</li>
 <li>O prazo do empréstimo é de <b>até 15 dias</b> a contar da entrega, salvo acordo diferente.</li>
-<li>As peças destinam-se apenas à produção indicada no Acordo (editorial, sessão fotográfica ou conteúdo).</li>
+<li>As peças destinam-se apenas à produção indicada no pedido (editorial, sessão fotográfica ou conteúdo), para a publicação e a data de publicação aí indicadas. O Utilizador envia à Cedente o link ou a imagem da publicação quando sair.</li>
 <li>O empréstimo não tem custo, salvo acordo diferente. Sempre que as peças forem publicadas, o Utilizador credita a Bendito Closet (@benditocloset.pt).</li>
 </ol>
 
@@ -159,7 +162,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <div id="signed" hidden>
 <h2>8. Assinatura</h2>
 <p>Pedido <b class="sc"></b> · caução <b class="sv"></b> · <span class="spo"></span><br>Peças: <span class="sp"></span><br>Entrega: <span class="sd1"></span> · devolução até <span class="sd2"></span></p>
-<p>Utilizador: <b class="sn"></b><br>Assinado no site em <span class="st"></span></p>
+<p>Publicação: <span class="spub"></span><br>Utilizador: <b class="sn"></b><br>Assinado no site em <span class="st"></span></p>
 <img alt="Assinatura">
 </div>
 </main>
@@ -190,6 +193,10 @@ function problem(){
  if($("tel").value.replace(/\D/g,"").length<9)return "Escreva o seu telemóvel.";
  if(pts<15)return "Assine o contrato no quadro.";
  if($("sname").value.trim().split(/\s+/).length<2)return "Escreva o seu nome completo junto da assinatura.";
+ if($("pub").value.trim().length<2)return "Escreva a publicação ou empresa onde vão sair as peças.";
+ if($("link").value.trim().length<3)return "Escreva o site ou o @ da publicação.";
+ if($("prod").value.trim().length<10)return "Descreva a produção e onde vai ser publicada.";
+ if($("dpub").value.trim().length<3)return "Escreva a data prevista de publicação.";
  if(!$("ok").checked)return "Marque a caixa para aceitar e assinar o contrato.";
  return "";}
 const cv=$("sig"),cx=cv.getContext("2d");let strokes=0,pts=0,draw=false,last=null;
@@ -223,7 +230,7 @@ $("go").addEventListener("click",async()=>{
   "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":SH==="mao"?"—":"por conta da Bendito Closet","Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
   "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":$("mor").value.trim(),
   "Nome":$("nome").value.trim(),"E-mail":$("mail").value.trim(),_replyto:$("mail").value.trim(),"Telemóvel":$("tel").value.trim(),
-  "Publicação/empresa":$("pub").value.trim(),"NIF":$("nif").value.trim(),"Produção e notas":$("obs").value.trim(),
+  "Publicação/empresa":$("pub").value.trim(),"Site ou @":$("link").value.trim(),"Produção e onde sai":$("prod").value.trim(),"Data prevista de publicação":$("dpub").value.trim(),"NIF":$("nif").value.trim(),"Notas":$("obs").value.trim(),
   "Contrato":"Aceite no site (versão de 25/11/2026)"};
  const when=new Date();data["Assinado por"]=$("sname").value.trim();data["Data e hora da assinatura"]=when.toLocaleString("pt-PT")+" ("+Intl.DateTimeFormat().resolvedOptions().timeZone+")";data["Dispositivo"]=navigator.userAgent;
  data.email=$("mail").value.trim();data._autoresponse="Recebemos o seu pedido de empréstimo "+CODE+" (caução de "+fmt(V)+(portes()?" + portes ida e volta "+fmt(portes()):"")+"). Assinou o contrato em "+data["Data e hora da assinatura"]+". A Marianna confirma as peças e as datas por e-mail. Contrato: https://benditocloset.pt/emprestimo/";
@@ -231,7 +238,7 @@ $("go").addEventListener("click",async()=>{
  let ok=false;
  try{const f=new FormData();Object.entries(data).forEach(([k,v])=>f.append(k,v));f.append("attachment",new File([blob],"assinatura-"+CODE+".png",{type:"image/png"}));const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Accept":"application/json"},body:f});ok=r.ok;}catch(e){}
  if(!ok){try{data["Assinatura"]="(imagem não anexada)";const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});ok=r.ok;}catch(e){}}
- const sg=$("signed");sg.querySelector(".sc").textContent=CODE;sg.querySelector(".sv").textContent=fmt(V);sg.querySelector(".spo").textContent=ent()+(portes()?" ("+fmt(portes())+")":"");sg.querySelector(".sp").textContent=data["Peças"];sg.querySelector(".sd1").textContent=data["Entrega"];sg.querySelector(".sd2").textContent=data["Devolução até"];sg.querySelector(".sn").textContent=data["Assinado por"];sg.querySelector(".st").textContent=data["Data e hora da assinatura"];sg.querySelector("img").src=png.toDataURL("image/png");
+ const sg=$("signed");sg.querySelector(".sc").textContent=CODE;sg.querySelector(".sv").textContent=fmt(V);sg.querySelector(".spo").textContent=ent()+(portes()?" ("+fmt(portes())+")":"");sg.querySelector(".sp").textContent=data["Peças"];sg.querySelector(".sd1").textContent=data["Entrega"];sg.querySelector(".sd2").textContent=data["Devolução até"];sg.querySelector(".sn").textContent=data["Assinado por"];sg.querySelector(".spub").textContent=data["Publicação/empresa"]+" ("+data["Site ou @"]+") · "+data["Produção e onde sai"]+" · "+data["Data prevista de publicação"];sg.querySelector(".st").textContent=data["Data e hora da assinatura"];sg.querySelector("img").src=png.toDataURL("image/png");
  if(!ok){go.disabled=false;go.textContent="Tentar outra vez";$("err").innerHTML='Não foi possível enviar o pedido. Tente outra vez ou envie-o para <a href="mailto:ola@benditocloset.pt?subject='+encodeURIComponent("Pedido de empréstimo "+CODE)+'&body='+encodeURIComponent(Object.entries(data).filter(([k])=>k[0]!=="_").map(([k,v])=>k+": "+v).join("\n"))+'">ola@benditocloset.pt</a>.';$("err").hidden=false;return;}
  let wurl="";try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/caucao",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,ship:SH,email:$("mail").value.trim(),ids:[...S],d1:$("d1").value,d2:$("d2").value})});const o=await r.json();if(r.ok&&o.url&&Math.abs(o.total-(V+portes()))<0.01)wurl=o.url;}catch(e){}
  $("code").textContent=CODE;$("c2").textContent=CODE;$("v2").textContent=num(V+portes())+" €";
