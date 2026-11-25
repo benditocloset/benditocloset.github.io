@@ -83,7 +83,7 @@ const M={pt:{pick2:"🖼️ Trocar a foto",need:"Primeiro escolha uma foto sua."
  en:{pick2:"🖼️ Change photo",need:"First pick a photo of yourself.",needP:"Now pick a piece.",wait:"Dressing you up… (about 20 seconds)",check:"Checking the photo…",okp:"Photo ready ✓",okFull:"Photo ready ✓ Full body: you can try any piece.",okHalf:"Photo ready ✓ Half body: works for tops, shirts and jackets. For trousers and dresses, use a full-body photo.",noBody:"This photo only shows your face. The AI needs to see your body, at least down to the waist. Pick another photo (so you don't use up a try-on).",needLegs:"For trousers, skirts and dresses the AI needs to see your full body. Pick a full-body photo, or a top/jacket.",err:"Couldn't create the try-on this time. Try another photo with your face clearly visible and good light.",lim:"You've used today's 5 try-ons. Come back tomorrow!",day:"The fitting room is full today. Come back tomorrow!",bad:"Couldn't open this photo. Try another one.",buy:"I want this piece",save:"Save the photo",again:"Try another piece",stack:"Add another piece to this look",stackOk:"Your photo is now this look ✓ Pick the next piece (for example, a top to go with the trousers).",cover:"Make a magazine cover with this photo",before:"Before",after:"Wearing it"}}[LANG];
 if(LANG==="en"){document.documentElement.lang="en";document.querySelectorAll("[data-t]").forEach(e=>{const v=TX.en[e.dataset.t];if(v)e.textContent=v})}
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
-let ME=null,MEsrc="",P=[],PICK=null,BUSY=false,BODY=null;
+let ME=null,MEsrc="",P=[],PICK=[],BUSY=false,BODY=null;
 let DONO="";try{const d=new URLSearchParams(location.search).get("dono");if(d)localStorage.setItem("bc-dono",d);DONO=localStorage.getItem("bc-dono")||""}catch(e){}
 let PL=null;async function poseModel(){if(PL)return PL;const v=await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs");const fs=await v.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");PL=await v.PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"},runningMode:"IMAGE",numPoses:1});return PL}
 /* Verifica no telemóvel (sem gastar créditos) se a foto mostra o corpo: ombros e, se possível, ancas */
@@ -98,35 +98,44 @@ function trimShot(i){return new Promise(res=>{try{const w=i.naturalWidth,h=i.nat
 function ready(){$("#go").disabled=BUSY||(BODY&&BODY!=="wait"&&!BODY.sh)}
 $("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const i=new Image();
  i.onload=async()=>{ME=await trimShot(i);MEsrc=shrink(ME,1024);$("#meImg").src=MEsrc;$("#me").hidden=false;$("#fileT").textContent=M.pick2;BODY="wait";$("#meOk").textContent=M.check;ready();BODY=await bodyCheck(ME);$("#meOk").textContent=!BODY?M.okp:!BODY.sh?M.noBody:BODY.hip?M.okFull:M.okHalf;$("#meOk").style.color=BODY&&!BODY.sh?"#A21B3F":"";ready();
-   if(!PICK)$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
+   if(!PICK.length)$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
  i.onerror=()=>alert(M.bad);i.src=URL.createObjectURL(f);e.target.value=""});
-function paint(){$("#pcs").innerHTML=P.map(p=>`<button type="button" data-id="${p.id}" aria-pressed="${p.id===PICK}"><span class="ph"><img src="/${p.foto}" alt="${p.marca}" loading="lazy"></span><small>${p.marca}</small><b>${fmt(p.preco)}</b></button>`).join("");const s=P.find(p=>p.id===PICK);$("#pickT").textContent=s?(LANG==="pt"?"Escolhida: ":"Selected: ")+s.marca+" · "+fmt(s.preco):(LANG==="pt"?"Deslize para o lado para ver todas as peças →":"Swipe sideways to see all pieces →")}
-$("#pcs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;PICK=b.dataset.id;paint();ready();if(ME)$("#go").scrollIntoView({behavior:"smooth",block:"center"})});
+function paint(){$("#pcs").innerHTML=P.map(p=>`<button type="button" data-id="${p.id}" aria-pressed="${PICK.includes(p.id)}"><span class="ph"><img src="/${p.foto}" alt="${p.marca}" loading="lazy"></span><small>${p.marca}</small><b>${fmt(p.preco)}</b></button>`).join("");const sel=PICK.map(id=>P.find(p=>p.id===id)).filter(Boolean);$("#pickT").textContent=sel.length?(LANG==="pt"?(sel.length>1?"Escolhidas: ":"Escolhida: "):"Selected: ")+sel.map(s=>s.marca+" · "+fmt(s.preco)).join(" + "):(LANG==="pt"?"Pode escolher até 3 peças (por exemplo, calças + blusa). Deslize para o lado para ver todas →":"You can pick up to 3 pieces (e.g. trousers + top). Swipe sideways to see all →")}
+$("#pcs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const id=b.dataset.id,c=VTO[id];
+ if(PICK.includes(id))PICK=PICK.filter(x=>x!==id);
+ else{ if(c==="one-pieces")PICK=PICK.filter(x=>VTO[x]==="tops"); else if(c==="bottoms")PICK=PICK.filter(x=>VTO[x]==="tops");
+   if(c!=="tops"&&PICK.some(x=>VTO[x]==="one-pieces"||VTO[x]==="bottoms"))PICK=PICK.filter(x=>VTO[x]==="tops");
+   PICK.push(id); if(PICK.length>3)PICK.shift()}
+ paint();ready()});
 async function poll(id){for(let i=0;i<50;i++){await new Promise(z=>setTimeout(z,2000));const s=await (await fetch(TRYON_API+"/status/"+id)).json();if(s.status==="completed"&&s.output&&s.output[0])return {out:s.output[0]};if(s.status==="failed")return {err:s.error||"failed"}}return {err:"timeout"}}
 const asData=o=>/^data:|^https?:/.test(o)?o:"data:image/jpeg;base64,"+o;
 async function run(path,body){const h={"Content-Type":"application/json"};if(DONO)h["X-Bendito-Dono"]=DONO;const r=await fetch(TRYON_API+path,{method:"POST",headers:h,body:JSON.stringify(body)});const o=await r.json().catch(()=>({}));return r.ok?o:{fail:o.error||"x"}}
 const show=h=>{const r=$("#res");r.hidden=false;r.innerHTML=h;r.scrollIntoView({behavior:"smooth",block:"start"})};
 const lim=e=>e==="limit_user"?M.lim:e==="limit_day"?M.day:M.err;
-$("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}const p=P.find(x=>x.id===PICK);if(!p){alert(M.needP);$("#pcs").scrollIntoView({behavior:"smooth",block:"center"});return}
+$("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
+ const ord={"one-pieces":0,bottoms:1,tops:2},sel=PICK.map(id=>P.find(p=>p.id===id)).filter(Boolean).sort((a,b)=>ord[VTO[a.id]]-ord[VTO[b.id]]);
+ if(!sel.length){alert(M.needP);$("#pcs").scrollIntoView({behavior:"smooth",block:"center"});return}
  if(BODY==="wait"){show('<div class="spin"></div><p>'+M.check+'</p>');for(let k=0;k<30&&BODY==="wait";k++)await new Promise(z=>setTimeout(z,500))}
  if(BODY&&BODY!=="wait"&&!BODY.sh){show('<p>'+M.noBody+'</p>');return}
- if(BODY&&BODY!=="wait"&&!BODY.hip&&VTO[p.id]!=="tops"){show('<p>'+M.needLegs+'</p>');return}
- BUSY=true;ready();show('<div class="spin"></div><p>'+M.wait+'</p>');
- try{const gar="https://benditocloset.pt/"+p.foto,cat=VTO[p.id];
-  let o=await run("/run",{model_image:MEsrc,garment_image:gar,category:cat});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
-  let r=await poll(o.id);
-
-  if(!r.out){show('<p>'+M.err+'</p>');return}
-  const src=asData(r.out);try{sessionStorage.setItem("bc-ai-last",src)}catch(e){}
-  show(`<img src="${src}" alt="${p.marca}"><p style="margin:0 0 4px;font-weight:600">${p.marca} · ${p.nome||""} · ${fmt(p.preco)}</p>
-   <div class="acts"><a class="btn go" href="/?peca=${encodeURIComponent(p.id)}">${M.buy}</a><a class="btn" href="${src}" download="bendito-provador.jpg">${M.save}</a><button class="btn dark" type="button" id="stack">${M.stack}</button><button class="btn out" type="button" id="again">${M.again}</button></div>`);
+ if(BODY&&BODY!=="wait"&&!BODY.hip&&sel.some(p=>VTO[p.id]!=="tops")){show('<p>'+M.needLegs+'</p>');return}
+ BUSY=true;ready();
+ try{let cur=MEsrc,src="";
+  for(let i=0;i<sel.length;i++){const p=sel[i];
+   show('<div class="spin"></div><p>'+(sel.length>1?(LANG==="pt"?`Peça ${i+1} de ${sel.length}: ${p.marca}. `:`Piece ${i+1} of ${sel.length}: ${p.marca}. `):"")+M.wait+'</p>');
+   const o=await run("/run",{model_image:cur,garment_image:"https://benditocloset.pt/"+p.foto,category:VTO[p.id]});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
+   const r=await poll(o.id);if(!r.out){show('<p>'+M.err+'</p>');return}
+   src=asData(r.out);cur=src}
+  try{sessionStorage.setItem("bc-ai-last",src)}catch(e){}
+  const tot=sel.reduce((a,p)=>a+(+p.preco||0),0);
+  show(`<img src="${src}" alt=""><p style="margin:0 0 4px;font-weight:600">${sel.map(p=>p.marca+" · "+fmt(p.preco)).join(" + ")}${sel.length>1?" = "+fmt(tot):""}</p>
+   <div class="acts">${sel.map(p=>`<a class="btn go" href="/?peca=${encodeURIComponent(p.id)}">${M.buy}${sel.length>1?": "+p.marca:""}</a>`).join("")}<a class="btn" href="${src}" download="bendito-provador.jpg">${M.save}</a><button class="btn dark" type="button" id="stack">${M.stack}</button><button class="btn out" type="button" id="again">${M.again}</button></div>`);
   $("#again").onclick=()=>{$("#res").hidden=true;$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
-  $("#stack").onclick=()=>{const n=new Image();n.onload=()=>{ME=n;MEsrc=shrink(n,1024);$("#meImg").src=MEsrc;BODY={sh:true,hip:true};$("#meOk").textContent=M.stackOk;$("#meOk").style.color="";$("#res").hidden=true;PICK=null;paint();ready();$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};n.src=src};
+  $("#stack").onclick=()=>{const n=new Image();n.onload=()=>{ME=n;MEsrc=shrink(n,1024);$("#meImg").src=MEsrc;BODY={sh:true,hip:true};$("#meOk").textContent=M.stackOk;$("#meOk").style.color="";$("#res").hidden=true;PICK=[];paint();ready();$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};n.src=src};
   try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}
  }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready()}};
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
  P=all.filter(p=>p.status!=="vendido"&&VTO[p.id]&&(p.foto||(p.fotos&&p.fotos[0]))).map(p=>({id:p.id,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));
- const q=new URLSearchParams(location.search).get("peca");if(q&&P.some(p=>p.id===q))PICK=q;paint()}).catch(()=>{$("#pcs").textContent="—"});
+ const q=new URLSearchParams(location.search).get("peca");if(q&&P.some(p=>p.id===q))PICK=[q];paint()}).catch(()=>{$("#pcs").textContent="—"});
 })();
 </script>
 <script src="/cookies.js" defer></script>
