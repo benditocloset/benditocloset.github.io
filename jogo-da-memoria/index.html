@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jogo da memória · Bendito Closet</title>
+<meta name="description" content="Encontre os 8 pares de peças do Bendito Closet e ganhe 10% de desconto na primeira compra.">
+<meta property="og:title" content="Jogo da memória do Bendito Closet">
+<meta property="og:description" content="Encontre os 8 pares de peças de marca e ganhe 10% de desconto.">
+<meta property="og:image" content="https://benditocloset.pt/img/versace-bolsa-modelo.jpg">
+<link rel="icon" href="/img/logo.jpg">
+<link rel="manifest" href="/manifest.webmanifest">
+<style>
+@font-face{font-family:"Bodoni Moda";font-style:italic;font-weight:400 600;src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:400 700;src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2")}
+:root{--ink:#1C1517;--rose:#A21B3F;--cream:#F8F4EE;--gold:#C9A46A;--line:#E8DDD2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 16px/1.5 "DM Sans",system-ui,sans-serif}
+header{background:var(--ink);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+header a{color:#fff;text-decoration:none;letter-spacing:.14em;font-size:13px;text-transform:uppercase}
+.wrap{max-width:620px;margin:0 auto;padding:22px 14px 60px;text-align:center}
+.eb{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);font-weight:600}
+h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(34px,8vw,52px);line-height:1.05;margin:6px 0 8px}
+.sub{margin:0 auto 18px;max-width:440px;color:#4b4245}
+.hud{display:flex;justify-content:center;gap:10px;margin-bottom:16px}
+.hud div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 14px;min-width:92px}
+.hud small{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#7a6f72}.hud b{font-size:21px;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;perspective:900px}
+.cd{aspect-ratio:3/4;position:relative;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.cd .f,.cd .v{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.cd .v{background:var(--ink) url(/img/logo.jpg) center/88% no-repeat;box-shadow:0 8px 18px -10px rgba(0,0,0,.6);border:1px solid #3a2f32}
+.cd .f{transform:rotateY(180deg);background:#eee}
+.cd .f img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.cd .f span{position:absolute;left:0;right:0;bottom:0;background:rgba(28,21,23,.78);color:#fff;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 2px;opacity:0;transition:opacity .3s}
+.cd.on{transform:rotateY(180deg)}
+.cd.ok .f{box-shadow:0 0 0 3px var(--gold)}.cd.ok .f span{opacity:1}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--rose);color:#fff;font:600 15px/1 "DM Sans",sans-serif;padding:15px 24px;border-radius:999px;text-decoration:none}
+.btn.dark{background:var(--ink)}.btn.out{background:#fff;color:var(--ink);border:1px solid var(--line)}
+#novo{margin-top:18px}
+.fim{position:fixed;inset:0;background:rgba(10,6,8,.72);display:none;place-items:center;z-index:40;padding:16px}
+.fim.on{display:grid}
+.box{background:#fff;border-radius:22px;padding:26px 22px;max-width:390px;width:100%;text-align:center;max-height:92vh;overflow:auto}
+.box h2{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;font-size:34px;margin:0 0 4px}
+.cupao{font:700 26px "DM Sans";letter-spacing:.14em;border:2px dashed var(--rose);border-radius:12px;padding:12px;margin:12px 0 8px;color:var(--rose)}
+.small{font-size:13.5px;color:#5b5154;margin:0 0 14px}
+.acts{display:grid;gap:8px}
+.pcs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 4px}
+.pcs a{display:block;border-radius:8px;overflow:hidden;aspect-ratio:3/4}.pcs img{width:100%;height:100%;object-fit:cover;object-position:50% 12%}
+.x{position:absolute;right:14px;top:8px;border:0;background:none;font-size:28px;cursor:pointer}
+@media(prefers-reduced-motion:reduce){.cd{transition:none}}
+</style>
+</head>
+<body>
+<header><a href="/">← Bendito Closet</a><a href="/estilo/">Quiz</a></header>
+<div class="wrap">
+  <div class="eb">Novo · Jogo da memória</div>
+  <h1>Encontre os pares</h1>
+  <p class="sub">8 pares de peças de marca do meu closet. Encontre todos e ganhe <b>10% de desconto</b> na sua primeira compra.</p>
+  <div class="hud"><div><small>Tempo</small><b id="t">0,0s</b></div><div><small>Jogadas</small><b id="j">0</b></div><div><small>Recorde</small><b id="r">—</b></div></div>
+  <div class="grid" id="g"></div>
+  <button class="btn out" id="novo" type="button">Baralhar de novo</button>
+</div>
+<div class="fim" id="fim" role="dialog" aria-modal="true" aria-labelledby="fimT"><div class="box" style="position:relative">
+  <button class="x" id="fx" type="button" aria-label="Fechar">×</button>
+  <h2 id="fimT">Conseguiu!</h2>
+  <p id="res" style="margin:0"></p>
+  <div class="cupao">BENDITO10</div>
+  <p class="small">10% na primeira compra. O cupão já ficou guardado: entra sozinho quando pagar com cartão no site. Se comprar pelo WhatsApp, diga este código.</p>
+  <div class="acts">
+    <a class="btn" href="/#grid">Usar o cupão nas peças</a>
+    <button class="btn dark" id="part" type="button">Desafiar uma amiga</button>
+    <button class="btn out" id="outra" type="button">Jogar outra vez</button>
+  </div>
+  <div class="pcs" id="pcs"></div>
+  <p class="small" style="margin-top:6px">As peças deste jogo. Cada uma existe uma única vez.</p>
+</div></div>
+<div id="toast" style="position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .3s;z-index:60;pointer-events:none"></div>
+<script>
+const P=[
+ {id:"versace-bolsa",m:"Versace",f:"versace-bolsa-modelo.jpg"},
+ {id:"golden-goose-superstar",m:"Golden Goose",f:"golden-goose-superstar-modelo.jpg"},
+ {id:"gucci-gframe",m:"Gucci",f:"gucci-gframe-modelo.jpg"},
+ {id:"nike-mind-002",m:"Nike",f:"nike-mind-modelo.jpg"},
+ {id:"guess-casaco-2",m:"Guess",f:"guess-vinho-modelo.jpg"},
+ {id:"blueman-vestido-mata",m:"Blue Man",f:"blueman-vestido-modelo.jpg"},
+ {id:"shein-blusa-rosa",m:"Shein",f:"shein-blusa-modelo.jpg"},
+ {id:"zara-botas-camurca",m:"Zara",f:"zara-botas-camurca-modelo.jpg"}];
+P.forEach(p=>{const i=new Image();i.src="/img/"+p.f});
+let open=[],lock=false,ok=0,jog=0,t0=0,tick;
+const $=s=>document.querySelector(s),g=$("#g"),T=$("#t"),J=$("#j"),R=$("#r");
+let rec=null;try{rec=+localStorage.getItem("bc-mem-rec")||null}catch(e){}
+const fmt=s=>s.toFixed(1).replace(".",",")+"s";R.textContent=rec?fmt(rec):"—";
+function toast(m){const t=$("#toast");t.textContent=m;t.style.opacity=1;clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.opacity=0,3000)}
+function novo(){clearInterval(tick);t0=0;ok=0;jog=0;open=[];lock=false;T.textContent="0,0s";J.textContent=0;
+ const d=[...P,...P].map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+ g.innerHTML=d.map(p=>`<button class="cd" type="button" data-id="${p.id}" aria-label="Carta virada"><span class="v"></span><span class="f"><img src="/img/${p.f}" alt="${p.m}"><span>${p.m}</span></span></button>`).join("")}
+g.onclick=e=>{const c=e.target.closest(".cd");if(!c||lock||c.classList.contains("on"))return;
+ if(!t0){t0=performance.now();tick=setInterval(()=>T.textContent=fmt((performance.now()-t0)/1000),100)}
+ c.classList.add("on");c.setAttribute("aria-label",c.querySelector("img").alt);open.push(c);
+ if(open.length===2){jog++;J.textContent=jog;const[a,b]=open;
+  if(a.dataset.id===b.dataset.id){a.classList.add("ok");b.classList.add("ok");open=[];ok++;if(ok===P.length)setTimeout(fim,500)}
+  else{lock=true;setTimeout(()=>{a.classList.remove("on");b.classList.remove("on");a.setAttribute("aria-label","Carta virada");b.setAttribute("aria-label","Carta virada");open=[];lock=false},750)}}};
+let ULT=0;
+function fim(){clearInterval(tick);const s=(performance.now()-t0)/1000;ULT=s;
+ if(!rec||s<rec){rec=s;try{localStorage.setItem("bc-mem-rec",s)}catch(e){}R.textContent=fmt(rec)}
+ try{if(!localStorage.getItem("bc-cupao"))localStorage.setItem("bc-cupao","BENDITO10")}catch(e){}
+ $("#res").innerHTML=`Encontrou os 8 pares em <b>${fmt(s)}</b> e <b>${jog}</b> jogadas.`;
+ $("#pcs").innerHTML=P.map(p=>`<a href="/?peca=${p.id}"><img src="/img/${p.f}" alt="${p.m}" loading="lazy"></a>`).join("");
+ $("#fim").classList.add("on");try{typeof fbq==="function"&&fbq("trackCustom","JogoMemoria")}catch(e){}}
+$("#fim").onclick=e=>{if(e.target.id==="fim")e.currentTarget.classList.remove("on")};
+$("#fx").onclick=()=>$("#fim").classList.remove("on");
+$("#outra").onclick=()=>{$("#fim").classList.remove("on");novo()};
+$("#part").onclick=async()=>{const txt=`Encontrei os 8 pares do Bendito Closet em ${fmt(ULT)}. Consegue fazer melhor? E ainda ganha 10% de desconto:`,url="https://benditocloset.pt/jogo-da-memoria/";
+ try{if(navigator.share){await navigator.share({text:txt,url});return}}catch(e){if(e&&e.name==="AbortError")return}
+ location.href="https://wa.me/?text="+encodeURIComponent(txt+" "+url)};
+$("#novo").onclick=novo;novo();
+</script>
+<script src="/cookies.js" defer></script>
+</body>
+</html>
