@@ -35,6 +35,59 @@ async function avisar(env, motivo) {
   await env.LIMITS.put(k, "1", { expirationTtl: 172800 });
   return motivo;
 }
+// Empréstimo de peças: cria o pagamento da caução na Stripe com o valor calculado aqui,
+// a partir dos preços publicados no site. Segredo na Cloudflare: STRIPE_KEY (chave restrita, só "Checkout Sessions: escrita").
+// Portes de ida e volta por conta da Bendito Closet (decisão de 25/11/2026): o pagamento é só a caução.
+const PORTES = { envio: [0, 0], mao: [0, 0] };
+const PORTES_NOME = { envio: "Envio para a morada (portes ida e volta pela Bendito Closet)", mao: "Levantamento em mão (Ermesinde)" };
+async function pecasDoSite() {
+  const h = await (await fetch("https://benditocloset.pt/?w=" + Math.floor(Date.now() / 300000), { cf: { cacheTtl: 300 } })).text();
+  const m = h.match(/const PECAS = (\[[\s\S]*?\n\]);/); const P = {};
+  if (!m) return P;
+  for (const l of m[1].split("\n")) {
+    const id = l.match(/^\s*\{\s*id:"([^"]+)"/); if (!id) continue;
+    const g = k => { const r = l.match(new RegExp("\\b" + k + ":\\s*\"([^\"]*)\"")); return r ? r[1] : ""; };
+    const pr = l.match(/\bpreco:\s*([\d.]+)/);
+    P[id[1]] = { cat: g("cat"), marca: g("marca"), nome: g("nome"), status: g("status"), preco: pr ? +pr[1] : 0 };
+  }
+  return P;
+}
+async function caucao(req, env, j) {
+  if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const code = String(b.code || ""), ship = String(b.ship || ""), email = String(b.email || "").trim(), ids = Array.isArray(b.ids) ? b.ids.map(String) : [];
+  const d1 = String(b.d1 || ""), d2 = String(b.d2 || "");
+  if (!/^BC-[A-Z0-9]{4}$/.test(code) || !PORTES[ship] || !/^\S+@\S+\.\S+$/.test(email) || !ids.length || ids.length > 30 || !/^\d{4}-\d{2}-\d{2}$/.test(d1) || !/^\d{4}-\d{2}-\d{2}$/.test(d2)) return j({ error: "dados" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `cau:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 15) return j({ error: "limite" }, 429);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  const P = await pecasDoSite(), sel = [];
+  for (const id of new Set(ids)) { const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 400); sel.push(p); }
+  const cau = Math.round(sel.reduce((a, p) => a + p.preco, 0) * 100);
+  const big = sel.some(p => !["roupas", "acessorios"].includes(p.cat));
+  const portes = PORTES[ship][big ? 1 : 0] * 2 * 100;
+  const lista = sel.map(p => `${p.marca} ${p.nome} (${p.preco} €)`).join("; ");
+  const fd = d => d.split("-").reverse().join("/");
+  const f = new URLSearchParams();
+  f.set("mode", "payment"); f.set("locale", "pt"); f.set("customer_email", email); f.set("client_reference_id", code);
+  f.set("success_url", "https://benditocloset.pt/emprestimo/?pago=" + code); f.set("cancel_url", "https://benditocloset.pt/emprestimo/#caucao");
+  f.set("line_items[0][quantity]", "1"); f.set("line_items[0][price_data][currency]", "eur"); f.set("line_items[0][price_data][unit_amount]", String(cau));
+  f.set("line_items[0][price_data][product_data][name]", "Caução (devolvida) · pedido " + code);
+  f.set("line_items[0][price_data][product_data][description]", lista.slice(0, 480));
+  if (portes) {
+    f.set("line_items[1][quantity]", "1"); f.set("line_items[1][price_data][currency]", "eur"); f.set("line_items[1][price_data][unit_amount]", String(portes));
+    f.set("line_items[1][price_data][product_data][name]", "Portes ida e volta · " + PORTES_NOME[ship]);
+  }
+  const meta = { pedido: code, pecas: lista.slice(0, 490), datas: fd(d1) + " a " + fd(d2), envio: PORTES_NOME[ship], caucao_eur: (cau / 100).toFixed(2), portes_eur: (portes / 100).toFixed(2) };
+  for (const [a, v] of Object.entries(meta)) { f.set(`metadata[${a}]`, v); f.set(`payment_intent_data[metadata][${a}]`, v); }
+  f.set("payment_intent_data[description]", "Empréstimo " + code + " · caução " + (cau / 100) + " € + portes " + (portes / 100) + " €");
+  const call = body => fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body });
+  const f2 = new URLSearchParams(f); ["card", "mb_way", "multibanco"].forEach((t, i) => f2.set(`payment_method_types[${i}]`, t));
+  let r = await call(f2.toString()), o = await r.json();
+  if (!r.ok) { r = await call(f.toString()); o = await r.json(); }
+  if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
+  return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100 });
+}
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
@@ -43,6 +96,7 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: cors });
     const url = new URL(req.url);
     if (url.pathname === "/") return j({ ok: true, service: "bendito-provador" });
+    if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);
     if (url.pathname === "/run" && req.method === "POST") {
       const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
