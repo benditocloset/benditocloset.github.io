@@ -52,7 +52,12 @@ export default {
       const r = await fetch("https://api.fashn.ai/v1/run", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.FASHN_KEY },
         body: JSON.stringify({ model_name: "tryon-max", inputs: { model_image: b.model_image, product_image: b.garment_image, prompt: (PROMPT[category] || PROMPT.auto) + (HINT[b.hint] || "") + (category === "accessories" ? KEEP_ACC : KEEP) + (category === "tops" ? (b.jeans ? JEANS_ALL : JEANS_BARE) : (FILL[category] || "")), resolution: "1k", generation_mode: "balanced", return_base64: true, output_format: "jpeg" } }) });
       let o = {}; try { o = await r.json(); } catch (e) {}
-      if (!r.ok || !o.id) return j({ error: "fashn", detail: (o.error && (o.error.name || o.error.message || o.error)) || r.status }, 502);
+      if (!r.ok || !o.id) {
+        const det = String((o.error && (o.error.name || o.error.message || o.error)) || r.status);
+        // Sem créditos na FASHN: mostrar "provador cheio hoje" em vez de erro
+        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) return j({ error: "limit_day" }, 429);
+        return j({ error: "fashn", detail: det }, 502);
+      }
       if (!dono) {
         await env.LIMITS.put(kIp, String(nIp + 1), { expirationTtl: 172800 });
         await env.LIMITS.put(kAll, String(nAll + 1), { expirationTtl: 172800 });
@@ -81,7 +86,12 @@ export default {
       const r = await fetch("https://api.fashn.ai/v1/run", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.FASHN_KEY },
         body: JSON.stringify({ model_name: "face-to-model", inputs: { face_image: b.face_image, aspect_ratio: "2:3", resolution: "1k", generation_mode: "fast", return_base64: true, output_format: "jpeg" } }) });
       let o = {}; try { o = await r.json(); } catch (e) {}
-      if (!r.ok || !o.id) return j({ error: "fashn", detail: (o.error && (o.error.name || o.error.message || o.error)) || r.status }, 502);
+      if (!r.ok || !o.id) {
+        const det = String((o.error && (o.error.name || o.error.message || o.error)) || r.status);
+        // Sem créditos na FASHN: mostrar "provador cheio hoje" em vez de erro
+        if (r.status === 402 || /credit|balance|quota|insufficient/i.test(det)) return j({ error: "limit_day" }, 429);
+        return j({ error: "fashn", detail: det }, 502);
+      }
       if (!dono) {
         await env.LIMITS.put(kIp, String(nIp + 1), { expirationTtl: 172800 });
         await env.LIMITS.put(kAll, String(nAll + 1), { expirationTtl: 172800 });
