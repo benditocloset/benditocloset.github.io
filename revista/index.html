@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bendito Edit · Nº 01 · Dezembro 2026</title>
+<meta name="description" content="A revista mensal do Bendito Closet: 4 looks para as festas com peças reais, a peça do mês e presentes até 20 €.">
+<meta property="og:title" content="Bendito Edit · Nº 01 · Dezembro">
+<meta property="og:description" content="4 looks para as festas com peças únicas do closet. Cada peça existe uma só vez.">
+<meta property="og:image" content="https://benditocloset.pt/img/guess-vinho-modelo.jpg">
+<meta name="theme-color" content="#1C1517">
+<script src="/assinar.js" defer></script>
+<style>
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+:root{--bg:#FAF6F0;--ink:#1C1517;--muted:#6F625C;--line:#E9DFD3;--rose:#9E1B3F;--pink:#E7A6B8;--serif:"Bodoni Moda",Georgia,serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{display:block;max-width:100%}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(28,21,23,.92);backdrop-filter:blur(8px);color:#fff}
+.bar a{text-decoration:none;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase}
+.bar .r{display:flex;gap:10px;align-items:center}
+.lang{display:flex;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:2px}
+.lang button{border:0;background:none;color:#fff;font:600 12px "DM Sans";letter-spacing:.08em;padding:6px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--pink);color:var(--ink)}
+/* cover */
+.cover{position:relative;min-height:min(100svh,980px);color:#fff;overflow:hidden;background:#140f10}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;opacity:.95}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.7) 100%)}
+.cv{position:relative;z-index:1;max-width:1100px;margin:0 auto;min-height:min(100svh,980px);display:flex;flex-direction:column;justify-content:space-between;padding:22px 20px 34px}
+.issue{display:flex;justify-content:space-between;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600}
+.mast{font-family:var(--serif);font-weight:400;font-size:clamp(64px,17vw,190px);line-height:.85;letter-spacing:.02em;margin:10px 0 0;text-align:center}
+.mast small{display:block;font-size:clamp(14px,3vw,20px);letter-spacing:.6em;margin-top:10px;font-family:"DM Sans";font-weight:500}
+.lines{display:grid;gap:14px;max-width:520px}
+.lines .big{font-family:var(--serif);font-style:italic;font-size:clamp(30px,6vw,52px);line-height:1.05}
+.lines .sm{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;border-top:1px solid rgba(255,255,255,.5);padding-top:10px}
+.lines .sm b{color:var(--pink)}
+/* sections */
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.kick{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--rose);font-weight:600}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,7vw,64px);line-height:1;margin:10px 0 14px;letter-spacing:-.01em}
+h2 em{color:var(--rose)}
+.letter{display:grid;grid-template-columns:84px 1fr;gap:18px;align-items:start;padding:56px 0 20px;max-width:760px;margin:0 auto}
+.letter img{width:84px;height:84px;border-radius:50%;object-fit:cover}
+.letter p{margin:0 0 10px;font-family:var(--serif);font-size:19px;line-height:1.55}
+.letter .sig{font-family:"DM Sans";font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:24px 0 10px}
+.toc a{border:1px solid var(--ink);border-radius:999px;padding:8px 14px;font-size:13px;text-decoration:none}
+.look{padding:56px 0;border-top:1px solid var(--line);display:grid;gap:22px}
+@media(min-width:900px){.look{grid-template-columns:1fr 1.3fr;gap:44px;align-items:start}.look .head{position:sticky;top:80px}}
+.look .no{display:block;font-family:var(--serif);font-size:96px;line-height:.9;color:var(--rose)}
+.pcs .pc:first-child{grid-column:1/-1}
+.pcs .pc:first-child .im{aspect-ratio:4/5}
+.look h2{font-style:italic}
+.look p.d{color:var(--muted);margin:0 0 20px;max-width:520px}
+.pcs{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pc{text-decoration:none;color:inherit;display:block}
+.pc .im{aspect-ratio:4/5;border-radius:4px;overflow:hidden;background:#eee}
+.pc img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.pc:hover img{transform:scale(1.03)}
+.pc small{display:block;margin-top:8px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.pc span{display:block;font-size:14px;line-height:1.3}
+.pc b{display:block;font-size:14px;margin-top:2px}
+.pc.sold{opacity:.45;pointer-events:none}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{border-radius:999px;padding:14px 20px;font:600 14px "DM Sans";cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;display:inline-block}
+.btn.buy{background:var(--rose);border-color:var(--rose);color:#fff}
+.month{background:var(--ink);color:#fff;margin:20px 0 0;padding:64px 0}
+.month .in{display:grid;gap:26px;align-items:center}
+@media(min-width:800px){.month .in{grid-template-columns:1fr 1fr;gap:48px}}
+.month img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:4px}
+.month .kick{color:var(--pink)}
+.month p{color:#d8cdc6}
+.month .btn{border-color:#fff;color:#fff}
+.month .btn.buy{background:var(--pink);border-color:var(--pink);color:var(--ink)}
+.gifts{padding:64px 0 10px}
+.gl{display:grid;grid-auto-flow:column;grid-auto-columns:150px;gap:14px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory}
+.gl .pc{scroll-snap-align:start}
+.game{display:block;margin:40px 0 0;padding:26px 22px;border:1px solid var(--ink);border-radius:18px;text-decoration:none;text-align:center}
+.game b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(26px,5vw,38px);display:block;line-height:1.1;margin:6px 0}
+.game span{color:var(--muted);font-size:14px}
+footer{text-align:center;padding:30px 20px 50px;font-size:12.5px;color:var(--muted)}
+footer a{color:var(--rose)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,150%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;transition:transform .3s;z-index:9}
+.toast.on{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="bar"><a href="/">← Bendito Closet</a><div class="r"><div class="lang" role="group" aria-label="Idioma / Language"><button type="button" data-l="pt">PT</button><button type="button" data-l="en">EN</button></div></div></div>
+
+<header class="cover">
+  <img src="/img/guess-vinho-modelo.jpg" alt="">
+  <div class="cv">
+    <div class="issue"><span data-t="iss">Nº 01 · Dezembro 2026</span><span>Bendito Closet</span></div>
+    <div class="mast">BENDITO<small>E D I T</small></div>
+    <div class="lines">
+      <div class="big" data-t="cl1">4 looks para as festas</div>
+      <div class="sm" data-h="cl2">O casaco do inverno · <b>a peça do mês</b> · presentes até 20 €</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="letter">
+    <img src="/img/marianna.jpg" alt="Marianna">
+    <div>
+      <div class="kick" data-t="lk">Carta da Marianna</div>
+      <p data-t="l1">Dezembro é o mês em que toda a gente quer estar bonita sem gastar o que não tem. Por isso montei quatro looks só com peças do closet, para a noite de Natal, o almoço de família, um passeio pelo Porto e a passagem de ano.</p>
+      <p data-t="l2">Cada peça existe uma única vez. Se gostar de alguma, não espere muito.</p>
+      <div class="sig">Marianna Werneck · Porto</div>
+    </div>
+  </section>
+  <nav class="toc" id="toc"></nav>
+  <div id="looks"></div>
+</main>
+
+<section class="month" id="mes"><div class="wrap in" id="month"></div></section>
+
+<main class="wrap">
+  <section class="gifts" id="presentes">
+    <div class="kick" data-t="gk">Presentes</div>
+    <h2 data-h="gt">Até <em>20 €</em></h2>
+    <p class="d" style="color:var(--muted)" data-t="gp">Para o amigo secreto, para a mãe ou para si.</p>
+    <div class="gl" id="gifts"></div>
+  </section>
+  <a class="game" href="/monta-o-look/"><span class="kick" data-t="gmk">Agora é a sua vez</span><b data-t="gmt">Monte o seu look e faça a sua capa</b><span data-t="gmp">Escolha peças do closet, nós fazemos a capa de revista para o seu story →</span></a>
+  <div data-assinar="Revista Bendito Edit Nº 01"></div>
+</main>
+<footer><span data-t="ft">Bendito Edit é a revista mensal do Bendito Closet · brechó de marcas no Porto</span> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const LOOKS=[
+ {id:"natal",ids:["guess-casaco-2","vestido-floral-preto","moschino-coturnos-bordo","guess-bolsa-preta"],
+  pt:["Noite de Natal","Bordô é a cor da noite","Um casaco quente com gola de pelo, o vestido preto que vai com tudo e uns coturnos bordô a combinar. Elegante sem esforço, e quente o suficiente para a missa do galo."],
+  en:["Christmas Eve","Burgundy is the colour of the night","A warm coat with a fur collar, the black dress that goes with everything and matching burgundy boots. Effortlessly elegant, and warm enough for midnight mass."]},
+ {id:"almoco",ids:["pelo-camel","rl-camisola-azul","zara-botas-camurca","guess-bolsa-aba"],
+  pt:["Almoço de família","Clássico, mas com graça","O casaco de pelo camel faz o look sozinho. Por baixo, a camisola Ralph Lauren; botas de camurça e uma mala preta para o resto do dia."],
+  en:["Family lunch","Classic, with a twist","The camel faux-fur coat makes the look on its own. Underneath, the Ralph Lauren jumper; suede boots and a black bag for the rest of the day."]},
+ {id:"porto",ids:["guess-casaco-1","adidas-calca-castanha","golden-goose-superstar","adidas-bolsa"],
+  pt:["Um passeio pelo Porto","Quente, confortável e cool","Para a Ribeira com vento: o casaco comprido acolchoado, a calça Adidas de perna larga e os Golden Goose de brilho. Confortável para andar o dia todo."],
+  en:["A walk around Porto","Warm, comfy and cool","For a windy day by the river: the long padded coat, wide-leg Adidas trousers and glittery Golden Goose. Comfortable enough to walk all day."]},
+ {id:"reveillon",ids:["shein-bomber-lantejoulas","shein-body-dourado","zara-slingback-perolas","ck-bolsa-prata"],
+  pt:["Passagem de ano","Brilho da cabeça aos pés","Lantejoulas, dourado e prata: um look de festa completo por menos de 100 €. Para entrar em 2027 a brilhar."],
+  en:["New Year's Eve","Sparkle from head to toe","Sequins, gold and silver: a full party look for under €100. To start 2027 shining."]}
+];
+const MONTH={id:"gucci-gframe",pt:["A peça do mês","Gucci G-Frame","O relógio Gucci de caixa retangular, com a bracelete verde e vermelha da casa. Um clássico que não sai de moda e o presente que fica para sempre."],en:["Piece of the month","Gucci G-Frame","Gucci's rectangular-case watch with the house's green and red strap. A classic that never goes out of style, and a gift that lasts forever."]};
+const TX={
+ pt:{iss:"Nº 01 · Dezembro 2026",cl1:"4 looks para as festas",cl2:"O casaco do inverno · <b>a peça do mês</b> · presentes até 20 €",lk:"Carta da Marianna",l1:"Dezembro é o mês em que toda a gente quer estar bonita sem gastar o que não tem. Por isso montei quatro looks só com peças do closet, para a noite de Natal, o almoço de família, um passeio pelo Porto e a passagem de ano.",l2:"Cada peça existe uma única vez. Se gostar de alguma, não espere muito.",gk:"Presentes",gt:"Até <em>20 €</em>",gp:"Para o amigo secreto, para a mãe ou para si.",gmk:"Agora é a sua vez",gmt:"Monte o seu look e faça a sua capa",gmp:"Escolha peças do closet, nós fazemos a capa de revista para o seu story →",ft:"Bendito Edit é a revista mensal do Bendito Closet · brechó de marcas no Porto",
+  look:"Look",buy:t=>`Comprar o look · ${t}`,mine:"Monte a sua versão",see:"Ver a peça",sold:"Vendida",added:"Peças no saco ✓",gift:"Presentes"},
+ en:{iss:"Nº 01 · December 2026",cl1:"4 looks for the holidays",cl2:"The winter coat · <b>piece of the month</b> · gifts under €20",lk:"A letter from Marianna",l1:"December is the month when everyone wants to look good without spending what they don't have. So I put together four looks using only pieces from the closet: Christmas Eve, family lunch, a walk around Porto and New Year's Eve.",l2:"Every piece exists only once. If you like one, don't wait too long.",gk:"Gifts",gt:"Under <em>€20</em>",gp:"For Secret Santa, for your mum or for yourself.",gmk:"Your turn",gmt:"Build your look and make your cover",gmp:"Pick pieces from the closet and we'll make a magazine cover for your story →",ft:"Bendito Edit is the monthly magazine of Bendito Closet · pre-loved designer pieces in Porto",
+  look:"Look",buy:t=>`Shop the look · ${t}`,mine:"Make your own version",see:"View piece",sold:"Sold",added:"Pieces in your bag ✓",gift:"Gifts"}
+};
+const $=s=>document.querySelector(s);
+let LANG=(()=>{let l=new URLSearchParams(location.search).get("lang");try{l=l||localStorage.getItem("bc-lang")}catch(e){}if(!l)l=/^pt/i.test(navigator.language||"pt")?"pt":"en";return l==="pt"?"pt":"en"})();
+let P={},TR={};
+const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
+const nome=p=>(LANG!=="pt"&&TR[p.id])?TR[p.id][0]:p.nome;
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2600)}
+function card(id){const p=P[id];if(!p)return"";const sold=p.status==="vendido";
+  return `<a class="pc${sold?" sold":""}" href="/?peca=${encodeURIComponent(id)}"><div class="im"><img src="/${p.foto}" alt="${(p.marca+" "+nome(p)).replace(/"/g,"&quot;")}" loading="lazy"></div><small>${p.marca}</small><span>${nome(p)}</span><b>${sold?TX[LANG].sold:fmt(p.preco)}</b></a>`}
+function render(){
+  const t=TX[LANG];document.documentElement.lang=LANG==="pt"?"pt-PT":"en";
+  document.querySelectorAll("[data-t]").forEach(e=>{const v=t[e.dataset.t];if(typeof v==="string")e.textContent=v});
+  document.querySelectorAll("[data-h]").forEach(e=>e.innerHTML=t[e.dataset.h]);
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===LANG));
+  $("#toc").innerHTML=LOOKS.map(l=>`<a href="#${l.id}">${l[LANG][0]}</a>`).join("")+`<a href="#mes">${MONTH[LANG][0]}</a><a href="#presentes">${t.gift}</a>`;
+  $("#looks").innerHTML=LOOKS.map((l,i)=>{const av=l.ids.filter(id=>P[id]&&P[id].status!=="vendido");const tot=av.reduce((a,id)=>a+P[id].preco,0);const hero=P[l.ids[0]];
+    return `<article class="look" id="${l.id}"><div class="head"><span class="no">${String(i+1).padStart(2,"0")}</span>
+    <div class="kick">${t.look} ${i+1} · ${l[LANG][0]}</div><h2>${l[LANG][1]}</h2><p class="d">${l[LANG][2]}</p></div><div class="body"><div class="pcs">${l.ids.map(card).join("")}</div>
+    <div class="acts">${av.length?`<button class="btn buy" type="button" data-buy="${av.join(",")}">${t.buy(fmt(tot))}</button>`:""}<a class="btn" href="/monta-o-look/?p=${av.join(",")}&m=${["noite","paris","porto","noite"][i]}">${t.mine}</a></div></div></article>`}).join("");
+  const m=P[MONTH.id];
+  $("#month").innerHTML=m?`<img src="/${m.foto}" alt="${m.marca} ${nome(m)}" loading="lazy"><div><div class="kick">${MONTH[LANG][0]}</div><h2>${MONTH[LANG][1]}</h2><p>${MONTH[LANG][2]}</p><p style="font-family:var(--serif);font-size:34px;color:#fff;margin:6px 0 0">${m.status==="vendido"?t.sold:fmt(m.preco)}</p><div class="acts"><a class="btn buy" href="/?peca=${m.id}">${t.see}</a></div></div>`:"";
+  const g=Object.values(P).filter(p=>p.status!=="vendido"&&p.preco<=20).sort((a,b)=>a.preco-b.preco);
+  $("#gifts").innerHTML=g.map(p=>card(p.id)).join("");
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-buy]");if(!b)return;let bag=[];try{bag=JSON.parse(localStorage.getItem("bc-saco")||"[]")}catch(x){}
+  b.dataset.buy.split(",").forEach(id=>{if(!bag.includes(id))bag.push(id)});try{localStorage.setItem("bc-saco",JSON.stringify(bag))}catch(x){}toast(TX[LANG].added);setTimeout(()=>location.href="/?saco=1",500)});
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{LANG=b.dataset.l;try{localStorage.setItem("bc-lang",LANG)}catch(e){}render()});
+render();
+fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{
+  const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);(m?Function('"use strict";return '+m[1])():[]).forEach(p=>{P[p.id]={id:p.id,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,status:p.status,foto:(p.foto||(p.fotos||[])[0]||"").replace(/^\//,"")}});
+  const e=h.match(/const EN = (\{[\s\S]*?\n\});/);if(e){try{TR=Function('"use strict";return '+e[1])()}catch(x){}}
+  render();
+}).catch(()=>{});
+})();
+</script>
+</body>
+</html>
