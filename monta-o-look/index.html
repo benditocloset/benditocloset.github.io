@@ -40,8 +40,9 @@ h1 em{font-style:italic;color:var(--rose)}
 .stage .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;pointer-events:none}
 .stage .mq{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .stage .mast{position:absolute;left:0;right:0;top:3.2%;text-align:center;font-family:"Bodoni Moda",serif;font-size:clamp(28px,8vw,46px);letter-spacing:.12em;color:#fff;mix-blend-mode:difference;pointer-events:none;opacity:.85}
+.stage.hasbg .mast{display:none}
 .st{position:absolute;left:0;top:0;transform-origin:center center;cursor:grab;will-change:transform}
-.st img{display:block;width:100%;height:auto;pointer-events:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.28))}
+.st img{display:block;width:100%;height:auto;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.32))}
 .st.photo img{border:6px solid #fff;border-radius:4px;aspect-ratio:4/5;object-fit:cover}
 .st.sel{outline:2px dashed var(--pink);outline-offset:4px}
 .empty{position:absolute;inset:auto 0 6% 0;text-align:center;color:var(--ink);font-size:13px;pointer-events:none}
@@ -141,6 +142,7 @@ const T=()=>TXT[LANG];
 let P=[],TIPO={},CAT="roupas",ST=[],SELI=-1,BG=null;
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2600)}
+const MAXH={top:.4,coat:.6,dress:.58,bottom:.48,shoe:.17,photo:.32};
 const src=p=>TIPO[p.id]&&TIPO[p.id]!=="photo"?`/monta-o-look/pecas/${p.id}.webp`:"/"+p.foto;
 
 /* ---------- stickers ---------- */
@@ -151,7 +153,7 @@ function add(p){
   if(ST.length>=6){toast(T().max);return}
   const tp=TIPO[p.id]||"photo",[x,y,w]=POS[tp];const el=document.createElement("div");el.className="st"+(tp==="photo"?" photo":"");
   const im=new Image();im.src=src(p);im.alt=p.marca;im.draggable=false;el.appendChild(im);stage.appendChild(el);
-  const s={id:p.id,tp,x,y,w,r:0,f:false,el,img:im};ST.push(s);im.onload=()=>place(s);place(s);select(ST.length-1);bind(s);
+  const s={id:p.id,tp,x,y,w,r:0,f:false,el,img:im};ST.push(s);im.onload=()=>{const ar=im.naturalHeight/im.naturalWidth,W=stage.clientWidth,H=stage.clientHeight,mh=(MAXH[tp]||.5)*H;if(s.w*W*ar>mh)s.w=mh/ar/W;place(s)};place(s);select(ST.length-1);bind(s);
   if(ST.length===1)toast(T().added);ui();
 }
 function remove(i){if(i<0)return;ST[i].el.remove();ST.splice(i,1);SELI=-1;$("#tools").hidden=true;ui()}
@@ -176,8 +178,8 @@ $("#tools").addEventListener("click",e=>{const b=e.target.closest("button");if(!
 addEventListener("resize",()=>ST.forEach(place));
 
 /* ---------- photo ---------- */
-$("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);const i=$("#bgimg");i.onload=()=>{BG=i;i.hidden=false;$("#mq").style.display="none"};i.src=u});
-$("#nophoto").onclick=()=>{BG=null;$("#bgimg").hidden=true;$("#mq").style.display=""};
+$("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);const i=$("#bgimg");i.onload=()=>{BG=i;i.hidden=false;$("#mq").style.display="none";stage.classList.add("hasbg")};i.src=u});
+$("#nophoto").onclick=()=>{BG=null;$("#bgimg").hidden=true;$("#mq").style.display="";stage.classList.remove("hasbg")};
 
 /* ---------- UI ---------- */
 function ui(){const t=T(),sel=ST.map(s=>P.find(p=>p.id===s.id)).filter(Boolean),tot=sel.reduce((a,p)=>a+p.preco,0);
