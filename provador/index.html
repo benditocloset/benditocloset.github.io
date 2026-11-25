@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Provador com IA · Bendito Closet</title>
+<meta name="description" content="Escolha uma foto sua e uma peça do Bendito Closet: a inteligência artificial mostra a peça vestida em si.">
+<meta property="og:title" content="Provador com IA · Bendito Closet">
+<meta property="og:description" content="Veja as peças do closet vestidas em si, com inteligência artificial.">
+<meta property="og:image" content="https://benditocloset.pt/img/versace-bolsa-modelo.jpg">
+<link rel="icon" href="/img/logo.jpg">
+<link rel="manifest" href="/manifest.webmanifest">
+<style>
+@font-face{font-family:"Bodoni Moda";font-style:italic;font-weight:400 600;src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:400 700;src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2")}
+:root{--ink:#1C1517;--rose:#A21B3F;--cream:#F8F4EE;--line:#E8DDD2;--purple:#5A2A5E}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--cream);color:var(--ink);font:400 16px/1.5 "DM Sans",system-ui,sans-serif}
+header{background:var(--ink);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+header a{color:#fff;text-decoration:none;letter-spacing:.14em;font-size:13px;text-transform:uppercase}
+.wrap{max-width:560px;margin:0 auto;padding:22px 16px 60px}
+.eb{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--purple);font-weight:600}
+h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(36px,9vw,54px);line-height:1.05;margin:6px 0 8px}
+.lead{margin:0 0 20px;color:#4b4245}
+.step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.step h2{margin:0 0 10px;font-size:15px;letter-spacing:.06em}
+.step h2 b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;margin-right:8px;font-size:13px}
+.btn{display:block;width:100%;text-align:center;border:0;cursor:pointer;background:var(--ink);color:#fff;font:600 16px/1 "DM Sans",sans-serif;padding:16px 20px;border-radius:999px;text-decoration:none}
+.btn.go{background:var(--rose)}.btn.out{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.45;cursor:default}
+.me{display:flex;gap:12px;align-items:center;margin-top:12px}.me img{width:84px;height:110px;object-fit:cover;border-radius:12px}
+.small{font-size:13.5px;color:#6a5f62;margin:8px 0 0}
+.pcs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:360px;overflow:auto;padding:2px}
+.pcs button{border:3px solid transparent;border-radius:12px;padding:0;background:none;cursor:pointer;aspect-ratio:3/4;overflow:hidden}
+.pcs button img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.pcs button[aria-pressed=true]{border-color:var(--rose)}
+.res{text-align:center}.res img{width:100%;border-radius:16px;display:block;margin-bottom:10px}
+.acts{display:grid;gap:8px;margin-top:10px}
+.spin{width:44px;height:44px;border-radius:50%;border:4px solid #eee;border-top-color:var(--rose);margin:16px auto;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}.cmp figure{margin:0}.cmp img{border-radius:12px;width:100%;aspect-ratio:3/4;object-fit:cover}.cmp figcaption{font-size:12px;color:#6a5f62}
+</style>
+</head>
+<body>
+<header><a href="/">← Bendito Closet</a><a href="/monta-o-look/" data-t="game">Monta o look</a></header>
+<div class="wrap">
+  <div class="eb" data-t="eb">Novo · Provador com IA</div>
+  <h1 data-t="h1">Prove em si</h1>
+  <p class="lead" data-t="lead">Escolha uma foto sua e uma peça do closet. A inteligência artificial mostra a peça vestida em si, em cerca de 20 segundos.</p>
+
+  <div class="step">
+    <h2><b>1</b><span data-t="s1">A sua foto</span></h2>
+    <label class="btn" style="position:relative"><input type="file" id="file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"><span id="fileT" data-t="pick">🖼️ Escolher foto da galeria</span></label>
+    <div class="me" id="me" hidden><img id="meImg" alt=""><p class="small" style="margin:0" data-t="ok">Foto pronta ✓ Pode ser de corpo inteiro, meio corpo, só o rosto ou até um print.</p></div>
+    <p class="small" data-t="tip">Melhor resultado: de frente, corpo à vista e boa luz. Se a foto só mostrar o rosto, a IA cria o corpo.</p>
+  </div>
+
+  <div class="step">
+    <h2><b>2</b><span data-t="s2">A peça</span></h2>
+    <div class="pcs" id="pcs"><p class="small" data-t="loading">A abrir o closet…</p></div>
+  </div>
+
+  <div class="step">
+    <h2><b>3</b><span data-t="s3">Provar</span></h2>
+    <button class="btn go" id="go" type="button" data-t="go">✨ Provar em mim</button>
+    <p class="small" data-t="priv">A sua foto é enviada à FASHN AI só para gerar a imagem e é apagada depois. O Bendito não a guarda. 5 provas por dia.</p>
+  </div>
+
+  <div class="step res" id="res" hidden></div>
+</div>
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const TRYON_API="https://bendito-provador-ia.nn45hn9bvr.workers.dev";
+const VTO={"adidas-calca-castanha": "bottoms", "shein-blusa-rosa": "tops", "blueman-saida-praia": "one-pieces", "blueman-vestido-mata": "one-pieces", "sarong-bali-seda": "one-pieces", "vestido-rio": "one-pieces", "body-leopardo": "tops", "vestido-floral-preto": "one-pieces", "shein-vestido-zebra": "one-pieces", "adidas-legging": "bottoms", "rl-camisola-azul": "tops", "rl-camisa-linho": "one-pieces", "rl-camisa-linho-rosa": "one-pieces", "kimono-dourado-ibiza": "one-pieces", "shein-camisa-caramelo": "tops", "shein-body-dourado": "tops", "shein-body-azul": "tops", "adidas-casaco-bordo": "tops", "zara-bomber-organza": "tops", "guess-casaco-1": "tops", "guess-casaco-2": "tops", "versace-casaco": "tops", "pepe-parka": "tops", "guess-biker": "tops", "zara-gabardina": "tops", "zara-casaco-vermelho": "tops", "salsa-dupla-face": "tops", "pelo-camel": "tops", "pelo-rosa": "tops", "shein-bomber-lantejoulas": "tops", "primark-jaq": "tops"};
+let LANG="pt";try{LANG=(new URLSearchParams(location.search).get("lang")||localStorage.getItem("bc-lang")||(/^pt/i.test(navigator.language||"pt")?"pt":"en"))}catch(e){}LANG=/^pt/.test(LANG)?"pt":"en";
+const TX={pt:{},en:{eb:"New · AI fitting room",h1:"Try it on you",lead:"Pick a photo of yourself and a piece from the closet. The AI shows the piece on you in about 20 seconds.",s1:"Your photo",pick:"🖼️ Pick a photo from my gallery",pick2:"🖼️ Change photo",ok:"Photo ready ✓ Full body, half body, just your face or even a screenshot works.",tip:"Best results: front-facing, body visible, good light. If the photo only shows your face, the AI creates the body.",s2:"The piece",loading:"Opening the closet…",s3:"Try it on",go:"✨ Try it on me",priv:"Your photo is sent to FASHN AI only to create the image and is then deleted. Bendito never keeps it. 5 try-ons a day.",game:"Build the look"}};
+const M={pt:{pick2:"🖼️ Trocar a foto",need:"Primeiro escolha uma foto sua.",needP:"Agora escolha uma peça.",wait:"A vestir a peça em si… (cerca de 20 segundos)",face:"Não vi o seu corpo na foto, por isso a IA está a criar um a partir do seu rosto… (cerca de 40 segundos)",err:"Não consegui gerar a prova desta vez. Tente outra foto, com o rosto bem visível e boa luz.",lim:"Já usou as 5 provas de hoje. Volte amanhã!",day:"O provador está cheio hoje. Volte amanhã!",bad:"Não consegui abrir esta foto. Tente outra.",buy:"Quero esta peça",save:"Guardar a foto",again:"Provar outra peça",cover:"Fazer a capa de revista com esta foto",before:"Antes",after:"Com a peça"},
+ en:{pick2:"🖼️ Change photo",need:"First pick a photo of yourself.",needP:"Now pick a piece.",wait:"Dressing you up… (about 20 seconds)",face:"I couldn't see your body in the photo, so the AI is creating one from your face… (about 40 seconds)",err:"Couldn't create the try-on this time. Try another photo with your face clearly visible and good light.",lim:"You've used today's 5 try-ons. Come back tomorrow!",day:"The fitting room is full today. Come back tomorrow!",bad:"Couldn't open this photo. Try another one.",buy:"I want this piece",save:"Save the photo",again:"Try another piece",cover:"Make a magazine cover with this photo",before:"Before",after:"Wearing it"}}[LANG];
+if(LANG==="en"){document.documentElement.lang="en";document.querySelectorAll("[data-t]").forEach(e=>{const v=TX.en[e.dataset.t];if(v)e.textContent=v})}
+const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
+let ME=null,MEsrc="",P=[],PICK=null,BUSY=false;
+function shrink(img,max){const r=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement("canvas");c.width=Math.round(img.naturalWidth*r);c.height=Math.round(img.naturalHeight*r);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.86)}
+function trimShot(i){return new Promise(res=>{try{const w=i.naturalWidth,h=i.naturalHeight,k=Math.min(1,200/w),cw=Math.max(1,Math.round(w*k)),ch=Math.max(1,Math.round(h*k)),c=document.createElement("canvas");c.width=cw;c.height=ch;const x=c.getContext("2d");x.drawImage(i,0,0,cw,ch);const d=x.getImageData(0,0,cw,ch).data;
+ const flat=y=>{let s=0,s2=0;for(let xx=0;xx<cw;xx+=2){const o=(y*cw+xx)*4,l=(d[o]+d[o+1]+d[o+2])/3;s+=l;s2+=l*l}const n=Math.ceil(cw/2),m=s/n;return s2/n-m*m<40};
+ let t=0,b=ch-1;while(t<ch*.4&&flat(t))t++;while(b>ch*.6&&flat(b))b--;let T=t/k,B=(b+1)/k;if((B-T)/w>1.85){T+=(B-T)*.10;B-=(B-T)*.11}
+ if(T<2&&B>h-2){res(i);return}const o=document.createElement("canvas");o.width=w;o.height=Math.round(B-T);o.getContext("2d").drawImage(i,0,T,w,B-T,0,0,w,B-T);const n=new Image();n.onload=()=>res(n);n.onerror=()=>res(i);n.src=o.toDataURL("image/jpeg",.92)}catch(e){res(i)}})}
+function ready(){$("#go").disabled=BUSY}
+$("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const i=new Image();
+ i.onload=async()=>{ME=await trimShot(i);MEsrc=shrink(ME,1024);$("#meImg").src=MEsrc;$("#me").hidden=false;$("#fileT").textContent=M.pick2;ready();
+   if(!PICK)$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
+ i.onerror=()=>alert(M.bad);i.src=URL.createObjectURL(f);e.target.value=""});
+function paint(){$("#pcs").innerHTML=P.map(p=>`<button type="button" data-id="${p.id}" aria-pressed="${p.id===PICK}" title="${p.marca} · ${fmt(p.preco)}"><img src="/${p.foto}" alt="${p.marca}" loading="lazy"></button>`).join("")}
+$("#pcs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;PICK=b.dataset.id;paint();ready();if(ME)$("#go").scrollIntoView({behavior:"smooth",block:"center"})});
+async function poll(id){for(let i=0;i<50;i++){await new Promise(z=>setTimeout(z,2000));const s=await (await fetch(TRYON_API+"/status/"+id)).json();if(s.status==="completed"&&s.output&&s.output[0])return {out:s.output[0]};if(s.status==="failed")return {err:s.error||"failed"}}return {err:"timeout"}}
+const asData=o=>/^data:|^https?:/.test(o)?o:"data:image/jpeg;base64,"+o;
+async function run(path,body){const r=await fetch(TRYON_API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const o=await r.json().catch(()=>({}));return r.ok?o:{fail:o.error||"x"}}
+const show=h=>{const r=$("#res");r.hidden=false;r.innerHTML=h;r.scrollIntoView({behavior:"smooth",block:"start"})};
+const lim=e=>e==="limit_user"?M.lim:e==="limit_day"?M.day:M.err;
+$("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}const p=P.find(x=>x.id===PICK);if(!p){alert(M.needP);$("#pcs").scrollIntoView({behavior:"smooth",block:"center"});return}
+ BUSY=true;ready();show('<div class="spin"></div><p>'+M.wait+'</p>');
+ try{const gar="https://benditocloset.pt/"+p.foto,cat=VTO[p.id];
+  let o=await run("/run",{model_image:MEsrc,garment_image:gar,category:cat});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
+  let r=await poll(o.id);
+  if(!r.out&&!/Moderation|ImageLoad|Input|timeout/i.test(r.err)){
+   show('<div class="spin"></div><p>'+M.face+'</p>');
+   const f=await run("/face",{face_image:MEsrc});if(f.fail){show('<p>'+lim(f.fail)+'</p>');return}
+   const fr=await poll(f.id);if(!fr.out){show('<p>'+M.err+'</p>');return}
+   show('<div class="spin"></div><p>'+M.wait+'</p>');
+   o=await run("/run",{model_image:asData(fr.out),garment_image:gar,category:cat});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
+   r=await poll(o.id)}
+  if(!r.out){show('<p>'+M.err+'</p>');return}
+  const src=asData(r.out);try{sessionStorage.setItem("bc-ai-last",src)}catch(e){}
+  show(`<img src="${src}" alt="${p.marca}"><p style="margin:0 0 4px;font-weight:600">${p.marca} · ${p.nome||""} · ${fmt(p.preco)}</p>
+   <div class="acts"><a class="btn go" href="/?peca=${encodeURIComponent(p.id)}">${M.buy}</a><a class="btn" href="${src}" download="bendito-provador.jpg">${M.save}</a><button class="btn out" type="button" id="again">${M.again}</button></div>`);
+  $("#again").onclick=()=>{$("#res").hidden=true;$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
+  try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}
+ }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready()}};
+fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
+ P=all.filter(p=>p.status!=="vendido"&&VTO[p.id]&&(p.foto||(p.fotos&&p.fotos[0]))).map(p=>({id:p.id,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));
+ const q=new URLSearchParams(location.search).get("peca");if(q&&P.some(p=>p.id===q))PICK=q;paint()}).catch(()=>{$("#pcs").textContent="—"});
+})();
+</script>
+<script src="/cookies.js" defer></script>
+</body>
+</html>
