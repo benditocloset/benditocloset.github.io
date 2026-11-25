@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Mira · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: cabeleireiro fictício com marcações online. Criado por Marianna Werneck.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/lojas/exemplos/fonts.css">
+<style>
+:root{--areia:#F3ECE4;--nude:#E7D3C3;--terra:#B4664A;--salvia:#8E9C86;--tinta:#2B2420;--suave:#7A6B62;--linha:#E2D5C8;--branco:#FFFCF8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--areia);color:var(--tinta);font:400 16px/1.65 "DM Sans",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.it{font-family:"Italiana",serif;font-weight:400;letter-spacing:.04em}
+header .bar{display:flex;justify-content:space-between;align-items:center;padding-block:22px}
+.logo{font:400 30px/1 "Italiana",serif;letter-spacing:.18em;text-decoration:none;color:var(--tinta)}
+header a.cta{font:600 13px "DM Sans";letter-spacing:.12em;text-transform:uppercase;color:var(--tinta);text-decoration:none;border-bottom:1.5px solid var(--terra);padding-bottom:3px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding-block:40px 70px}
+.hero h1{font:400 clamp(46px,7vw,84px)/.98 "Italiana",serif;margin:0 0 20px;letter-spacing:.02em}
+.hero p{color:var(--suave);font-size:18px;max-width:40ch;margin:0 0 30px}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--tinta);color:#fff;font:600 14px/1 "DM Sans";letter-spacing:.1em;text-transform:uppercase;padding:17px 28px;border-radius:999px;text-decoration:none}
+.arco{aspect-ratio:3/4;border-radius:999px 999px 28px 28px;background:
+ radial-gradient(120% 80% at 30% 20%,#F6E7DA 0,transparent 55%),
+ repeating-linear-gradient(115deg,rgba(180,102,74,.18) 0 2px,transparent 2px 14px),
+ linear-gradient(160deg,#D9B49C,#B4664A 70%,#7E3F2B);position:relative;overflow:hidden;max-width:420px;margin-left:auto;width:100%}
+.arco:after{content:"Mira";position:absolute;bottom:24px;left:0;right:0;text-align:center;font:400 64px/1 "Italiana",serif;color:rgba(255,255,255,.85);letter-spacing:.2em}
+h2{font:400 46px/1.05 "Italiana",serif;margin:0 0 10px}
+.sub{color:var(--suave);margin:0 0 30px}
+section{padding:70px 0;border-top:1px solid var(--linha)}
+.serv{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sv{background:var(--branco);border:1.5px solid var(--linha);border-radius:22px;padding:22px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:.2s}
+.sv:hover{transform:translateY(-3px)}
+.sv[aria-pressed=true]{border-color:var(--terra);box-shadow:0 0 0 3px rgba(180,102,74,.15)}
+.sv b{display:block;font:400 26px/1.1 "Italiana",serif;margin-bottom:6px}.sv span{font-size:13.5px;color:var(--suave)}.sv i{font-style:normal;display:block;margin-top:14px;font-weight:600}
+.agenda{background:var(--branco);border-radius:28px;padding:30px;border:1px solid var(--linha);margin-top:26px}
+.dias{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.dias button,.horas button{flex:none;border:1.5px solid var(--linha);background:#fff;border-radius:16px;cursor:pointer;font:600 14px "DM Sans";color:var(--tinta)}
+.dias button{width:72px;padding:12px 0;text-align:center}.dias button small{display:block;font-weight:400;color:var(--suave);font-size:12px}
+.dias button strong{font-size:22px}
+.horas{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.horas button{padding:11px 16px}
+.horas button:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+[aria-pressed=true].d,.horas button[aria-pressed=true]{background:var(--tinta)!important;color:#fff!important;border-color:var(--tinta)!important}
+[aria-pressed=true].d small{color:#ddd}
+.resumo{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px dashed var(--linha)}
+.cores{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cores div{aspect-ratio:1;border-radius:20px;display:flex;align-items:flex-end;padding:12px;color:#fff;font:400 20px "Italiana",serif;letter-spacing:.06em}
+footer{padding:40px 0;color:var(--suave);font-size:14px;border-top:1px solid var(--linha)}
+@media(max-width:780px){.hero{grid-template-columns:1fr;padding-top:10px}.arco{max-width:260px;margin:0 auto}.serv{grid-template-columns:1fr}.cores{grid-template-columns:repeat(2,1fr)}h2{font-size:38px}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar"><a class="logo" href="#">ATELIER MIRA</a><a class="cta" href="#marcar">Marcar</a></div></header>
+<div class="wrap hero">
+  <div><h1>O seu cabelo,<br>sem pressa.</h1><p>Corte, cor e tratamentos num atelier pequeno e calmo em Cedofeita. Marque em três toques, a qualquer hora.</p><a class="btn" href="#marcar">Marcar agora</a></div>
+  <div class="arco" aria-hidden="true"></div>
+</div>
+
+<section id="marcar"><div class="wrap">
+  <h2>Marcação online</h2><p class="sub">1. Escolha o serviço · 2. o dia · 3. a hora.</p>
+  <div class="serv" id="serv"></div>
+  <div class="agenda">
+    <div class="dias" id="dias"></div>
+    <div class="horas" id="horas"></div>
+    <div class="resumo"><div id="res" style="font-size:15px"></div><button class="btn" id="ok">Confirmar marcação</button></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Paleta da estação</h2><p class="sub">Os tons que mais pedem este inverno.</p>
+  <div class="cores">
+    <div style="background:linear-gradient(160deg,#C9A07A,#8A5A3B)">Caramelo</div>
+    <div style="background:linear-gradient(160deg,#E9D3B8,#BF9B74)">Mel</div>
+    <div style="background:linear-gradient(160deg,#7A3B2E,#3E1D17)">Cobre</div>
+    <div style="background:linear-gradient(160deg,#4A3A33,#1F1714)">Chocolate</div>
+  </div>
+</div></section>
+<footer><div class="wrap">Atelier Mira · Rua de Cedofeita, Porto · negócio fictício criado para demonstração.</div></footer>
+
+<script src="/lojas/exemplos/kit.js"></script>
+<script>
+const S=[["Corte e brushing","45 min","28 €"],["Coloração completa","1h45","55 €"],["Madeixas balayage","2h30","95 €"],["Tratamento de hidratação","40 min","25 €"],["Brushing","30 min","18 €"],["Penteado para evento","1h","40 €"]];
+let si=0,di=0,hi=null;
+const serv=document.getElementById("serv"),dias=document.getElementById("dias"),horas=document.getElementById("horas");
+S.forEach((s,i)=>{const b=document.createElement("button");b.className="sv";b.innerHTML=`<b>${s[0]}</b><span>${s[1]}</span><i>${s[2]}</i>`;b.onclick=()=>{si=i;draw()};serv.appendChild(b)});
+const DS=["dom","seg","ter","qua","qui","sex","sáb"];
+for(let k=0;k<7;k++){const d=new Date(Date.now()+(k+1)*864e5);const b=document.createElement("button");b.className="d";b.innerHTML=`<small>${DS[d.getDay()]}</small><strong>${d.getDate()}</strong>`;b.dataset.t=d.toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long"});b.onclick=()=>{di=k;hi=null;draw()};dias.appendChild(b)}
+const HS=["9:30","10:30","11:30","14:00","15:00","16:00","17:00","18:00"];
+function ocupado(k,h){return ((k*7+h*3)%5)===0}
+function draw(){
+ serv.querySelectorAll(".sv").forEach((b,i)=>b.setAttribute("aria-pressed",i===si));
+ dias.querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",i===di));
+ horas.innerHTML="";HS.forEach((h,i)=>{const b=document.createElement("button");b.textContent=h;b.disabled=ocupado(di,i);b.setAttribute("aria-pressed",i===hi);b.onclick=()=>{hi=i;draw()};horas.appendChild(b)});
+ const d=dias.children[di].dataset.t;
+ document.getElementById("res").innerHTML=`<b>${S[si][0]}</b> · ${S[si][2]}<br>${d}${hi!=null?" às "+HS[hi]:" · escolha a hora"}`;
+}
+document.getElementById("ok").onclick=()=>{if(hi==null){kitToast("Escolha primeiro uma hora livre.");return}kitToast(`Marcação: ${S[si][0]}, ${dias.children[di].dataset.t} às ${HS[hi]}. Num site real, o atelier recebia a marcação e a cliente um lembrete na véspera.`)};
+draw();
+</script>
+</body>
+</html>

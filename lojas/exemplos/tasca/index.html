@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tasca da Ribeira · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: tasca fictícia no Porto com menu, pedido para levantar e reservas. Criado por Marianna Werneck.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/lojas/exemplos/fonts.css">
+<style>
+:root{--azul:#1D4B8F;--azul2:#2F66B5;--creme:#FBF6EC;--papel:#FFFDF8;--barro:#C4572E;--tinta:#1E2430;--suave:#5B6474;--linha:#E6DCC8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--creme);color:var(--tinta);font:400 16px/1.6 "DM Sans",system-ui,sans-serif}
+.serif{font-family:"Fraunces",Georgia,serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+header{position:sticky;top:0;z-index:20;background:rgba(251,246,236,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
+.logo{font:600 22px/1 "Fraunces",serif;color:var(--azul);text-decoration:none}.logo small{display:block;font:500 10px/1.6 "DM Sans";letter-spacing:3px;color:var(--suave);text-transform:uppercase}
+nav a{margin-left:18px;text-decoration:none;color:var(--tinta);font-weight:500;font-size:14px}
+nav a.cta{background:var(--azul);color:#fff;padding:9px 16px;border-radius:999px}
+.hero{position:relative;overflow:hidden;color:#fff;background:var(--azul)}
+.hero:before{content:"";position:absolute;inset:0;opacity:.22;background:
+ radial-gradient(circle at 25% 25%,transparent 18%,#fff 19% 21%,transparent 22%) 0 0/56px 56px,
+ radial-gradient(circle at 75% 75%,transparent 18%,#fff 19% 21%,transparent 22%) 0 0/56px 56px,
+ conic-gradient(from 45deg,transparent 0 25%,rgba(255,255,255,.35) 0 50%,transparent 0 75%,rgba(255,255,255,.35) 0) 0 0/28px 28px}
+.hero .wrap{position:relative;padding:80px 22px 90px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.hero h1{font:400 clamp(42px,6vw,72px)/1.02 "Fraunces",serif;margin:0 0 18px}.hero h1 em{font-style:italic;color:#FFD9A0}
+.hero p{font-size:18px;max-width:46ch;opacity:.92;margin:0 0 28px}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--barro);color:#fff;font:600 15px/1 "DM Sans";padding:15px 24px;border-radius:999px;text-decoration:none}
+.btn.ghost{background:transparent;border:1.5px solid #fff;margin-left:10px}
+.prato{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff 0 54%,#E9E2D3 55% 58%,#fff 59% 66%,transparent 67%);display:grid;place-items:center;filter:drop-shadow(0 30px 40px rgba(0,0,0,.35));max-width:380px;margin-left:auto;width:100%}
+.prato span{font-size:min(28vw,150px)}
+.info{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;padding:18px 22px;background:var(--papel);border-bottom:1px solid var(--linha);font-size:14px;color:var(--suave)}
+.info b{color:var(--tinta)}
+section{padding:70px 0}
+h2{font:400 40px/1.1 "Fraunces",serif;margin:0 0 8px;color:var(--azul)}
+.sub{color:var(--suave);margin:0 0 28px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tabs button{border:1.5px solid var(--azul);background:transparent;color:var(--azul);font:600 14px "DM Sans";padding:9px 16px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--azul);color:#fff}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.item{display:flex;gap:14px;align-items:center;background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:16px}
+.item .e{font-size:38px;width:62px;height:62px;border-radius:14px;background:#EEF3FB;display:grid;place-items:center;flex:none}
+.item h3{margin:0;font:600 18px/1.2 "Fraunces",serif}.item p{margin:2px 0 0;font-size:13.5px;color:var(--suave)}
+.item .pr{margin-left:auto;text-align:right;flex:none}.item .pr b{display:block;font-size:17px}
+.q{display:inline-flex;align-items:center;gap:8px;margin-top:6px}
+.q button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--azul);background:#fff;color:var(--azul);font-weight:700;cursor:pointer}
+.q span{min-width:14px;text-align:center;font-weight:600}
+.cesto{position:fixed;right:18px;bottom:18px;z-index:30;background:var(--tinta);color:#fff;border-radius:18px;padding:14px 18px;display:none;align-items:center;gap:16px;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.cesto.on{display:flex}.cesto b{font-size:17px}
+.dia{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:stretch}
+.card{background:var(--papel);border:1px solid var(--linha);border-radius:20px;padding:28px}
+.card.az{background:var(--azul);color:#fff;border:0}
+.card.az h2{color:#fff}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}
+input,select{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1.5px solid var(--linha);background:#fff}
+.horas{display:flex;gap:8px;flex-wrap:wrap}.horas button{flex:1;min-width:64px;padding:10px;border-radius:10px;border:1.5px solid var(--linha);background:#fff;font:600 14px "DM Sans";cursor:pointer}
+.horas button[aria-pressed=true]{border-color:var(--azul);background:#EEF3FB;color:var(--azul)}
+footer{background:var(--tinta);color:#C9CED8;padding:40px 0;font-size:14px}
+@media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:50px 22px 60px}.prato{max-width:220px;margin:0 auto}.menu,.dia{grid-template-columns:1fr}nav a:not(.cta){display:none}h2{font-size:32px}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar"><a class="logo" href="#">Tasca da Ribeira<small>Porto · desde 1987</small></a><nav><a href="#menu">Menu</a><a href="#prato">Prato do dia</a><a class="cta" href="#reservar">Reservar</a></nav></div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <h1>Comida de avó,<br><em>vista para o rio.</em></h1>
+    <p>Francesinha, bacalhau e caldo verde feitos como sempre, a dois passos do Douro. Peça para levantar ou reserve a sua mesa em 30 segundos.</p>
+    <a class="btn" href="#menu">Fazer pedido</a><a class="btn ghost" href="#reservar">Reservar mesa</a>
+  </div>
+  <div class="prato" aria-hidden="true"><span>🍲</span></div>
+</div></div>
+<div class="info"><span>📍 <b>Cais da Ribeira, Porto</b></span><span>🕛 <b>12h–15h · 19h–23h</b></span><span>🛵 <b>Levantamento em 20 min</b></span></div>
+
+<section id="menu"><div class="wrap">
+  <h2>O nosso menu</h2><p class="sub">Escolha os pratos e veja o total na hora. O pedido segue para o nosso WhatsApp.</p>
+  <div class="tabs" role="group" aria-label="Categorias"></div>
+  <div class="menu" id="lista"></div>
+</div></section>
+
+<section id="prato" style="padding-top:0"><div class="wrap dia">
+  <div class="card az"><p style="letter-spacing:3px;font-size:12px;text-transform:uppercase;margin:0 0 8px;opacity:.8">Prato do dia · quarta-feira</p><h2>Arroz de pato à antiga</h2><p style="opacity:.9">Com chouriço de Trás-os-Montes e laranja. Sopa, prato, bebida e café por <b style="font-size:22px">12,50 €</b>.</p><button class="btn" id="add-dia">Juntar ao pedido</button></div>
+  <div class="card" id="reservar">
+    <h2>Reservar mesa</h2><p class="sub" style="margin-bottom:4px">Confirmação imediata por mensagem.</p>
+    <form id="res">
+      <label for="d">Dia</label><input id="d" type="date" required>
+      <label>Hora</label><div class="horas" id="horas"></div>
+      <label for="p">Pessoas</label><select id="p"><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select>
+      <label for="n">Nome</label><input id="n" required placeholder="O seu nome">
+      <p style="margin-top:18px"><button class="btn" type="submit">Confirmar reserva</button></p>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Tasca da Ribeira · Cais da Ribeira, Porto · negócio fictício criado para demonstração.</div></footer>
+<div class="cesto" id="cesto"><div><small>O seu pedido</small><br><b id="tot">0,00 €</b> · <span id="nit">0</span> itens</div><button class="btn" id="enviar">Enviar pedido</button></div>
+
+<script src="/lojas/exemplos/kit.js"></script>
+<script>
+const M={Petiscos:[["🥖","Pão com chouriço","Assado no forno a lenha",3.5],["🫒","Azeitonas e tremoços","Temperados da casa",2.5],["🦐","Camarão ao alho","Com pão para molhar",9]],
+Pratos:[["🥪","Francesinha","Molho da casa, ovo e batata frita",13.5],["🐟","Bacalhau à Gomes de Sá","Batata, cebola, ovo e azeitona",15],["🍲","Caldo verde","Com rodela de chouriço",4]],
+Sobremesas:[["🍮","Leite-creme queimado","Queimado na hora",4.5],["🥧","Pastel de nata","Quentinho com canela",1.8]],
+Bebidas:[["🍷","Vinho do Douro (copo)","Tinto ou branco",4],["🥤","Sumo natural de laranja","Espremido na hora",3.2]]};
+const Q={};let cat="Pratos";const fmt=v=>v.toFixed(2).replace(".",",")+" €";
+const tabs=document.querySelector(".tabs"),lista=document.getElementById("lista");
+Object.keys(M).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{cat=c;draw()};tabs.appendChild(b)});
+function draw(){tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.textContent===cat));
+ lista.innerHTML=M[cat].map(([e,n,d,p])=>`<div class="item"><div class="e">${e}</div><div><h3>${n}</h3><p>${d}</p></div><div class="pr"><b>${fmt(p)}</b><div class="q"><button aria-label="Menos ${n}" data-n="${n}" data-d="-1">−</button><span>${Q[n]?Q[n].q:0}</span><button aria-label="Mais ${n}" data-n="${n}" data-d="1" data-p="${p}">+</button></div></div></div>`).join("")}
+lista.addEventListener("click",e=>{const b=e.target.closest("button[data-n]");if(!b)return;const n=b.dataset.n,price=+(b.dataset.p||(Q[n]&&Q[n].p)||0);Q[n]=Q[n]||{q:0,p:price};Q[n].q=Math.max(0,Q[n].q+ +b.dataset.d);if(!Q[n].q)delete Q[n];draw();total()});
+function total(){let t=0,n=0;for(const k in Q){t+=Q[k].q*Q[k].p;n+=Q[k].q}document.getElementById("tot").textContent=fmt(t);document.getElementById("nit").textContent=n;document.getElementById("cesto").classList.toggle("on",n>0)}
+document.getElementById("add-dia").onclick=()=>{const n="Prato do dia";Q[n]=Q[n]||{q:0,p:12.5};Q[n].q++;total();kitToast("Prato do dia juntado ao pedido.")};
+document.getElementById("enviar").onclick=()=>{const l=Object.entries(Q).map(([k,v])=>v.q+"× "+k).join(", ");kitToast(`Numa tasca real, seguia agora para o WhatsApp: “${l}”, com o total e a hora de levantamento.`)};
+const H=document.getElementById("horas");["12:30","13:30","19:30","20:30","21:30"].forEach((h,i)=>{const b=document.createElement("button");b.type="button";b.textContent=h;b.setAttribute("aria-pressed",i===3);b.onclick=()=>H.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));H.appendChild(b)});
+const d=document.getElementById("d");d.valueAsDate=new Date(Date.now()+864e5);
+document.getElementById("res").onsubmit=e=>{e.preventDefault();const h=H.querySelector("[aria-pressed=true]").textContent;kitToast(`Reserva para ${document.getElementById("p").value} pessoas às ${h}. Num site real, a tasca recebia logo o pedido e confirmava por mensagem.`)};
+draw();
+</script>
+</body>
+</html>

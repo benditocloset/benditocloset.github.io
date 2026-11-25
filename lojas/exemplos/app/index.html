@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mercado Vizinho · app · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: app de encomendas para uma mercearia de bairro, instalável no telemóvel. Criado por Marianna Werneck.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E6B4F">
+<link rel="stylesheet" href="/lojas/exemplos/fonts.css">
+<style>
+:root{--verde:#0E6B4F;--verde2:#14936C;--menta:#E3F4EC;--fundo:#F5F7F4;--tinta:#16231D;--suave:#6A7A72;--linha:#E2E8E4;--laranja:#FF8A3D}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--tinta);font:400 16px/1.55 "DM Sans",system-ui,sans-serif}
+.lado{max-width:1100px;margin:0 auto;padding:40px 22px;display:grid;grid-template-columns:1fr 390px;gap:60px;align-items:center}
+.lado h1{font:700 clamp(38px,5vw,58px)/1.03 "Space Grotesk";letter-spacing:-.03em;margin:0 0 16px}.lado h1 span{color:var(--verde2)}
+.lado p{color:var(--suave);font-size:18px;margin:0 0 20px;max-width:44ch}
+.lado ul{padding:0;list-style:none;margin:0}.lado li{padding:8px 0;font-size:15.5px}.lado li b{color:var(--verde)}
+.tel{width:390px;height:780px;border-radius:52px;background:#0c0f0e;padding:12px;box-shadow:0 40px 80px -30px rgba(10,40,30,.5)}
+.ecr{width:100%;height:100%;border-radius:42px;overflow:hidden;background:#fff;display:flex;flex-direction:column;position:relative}
+.top{background:var(--verde);color:#fff;padding:44px 20px 18px}
+.top small{opacity:.8}.top h2{margin:2px 0 12px;font:700 24px "Space Grotesk"}
+.busca{background:rgba(255,255,255,.16);border-radius:14px;padding:11px 14px;font-size:14px;color:#e6f4ee}
+.corpo{flex:1;overflow:auto;padding:16px 16px 90px}
+.cats{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px}
+.cats button{flex:none;border:0;background:var(--menta);color:var(--verde);font:600 13px "DM Sans";padding:8px 14px;border-radius:999px;cursor:pointer}
+.cats button[aria-pressed=true]{background:var(--verde);color:#fff}
+.promo{background:linear-gradient(120deg,#FFE7D3,#FFD0A8);border-radius:18px;padding:16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.promo b{font:700 18px "Space Grotesk"}.promo span{font-size:40px}
+.lista{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pr{border:1px solid var(--linha);border-radius:16px;padding:12px;position:relative}
+.pr .e{font-size:40px;height:62px;display:grid;place-items:center;background:var(--fundo);border-radius:12px;margin-bottom:8px}
+.pr b{display:block;font-size:14px;line-height:1.25}.pr small{color:var(--suave);font-size:12px}
+.pr .p{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-weight:700}
+.pr button{width:30px;height:30px;border-radius:10px;border:0;background:var(--verde);color:#fff;font-size:18px;cursor:pointer}
+.pr .q{position:absolute;top:8px;right:8px;background:var(--laranja);color:#fff;font:700 12px "DM Sans";border-radius:999px;padding:2px 8px;display:none}
+.cesta{position:absolute;left:14px;right:14px;bottom:76px;background:var(--tinta);color:#fff;border-radius:16px;padding:13px 16px;display:none;justify-content:space-between;align-items:center;cursor:pointer;border:0;font:inherit}
+.cesta.on{display:flex}
+.nav{position:absolute;left:0;right:0;bottom:0;height:66px;background:#fff;border-top:1px solid var(--linha);display:flex;justify-content:space-around;align-items:center;font-size:11px;color:var(--suave)}
+.nav span{text-align:center}.nav span i{display:block;font-style:normal;font-size:20px}.nav .on{color:var(--verde);font-weight:700}
+.folha{position:absolute;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end}
+.folha.on{display:flex}.folha div{background:#fff;width:100%;border-radius:24px 24px 0 0;padding:22px}
+.folha h3{margin:0 0 10px;font:700 20px "Space Grotesk"}
+.btn{display:block;width:100%;border:0;cursor:pointer;background:var(--verde);color:#fff;font:700 15px "DM Sans";padding:15px;border-radius:14px;margin-top:12px}
+.slot{display:flex;gap:6px;margin:10px 0}.slot button{flex:1;border:1.5px solid var(--linha);background:#fff;border-radius:10px;padding:9px 4px;font:600 12.5px "DM Sans";cursor:pointer}
+.slot button[aria-pressed=true]{border-color:var(--verde);background:var(--menta);color:var(--verde)}
+@media(max-width:880px){.lado{grid-template-columns:1fr;gap:26px;padding:20px 0 0}.lado>div:first-child{padding:0 20px}.tel{width:100%;height:calc(100vh - 40px);min-height:640px;border-radius:0;padding:0;box-shadow:none;background:none}.ecr{border-radius:0}.top{padding-top:22px}}
+</style>
+</head>
+<body>
+<div class="lado">
+  <div>
+    <h1>A mercearia do bairro,<br><span>agora numa app.</span></h1>
+    <p>Exemplo de app para um pequeno negócio: o cliente instala no telemóvel direto do site, sem App Store, e encomenda em segundos.</p>
+    <ul><li>📲 <b>Instala-se no ecrã inicial</b> como uma app normal</li><li>🛒 <b>Cesta, horário de entrega e pagamento</b></li><li>🔔 <b>Avisos</b> quando a encomenda sai</li><li>💶 <b>Sem comissões</b> de plataformas de entrega</li></ul>
+    <p style="font-size:15px;margin-top:18px">Experimente a app ao lado 👉</p>
+  </div>
+  <div class="tel"><div class="ecr">
+    <div class="top"><small>Entregamos em Campanhã · hoje</small><h2>Olá! O que precisa? 👋</h2><div class="busca">🔍 Pesquisar fruta, pão, queijo…</div></div>
+    <div class="corpo">
+      <div class="promo"><div><b>Cabaz da semana</b><br><small>Fruta e legumes da época · 12,90 €</small></div><span>🧺</span></div>
+      <div class="cats" id="cats"></div>
+      <div class="lista" id="lista"></div>
+    </div>
+    <button class="cesta" id="cesta"><span><b id="n">0</b> itens</span><b id="tot">0,00 €</b><span>Ver cesta →</span></button>
+    <div class="nav"><span class="on"><i>🏠</i>Início</span><span><i>🔍</i>Procurar</span><span><i>🧾</i>Encomendas</span><span><i>👤</i>Conta</span></div>
+    <div class="folha" id="folha"><div><h3>A sua cesta</h3><div id="resumo" style="font-size:14px;color:#6A7A72"></div><p style="margin:12px 0 0;font-weight:600;font-size:14px">Hora de entrega</p><div class="slot" id="slot"><button aria-pressed="true">18h–19h</button><button aria-pressed="false">19h–20h</button><button aria-pressed="false">20h–21h</button></div><button class="btn" id="pagar">Pagar com MB WAY</button></div></div>
+  </div></div>
+</div>
+<script src="/lojas/exemplos/kit.js"></script>
+<script>
+const P={Fruta:[["🍊","Laranja do Algarve","1 kg",1.9],["🍎","Maçã de Alcobaça","1 kg",2.2],["🍌","Banana da Madeira","1 kg",2.4],["🍐","Pera Rocha","1 kg",1.8]],
+Padaria:[["🥖","Broa de milho","Inteira",2.5],["🥐","Croissant","Unidade",0.9],["🍞","Pão alentejano","500 g",2.8],["🥨","Regueifa","Unidade",1.6]],
+Queijos:[["🧀","Queijo da Serra","Amanteigado",11.5],["🧈","Manteiga dos Açores","250 g",2.9],["🥚","Ovos caseiros","Dúzia",3.2],["🥛","Leite do dia","1 L",1.1]]};
+let cat="Fruta";const C={};const fmt=v=>v.toFixed(2).replace(".",",")+" €";const all=Object.values(P).flat();
+const cats=document.getElementById("cats");Object.keys(P).forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{cat=c;draw()};cats.appendChild(b)});
+function draw(){cats.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.textContent===cat));
+ document.getElementById("lista").innerHTML=P[cat].map(p=>`<div class="pr"><span class="q" style="${C[p[1]]?"display:block":""}">${C[p[1]]||""}</span><div class="e">${p[0]}</div><b>${p[1]}</b><small>${p[2]}</small><div class="p">${fmt(p[3])}<button data-n="${p[1]}" aria-label="Juntar ${p[1]}">+</button></div></div>`).join("");
+ let n=0,t=0;for(const k in C){const p=all.find(x=>x[1]===k);n+=C[k];t+=C[k]*p[3]}document.getElementById("n").textContent=n;document.getElementById("tot").textContent=fmt(t);document.getElementById("cesta").classList.toggle("on",n>0);
+ document.getElementById("resumo").innerHTML=Object.entries(C).map(([k,q])=>`${q} × ${k}`).join("<br>")+`<br><b style="color:#16231D">Total: ${fmt(t)}</b>`}
+document.getElementById("lista").onclick=e=>{const b=e.target.closest("button[data-n]");if(!b)return;C[b.dataset.n]=(C[b.dataset.n]||0)+1;draw()};
+const f=document.getElementById("folha");document.getElementById("cesta").onclick=()=>f.classList.add("on");f.onclick=e=>{if(e.target===f)f.classList.remove("on")};
+document.getElementById("slot").onclick=e=>{const b=e.target.closest("button");if(!b)return;document.querySelectorAll("#slot button").forEach(x=>x.setAttribute("aria-pressed",x===b))};
+document.getElementById("pagar").onclick=()=>{f.classList.remove("on");kitToast("Numa app real, abria o MB WAY no telemóvel e a mercearia recebia a encomenda com a hora de entrega.")};
+draw();
+</script>
+</body>
+</html>

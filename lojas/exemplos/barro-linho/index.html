@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barro &amp; Linho · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: loja fictícia de artesanato português com carrinho e pagamento. Criado por Marianna Werneck.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/lojas/exemplos/fonts.css">
+<style>
+:root{--linho:#F2EEE6;--papel:#FBF9F4;--barro:#A9583A;--oliva:#6E7451;--tinta:#2E2A25;--suave:#80786D;--linha:#E1D9CB}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--linho);color:var(--tinta);font:400 16px/1.6 "DM Sans",system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.pf{font-family:"Playfair Display",Georgia,serif}
+header{border-bottom:1px solid var(--linha);background:var(--papel)}
+.bar{display:flex;justify-content:space-between;align-items:center;padding-block:16px}
+.logo{font:400 26px/1 "Playfair Display",serif;text-decoration:none;color:var(--tinta)}.logo em{color:var(--barro)}
+.sacobtn{border:1.5px solid var(--tinta);background:transparent;border-radius:999px;padding:9px 16px;font:600 14px "DM Sans";cursor:pointer}
+.sacobtn b{background:var(--barro);color:#fff;border-radius:999px;padding:1px 8px;margin-left:6px}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding-block:60px}
+.hero h1{font:400 clamp(40px,6vw,68px)/1.05 "Playfair Display",serif;margin:0 0 18px}.hero h1 em{color:var(--barro)}
+.hero p{color:var(--suave);font-size:18px;max-width:44ch;margin:0 0 26px}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--barro);color:#fff;font:600 15px/1 "DM Sans";padding:15px 24px;border-radius:999px;text-decoration:none}
+.hero>*{min-width:0}
+.vasos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vasos div{aspect-ratio:3/4;border-radius:24px;display:grid;place-items:center;font-size:72px}
+.selos{display:flex;gap:24px;flex-wrap:wrap;font-size:14px;color:var(--suave);padding-block:18px 40px}
+.selos b{color:var(--tinta)}
+h2{font:400 40px/1.1 "Playfair Display",serif;margin:0 0 6px}
+.sub{color:var(--suave);margin:0 0 26px}
+.prods{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding-bottom:70px}
+.pd{background:var(--papel);border:1px solid var(--linha);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.pd .im{aspect-ratio:1;display:grid;place-items:center;font-size:64px;position:relative}
+.pd .im span{position:absolute;top:10px;left:10px;background:var(--papel);font:600 11px "DM Sans";padding:4px 9px;border-radius:999px;color:var(--oliva)}
+.pd .tx{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+.pd h3{font:400 19px/1.25 "Playfair Display",serif;margin:0}.pd p{margin:2px 0 10px;font-size:13px;color:var(--suave);flex:1}
+.pd .ln{display:flex;justify-content:space-between;align-items:center}.pd .ln b{font-size:17px}
+.pd button{border:1.5px solid var(--tinta);background:transparent;border-radius:999px;padding:8px 14px;font:600 13px "DM Sans";cursor:pointer}
+.pd button:hover{background:var(--tinta);color:#fff}
+.gav{position:fixed;inset:0;background:rgba(30,25,20,.45);display:none;z-index:50}
+.gav.on{display:block}
+.gav aside{position:absolute;right:0;top:0;bottom:0;width:min(420px,100%);background:var(--papel);padding:26px;display:flex;flex-direction:column}
+.gav h3{font:400 28px "Playfair Display",serif;margin:0 0 14px}
+.barra{height:8px;border-radius:99px;background:var(--linha);overflow:hidden;margin:6px 0 4px}.barra i{display:block;height:100%;background:var(--oliva);transition:width .4s}
+.lin{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--linha)}
+.lin .e{font-size:30px;width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:var(--linho)}
+.lin .x{margin-left:auto;background:none;border:0;color:var(--suave);cursor:pointer;font-size:18px}
+.items{flex:1;overflow:auto}
+.chk{display:flex;gap:8px;align-items:center;margin:14px 0;font-size:14px}
+.tot{display:flex;justify-content:space-between;font-size:18px;margin:10px 0 16px}
+footer{border-top:1px solid var(--linha);padding:36px 0;color:var(--suave);font-size:14px}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-block:30px}.prods{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar"><a class="logo" href="#">Barro <em>&amp;</em> Linho</a><button class="sacobtn" id="abrir">Saco<b id="n">0</b></button></div></header>
+<div class="wrap hero">
+  <div><h1>Feito à mão<br>em <em>Portugal</em>,<br>peça a peça.</h1><p>Cerâmica de Barcelos, linho de Guimarães e velas de cera de abelha. Cada peça tem pequenas diferenças, porque foi feita por pessoas.</p><a class="btn" href="#loja">Ver a coleção</a></div>
+  <div class="vasos" aria-hidden="true"><div style="background:#E7D3C3">🏺</div><div style="background:#DCE0CB;margin-top:40px">🧺</div></div>
+</div>
+<div class="wrap selos"><span>🇵🇹 <b>Artesãos portugueses</b></span><span>🎁 <b>Embrulho para oferta</b></span><span>🚚 <b>Portes grátis acima de 60 €</b></span></div>
+
+<section id="loja"><div class="wrap">
+  <h2>A coleção</h2><p class="sub">Peças em pequenas quantidades.</p>
+  <div class="prods" id="prods"></div>
+</div></section>
+<footer><div class="wrap">Barro &amp; Linho · Guimarães · negócio fictício criado para demonstração.</div></footer>
+
+<div class="gav" id="gav"><aside aria-label="Saco de compras">
+  <h3>O seu saco</h3>
+  <div id="frete" style="font-size:14px"></div><div class="barra"><i id="bar"></i></div>
+  <div class="items" id="items"></div>
+  <label class="chk"><input type="checkbox" id="emb"> Embrulho para oferta (+2 €)</label>
+  <div class="tot"><span>Total</span><b id="tot">0 €</b></div>
+  <button class="btn" id="pagar" style="width:100%">Pagar com cartão ou MB WAY</button>
+  <button class="sacobtn" id="fechar" style="margin-top:10px">Continuar a ver</button>
+</aside></div>
+
+<script src="/lojas/exemplos/kit.js"></script>
+<script>
+const P=[["🏺","Jarro de Barcelos","Barro vidrado, 25 cm",34,"#E7D3C3","Últimas 3"],["🧺","Cesto de vime","Feito em Gonçalo",28,"#DCE0CB",""],["🕯️","Vela de cera de abelha","Mel e laranja, 40 h",16,"#F3E3C3",""],["🍶","Taças de linho e barro","Conjunto de 2",22,"#E3D8E6","Nova"],
+["🧶","Manta de lã de Arraiolos","Bordada à mão",89,"#E9CDBF",""],["🫖","Bule de esmalte","Azul de cobalto",39,"#D3DEEA",""],["🪴","Vaso de terracota","Com prato, 18 cm",19,"#E6D2C2",""],["🧣","Lenço de linho","Tingido com plantas",24,"#DDE3D3","Nova"]];
+const C={};const fmt=v=>(v%1?v.toFixed(2).replace(".",","):v)+" €";
+document.getElementById("prods").innerHTML=P.map((p,i)=>`<div class="pd"><div class="im" style="background:${p[4]}">${p[5]?`<span>${p[5]}</span>`:""}${p[0]}</div><div class="tx"><h3>${p[1]}</h3><p>${p[2]}</p><div class="ln"><b>${fmt(p[3])}</b><button data-i="${i}">Juntar</button></div></div></div>`).join("");
+document.getElementById("prods").onclick=e=>{const b=e.target.closest("button[data-i]");if(!b)return;C[b.dataset.i]=(C[b.dataset.i]||0)+1;draw();abrir()};
+const gav=document.getElementById("gav");const abrir=()=>gav.classList.add("on");
+document.getElementById("abrir").onclick=abrir;document.getElementById("fechar").onclick=()=>gav.classList.remove("on");gav.onclick=e=>{if(e.target===gav)gav.classList.remove("on")};
+document.getElementById("emb").onchange=draw;
+document.getElementById("items").onclick=e=>{const b=e.target.closest("[data-x]");if(!b)return;delete C[b.dataset.x];draw()};
+function draw(){let t=0,n=0;document.getElementById("items").innerHTML=Object.entries(C).map(([i,q])=>{const p=P[i];t+=p[3]*q;n+=q;return`<div class="lin"><div class="e" style="background:${p[4]}">${p[0]}</div><div><b>${p[1]}</b><br><small>${q} × ${fmt(p[3])}</small></div><button class="x" data-x="${i}" aria-label="Remover">✕</button></div>`}).join("")||'<p style="color:#80786D">Ainda vazio.</p>';
+ if(document.getElementById("emb").checked&&n)t+=2;document.getElementById("tot").textContent=fmt(t);document.getElementById("n").textContent=n;
+ const falta=Math.max(0,60-t);document.getElementById("frete").innerHTML=falta?`Faltam <b>${fmt(falta)}</b> para portes grátis`:"<b>🎉 Portes grátis!</b>";document.getElementById("bar").style.width=Math.min(100,t/60*100)+"%"}
+document.getElementById("pagar").onclick=()=>kitToast("Num site real, abria aqui o pagamento seguro (cartão, MB WAY, Apple Pay) e a loja recebia a encomenda com a morada.");
+draw();
+</script>
+</body>
+</html>

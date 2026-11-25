@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pares do Porto · jogo · Projeto conceito por Marianna Werneck</title>
+<meta name="description" content="Projeto conceito: jogo de memória para marcas, com cronómetro e cupão no fim. Criado por Marianna Werneck.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/lojas/exemplos/fonts.css">
+<style>
+:root{--a:#5B2EFF;--b:#FF4F8B;--c:#FFC93C;--noite:#130E2B;--branco:#FFFFFF}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 10% -10%,#3A1FB0 0,transparent 60%),radial-gradient(900px 500px at 110% 10%,#9C1E5C 0,transparent 55%),var(--noite);color:var(--branco);font:400 16px/1.5 "Space Grotesk",system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:26px 18px 60px;text-align:center}
+h1{font:700 clamp(36px,7vw,60px)/1 "Space Grotesk";letter-spacing:-.03em;margin:10px 0 8px}
+h1 span{background:linear-gradient(90deg,var(--c),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{opacity:.8;margin:0 0 22px}
+.hud{display:flex;justify-content:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hud div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 16px;min-width:110px}
+.hud small{display:block;opacity:.7;font-size:12px;letter-spacing:.1em;text-transform:uppercase}.hud b{font-size:24px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;perspective:900px}
+.cd{aspect-ratio:3/4;position:relative;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.cd .f,.cd .v{position:absolute;inset:0;border-radius:16px;display:grid;place-items:center;backface-visibility:hidden}
+.cd .v{background:linear-gradient(145deg,var(--a),var(--b));box-shadow:0 10px 24px -10px rgba(0,0,0,.6);font:700 26px "Space Grotesk"}
+.cd .v:after{content:"?";opacity:.5}
+.cd .f{background:#fff;transform:rotateY(180deg);font-size:clamp(30px,8vw,52px)}
+.cd.on{transform:rotateY(180deg)}
+.cd.ok .f{background:linear-gradient(145deg,#FFF6D6,#FFE08A);box-shadow:0 0 0 3px var(--c)}
+.btn{display:inline-block;border:0;cursor:pointer;background:linear-gradient(90deg,var(--c),var(--b));color:#1a0f2e;font:700 16px/1 "Space Grotesk";padding:15px 26px;border-radius:999px;margin-top:22px}
+.fim{position:fixed;inset:0;background:rgba(10,6,25,.75);display:none;place-items:center;z-index:40;padding:20px}
+.fim.on{display:grid}
+.fim div{background:#fff;color:#1a0f2e;border-radius:24px;padding:30px;max-width:380px;text-align:center}
+.cupao{font:700 26px "Space Grotesk";letter-spacing:.12em;border:2px dashed var(--a);border-radius:12px;padding:12px;margin:14px 0;color:var(--a)}
+.para{margin-top:40px;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px}
+.para h2{margin:0 0 8px;font-size:22px}.para ul{margin:0;padding-left:20px;opacity:.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pares do <span>Porto</span></h1>
+  <p class="sub">Encontre os 8 pares no menor tempo possível. Quem acabar ganha um cupão.</p>
+  <div class="hud"><div><small>Tempo</small><b id="t">0,0s</b></div><div><small>Jogadas</small><b id="j">0</b></div><div><small>Recorde</small><b id="r">—</b></div></div>
+  <div class="grid" id="g"></div>
+  <button class="btn" id="novo">Baralhar de novo</button>
+  <div class="para"><h2>Para que serve um jogo no site?</h2><ul><li>Prende a atenção: as pessoas ficam mais tempo e voltam para bater o recorde.</li><li>Dá um prémio no fim (cupão, amostra, sorteio) e recolhe o e-mail com autorização.</li><li>É partilhável no Instagram e no WhatsApp, o que traz visitas novas.</li></ul></div>
+</div>
+<div class="fim" id="fim"><div><h2 style="margin:0">Conseguiu! 🎉</h2><p id="res"></p><div class="cupao">PORTO10</div><p style="font-size:14px;margin:0 0 12px">Cupão de demonstração: numa marca real, valia desconto na loja.</p><button class="btn" id="part" style="margin-top:4px">Partilhar resultado</button></div></div>
+<script src="/lojas/exemplos/kit.js"></script>
+<script>
+const E=["🍷","🌉","🚋","🐟","🥪","⛪","🎡","🍮"];
+let open=[],lock=false,ok=0,jog=0,t0=0,tick;
+const g=document.getElementById("g"),T=document.getElementById("t"),J=document.getElementById("j"),R=document.getElementById("r");
+let rec=null;try{rec=+localStorage.getItem("pares-rec")||null}catch(e){}
+const fmt=s=>s.toFixed(1).replace(".",",")+"s";R.textContent=rec?fmt(rec):"—";
+function novo(){clearInterval(tick);t0=0;ok=0;jog=0;open=[];lock=false;T.textContent="0,0s";J.textContent=0;
+ const d=[...E,...E].sort(()=>Math.random()-.5);
+ g.innerHTML=d.map(e=>`<button class="cd" data-e="${e}" aria-label="Carta"><span class="v"></span><span class="f">${e}</span></button>`).join("")}
+g.onclick=e=>{const c=e.target.closest(".cd");if(!c||lock||c.classList.contains("on"))return;
+ if(!t0){t0=performance.now();tick=setInterval(()=>T.textContent=fmt((performance.now()-t0)/1000),100)}
+ c.classList.add("on");open.push(c);
+ if(open.length===2){jog++;J.textContent=jog;const[a,b]=open;
+  if(a.dataset.e===b.dataset.e){a.classList.add("ok");b.classList.add("ok");open=[];ok++;if(ok===8)fim()}
+  else{lock=true;setTimeout(()=>{a.classList.remove("on");b.classList.remove("on");open=[];lock=false},700)}}};
+function fim(){clearInterval(tick);const s=(performance.now()-t0)/1000;if(!rec||s<rec){rec=s;try{localStorage.setItem("pares-rec",s)}catch(e){}R.textContent=fmt(rec)}
+ document.getElementById("res").innerHTML=`Tempo: <b>${fmt(s)}</b> em <b>${jog}</b> jogadas.`;document.getElementById("fim").classList.add("on")}
+document.getElementById("fim").onclick=e=>{if(e.target.id==="fim")e.currentTarget.classList.remove("on")};
+document.getElementById("part").onclick=()=>kitToast("Num jogo real, abria a partilha para o Instagram ou WhatsApp com o tempo e o link do jogo.");
+document.getElementById("novo").onclick=novo;novo();
+</script>
+</body>
+</html>
