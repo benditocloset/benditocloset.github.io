@@ -10,10 +10,10 @@ const FILL = {
   bags: " If the person is in underwear, lingerie or swimwear, dress them in a plain white crew-neck t-shirt and classic mid-blue straight-leg jeans.",
   accessories: " If the person is in underwear, lingerie or swimwear, dress them in a plain white crew-neck t-shirt and classic mid-blue straight-leg jeans."
 };
-const JEANS_BARE = " If the person's legs are bare or they are in underwear or swimwear, also dress them in classic mid-blue straight-leg jeans.";
+const JEANS_BARE = " If the person has nothing on the lower body (bare legs up to the hips, or only underwear or swimwear), dress the lower body in classic mid-blue straight-leg jeans; never leave the person without clothing on the lower body.";
 const JEANS_ALL = " Also replace whatever they wear on the lower body (skirt, shorts, dress hem, underwear) with classic mid-blue straight-leg jeans.";
 const PROMPT = {
-  tops: "Dress the person in the top/jacket from the product photo only. Keep the person's face, body, pose, hair and background.",
+  tops: "Dress the person in the top/jacket from the product photo only, on the upper body. Do not remove, shorten or change anything on the lower body: keep any skirt, sarong, shorts, trousers or the lower part of a dress exactly as it is, with the top worn naturally over it. Keep the person's face, body, pose, hair and background.",
   bottoms: "Dress the person in the trousers/leggings from the product photo only. If the person wears a dress, replace it with these trousers and a simple plain fitted top in a neutral colour. Keep face, body, pose, hair and background.",
   "one-pieces": "Dress the person in the dress/one-piece from the product photo only, replacing their current outfit. Keep face, body, pose, hair and background.",
   shoes: "Put the shoes/sneakers from the product photo on the person's feet only; ignore the rest of the outfit in the product photo. Keep everything else the same.",
