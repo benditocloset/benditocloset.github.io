@@ -139,6 +139,13 @@ const STY={
   en:["Sporty","luxe","Comfort with a label: track jacket, great leggings and sneakers that last all day. From the gym to brunch without changing."],
   pieces:["adidas-casaco-bordo","adidas-legging","nike-mind-002","adidas-bolsa"],pool:["asics-noosa","adidas-calca-castanha","adidas-casaco-bordo","adidas-legging","nike-mind-002"]}
 };
+const QIMG=[
+ {paris:"versace-oculos",porto:"golden-goose-superstar",noite:"shein-bomber-lantejoulas",rio:"blueman-saida-praia",sporty:"adidas-legging"},
+ {paris:"zara-gabardina",porto:"rl-camisola-azul",noite:"shein-body-dourado",rio:"blueman-vestido-mata",sporty:"nike-mind-002"},
+ {paris:"guess-casaco-1",porto:"pelo-camel",noite:"ck-bolsa-prata",rio:"sarong-bali-seda",sporty:"adidas-casaco-bordo"},
+ {paris:"versace-bolsa",porto:"pepe-parka",noite:"kimono-dourado-ibiza",rio:"vestido-rio",sporty:"asics-noosa"},
+ {paris:"gucci-gframe",porto:"zara-botas-camurca",noite:"shein-sapatos-lantejoulas",rio:"melissa-mules-anabela",sporty:"adidas-calca-castanha"}
+];
 const KEYS=Object.keys(STY);
 const Q={
  pt:[
@@ -187,7 +194,7 @@ function renderQ(){
   $("#prog").innerHTML=[0,1,2,3,4].map(i=>`<i class="${i<=STEP?"on":""}"></i>`).join("");
   $("#qn").textContent=T().q(STEP+1);
   $("#qt").textContent=qt;
-  $("#opts").innerHTML=ORD[STEP].map(k=>{const id=STY[k].pool[STEP],f=foto(id)||foto(STY[k].pieces[0]);return `<button type="button" class="opt${ANS[STEP]===k?" pick":""}" data-k="${k}">${f?`<img src="/${f}" alt="" loading="lazy">`:""}<span>${opts[k]}</span></button>`}).join("");
+  $("#opts").innerHTML=ORD[STEP].map(k=>{const id=QIMG[STEP][k],f=foto(id)||foto(STY[k].pieces[0]);return `<button type="button" class="opt${ANS[STEP]===k?" pick":""}" data-k="${k}">${f?`<img src="/${f}" alt="" loading="lazy">`:""}<span>${opts[k]}</span></button>`}).join("");
   $("#back").style.visibility=STEP?"visible":"hidden";
 }
 $("#opts").addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;ANS[STEP]=b.dataset.k;b.classList.add("pick");
