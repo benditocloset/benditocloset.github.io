@@ -158,7 +158,7 @@ function drawCover(c){
     c.fillStyle=m.ink;c.textAlign="center";c.font='italic 400 64px "Bodoni Moda"';c.fillText(t.place,W/2,690);c.font='500 26px "DM Sans"';c.globalAlpha=.7;spaced(c,t.place2.toUpperCase(),W/2,750,4,"center");c.globalAlpha=1;c.textAlign="left"}
   sel.forEach((p,k)=>{const [x,y,w,h,r]=sl[k],i=img(p.foto);c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
     c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=40;c.shadowOffsetY=18;c.fillStyle="#fff";c.fillRect(-w/2-14,-h/2-14,w+28,h+28);c.shadowColor="transparent";
-    if(i.complete&&i.naturalWidth)coverImg(c,i,-w/2,-h/2,w,h);else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h)}
+    if(i.complete&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h)}
     c.restore()});
   // credit tags on top of every photo
   sel.forEach((p,k)=>{const [x,y,w,h,r]=sl[k];c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
