@@ -155,7 +155,7 @@ const IMG={};let BG=null,BGZ=1,BGX=0,BGY=0;
 const cv=$("#cv"),ctx=cv.getContext("2d");
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),3200)}
-function img(src){if(IMG[src])return IMG[src];const i=new Image();IMG[src]=i;i.onload=()=>draw();i.src="/"+src.replace(/^\//,"");return i}
+function img(src){if(IMG[src])return IMG[src];const i=new Image();IMG[src]=i;i.onload=()=>{(i.decode?i.decode():Promise.resolve()).catch(()=>{}).then(()=>{i._ok=1;draw()})};i.src="/"+src.replace(/^\//,"");return i}
 
 /* ---------- cover ---------- */
 const SLOTS={1:[[170,240,740,870,-1.5]],2:[[70,250,540,700,-3],[480,420,520,680,3]],3:[[60,240,500,640,-3],[560,220,440,520,3],[520,640,450,470,-2]],4:[[60,240,460,560,-3],[560,230,440,520,2.5],[100,720,420,400,2],[570,680,410,430,-2.5]]};
@@ -179,7 +179,7 @@ function drawCover(c){
     c.fillStyle=m.ink;c.textAlign="center";c.font='italic 400 64px "Bodoni Moda"';c.fillText(t.place,W/2,690);c.font='500 26px "DM Sans"';c.globalAlpha=.7;spaced(c,t.place2.toUpperCase(),W/2,750,4,"center");c.globalAlpha=1;c.textAlign="left"}
   sel.forEach((p,k)=>{const [x,y,w,h,r]=sl[k],i=img(p.foto);c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
     c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=40;c.shadowOffsetY=18;c.fillStyle="#fff";c.fillRect(-w/2-14,-h/2-14,w+28,h+28);c.shadowColor="transparent";
-    if(i.complete&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h)}
+    if(i._ok&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h)}
     c.restore()});
   // credit tags on top of every photo
   sel.forEach((p,k)=>{const [x,y,w,h,r]=sl[k];c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
