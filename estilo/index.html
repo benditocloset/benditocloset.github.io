@@ -173,6 +173,10 @@ const T=()=>TXT[LANG];
 let P={},ORD=[],ANS=[],STEP=0,RES=null;
 const IMG={};
 function img(src){if(IMG[src])return IMG[src];const i=new Image();IMG[src]=i;i.src="/"+src.replace(/^\//,"");return i}
+/* Safari pode dar a imagem como "complete" antes de a descodificar e desenha-a em branco no canvas: esperamos pelo decode() */
+const READY=new Set();
+function ready(src){const i=img(src);if(READY.has(src))return Promise.resolve();const p=i.decode?i.decode():new Promise((r,j)=>{if(i.complete&&i.naturalWidth)r();else{i.onload=r;i.onerror=j}});return p.then(()=>{READY.add(src)}).catch(()=>new Promise(r=>{if(i.complete&&i.naturalWidth){READY.add(src);r()}else{i.addEventListener("load",()=>{READY.add(src);r()},{once:true});i.addEventListener("error",r,{once:true})}}))}
+function readyAll(){if(!RES)return Promise.resolve();return Promise.all(avail(RES).slice(0,3).map(id=>ready(P[id].foto)))}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),3200)}
 function foto(id){return P[id]?P[id].foto:null}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -238,18 +242,19 @@ function draw(){
   c.fillStyle=s.ink;c.textAlign="center";
   c.font='400 132px "Bodoni Moda", serif';c.fillText(t[0],540,365);
   c.font='italic 400 150px "Bodoni Moda", serif';c.fillStyle=s.acc;c.fillText(t[1],540,520);
-  const ids=avail(RES).slice(0,3);
+  const ids=avail(RES).slice(0,3);let pend=false;
   ids.forEach((id,n)=>{const p=P[id],i=img(p.foto),[x,y,w,h,r]=SL[n];
     c.save();c.translate(x+w/2,y+h/2);c.rotate(r*Math.PI/180);
     c.shadowColor="rgba(0,0,0,.35)";c.shadowBlur=30;c.shadowOffsetY=14;c.fillStyle="#fff";c.fillRect(-w/2-14,-h/2-14,w+28,h+86);c.shadowColor="transparent";
-    if(i.complete&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h);i.addEventListener("load",draw,{once:true})}
+    if(READY.has(p.foto)&&i.naturalWidth){c.save();c.beginPath();c.rect(-w/2,-h/2,w,h);c.clip();coverImg(c,i,-w/2,-h/2,w,h);c.restore()}else{c.fillStyle="#ddd";c.fillRect(-w/2,-h/2,w,h);pend=true}
     c.fillStyle="#1C1517";c.font='600 22px "DM Sans", sans-serif';c.textAlign="center";
     let lab=(p.marca||"").toUpperCase();while(c.measureText(lab).width>w-10&&lab.length>4)lab=lab.slice(0,-2)+"…";
     c.fillText(lab,0,h/2+46);c.restore()});
   c.fillStyle=s.ink;c.globalAlpha=.85;c.font='500 30px "DM Sans", sans-serif';c.textAlign="center";c.fillText(T().cardBottom,540,1270);c.globalAlpha=1;
+  if(pend)readyAll().then(()=>requestAnimationFrame(draw));
 }
 async function blob(){return new Promise(r=>$("#cv").toBlob(r,"image/png"))}
-$("#save").addEventListener("click",async()=>{draw();const b=await blob();const f=new File([b],"meu-estilo-bendito.png",{type:"image/png"});
+$("#save").addEventListener("click",async()=>{await readyAll();draw();const b=await blob();const f=new File([b],"meu-estilo-bendito.png",{type:"image/png"});
   if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});toast(T().saved);return}catch(e){if(e.name==="AbortError")return}}
   const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast(T().saved)});
 $("#share").addEventListener("click",async()=>{const t=STY[RES][LANG],u="https://benditocloset.pt/estilo/",txt=T().shareText(t[0]+" "+t[1]);
