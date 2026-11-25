@@ -55,6 +55,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 </div>
 
 
+<div class="box" id="pago" hidden style="border-color:#9B1B3A"><b>Pagamento recebido ✓</b> Pedido <span id="pcode"></span>. Vai receber o recibo da Stripe por e-mail e a Marianna confirma o envio das peças.</div>
 <div class="calc" id="caucao">
 <h2 style="margin-top:0">Pedir peças emprestadas</h2>
 <p class="steps">Faça o pedido aqui, sem trocar mensagens: escolha as peças e as datas, preencha os seus dados, assine o contrato e pague a caução e os portes. A caução é a soma do valor das peças e é-lhe devolvida.</p>
@@ -99,13 +100,13 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 
 <div class="done" id="done" hidden>
 <p><b>Pedido <span id="code"></span> enviado ✓</b><br>Recebe a confirmação das peças e das datas por e-mail. Agora faça o pagamento:</p>
-<ol class="steps">
+<ol class="steps" id="manual">
 <li>No pagamento, escreva o valor total <b id="v2"></b> <button type="button" class="cp" data-cp="v">copiar</button></li>
 <li>No campo das peças, escreva o código <b id="c2"></b> <button type="button" class="cp" data-cp="c">copiar</button></li>
 <li>Escolha «Sim, li e aceito o contrato» e pague.</li>
 </ol>
 <a class="pay" id="pay" href="https://buy.stripe.com/eVqdR26NA8fP77Q0MAcwg0X?locale=pt" target="_blank" rel="noopener">Pagar a caução</a>
-<p class="steps">A caução é devolvida até 7 dias depois de as peças voltarem em bom estado. Se alguma peça não estiver disponível nas datas pedidas, a caução e os portes são devolvidos na totalidade. A devolução das peças é enviada por si, com seguimento, para a morada que lhe indicamos.</p>
+<p class="steps">A caução é devolvida até 7 dias depois de as peças voltarem em bom estado. Se alguma peça não estiver disponível nas datas pedidas, a caução e os portes são devolvidos na totalidade. A devolução já fica paga: enviamos-lhe a etiqueta com as peças.</p>
 <button type="button" class="cp" id="copy" style="font-size:14px;padding:8px 14px">Guardar cópia do contrato assinado (PDF)</button>
 </div>
 </div>
@@ -126,7 +127,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <h2>3. Caução</h2>
 <ol>
 <li>A caução é igual à <b>soma do valor das peças emprestadas</b> indicado no Acordo.</li>
-<li>A caução é paga pelo link de pagamento da Bendito Closet antes da entrega das peças (cartão, MB WAY ou Multibanco), juntamente com os portes de envio escolhidos no pedido. Os portes não são reembolsáveis, salvo se a Cedente não puder emprestar as peças.</li>
+<li>A caução é paga no site da Bendito Closet antes da entrega das peças (cartão, MB WAY ou Multibanco), juntamente com os portes de ida e volta escolhidos no pedido. Os portes não são reembolsáveis, salvo se a Cedente não puder emprestar as peças.</li>
 <li>Quando as peças forem devolvidas no estado em que foram entregues, a Cedente reembolsa a caução na totalidade, pelo mesmo meio de pagamento, <b>até 7 dias</b> depois de as receber e verificar. O prazo em que o reembolso aparece na conta depende do banco (normalmente 5 a 10 dias).</li>
 <li>Se alguma peça não estiver disponível nas datas pedidas e o Utilizador não aceitar outra, a Cedente reembolsa a caução e os portes na totalidade.</li>
 <li>Se houver valores a pagar nos termos da cláusula 5, a Cedente reembolsa apenas a parte da caução que sobrar.</li>
@@ -137,7 +138,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <li>Guardar e usar as peças com cuidado, protegendo-as de maquilhagem, autobronzeador, perfume, comida, bebida e fumo.</li>
 <li>Não alterar, cortar, coser, tingir, lavar ou limpar as peças, nem as vender, alugar ou emprestar a terceiros.</li>
 <li>Devolver todas as peças até à data do Acordo, no mesmo estado, com etiquetas, acessórios e embalagens, se os tiverem.</li>
-<li>Pagar os portes de envio, escolhidos e pagos no pedido, e os portes de devolução: as peças são devolvidas com seguimento, por conta do Utilizador, para a morada indicada pela Cedente, salvo acordo diferente.</li>
+<li>Pagar no pedido os portes de ida e volta. A Cedente envia as peças com a etiqueta ou as instruções de devolução, e o Utilizador entrega a encomenda à transportadora até à data de devolução.</li>
 </ol>
 
 <h2>5. Responsabilidade por defeito, dano ou perda</h2>
@@ -203,11 +204,11 @@ function sigPNG(){const w=600,h=Math.round(600*cv.height/cv.width),c=document.cr
 const SHIP=[{k:"ctt",n:"Portugal continental · CTT · 2 a 3 dias úteis",p:7,g:9},{k:"cex",n:"Portugal continental · Correos Express · 24h",p:10,g:12},{k:"ilhas",n:"Açores e Madeira · CTT · 3 a 5 dias úteis",p:9,g:12},{k:"eu",n:"Europa · DHL ou Correos Express",p:18,g:24},{k:"mao",n:"Levanto em mão (Ermesinde)",p:0,g:0}];
 let SH="ctt";
 function big(){return sel().some(p=>!["roupas","acessorios"].includes(p.cat));}
-function portes(){const o=SHIP.find(x=>x.k===SH);return big()?o.g:o.p;}
-function renderShip(){const g=big();$("ship").innerHTML=SHIP.map(o=>`<label class="opt"><input type="radio" name="ent" value="${o.k}" ${o.k===SH?"checked":""}> <span style="flex:1">${o.n}</span><b>${o.p?fmt(g?o.g:o.p):"grátis"}</b></label>`).join("");$("shipnote").textContent=g?"Portes para sapatos, malas ou casacos.":"Portes para roupa e acessórios. Com sapatos, malas ou casacos: "+fmt(9)+" a "+fmt(24)+".";}
+function portes(){const o=SHIP.find(x=>x.k===SH);return (big()?o.g:o.p)*2;}
+function renderShip(){const g=big();$("ship").innerHTML=SHIP.map(o=>`<label class="opt"><input type="radio" name="ent" value="${o.k}" ${o.k===SH?"checked":""}> <span style="flex:1">${o.n}</span><b>${o.p?fmt((g?o.g:o.p)*2):"grátis"}</b></label>`).join("");$("shipnote").textContent="Portes de ida e volta: enviamos as peças e a etiqueta para as devolver."+(g?" Preço para sapatos, malas ou casacos.":" Preço para roupa e acessórios.");}
 $("ship").addEventListener("change",e=>{if(e.target.name==="ent"){SH=e.target.value;check();}});
 function ent(){return SHIP.find(x=>x.k===SH).n;}
-function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 15 dias.":(n>15?"Escolheu "+n+" dias. O empréstimo é de até 15 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (devolvida)</span><span>${fmt(V)}</span></div><div><span>Portes de envio</span><span>${portes()?fmt(portes()):"grátis"}</span></div><div class="t"><span>Total a pagar</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · total de "+fmt(T):"Enviar pedido";return p;}
+function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 15 dias.":(n>15?"Escolheu "+n+" dias. O empréstimo é de até 15 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (devolvida)</span><span>${fmt(V)}</span></div><div><span>Portes ida e volta</span><span>${portes()?fmt(portes()):"grátis"}</span></div><div class="t"><span>Total a pagar</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · total de "+fmt(T):"Enviar pedido";return p;}
 list.addEventListener("change",e=>{const c=e.target;if(c.type!=="checkbox")return;c.checked?S.add(c.value):S.delete(c.value);total();});
 q.addEventListener("input",render);
 $("d1").addEventListener("change",()=>{if($("d1").value){const a=new Date($("d1").value+"T12:00");$("d2").min=iso(a);const m=new Date(a);m.setDate(m.getDate()+15);$("d2").max=iso(m);}check();});
@@ -219,29 +220,31 @@ $("go").addEventListener("click",async()=>{
  CODE="BC-"+Math.random().toString(36).slice(2,6).toUpperCase();
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
  const data={_subject:"Pedido de empréstimo "+CODE+" · total "+fmt(V+portes()),_template:"table",_captcha:"false",
-  "Pedido":CODE,"Caução":fmt(V),"Portes":portes()?fmt(portes()):"grátis","Total a pagar":fmt(V+portes()),"Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
+  "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":portes()?fmt(portes()):"grátis","Total a pagar":fmt(V+portes()),"Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
   "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":$("mor").value.trim(),
   "Nome":$("nome").value.trim(),"E-mail":$("mail").value.trim(),_replyto:$("mail").value.trim(),"Telemóvel":$("tel").value.trim(),
   "Publicação/empresa":$("pub").value.trim(),"NIF":$("nif").value.trim(),"Produção e notas":$("obs").value.trim(),
   "Contrato":"Aceite no site (versão de 25/11/2026)"};
  const when=new Date();data["Assinado por"]=$("sname").value.trim();data["Data e hora da assinatura"]=when.toLocaleString("pt-PT")+" ("+Intl.DateTimeFormat().resolvedOptions().timeZone+")";data["Dispositivo"]=navigator.userAgent;
- data.email=$("mail").value.trim();data._autoresponse="Recebemos o seu pedido de empréstimo "+CODE+" (caução de "+fmt(V)+(portes()?" + portes "+fmt(portes()):"")+"). Assinou o contrato em "+data["Data e hora da assinatura"]+". A Marianna confirma as peças e as datas por e-mail. Contrato: https://benditocloset.pt/emprestimo/";
+ data.email=$("mail").value.trim();data._autoresponse="Recebemos o seu pedido de empréstimo "+CODE+" (caução de "+fmt(V)+(portes()?" + portes ida e volta "+fmt(portes()):"")+"). Assinou o contrato em "+data["Data e hora da assinatura"]+". A Marianna confirma as peças e as datas por e-mail. Contrato: https://benditocloset.pt/emprestimo/";
  const png=sigPNG();const blob=await new Promise(r=>png.toBlob(r,"image/png"));
  let ok=false;
  try{const f=new FormData();Object.entries(data).forEach(([k,v])=>f.append(k,v));f.append("attachment",new File([blob],"assinatura-"+CODE+".png",{type:"image/png"}));const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Accept":"application/json"},body:f});ok=r.ok;}catch(e){}
  if(!ok){try{data["Assinatura"]="(imagem não anexada)";const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});ok=r.ok;}catch(e){}}
  const sg=$("signed");sg.querySelector(".sc").textContent=CODE;sg.querySelector(".sv").textContent=fmt(V);sg.querySelector(".spo").textContent=ent()+(portes()?" ("+fmt(portes())+")":"");sg.querySelector(".sp").textContent=data["Peças"];sg.querySelector(".sd1").textContent=data["Entrega"];sg.querySelector(".sd2").textContent=data["Devolução até"];sg.querySelector(".sn").textContent=data["Assinado por"];sg.querySelector(".st").textContent=data["Data e hora da assinatura"];sg.querySelector("img").src=png.toDataURL("image/png");
  if(!ok){go.disabled=false;go.textContent="Tentar outra vez";$("err").innerHTML='Não foi possível enviar o pedido. Tente outra vez ou envie-o para <a href="mailto:ola@benditocloset.pt?subject='+encodeURIComponent("Pedido de empréstimo "+CODE)+'&body='+encodeURIComponent(Object.entries(data).filter(([k])=>k[0]!=="_").map(([k,v])=>k+": "+v).join("\n"))+'">ola@benditocloset.pt</a>.';$("err").hidden=false;return;}
+ let wurl="";try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/caucao",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,ship:SH,email:$("mail").value.trim(),ids:[...S],d1:$("d1").value,d2:$("d2").value})});const o=await r.json();if(r.ok&&o.url&&Math.abs(o.total-(V+portes()))<0.01)wurl=o.url;}catch(e){}
  $("code").textContent=CODE;$("c2").textContent=CODE;$("v2").textContent=num(V+portes())+" €";
  const ref=(CODE+"_"+$("d1").value.replace(/-/g,"")+"_"+$("d2").value.replace(/-/g,"")).replace(/[^\w-]/g,"");
  $("pay").href="https://buy.stripe.com/eVqdR26NA8fP77Q0MAcwg0X?locale=pt&prefilled_email="+encodeURIComponent($("mail").value.trim())+"&client_reference_id="+ref;
- $("pay").textContent="Pagar "+fmt(V+portes())+(portes()?" (caução + portes)":" (caução)");
+ $("pay").textContent="Pagar "+fmt(V+portes())+(portes()?" (caução + portes)":" (caução)");if(wurl){$("pay").href=wurl;$("pay").removeAttribute("target");$("manual").hidden=true;}
  go.hidden=true;$("done").hidden=false;$("signed").hidden=false;cv.style.pointerEvents="none";$("sigclr").hidden=true;$("done").scrollIntoView({behavior:"smooth",block:"center"});
 });
 $("copy")&&$("copy").addEventListener("click",()=>window.print());
 document.addEventListener("click",e=>{const b=e.target.closest(".cp[data-cp]");if(!b)return;const t=b.dataset.cp==="v"?num(V+portes()):CODE;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="copiado ✓";setTimeout(()=>b.textContent="copiar",1500);}).catch(()=>{});});
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];P=all.filter(p=>p.status!=="vendido"&&(p.foto||(p.fotos&&p.fotos[0]))&&p.preco).map(p=>({id:p.id,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));render();}).catch(()=>{list.innerHTML='<p class="steps">Não foi possível carregar as peças. Recarregue a página.</p>'});
 check();
+const pg=new URLSearchParams(location.search).get("pago");if(pg&&/^BC-[A-Z0-9]{4}$/.test(pg)){$("pcode").textContent=pg;$("pago").hidden=false;$("pago").scrollIntoView();}
 })();
 </script>
 </body>
