@@ -151,7 +151,8 @@ $("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
  try{let cur=MEsrc,src="";
   for(let i=0;i<sel.length;i++){const p=sel[i];
    show('<div class="spin"></div><p>'+(sel.length>1?(LANG==="pt"?`Peça ${i+1} de ${sel.length}: ${p.marca}. `:`Piece ${i+1} of ${sel.length}: ${p.marca}. `):"")+M.wait+'</p>');
-   const o=await run("/run",{model_image:cur,garment_image:"https://benditocloset.pt/"+p.foto,category:VTO[p.id],jeans:$("#jeans").checked&&!sel.some(x=>VTO[x.id]==="bottoms"||VTO[x.id]==="one-pieces")&&VTO[p.id]==="tops"});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
+   const nm=(p.nome||"").toLowerCase(),hint=/rel[oó]gio|watch/.test(nm)?"watch":/[óo]culos|glasses/.test(nm)?"glasses":VTO[p.id]==="bags"?"bag":"";
+   const o=await run("/run",{model_image:cur,garment_image:"https://benditocloset.pt/"+p.foto,category:VTO[p.id],hint,jeans:$("#jeans").checked&&!sel.some(x=>VTO[x.id]==="bottoms"||VTO[x.id]==="one-pieces")&&VTO[p.id]==="tops"});if(o.fail){show('<p>'+lim(o.fail)+'</p>');return}
    const r=await poll(o.id);if(!r.out){show('<p>'+M.err+'</p>');return}
    src=asData(r.out);cur=src}
   try{sessionStorage.setItem("bc-ai-last",src)}catch(e){}
