@@ -64,6 +64,7 @@ h1 em{font-style:italic;color:var(--rose)}
 .btn.buy{background:var(--rose);border-color:var(--rose);color:#fff}
 .btn:disabled{opacity:.4;cursor:default}
 .note{font-size:12.5px;color:var(--muted);margin:0}
+.zoom{display:grid;gap:6px;margin:4px 0 10px;font-size:14px;color:#4b4245}.zoom input{width:100%;accent-color:var(--rose)}#cv.drag{cursor:grab;touch-action:none}
 .ai{margin-top:16px;border:1px solid var(--rose);border-radius:16px;padding:14px;display:grid;gap:10px;background:#fff}.ai-h{font-weight:600}.ai-p{display:flex;gap:8px;overflow-x:auto;min-height:84px;padding:2px}.ai-p button{flex:none;border:2px solid transparent;border-radius:10px;padding:0;background:none;cursor:pointer;width:64px;height:80px;overflow:hidden}.ai-p button img{width:100%;height:100%;object-fit:cover;display:block}.ai-p button[aria-pressed=true]{border-color:var(--rose)}.aid{border:0;border-radius:18px;padding:0;max-width:min(92vw,440px);width:100%}.aid::backdrop{background:rgba(0,0,0,.7)}.aid-in{position:relative;padding:16px;display:grid;gap:10px;text-align:center}.aid-in img{width:100%;border-radius:12px;display:block}.aid-x{position:absolute;top:6px;right:10px;border:0;background:none;font-size:28px;cursor:pointer;z-index:2}.spin{width:42px;height:42px;border-radius:50%;border:4px solid #eee;border-top-color:var(--rose);margin:20px auto;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .photo-row{display:flex;gap:8px;margin-top:12px}.photo-row .btn{display:inline-flex;align-items:center;justify-content:center}.priv{font-size:12.5px;color:var(--muted);margin:8px 0 0}
 .toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,150%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;transition:transform .3s;z-index:9;max-width:calc(100vw - 32px)}
@@ -84,6 +85,7 @@ footer a{color:var(--rose)}
   <div class="stage">
     <canvas class="cover" id="cv" width="1080" height="1350" aria-label="Capa do seu look"></canvas>
     <div class="hint" data-t="hint">Toque nas peças para entrar e sair da capa.</div>
+    <label class="zoom" id="zoomBox" hidden><span data-t="zoomT">🔍 Ajuste a foto: aproxime aqui e arraste na capa</span><input type="range" id="zoom" min="1" max="3" step="0.01" value="1"></label>
     <p class="priv" id="inapp" style="display:none;background:#fff;border:1px solid var(--rose);border-radius:12px;padding:10px 12px;color:var(--ink)"></p>
     <div class="photo-row">
       <label class="btn dark" style="flex:1;position:relative"><input type="file" id="file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"><span data-t="photo">🖼️ Escolher foto da galeria</span></label>
@@ -126,12 +128,12 @@ footer a{color:var(--rose)}
 <script>
 (function(){
 const TXT={
- pt:{eyebrow:"Jogo · Novo",h1:'Monta o <em>look</em>',lead:"Escolha até 4 peças reais do closet e, se quiser, ponha a sua foto: nós fazemos a capa de revista com você na capa. Partilhe no story ou leve o look para casa.",photo:"🖼️ Escolher foto da galeria",aiT:"Provador com IA: escolha uma peça e veja-a vestida em si",aiGo:"Provar em mim",aiNeed:"Primeiro escolha uma foto sua: de frente, corpo à vista, boa luz.",aiPriv:"Para provar com IA, a sua foto é enviada à FASHN AI só para gerar a imagem e é apagada depois. O Bendito não a guarda. 5 provas por dia.",aiWait:"A vestir a peça em si… (cerca de 20 segundos)",aiUse:"Pôr esta foto na capa",aiSave:"Guardar a foto",aiErr:"Não consegui gerar a prova. Use uma foto sua de verdade (não um print), de frente, com o corpo à vista e boa luz.",aiLim:"Já usou as 5 provas de hoje. Volte amanhã!",aiDay:"O provador está cheio hoje. Volte amanhã!",aiPick:"Escolha primeiro uma peça de roupa (não sapatos nem malas).",photo2:"🖼️ Trocar a foto",nophoto:"✕ Remover",priv:"🔒 A sua foto fica só no seu telemóvel: não é enviada nem guardada por nós.",hint:"Toque nas peças para entrar e sair da capa.",mood:"1 · O mood",pick:"2 · As peças",share:"3 · Partilhe ou compre",loading:"A abrir o closet…",rand:"✦ Surpreenda-me",save:"Guardar para o story",buy:t=>`Comprar o look · ${t}`,buy0:"Comprar o look",note:"Cada peça é única: quando sai, sai. Comprar leva as peças para o seu saco no site.",foot:"Bendito Closet · brechó de marcas no Porto",
+ pt:{eyebrow:"Jogo · Novo",h1:'Monta o <em>look</em>',lead:"Escolha até 4 peças reais do closet e, se quiser, ponha a sua foto: nós fazemos a capa de revista com você na capa. Partilhe no story ou leve o look para casa.",photo:"🖼️ Escolher foto da galeria",aiT:"Provador com IA: escolha uma peça e veja-a vestida em si",aiGo:"Provar em mim",aiNeed:"Primeiro escolha uma foto sua: de frente, corpo à vista, boa luz.",aiPriv:"Para provar com IA, a sua foto é enviada à FASHN AI só para gerar a imagem e é apagada depois. O Bendito não a guarda. 5 provas por dia.",aiWait:"A vestir a peça em si… (cerca de 20 segundos)",aiUse:"Pôr esta foto na capa",aiSave:"Guardar a foto",aiErr:"Não consegui gerar a prova desta vez. Tente outra foto, com o rosto bem visível e boa luz.",aiFace:"Não vi o seu corpo na foto, por isso a IA está a criar um a partir do seu rosto… (cerca de 40 segundos)",zoomT:"🔍 Ajuste a foto: aproxime aqui e arraste na capa",aiLim:"Já usou as 5 provas de hoje. Volte amanhã!",aiDay:"O provador está cheio hoje. Volte amanhã!",aiPick:"Escolha primeiro uma peça de roupa (não sapatos nem malas).",photo2:"🖼️ Trocar a foto",nophoto:"✕ Remover",priv:"🔒 A sua foto fica só no seu telemóvel: não é enviada nem guardada por nós.",hint:"Toque nas peças para entrar e sair da capa.",mood:"1 · O mood",pick:"2 · As peças",share:"3 · Partilhe ou compre",loading:"A abrir o closet…",rand:"✦ Surpreenda-me",save:"Guardar para o story",buy:t=>`Comprar o look · ${t}`,buy0:"Comprar o look",note:"Cada peça é única: quando sai, sai. Comprar leva as peças para o seu saco no site.",foot:"Bendito Closet · brechó de marcas no Porto",
   count:(n)=>n?`${n} de 4 peças na capa`:"Ainda sem peças: escolha a primeira.",max:"Máximo 4 peças. Tire uma para trocar.",empty:"Escolha pelo menos uma peça.",saved:"Imagem pronta! Publique no story e marque @benditocloset.pt",
   cats:{roupas:"Roupa",casacos:"Casacos",sapatos:"Sapatos",bolsas:"Malas",acessorios:"Acessórios"},
   issue:"Nº 01 · INVERNO 2026",tagline:"THE LOOK ISSUE",look:"O LOOK",place:"A sua capa começa aqui",place2:"escolha as peças em baixo",
   story1:"Monte o seu look em",story2:"benditocloset.pt/monta-o-look",shareText:"O meu look Bendito ✦ Monte o seu:"},
- en:{eyebrow:"Game · New",h1:'Build the <em>look</em>',lead:"Pick up to 4 real pieces from the closet and, if you like, add your photo: we make a magazine cover with you on it. Share it on your story or take the look home.",photo:"🖼️ Pick a photo from my gallery",aiT:"AI fitting room: pick a piece and see it on you",aiGo:"Try it on me",aiNeed:"First pick a photo of you: front-facing, body visible, good light.",aiPriv:"To try on with AI, your photo is sent to FASHN AI only to create the image and is then deleted. Bendito never keeps it. 5 try-ons a day.",aiWait:"Dressing you up… (about 20 seconds)",aiUse:"Put this photo on the cover",aiSave:"Save the photo",aiErr:"Couldn't create the try-on. Use a real photo of you (not a screenshot), front-facing, body visible, good light.",aiLim:"You've used today's 5 try-ons. Come back tomorrow!",aiDay:"The fitting room is full today. Come back tomorrow!",aiPick:"First pick a clothing piece (not shoes or bags).",photo2:"🖼️ Change photo",nophoto:"✕ Remove",priv:"🔒 Your photo stays on your phone: we never upload or store it.",hint:"Tap pieces to add them to or remove them from the cover.",mood:"1 · The mood",pick:"2 · The pieces",share:"3 · Share or shop",loading:"Opening the closet…",rand:"✦ Surprise me",save:"Save for my story",buy:t=>`Shop the look · ${t}`,buy0:"Shop the look",note:"Every piece is one of a kind: once it's gone, it's gone. Shopping adds the pieces to your bag on the site.",foot:"Bendito Closet · pre-loved designer pieces in Porto",
+ en:{eyebrow:"Game · New",h1:'Build the <em>look</em>',lead:"Pick up to 4 real pieces from the closet and, if you like, add your photo: we make a magazine cover with you on it. Share it on your story or take the look home.",photo:"🖼️ Pick a photo from my gallery",aiT:"AI fitting room: pick a piece and see it on you",aiGo:"Try it on me",aiNeed:"First pick a photo of you: front-facing, body visible, good light.",aiPriv:"To try on with AI, your photo is sent to FASHN AI only to create the image and is then deleted. Bendito never keeps it. 5 try-ons a day.",aiWait:"Dressing you up… (about 20 seconds)",aiUse:"Put this photo on the cover",aiSave:"Save the photo",aiErr:"Couldn't create the try-on this time. Try another photo with your face clearly visible and good light.",aiFace:"I couldn't see your body in the photo, so the AI is creating one from your face… (about 40 seconds)",zoomT:"🔍 Adjust the photo: zoom here and drag on the cover",aiLim:"You've used today's 5 try-ons. Come back tomorrow!",aiDay:"The fitting room is full today. Come back tomorrow!",aiPick:"First pick a clothing piece (not shoes or bags).",photo2:"🖼️ Change photo",nophoto:"✕ Remove",priv:"🔒 Your photo stays on your phone: we never upload or store it.",hint:"Tap pieces to add them to or remove them from the cover.",mood:"1 · The mood",pick:"2 · The pieces",share:"3 · Share or shop",loading:"Opening the closet…",rand:"✦ Surprise me",save:"Save for my story",buy:t=>`Shop the look · ${t}`,buy0:"Shop the look",note:"Every piece is one of a kind: once it's gone, it's gone. Shopping adds the pieces to your bag on the site.",foot:"Bendito Closet · pre-loved designer pieces in Porto",
   count:(n)=>n?`${n} of 4 pieces on the cover`:"No pieces yet: pick the first one.",max:"Maximum 4 pieces. Remove one to swap.",empty:"Pick at least one piece.",saved:"Image ready! Post it on your story and tag @benditocloset.pt",
   cats:{roupas:"Clothing",casacos:"Coats",sapatos:"Shoes",bolsas:"Bags",acessorios:"Accessories"},
   issue:"Nº 01 · WINTER 2026",tagline:"THE LOOK ISSUE",look:"THE LOOK",place:"Your cover starts here",place2:"pick the pieces below",
@@ -149,7 +151,7 @@ const qs=new URLSearchParams(location.search);if(qs.get("ia"))addEventListener("
 let LANG=(()=>{let l=qs.get("lang");try{l=l||localStorage.getItem("bc-lang")}catch(e){}if(!l){l=/^pt/i.test(navigator.language||"pt")?"pt":"en"}return l==="pt"?"pt":(l==="en"?"en":( /^pt/.test(l)?"pt":"en"))})();
 const T=()=>TXT[LANG];
 let P=[],SEL=(qs.get("p")||"").split(",").filter(Boolean),MOOD=MOODS[qs.get("m")]?qs.get("m"):"paris",CAT="roupas";
-const IMG={};let BG=null;
+const IMG={};let BG=null,BGZ=1,BGX=0,BGY=0;
 const cv=$("#cv"),ctx=cv.getContext("2d");
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),3200)}
@@ -159,12 +161,13 @@ function img(src){if(IMG[src])return IMG[src];const i=new Image();IMG[src]=i;i.o
 const SLOTS={1:[[170,240,740,870,-1.5]],2:[[70,250,540,700,-3],[480,420,520,680,3]],3:[[60,240,500,640,-3],[560,220,440,520,3],[520,640,450,470,-2]],4:[[60,240,460,560,-3],[560,230,440,520,2.5],[100,720,420,400,2],[570,680,410,430,-2.5]]};
 const PSLOTS={1:[[690,330,320,420,4]],2:[[700,300,300,360,4],[680,690,300,360,-3]],3:[[710,290,280,250,4],[690,560,280,250,-3],[715,830,270,230,3]],4:[[710,290,280,250,4],[690,560,280,250,-3],[715,830,270,230,3],[60,850,240,210,-4]]};
 function spaced(c,text,x,y,sp,align){c.save();c.textAlign="left";let w=0;for(const ch of text)w+=c.measureText(ch).width+sp;w-=sp;let sx=align==="center"?x-w/2:align==="right"?x-w:x;for(const ch of text){c.fillText(ch,sx,y);sx+=c.measureText(ch).width+sp}c.restore()}
+function bgImg(c,i,w,h){const r=Math.max(w/i.naturalWidth,h/i.naturalHeight)*BGZ,iw=i.naturalWidth*r,ih=i.naturalHeight*r;let x=(w-iw)/2+BGX,y=(h-ih)*0.25+BGY;x=Math.min(0,Math.max(w-iw,x));y=Math.min(0,Math.max(h-ih,y));c.drawImage(i,x,y,iw,ih)}
 function coverImg(c,i,x,y,w,h){const r=Math.max(w/i.naturalWidth,h/i.naturalHeight),iw=i.naturalWidth*r,ih=i.naturalHeight*r;c.drawImage(i,x+(w-iw)/2,y+(h-ih)*0.25,iw,ih)}
 function drawCover(c){
   const W=1080,H=1350,m=MOODS[MOOD],L=m[LANG],t=T(),sel=SEL.map(id=>P.find(p=>p.id===id)).filter(Boolean);
   c.fillStyle=m.bg;c.fillRect(0,0,W,H);
   // grain lines
-  if(BG&&BG.naturalWidth){coverImg(c,BG,0,0,W,H);const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,m.bg+"cc");g.addColorStop(.22,m.bg+"00");g.addColorStop(.7,m.bg+"00");g.addColorStop(1,m.bg+"ee");c.fillStyle=g;c.fillRect(0,0,W,H)}
+  if(BG&&BG.naturalWidth){bgImg(c,BG,W,H);const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,m.bg+"cc");g.addColorStop(.22,m.bg+"00");g.addColorStop(.7,m.bg+"00");g.addColorStop(1,m.bg+"ee");c.fillStyle=g;c.fillRect(0,0,W,H)}
   else{c.globalAlpha=.06;c.fillStyle=m.ink;for(let y=0;y<H;y+=6)c.fillRect(0,y,W,1);c.globalAlpha=1}
   // masthead
   c.fillStyle=m.ink;c.textBaseline="alphabetic";
@@ -229,8 +232,19 @@ $("#rand").onclick=()=>{const pick=c=>{const l=P.filter(p=>p.cat===c);return l.l
   const base=[pick("roupas")||pick("casacos"),pick(Math.random()<.5?"sapatos":"bolsas"),pick(Math.random()<.5?"casacos":"bolsas")].filter(Boolean);
   SEL=[...new Set(base)].slice(0,3);SEL.forEach(id=>img(P.find(p=>p.id===id).foto));const ks=Object.keys(MOODS);MOOD=ks[Math.floor(Math.random()*ks.length)];
   document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m===MOOD));sync();draw()};
-$("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const i=new Image();i.onload=()=>{BG=i;draw();document.getElementById("cv").scrollIntoView({behavior:"smooth",block:"center"})};i.onerror=()=>(window.__inapp&&window.__inapp(),toast(LANG==="pt"?"Não consegui abrir esta foto. Tente outra.":"Couldn't open this photo. Try another one."));i.src=URL.createObjectURL(f);e.target.value=""});
-$("#nophoto").onclick=()=>{BG=null;draw()};
+function trimShot(i){return new Promise(res=>{try{const w=i.naturalWidth,h=i.naturalHeight,k=Math.min(1,200/w),cw=Math.max(1,Math.round(w*k)),ch=Math.max(1,Math.round(h*k)),c=document.createElement("canvas");c.width=cw;c.height=ch;const x=c.getContext("2d");x.drawImage(i,0,0,cw,ch);const d=x.getImageData(0,0,cw,ch).data;
+ const flat=y=>{let s=0,s2=0;for(let xx=0;xx<cw;xx+=2){const o=(y*cw+xx)*4,l=(d[o]+d[o+1]+d[o+2])/3;s+=l;s2+=l*l}const n=Math.ceil(cw/2),m=s/n;return s2/n-m*m<40};
+ let t=0,b=ch-1;while(t<ch*.4&&flat(t))t++;while(b>ch*.6&&flat(b))b--;
+ let T=t/k,B=(b+1)/k;if((B-T)/w>1.85){T+=(B-T)*.10;B-=(B-T)*.11}
+ if(T<2&&B>h-2){res(i);return}
+ const o=document.createElement("canvas");o.width=w;o.height=Math.round(B-T);o.getContext("2d").drawImage(i,0,T,w,B-T,0,0,w,B-T);const n=new Image();n.onload=()=>res(n);n.onerror=()=>res(i);n.src=o.toDataURL("image/jpeg",.92)}catch(e){res(i)}})}
+function setBG(i){BG=i;BGZ=1;BGX=0;BGY=0;const z=$("#zoom");if(z)z.value=1;$("#zoomBox").hidden=!i;cv.classList.toggle("drag",!!i);draw()}
+$("#zoom").addEventListener("input",e=>{BGZ=+e.target.value;draw()});
+(()=>{let p=null;cv.addEventListener("pointerdown",e=>{if(!BG)return;p={x:e.clientX,y:e.clientY,bx:BGX,by:BGY,s:1080/cv.getBoundingClientRect().width};try{cv.setPointerCapture(e.pointerId)}catch(x){}});
+ cv.addEventListener("pointermove",e=>{if(!p)return;BGX=p.bx+(e.clientX-p.x)*p.s;BGY=p.by+(e.clientY-p.y)*p.s;const W=1080,H=1350,r=Math.max(W/BG.naturalWidth,H/BG.naturalHeight)*BGZ,iw=BG.naturalWidth*r,ih=BG.naturalHeight*r;BGX=Math.max(-(iw-W)/2,Math.min((iw-W)/2,BGX));BGY=Math.max(-(ih-H)*0.75,Math.min((ih-H)*0.25,BGY));draw()});
+ const up=()=>{p=null};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up)})();
+$("#file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const i=new Image();i.onload=async()=>{setBG(await trimShot(i));document.getElementById("cv").scrollIntoView({behavior:"smooth",block:"center"})};i.onerror=()=>(window.__inapp&&window.__inapp(),toast(LANG==="pt"?"Não consegui abrir esta foto. Tente outra.":"Couldn't open this photo. Try another one."));i.src=URL.createObjectURL(f);e.target.value=""});
+$("#nophoto").onclick=()=>setBG(null);
 $("#buy").onclick=()=>{if(!SEL.length){toast(T().empty);return}let bag=[];try{bag=JSON.parse(localStorage.getItem("bc-saco")||"[]")}catch(e){}
   SEL.forEach(id=>{if(!bag.includes(id))bag.push(id)});try{localStorage.setItem("bc-saco",JSON.stringify(bag))}catch(e){}location.href="/?saco=1"};
 $("#save").onclick=async()=>{
@@ -259,16 +273,26 @@ $("#aiPick").addEventListener("click",e=>{const b=e.target.closest("button");if(
 function shrink(img,max){const r=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement("canvas");c.width=Math.round(img.naturalWidth*r);c.height=Math.round(img.naturalHeight*r);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.86)}
 function aiShow(html){$("#aiBody").innerHTML=html;const d=$("#aiD");if(!d.open){try{d.showModal()}catch(e){d.setAttribute("open","")}}}
 $("#aiX").onclick=()=>$("#aiD").close();
+async function aiPoll(id){for(let i=0;i<50;i++){await new Promise(z=>setTimeout(z,2000));const s=await (await fetch(TRYON_API+"/status/"+id)).json();if(s.status==="completed"&&s.output&&s.output[0])return {out:s.output[0]};if(s.status==="failed")return {err:s.error||"failed"}}return {err:"timeout"}}
+const asData=o=>/^data:|^https?:/.test(o)?o:"data:image/jpeg;base64,"+o;
+async function aiRun(path,body){const r=await fetch(TRYON_API+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const o=await r.json();return r.ok?o:{fail:o.error||"x"}}
 $("#aiGo").onclick=async()=>{const t=T(),p=P.find(x=>x.id===AIP);if(!BG){toast(t.aiNeed);$("#file").click();return}if(!p)return;
   aiShow('<div class="spin"></div><p>'+t.aiWait+'</p>');
-  try{const r=await fetch(TRYON_API+"/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model_image:shrink(BG,1024),garment_image:"https://benditocloset.pt/"+p.foto,category:VTO[p.id]})});
-    const o=await r.json();if(!r.ok){aiShow('<p>'+(o.error==="limit_user"?t.aiLim:o.error==="limit_day"?t.aiDay:t.aiErr)+'</p>');return}
-    let out=null;for(let i=0;i<45&&!out;i++){await new Promise(z=>setTimeout(z,2000));const s=await (await fetch(TRYON_API+"/status/"+o.id)).json();
-      if(s.status==="completed"&&s.output&&s.output[0])out=s.output[0];else if(s.status==="failed"){break}}
-    if(!out){aiShow('<p>'+t.aiErr+'</p>');return}
-    const src=/^data:|^https?:/.test(out)?out:"data:image/jpeg;base64,"+out;
+  const lim=e=>e==="limit_user"?t.aiLim:e==="limit_day"?t.aiDay:t.aiErr;
+  try{const me=shrink(BG,1024),gar="https://benditocloset.pt/"+p.foto,cat=VTO[p.id];
+    let o=await aiRun("/run",{model_image:me,garment_image:gar,category:cat});if(o.fail){aiShow('<p>'+lim(o.fail)+'</p>');return}
+    let r=await aiPoll(o.id);
+    if(!r.out&&!/Moderation|ImageLoad|Input|timeout/i.test(r.err)){
+      aiShow('<div class="spin"></div><p>'+t.aiFace+'</p>');
+      const f=await aiRun("/face",{face_image:me});if(f.fail){aiShow('<p>'+lim(f.fail)+'</p>');return}
+      const fr=await aiPoll(f.id);if(!fr.out){aiShow('<p>'+t.aiErr+'</p>');return}
+      aiShow('<div class="spin"></div><p>'+t.aiWait+'</p>');
+      o=await aiRun("/run",{model_image:asData(fr.out),garment_image:gar,category:cat});if(o.fail){aiShow('<p>'+lim(o.fail)+'</p>');return}
+      r=await aiPoll(o.id)}
+    if(!r.out){aiShow('<p>'+t.aiErr+'</p>');return}
+    const src=asData(r.out);
     aiShow(`<img src="${src}" alt=""><p style="margin:0;font-weight:600">${p.marca} · ${fmt(p.preco)}</p><button class="btn buy" type="button" id="aiUse">${t.aiUse}</button><a class="btn" id="aiSave" href="${src}" download="bendito-provador.jpg">${t.aiSave}</a>`);
-    $("#aiUse").onclick=()=>{const i=new Image();i.onload=()=>{BG=i;draw();$("#aiD").close()};i.src=src};
+    $("#aiUse").onclick=()=>{const i=new Image();i.onload=()=>{setBG(i);$("#aiD").close()};i.src=src};
   }catch(e){aiShow('<p>'+t.aiErr+'</p>')}};
 
 /* ---------- data: the live closet from the shop page ---------- */
