@@ -1616,6 +1616,15 @@ document.addEventListener("change", e => { if (e.target.name === "envk") { ENV.k
   if (/^cs_/.test(sid)) { try { localStorage.setItem("bc-ultima-encomenda", sid); } catch(e) {} const a = document.createElement("a"); a.href = "/encomenda/?s=" + encodeURIComponent(sid); a.textContent = LK[LANG] || LK.pt; a.style.cssText = "display:block;margin-top:8px;color:inherit;text-decoration:underline"; n.appendChild(a); }
   document.body.appendChild(n);
   setTimeout(() => n.remove(), 25000);
+  if (/^cs_/.test(sid)) fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/encomenda/confirmar", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({s: sid})}).then(r => r.json()).then(o => {
+    if (!o || o.dup || !o.email) return;
+    const ML = {pt:["Obrigada pela sua compra","Encomenda","Peças","Total pago","Envio","A sua encomenda (seguir, cancelar ou devolver)","Etiqueta de devolução — guarde-a (também vai impressa dentro da caixa)","Como devolver","Até 14 dias depois de receber: peça a devolução no link acima, cole a etiqueta de devolução na embalagem e entregue nos CTT ou na Correos Express. Os portes da devolução são pagos por si no balcão. Quando a peça chegar, fazemos o reembolso."],
+      en:["Thank you for your order","Order","Items","Total paid","Shipping","Your order (track, cancel or return)","Return label — keep it (a printed copy also goes inside the box)","How to return","Up to 14 days after delivery: request the return at the link above, stick the return label on the parcel and drop it at CTT or Correos Express. Return shipping is paid by you at the counter. When the piece arrives, we refund you."]};
+    const m = LANG === "pt" ? ML.pt : ML.en;
+    const d = {_subject: m[0] + " · Bendito Closet · " + m[1] + " " + o.ref, _template: "table", _captcha: "false", _cc: o.email};
+    d[m[1]] = o.ref; d[m[2]] = o.pecas; d[m[3]] = o.total.toFixed(2).replace(".", ",") + " €"; d[m[4]] = o.envio; d[m[5]] = o.encomenda; d[m[6]] = o.devolucao; d[m[7]] = m[8];
+    fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body: JSON.stringify(d)}).catch(() => {});
+  }).catch(() => {});
   try { history.replaceState(null, "", location.pathname); } catch(e) {}
 })();
 </script>

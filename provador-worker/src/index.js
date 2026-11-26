@@ -237,7 +237,28 @@ async function etiqueta(env, url) {
   const sd = (ses.collected_information && ses.collected_information.shipping_details) || ses.shipping_details || {}, a = sd.address || {};
   const rem = [sd.name || (ses.customer_details && ses.customer_details.name) || "", [a.line1, a.line2].filter(Boolean).join(", "), [a.postal_code, a.city].filter(Boolean).join(" "), a.country || ""].filter(Boolean);
   const ref = id.slice(-8).toUpperCase();
+  if (url.searchParams.get("tipo") === "envio") {
+    const tel = (ses.customer_details && ses.customer_details.phone) || "";
+    return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Etiqueta de envio ${ref}</title><style>body{font:15px/1.45 Helvetica,Arial,sans-serif;color:#111;margin:0;padding:24px;background:#fff}.e{border:2px solid #111;max-width:560px;margin:auto;padding:22px}.k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#555;margin:14px 0 4px}.big{font-size:22px;font-weight:600}h1{font:400 26px Georgia,serif;margin:0 0 4px}button{margin:18px auto;display:block;border:1px solid #111;background:#111;color:#fff;padding:12px 20px;font:inherit;cursor:pointer}@media print{button{display:none}body{padding:0}}</style><div class="e"><h1>Bendito Closet</h1><div>Encomenda ${esc(ref)}</div><div class="k">Destinatário</div><div class="big">${rem.map(esc).join("<br>")}${tel ? "<br><small>" + esc(tel) + "</small>" : ""}</div><div class="k">Remetente</div><div style="white-space:pre-line">${esc(morada)}</div></div><button onclick="print()">Imprimir</button>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
   return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Etiqueta de devolução ${ref}</title><style>body{font:15px/1.45 Helvetica,Arial,sans-serif;color:#111;margin:0;padding:24px;background:#fff}.e{border:2px solid #111;max-width:560px;margin:auto;padding:22px}.k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#555;margin:14px 0 4px}.big{font-size:20px;font-weight:600;white-space:pre-line}h1{font:400 26px Georgia,serif;margin:0 0 4px}.n{border-top:1px dashed #999;margin-top:18px;padding-top:12px;font-size:13px}button{margin:18px auto;display:block;border:1px solid #111;background:#111;color:#fff;padding:12px 20px;font:inherit;cursor:pointer}@media print{button{display:none}body{padding:0}}</style><div class="e"><h1>Devolução · Bendito Closet</h1><div>Encomenda ${esc(ref)}</div><div class="k">Destinatário</div><div class="big">${esc(morada || "(morada de devolução por configurar)")}</div><div class="k">Remetente</div><div>${rem.map(esc).join("<br>")}</div><div class="n">Portes da devolução pagos pelo remetente. Entregue nos CTT ou na Correos Express e guarde o comprovativo com o código de seguimento. Prazo: 14 dias depois de receber a encomenda. Peça a devolução antes em benditocloset.pt/encomenda.</div></div><button onclick="print()">Imprimir</button>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+}
+async function confirmar(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const id = String(b.s || "");
+  if (!/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) return j({ error: "dados" }, 400);
+  try {
+    const ses = await stp(env, "checkout/sessions/" + id);
+    if (ses.payment_status !== "paid") return j({ error: "nao_paga" }, 409);
+    const r = await resumoEncomenda(env, ses);
+    if (/^Empr[eé]stimo/i.test(r.pecas)) return j({ error: "dados" }, 400);
+    const k = "conf:" + id, dup = !!(await env.LIMITS.get(k));
+    if (!dup) await env.LIMITS.put(k, "1", { expirationTtl: 90 * 86400 });
+    const tok = await hmac(env, "enc:" + id);
+    return j({ dup, ref: r.ref, email: r.email, nome: r.nome, pecas: r.pecas, total: r.total, envio: r.envio,
+      devolucao: "https://bendito-provador-ia.nn45hn9bvr.workers.dev/etiqueta?id=" + encodeURIComponent(id) + "&tok=" + tok,
+      encomenda: "https://benditocloset.pt/encomenda/?s=" + id });
+  } catch (e) { return j({ error: "stripe" }, 502); }
 }
 // Página de gestão da Marianna (link privado com o token de dona)
 async function gestao(req, env, url) {
@@ -284,7 +305,7 @@ async function gestao(req, env, url) {
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
       const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
       const etqUrl = "/etiqueta?id=" + encodeURIComponent(r.id) + "&tok=" + await hmac(env, "enc:" + r.id);
-      rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a><div class="a">${acoes}</div></div>`;
+      rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a><div class="a">${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
   return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
@@ -377,6 +398,7 @@ export default {
     if (url.pathname === "/encomenda/acao" && req.method === "POST") return acaoCliente(req, env, j);
     if (url.pathname === "/gestao") return gestao(req, env, url);
     if (url.pathname === "/etiqueta") return etiqueta(env, url);
+    if (url.pathname === "/encomenda/confirmar" && req.method === "POST") return confirmar(req, env, j);
     const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
     if (mc && req.method === "GET") return verContrato(mc[1], env);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);
