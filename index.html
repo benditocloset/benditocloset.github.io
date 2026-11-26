@@ -557,6 +557,12 @@ html.maison #mnu .big a.mbf{color:#9B1B3A!important}
 html.maison #mnu .small a:after{content:"";width:7px;height:7px;border-top:1.2px solid currentColor;border-right:1.2px solid currentColor;transform:rotate(45deg);margin-right:6px;flex:none}
 html.maison #mnu .pro,html.maison #mnu .pro a{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-size:11px!important;letter-spacing:.14em!important;text-transform:uppercase;color:#666!important;font-weight:400!important}
 html.maison .card h2.title,html.maison .card .title{text-transform:none!important;letter-spacing:0!important;font-size:14px!important;font-weight:300!important;line-height:1.4!important}
+.unica{display:none}
+html.maison .card .row .unica{display:block!important;order:0;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#777;margin:-2px 0 4px}
+html.maison .card.sold .photo img{opacity:.45}
+html.maison .card.sold .title,html.maison .card.sold .price{color:#999!important}
+html.maison .card.sold .row .buy{display:block!important;background:#fff!important;color:#999!important;border:1px solid #ddd!important;pointer-events:none}
+html.maison .bf{font-variant-numeric:tabular-nums}
 html.maison #mnu .x{width:40px!important;height:40px!important;background:none!important;color:#111!important;box-shadow:none!important}
 html.maison #pop{max-width:420px;background:#fff!important;color:#111!important;border:0!important;border-radius:0!important;padding:40px 28px 28px!important}
 html.maison #pop::backdrop{background:rgba(0,0,0,.45)}
@@ -1356,7 +1362,21 @@ function pintarBF(){
   const el = document.getElementById("bf"); if (!el) return;
   const t = BF_TXT[LANG] || BF_TXT.pt;
   if (BF_ATIVA || BF_AVISO) { el.innerHTML = BF_ATIVA ? t.ativa : t.aviso; el.hidden = false; } else el.hidden = true;
+  if (BF_ATIVA && document.documentElement.classList.contains("maison")) {
+    const c = BF_CONTA[LANG] || BF_CONTA.pt, ms = BF_FIM - Date.now();
+    if (ms > 0) { const d = Math.floor(ms/864e5), h = Math.floor(ms%864e5/36e5), m = Math.floor(ms%36e5/6e4);
+      el.innerHTML = ms < 864e5 ? c.ult(h, m) : c.fal(d, h); }
+  }
 }
+const BF_CONTA = {
+  pt:{fal:(d,h)=>`Black Friday · −15% em tudo · termina em ${d} d ${h} h`, ult:(h,m)=>`Último dia da Black Friday · −15% · termina em ${h} h ${m} min`},
+  en:{fal:(d,h)=>`Black Friday · 15% off everything · ends in ${d}d ${h}h`, ult:(h,m)=>`Last day of Black Friday · 15% off · ends in ${h}h ${m}m`},
+  es:{fal:(d,h)=>`Black Friday · −15% en todo · termina en ${d} d ${h} h`, ult:(h,m)=>`Último día de Black Friday · −15% · termina en ${h} h ${m} min`},
+  fr:{fal:(d,h)=>`Black Friday · −15 % sur tout · fin dans ${d} j ${h} h`, ult:(h,m)=>`Dernier jour du Black Friday · −15 % · fin dans ${h} h ${m} min`},
+  de:{fal:(d,h)=>`Black Friday · 15 % auf alles · endet in ${d} T ${h} Std`, ult:(h,m)=>`Letzter Tag Black Friday · −15 % · endet in ${h} Std ${m} Min`},
+  it:{fal:(d,h)=>`Black Friday · −15% su tutto · termina tra ${d} g ${h} h`, ult:(h,m)=>`Ultimo giorno di Black Friday · −15% · termina tra ${h} h ${m} min`}
+};
+setInterval(() => { try { pintarBF(); } catch(e) {} }, 60000);
 
 /* CARTÃO (Stripe): um link de pagamento por peça (scripts/stripe-links.json → node scripts/stripe-aplicar.js).
    Cada link aceita 1 pagamento, pede a morada e mostra os portes certos para o tamanho da peça.
@@ -1491,7 +1511,7 @@ function render(f){
         <span class="brandlabel">${p.marca}</span>
         <h2 class="title">${nomeDe(p)}</h2>
         <span class="meta">${detDe(p)}</span>
-        <div class="row"><span class="price">${precoHTML(p)}</span>${btn}</div>
+        <div class="row"><span class="price">${precoHTML(p)}</span>${p.status!=="vendido"?`<span class="unica">${({pt:"Peça única",en:"One of a kind",es:"Pieza única",fr:"Pièce unique",de:"Einzelstück",it:"Pezzo unico"})[LANG]||"Peça única"}</span>`:""}${btn}</div>
         <span class="note" id="note-${p.id}">O WhatsApp da loja ainda está a ser configurado. Volte em breve!</span>
       </div>`;
     grid.appendChild(card);
