@@ -2,7 +2,9 @@
 /* Contagem anónima de visitas e cliques (sem cookies, sem dados pessoais): só números por dia, para o resumo diário */
 (function () {
   var U = 'https://bendito-provador-ia.nn45hn9bvr.workers.dev/ev';
-  window.bcEv = function (e) { try { navigator.sendBeacon(U, new Blob([JSON.stringify({ e: e, p: location.pathname })], { type: 'text/plain' })); } catch (x) {} };
+  /* Aparelhos da Marianna não contam: abrir uma vez benditocloset.pt/?dono=1 (desfazer com ?dono=0) */
+  var dono = false; try { var q = location.search; if (/[?&]dono=1/.test(q)) localStorage.setItem('bc-dono', '1'); if (/[?&]dono=0/.test(q)) localStorage.removeItem('bc-dono'); dono = localStorage.getItem('bc-dono') === '1'; } catch (x) {}
+  window.bcEv = function (e) { if (dono) return; try { navigator.sendBeacon(U, new Blob([JSON.stringify({ e: e, p: location.pathname })], { type: 'text/plain' })); } catch (x) {} };
   var ev = 'pv';
   try { var h = new Date().toISOString().slice(0, 10); if (localStorage.getItem('bc-vis') !== h) { localStorage.setItem('bc-vis', h); ev = ['pv', 'vis']; } } catch (x) {}
   bcEv(ev);
