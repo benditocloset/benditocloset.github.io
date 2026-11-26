@@ -615,6 +615,31 @@ async function gestao(req, env, url) {
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
     if (acao === "morada") { await env.LIMITS.put("cfg:morada", String(f.get("morada") || "").trim().slice(0, 400)); msg = "Morada de devolução guardada."; }
+    // Cauções de empréstimo (retidas no cartão): libertar (peças voltaram bem) ou cobrar um valor (dano ou peça não devolvida)
+    if (/^pi_[A-Za-z0-9]{10,}$/.test(id) && (acao === "libertar" || acao === "cobrar")) {
+      try {
+        const pi = await stp(env, "payment_intents/" + id + "?expand[]=latest_charge");
+        if (pi.status !== "requires_capture") msg = "Esta caução já não está retida (estado: " + pi.status + ").";
+        else {
+          const email = pi.receipt_email || (pi.latest_charge && pi.latest_charge.billing_details && pi.latest_charge.billing_details.email) || "";
+          const ped = (pi.metadata && pi.metadata.pedido) || "";
+          if (acao === "libertar") {
+            await stp(env, "payment_intents/" + id + "/cancel", "POST", { cancellation_reason: "requested_by_customer" });
+            msg = "Caução libertada: " + (pi.amount / 100).toFixed(2) + " €. O valor volta ao limite do cartão (o banco pode levar alguns dias a mostrar).";
+            if (env.RESEND_KEY && email) await mail(env, email, "Caução libertada · empréstimo " + ped,
+              moldura("Caução libertada", `<p>As peças do empréstimo ${esc(ped)} voltaram em bom estado. Obrigada!</p><p>Libertámos a caução de <b>${(pi.amount / 100).toFixed(2).replace(".", ",")} €</b>: nada foi cobrado e o valor volta a ficar disponível no seu cartão. Alguns bancos levam uns dias a atualizar.</p>`),
+              "Caução de " + (pi.amount / 100).toFixed(2) + " € libertada. Nada foi cobrado.");
+          } else {
+            const v = Math.round(Math.min(Math.max(+String(f.get("valor") || "0").replace(",", ".") || 0, 0), pi.amount / 100) * 100);
+            if (!(v > 0)) msg = "Escreva o valor a cobrar.";
+            else {
+              await stp(env, "payment_intents/" + id + "/capture", "POST", { amount_to_capture: String(v), "metadata[cobrado_motivo]": String(f.get("motivo") || "").slice(0, 400) });
+              msg = "Cobrados " + (v / 100).toFixed(2) + " € da caução" + (v < pi.amount ? "; o resto (" + ((pi.amount - v) / 100).toFixed(2) + " €) foi libertado." : ".");
+            }
+          }
+        }
+      } catch (e) { msg = "Erro: " + esc(e.message || e); }
+    }
     if (/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) {
       const est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
       try {
@@ -669,6 +694,16 @@ async function gestao(req, env, url) {
       } catch (e) { msg = "Erro: " + esc(e.message || e); }
     }
   }
+  let cau = "";
+  try {
+    const o = await stp(env, "payment_intents?limit=40");
+    for (const pi of (o.data || [])) {
+      if (pi.status !== "requires_capture") continue;
+      const ped = (pi.metadata && pi.metadata.pedido) || "", dias = Math.max(0, 7 - Math.floor((Date.now() / 1000 - pi.created) / 86400));
+      const fm = (a, inner, conf) => `<form method="post"${conf ? ` onsubmit="return confirm('${conf}')"` : ""}><input type="hidden" name="id" value="${esc(pi.id)}"><input type="hidden" name="acao" value="${a}">${inner}</form>`;
+      cau += `<div class="o"><b>${esc(ped || pi.id)}</b> · ${(pi.amount / 100).toFixed(2)} € retidos · ${new Date(pi.created * 1000).toLocaleDateString("pt-PT", { timeZone: "Europe/Lisbon" })}<br>${esc((pi.metadata && pi.metadata.pecas) || pi.description || "")}<br><small>${esc((pi.metadata && pi.metadata.datas) || "")} · liberta-se sozinha em ${dias} dia${dias === 1 ? "" : "s"}</small><div class="a">${fm("libertar", `<button>Peças voltaram bem → libertar ${(pi.amount / 100).toFixed(2)} €</button>`, "Libertar a caução? Nada é cobrado.")}${fm("cobrar", `Cobrar <input name="valor" inputmode="decimal" placeholder="0,00" style="width:70px;padding:8px;border:1px solid #1C1517"> € <input name="motivo" placeholder="Motivo (ex.: mancha no punho)" style="padding:8px;border:1px solid #1C1517;width:200px"> <button>Cobrar e libertar o resto</button>`, "Cobrar este valor do cartão?")}</div></div>`;
+    }
+  } catch (e) { cau = "<p>Erro ao ler as cauções: " + esc(e.message || e) + "</p>"; }
   let rows = "";
   try {
     const o = await stp(env, "checkout/sessions?limit=40&expand[]=data.payment_intent.latest_charge");
@@ -687,7 +722,7 @@ async function gestao(req, env, url) {
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a>${pbInfo}<div class="a">${pbAcoes}${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
-  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<h2 style="font:400 22px Georgia,serif">Cauções de empréstimos</h2>${cau || "<p>Nenhuma caução retida.</p>"}<h2 style="font:400 22px Georgia,serif">Vendas</h2>${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 function est_motivo(r) { return ""; }
 
