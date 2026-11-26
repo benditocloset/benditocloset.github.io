@@ -627,7 +627,16 @@ ${faq}`;
   return j({ resposta });
 }
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
+    try { return await tratar(req, env, ctx); }
+    catch (e) {
+      const origin = req.headers.get("Origin") || "";
+      return new Response(JSON.stringify({ error: "interno", detail: String((e && e.message) || e).slice(0, 300) }), { status: 500, headers: { "Access-Control-Allow-Origin": ALLOWED.includes(origin) ? origin : ALLOWED[0], "Content-Type": "application/json", "Vary": "Origin" } });
+    }
+  }
+};
+async function tratar(req, env, ctx) {
+  {
     const origin = req.headers.get("Origin") || "";
     const cors = { "Access-Control-Allow-Origin": ALLOWED.includes(origin) ? origin : ALLOWED[0], "Access-Control-Allow-Methods": "POST,GET,OPTIONS", "Access-Control-Allow-Headers": "Content-Type, X-Bendito-Dono", "Vary": "Origin" };
     const j = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...cors, "Content-Type": "application/json" } });
