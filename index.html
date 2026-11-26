@@ -1712,5 +1712,86 @@ document.addEventListener("change", e => { if (e.target.name === "envk") { ENV.k
   try { history.replaceState(null, "", location.pathname); } catch(e) {}
 })();
 </script>
+
+<!-- Menu lateral (estilo Gucci). Pré-visualização: ?menu=novo (fica guardado); desligar: ?menu=0 -->
+<style>
+#menubtn{position:fixed;top:12px;left:12px;z-index:30;display:none;place-items:center;width:40px;height:40px;border-radius:999px;background:#FAF6F0;color:#1C1517;border:1px solid #1C1517;cursor:pointer;padding:0}
+@media(max-width:700px){#menubtn{top:8px;width:38px;height:38px}}
+html.menu-novo #menubtn{display:grid}
+html.menu-novo .topnav{display:none!important}
+html.menu-novo .lang{padding-left:52px}
+@media (max-width:640px){html.menu-novo .bf{padding-left:58px!important}}
+html.menu-novo .filters.stuck,html.menu-novo .filters{padding-left:52px}
+#mnu{position:fixed;inset:0;z-index:60;background:#FAF6F0;color:#1C1517;overflow-y:auto;transform:translateX(-100%);transition:transform .35s ease;font-family:var(--body);visibility:hidden}
+#mnu.open{transform:none;visibility:visible}
+#mnu .x{position:sticky;top:16px;margin:16px 16px 0 auto;display:grid;place-items:center;width:52px;height:52px;border-radius:999px;background:#0b0b0b;color:#fff;border:0;cursor:pointer}
+#mnu nav{max-width:560px;margin:0 auto;padding:8px 32px 48px}
+#mnu .big a,#mnu .mid a{display:flex;justify-content:space-between;align-items:center;color:#1C1517;text-decoration:none}
+#mnu .big a{font-size:27px;font-weight:400;padding:14px 0;letter-spacing:.01em}
+#mnu .big a.mbf{color:#9E1B3F}
+#mnu .mid{margin-top:26px}
+#mnu .mid a{font-size:19px;padding:11px 0}
+#mnu .big a:after,#mnu .mid a:after{content:"";width:9px;height:9px;border-top:1.6px solid currentColor;border-right:1.6px solid currentColor;transform:rotate(45deg);margin-right:6px;flex:none}
+#mnu .small{margin-top:40px;display:grid;gap:22px}
+#mnu .small a{color:#1C1517;font-size:16px;text-decoration:underline;text-underline-offset:4px}
+#mnu .pro{margin-top:40px;font-size:13px;color:#6F625C}
+#mnu .pro a{color:#6F625C}
+body.mnu-open{overflow:hidden}
+</style>
+<button type="button" id="menubtn" aria-label="Abrir o menu" aria-controls="mnu" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div id="mnu" role="dialog" aria-modal="true" aria-label="Menu">
+  <button type="button" class="x" aria-label="Fechar o menu"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <nav>
+    <div class="big">
+      <a href="#grid" class="mbf" data-m="all" id="m-bf">Black Friday · −15%</a>
+      <a href="#grid" data-m="novo">Novidades</a>
+      <a href="#grid" data-m="bolsas">Malas</a>
+      <a href="#grid" data-m="acessorios">Acessórios</a>
+      <a href="#grid" data-m="casacos">Casacos</a>
+      <a href="#grid" data-m="sapatos">Sapatos</a>
+      <a href="#grid" data-m="roupas">Roupa</a>
+      <a href="/looks/">Looks</a>
+      <a href="/revista/">Revista</a>
+    </div>
+    <div class="mid">
+      <a href="/estilo/">Qual é o seu estilo?</a>
+      <a href="#quem-sou">Quem sou eu</a>
+      <a href="#venda-connosco">Abra o seu closet</a>
+      <a href="/closet-da-lu/">Closet da Lu</a>
+      <a href="#vip">Grupo VIP</a>
+    </div>
+    <div class="small">
+      <a href="/conta/">A minha conta</a>
+      <a href="/conta/#favs">Favoritos</a>
+      <a href="#como-comprar">Como comprar e envios</a>
+      <a href="https://wa.me/351936796783" target="_blank" rel="noopener">Fale connosco no WhatsApp</a>
+      <a href="/imprensa/">Imprensa</a>
+    </div>
+    <p class="pro">Para profissionais: <a href="/lojas/">lojas online para o seu negócio</a></p>
+  </nav>
+</div>
+<script>
+(function(){
+  var q=location.search, H=document.documentElement;
+  try{ if(/[?&]menu=novo/.test(q)) localStorage.setItem('bc-menu','1'); if(/[?&]menu=0/.test(q)) localStorage.removeItem('bc-menu');
+       if(localStorage.getItem('bc-menu')==='1') H.classList.add('menu-novo'); }catch(e){}
+  var m=document.getElementById('mnu'), b=document.getElementById('menubtn');
+  if(typeof BF_ATIVA!=='undefined' && !BF_ATIVA && !BF_AVISO){ var bf=document.getElementById('m-bf'); if(bf) bf.remove(); }
+  function abrir(){ m.classList.add('open'); document.body.classList.add('mnu-open'); b.setAttribute('aria-expanded','true'); }
+  function fechar(){ m.classList.remove('open'); document.body.classList.remove('mnu-open'); b.setAttribute('aria-expanded','false'); }
+  b.addEventListener('click',abrir); m.querySelector('.x').addEventListener('click',fechar);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') fechar(); });
+  m.addEventListener('click',function(e){
+    var a=e.target.closest('a'); if(!a) return; var f=a.getAttribute('data-m');
+    fechar();
+    if(f){ e.preventDefault();
+      var o=document.getElementById('ordem');
+      if(f==='novo'){ if(o){ o.value='novo'; o.dispatchEvent(new Event('change',{bubbles:true})); } f='all'; }
+      var bt=document.getElementById('f-'+f); if(bt) bt.click();
+      var t=document.querySelector('.filters')||document.getElementById('grid'); if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+})();
+</script>
 </body>
 </html>
