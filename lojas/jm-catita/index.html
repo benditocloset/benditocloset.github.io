@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>JM Catita · Moda feminina em Vendas Novas (simulação)</title>
+<meta property="og:title" content="JM Catita · a sua loja online (simulação)">
+<meta property="og:description" content="Como ficaria a loja online da JM Catita. Simulação criada por Marianna Werneck.">
+<meta property="og:image" content="https://benditocloset.pt/lojas/jm-catita/hero.jpg">
+<style>
+@font-face{font-family:Bodoni;src:url(/fonts/bodoni-moda-latin-500-normal.woff2) format("woff2");font-weight:500}
+@font-face{font-family:Bodoni;src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2");font-style:italic}
+@font-face{font-family:DM;src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2");font-weight:400}
+@font-face{font-family:DM;src:url(/fonts/dm-sans-latin-600-normal.woff2) format("woff2");font-weight:600}
+:root{--bg:#FBF7F1;--ink:#2A211C;--mut:#7A6B60;--ac:#7A1F35;--gold:#C9962B;--line:#E9DFD3}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:DM,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.demo{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:8px 14px;line-height:1.4}
+.demo a{color:#F3D58F}
+header{position:sticky;top:0;z-index:20;background:rgba(251,247,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
+.logo{font-family:Bodoni,serif;font-size:26px;letter-spacing:.02em}
+.logo small{display:block;font-family:DM;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);margin-top:-2px}
+.bag{position:relative;border:0;background:var(--ink);color:#fff;border-radius:999px;padding:10px 16px;font:600 14px DM;cursor:pointer}
+.bag b{background:var(--gold);color:var(--ink);border-radius:999px;padding:1px 7px;margin-left:6px;font-size:12px}
+.hero{position:relative;min-height:72vh;display:flex;align-items:flex-end;background:url(hero.jpg) center 20%/cover}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(30,20,15,.72))}
+.hero div{position:relative;z-index:1;color:#fff;padding:28px 22px 34px;max-width:620px}
+.eyebrow{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.9}
+.hero h1{font-family:Bodoni,serif;font-weight:500;font-size:clamp(34px,8vw,58px);line-height:1.02;margin:8px 0 10px}
+.hero h1 i{font-style:italic;color:#F3D58F}
+.hero p{font-size:15.5px;line-height:1.5;opacity:.95;margin-bottom:16px}
+.btn{display:inline-block;background:#fff;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font:600 15px DM;text-decoration:none;cursor:pointer}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 14px;border-bottom:1px solid var(--line);text-align:center;font-size:12.5px;color:var(--mut)}
+.trust b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+main{max-width:1100px;margin:0 auto;padding:26px 14px 120px}
+h2{font-family:Bodoni,serif;font-weight:500;font-size:30px;margin:0 4px 4px}
+.sub{color:var(--mut);margin:0 4px 14px;font-size:14.5px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 16px;scrollbar-width:none}
+.chips button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 15px;font:500 14px DM;cursor:pointer;color:var(--ink)}
+.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+.ph{position:relative;aspect-ratio:4/5;background:#eee}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.tag{position:absolute;top:9px;left:9px;background:var(--ac);color:#fff;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 9px}
+.in{padding:11px 12px 13px;display:flex;flex-direction:column;gap:6px;flex:1}
+.in h3{font-size:14.5px;font-weight:600;line-height:1.3}
+.sz{display:flex;flex-wrap:wrap;gap:5px}
+.sz button{border:1px solid var(--line);background:#fff;border-radius:7px;min-width:32px;padding:5px 7px;font:500 12.5px DM;cursor:pointer;color:var(--ink)}
+.sz button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.pr{font-family:Bodoni,serif;font-size:20px;margin-top:auto}
+.pr small{font-family:DM;font-size:12px;color:var(--mut)}
+.add{border:0;border-radius:10px;background:var(--ac);color:#fff;padding:11px;font:600 14px DM;cursor:pointer}
+.add.ask{background:#fff;color:var(--ac);border:1.5px solid var(--ac)}
+.look{margin:38px 0 8px;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.look img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4;display:block}
+.look .tx{grid-column:1/-1;padding:18px}
+.look h2{margin:0 0 6px}
+.how{margin-top:38px;display:grid;gap:12px}
+.how div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.how b{font-family:Bodoni,serif;font-size:22px;color:var(--gold);margin-right:8px}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:30px 16px 110px;border-top:1px solid var(--line)}
+footer .logo{color:var(--ink);margin-bottom:8px}
+.wa{position:fixed;right:16px;bottom:18px;z-index:30;width:58px;height:58px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.wa svg{width:30px;height:30px;fill:#fff}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:40;display:none}
+.drawer{position:fixed;left:0;right:0;bottom:0;z-index:41;background:#fff;border-radius:20px 20px 0 0;max-height:85vh;overflow:auto;padding:20px 18px 26px;transform:translateY(105%);transition:transform .3s}
+.open .ov{display:block}.open .drawer{transform:none}
+.drawer h2{margin:0 0 10px}
+.li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.li img{width:56px;height:70px;object-fit:cover;border-radius:8px}
+.li div{flex:1;font-size:14px}
+.li small{color:var(--mut)}
+.li button{border:0;background:none;color:var(--mut);font-size:20px;cursor:pointer}
+.tot{display:flex;justify-content:space-between;font-weight:600;margin:14px 0 4px}
+.note{font-size:12.5px;color:var(--mut);margin-bottom:14px}
+.send{width:100%;border:0;border-radius:12px;background:#25D366;color:#fff;padding:15px;font:600 16px DM;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="demo">✨ Simulação da loja online da JM Catita, criada por Marianna Werneck · <a href="/lojas/">ver o serviço</a></div>
+<header>
+  <div class="logo">JM Catita<small>Vendas Novas · Moda</small></div>
+  <button class="bag" onclick="abrir()">Saco<b id="n">0</b></button>
+</header>
+<section class="hero">
+  <div>
+    <div class="eyebrow">🌻 Nova coleção de inverno</div>
+    <h1>Conforto com <i>estilo</i>, para todos os dias</h1>
+    <p>Malhas, casacos e calças escolhidos a dedo. Encomende pelo telemóvel e receba em casa ou levante na loja.</p>
+    <a class="btn" href="#loja">Ver as novidades</a>
+  </div>
+</section>
+<div class="trust">
+  <div><b>Peças novas</b>todas as semanas</div>
+  <div><b>Do S ao XXL</b>tamanhos para todas</div>
+  <div><b>Atendimento</b>pelo WhatsApp</div>
+</div>
+<main>
+  <h2 id="loja">Novidades</h2>
+  <p class="sub">Escolha o tamanho, junte ao saco e envie o pedido. Respondo em minutos.</p>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="grid"></div>
+
+  <section class="look">
+    <img src="blusa-ombro.jpg" alt="Blusa ombro a ombro">
+    <img src="calcas-bordadas.jpg" alt="Calças de ganga bordadas">
+    <div class="tx">
+      <div class="eyebrow" style="color:var(--ac)">Look da semana</div>
+      <h2>Blusa ombro a ombro + ganga bordada</h2>
+      <p class="sub" style="margin:0 0 12px">Duas peças que já combinam. Junte as duas ao saco de uma vez.</p>
+      <button class="add" onclick="juntarLook()">Quero o look</button>
+    </div>
+  </section>
+
+  <section class="how">
+    <h2>Como comprar</h2>
+    <div><b>1</b>Escolha as peças e o tamanho e junte ao saco.</div>
+    <div><b>2</b>Envie o pedido pelo WhatsApp com um toque. Confirmo a disponibilidade.</div>
+    <div><b>3</b>Pague por MB WAY ou transferência e receba em casa, ou levante na loja em Vendas Novas.</div>
+  </section>
+</main>
+<footer>
+  <div class="logo">JM Catita</div>
+  Moda feminina · Vendas Novas<br>
+  <span style="font-size:12px">Simulação: preços e textos de exemplo, a confirmar com a JM Catita.</span>
+</footer>
+<a class="wa" href="https://wa.me/351966814500?text=Ol%C3%A1%20JM%20Catita!" aria-label="WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.7c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.7 10.7 0 1 1 16 26.7zm5.9-8c-.3-.2-1.9-1-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5l-.7-.3z"/></svg></a>
+<div id="w"><div class="ov" onclick="fechar()"></div>
+<div class="drawer"><h2>O seu saco</h2><div id="lst"></div>
+<div class="tot"><span>Total</span><span id="tot"></span></div>
+<p class="note" id="nota"></p>
+<button class="send" onclick="enviar()">Enviar pedido pelo WhatsApp</button></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const WA="351966814500";
+const P=[
+ {id:"blusa-riscas",n:"Blusa de malha às riscas",c:"malhas",t:["M","L","XL","XXL"],p:21,tag:"Tamanho grande"},
+ {id:"blusa-ombro",n:"Blusa ombro a ombro com debrum",c:"malhas",t:["S","M","L"],p:17,tag:"8 cores"},
+ {id:"casaco-xadrez-capuz",n:"Casaco Siena xadrez com capuz",c:"casacos",t:["S","M","L","XL"],p:null,tag:"Novo"},
+ {id:"calcas-bordadas",n:"Calças de ganga vintage bordadas",c:"calcas",t:["34","36","38","40","42"],p:null,tag:"Novo"},
+ {id:"camisola-estrela",n:"Camisola de malha com estrela",c:"malhas",t:["S","M"],p:null},
+ {id:"casaco-franjas",n:"Casaco de malha com franjas",c:"casacos",t:["S","M","L"],p:null},
+ {id:"calcas-botoes",n:"Calças de ganga com botões",c:"calcas",t:["34","36","38","40","42"],p:null},
+ {id:"casaco-xadrez",n:"Casaco de malha grossa com bolsos",c:"casacos",t:["S/M","L/XL"],p:null},
+ {id:"calcas-camuflado",n:"Calças camuflado",c:"calcas",t:["Castanho","Camel","Bege"],p:null},
+ {id:"perfume-lara",n:"Perfume Lara White · 100 ml",c:"beleza",t:["100 ml"],p:20,tag:"Entrega imediata"},
+ {id:"champo",n:"Champô Pinky Bombs · 520 g",c:"beleza",t:["520 g"],p:6,tag:"Entrega imediata"}
+];
+const CAT=[["todas","Tudo"],["malhas","Blusas e malhas"],["calcas","Calças"],["casacos","Casacos"],["beleza","Beleza"]];
+let f="todas",saco=[],esc={};
+const eur=v=>v.toFixed(2).replace(".",",")+" €";
+function chips(){document.getElementById("chips").innerHTML=CAT.map(([k,l])=>`<button class="${k==f?"on":""}" onclick="f='${k}';chips();grid()">${l}</button>`).join("")}
+function grid(){document.getElementById("grid").innerHTML=P.filter(p=>f=="todas"||p.c==f).map(p=>`<article class="card"><div class="ph"><img loading="lazy" src="${p.id}.jpg" alt="${p.n}">${p.tag?`<span class="tag">${p.tag}</span>`:""}</div><div class="in"><h3>${p.n}</h3><div class="sz">${p.t.map(t=>`<button class="${esc[p.id]==t?"on":""}" onclick="esc['${p.id}']='${t}';grid()">${t}</button>`).join("")}</div><div class="pr">${p.p?eur(p.p):'<small>Preço por mensagem</small>'}</div><button class="add${p.p?"":" ask"}" onclick="add('${p.id}')">${p.p?"Juntar ao saco":"Juntar e pedir preço"}</button></div></article>`).join("")}
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),1800)}
+function add(id,t){const p=P.find(x=>x.id==id);t=t||esc[id]||(p.t.length==1?p.t[0]:null);if(!t){toast("Escolha primeiro o tamanho");return}saco.push({id,t});upd();toast("Juntou ao saco ✓")}
+function juntarLook(){add("blusa-ombro",esc["blusa-ombro"]||"M");add("calcas-bordadas",esc["calcas-bordadas"]||"38");abrir()}
+function upd(){document.getElementById("n").textContent=saco.length;
+ document.getElementById("lst").innerHTML=saco.length?saco.map((s,i)=>{const p=P.find(x=>x.id==s.id);return `<div class="li"><img src="${p.id}.jpg" alt=""><div>${p.n}<br><small>${s.t} · ${p.p?eur(p.p):"preço a confirmar"}</small></div><button onclick="saco.splice(${i},1);upd()" aria-label="Tirar">×</button></div>`}).join(""):'<p class="sub">O saco está vazio.</p>';
+ const tot=saco.reduce((a,s)=>a+(P.find(x=>x.id==s.id).p||0),0),falta=saco.some(s=>!P.find(x=>x.id==s.id).p);
+ document.getElementById("tot").textContent=eur(tot)+(falta?" +":"");
+ document.getElementById("nota").textContent=falta?"Algumas peças têm o preço confirmado por mensagem.":"Portes e forma de pagamento combinados no WhatsApp."}
+function abrir(){upd();document.getElementById("w").className="open"}
+function fechar(){document.getElementById("w").className=""}
+function enviar(){if(!saco.length){toast("O saco está vazio");return}
+ const l=saco.map(s=>{const p=P.find(x=>x.id==s.id);return "• "+p.n+" ("+s.t+")"+(p.p?" "+eur(p.p):" — preço?")}).join("\n");
+ location.href="https://wa.me/"+WA+"?text="+encodeURIComponent("Olá JM Catita! Gostava de encomendar:\n"+l+"\n\nTotal: "+document.getElementById("tot").textContent)}
+chips();grid();upd();
+</script>
+</body>
+</html>
