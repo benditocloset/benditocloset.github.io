@@ -38,6 +38,7 @@
 <link rel="canonical" href="https://benditocloset.pt/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Plano: vitrine de segunda mão — tinta escura + rosa "bendito" + auréola dourada; grelha de peças com filtros e estado (disponível / reservado / vendido) */
@@ -417,6 +418,22 @@ header{padding-bottom:6px!important}
 .consign h2,.reviews h2{font-weight:500!important;font-size:32px!important}
 .consign a{background:#0a0809!important;border-radius:0!important;font-size:11px!important;letter-spacing:.24em;text-transform:uppercase;font-weight:500!important}
 footer{font-size:12px!important;letter-spacing:.06em}
+/* ajustes 2: editorial de moda, clássico */
+:root{--display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif!important;--body:"Jost","Helvetica Neue",Arial,sans-serif!important}
+body,button,input,select,textarea{font-family:var(--body)!important}
+h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how h3,.cta strong,.consign h2,.reviews h2{font-family:var(--display)!important;font-weight:400!important;letter-spacing:-.005em}
+.hero h1{font-size:clamp(40px,11vw,72px)!important;line-height:1!important}
+.hero h1 em,.hero p,.game b{font-style:italic}
+.card h3,.card .nome,.card h2,.card .title{font-size:17px!important;line-height:1.25!important}
+.intro p,.card .meta,.how p,.consign p,.reviews p{font-weight:300}
+.bf{background:#0a0809!important;color:#F4ECE4!important;border-bottom:1px solid rgba(244,236,228,.15)}
+.bf b,.bf strong{color:#F4ECE4!important}
+.status,.status.ok{color:#1C1517!important;background:rgba(250,246,240,.95)!important}
+.status.res{color:#7a5a1e!important}.status.sold{color:#8a7f78!important}
+.consign a,.consign .box a,section a[style*="border:1px solid var(--halo)"]{background:transparent!important;color:#1C1517!important;border:0!important;border-bottom:1px solid #1C1517!important;border-radius:0!important;padding:10px 0!important;min-height:0!important;box-shadow:none!important;font-size:11px!important;letter-spacing:.2em!important;text-transform:uppercase;font-weight:500!important;display:inline-block!important;width:auto!important;margin:6px 22px 6px 0!important}
+#bagbtn{background:#FAF6F0!important;color:#1C1517!important;border:1px solid #1C1517!important}
+#bagbtn b{background:#1C1517!important;color:#FAF6F0!important}
+#faqbtn{background:#FAF6F0!important;color:#1C1517!important;border:1px solid #1C1517!important}
 </style>
 </head>
 <body>
@@ -493,7 +510,7 @@ footer{font-size:12px!important;letter-spacing:.06em}
 
 
   <div class="trust"><span><b aria-hidden="true">📸</b><i data-i18n="tr1">Fotos reais de cada peça</i></span><span><b aria-hidden="true">↩︎</b><i data-i18n="tr2">Devolução em 14 dias</i></span><span><b aria-hidden="true">🔒</b><i data-i18n="tr3">Pagamento seguro</i></span></div>
-  <div class="minis"><a class="mi ia" href="/provador/" data-i18n="ia1">Novo · Provador com IA</a><a class="mi qz" href="/estilo/" data-i18n="qz1">Novo · Quiz</a><a class="mi mm" href="/jogo-da-memoria/" data-i18n="mm1">Novo · Jogo da memória</a></div>
+  <div class="minis"><a class="mi ia" href="/provador/" data-i18n="ia1">Novo · Provador com IA</a><a class="mi qz" href="/estilo/" data-i18n="qz1">Novo · Quiz</a></div>
   <h2 class="sec-t"><small data-i18n="secK">A coleção</small><span data-i18n="secT">As peças</span></h2>
   <nav class="filters" aria-label="Filtrar peças">
     <button type="button" id="f-all" data-f="all" aria-pressed="true" data-i18n="fAll">Tudo</button>
@@ -509,7 +526,6 @@ footer{font-size:12px!important;letter-spacing:.06em}
   <div class="games-after">
   <a class="game quiz" href="/estilo/"><span data-i18n="qz1">Novo · Quiz</span><b data-i18n="qz2">Qual é o seu estilo? 5 perguntas e as peças que são a sua cara</b><i aria-hidden="true">→</i></a>
   <a class="game ia" style="margin-top:10px" href="/provador/"><span data-i18n="ia1">Novo · Provador com IA</span><b data-i18n="ia2">Veja a roupa vestida em si: escolha uma foto sua e a inteligência artificial veste a peça</b><i aria-hidden="true">→</i></a>
-  <a class="game mem" style="margin-top:10px" href="/jogo-da-memoria/"><span data-i18n="mm1">Novo · Jogo da memória</span><b data-i18n="mm2">Encontre os 8 pares de peças e ganhe 10% de desconto</b><i aria-hidden="true">→</i></a>
   <a class="game" style="margin-top:10px" href="/monta-o-look/"><span data-i18n="gm1">Novo · Jogo</span><b data-i18n="gm2">Monta o look: escolha as peças do closet e vire capa de revista</b><i aria-hidden="true">→</i></a>
   <a class="game rev" href="/revista/"><span data-i18n="rv1">Revista · Nº 01</span><b data-i18n="rv2">Bendito Edit de Dezembro: 4 looks para as festas e presentes até 20 €</b><i aria-hidden="true">→</i></a>
   <button type="button" class="game app" id="app-btn"><span data-i18n="ap1">App · Grátis</span><b data-i18n="ap2">Instale o Bendito no seu telemóvel: abre como uma app</b><i aria-hidden="true">↓</i></button>
@@ -557,7 +573,7 @@ footer{font-size:12px!important;letter-spacing:.06em}
     <div class="box">
       <h2 id="cu-title" data-i18n="cuT">Abra o seu closet no Bendito Closet</h2>
       <p data-i18n="cuP">Tem roupa, sapatos ou acessórios de marca em bom estado que já não usa? Abrimos o seu closet no nosso site. Pacote de 100 € + IVA: escolhemos até 5 peças consigo, criamos fotos profissionais com modelo, publicamos no site e no Instagram da loja. Sem comissão: as vendas, o pagamento e o envio ficam por sua conta. Mais de 5 peças: preço sob consulta.</p>
-      <a href="/closet-brasil/" style="background:transparent;border:1px solid var(--halo);color:var(--halo)">Mora no Brasil? Abra o seu closet daí 🇧🇷</a>
+      <a href="/closet-brasil/" style="background:transparent;border:1px solid var(--halo);color:var(--halo)">Mora no Brasil? Abra o seu closet daí</a>
       <a href="/closet-da-lu/" id="ex-lu" style="background:transparent;border:1px solid var(--halo);color:var(--halo)">Ver um exemplo: o Closet da Lu ✦</a><script>if(new Date()>=new Date("2027-01-01T00:00:00"))document.getElementById("ex-lu").remove()</script>
       <a id="cu-btn" href="https://wa.me/351936796783?text=Ol%C3%A1!%20Quero%20abrir%20o%20meu%20closet%20no%20Bendito%20Closet." target="_blank" rel="noopener" data-i18n="cuB">Quero abrir o meu closet</a>
       <a id="cu-pay" href="https://buy.stripe.com/8x2eVd8RC8Ar67fd9U5c401?locale=pt" target="_blank" rel="noopener" style="background:transparent;border:1px solid var(--halo);color:var(--halo)" data-i18n="cuPay">Já combinámos? Pagar o pacote (100 € + IVA)</a>
