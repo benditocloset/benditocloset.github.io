@@ -223,7 +223,7 @@ document.querySelectorAll("#caucao input,#caucao textarea").forEach(i=>i.addEven
 
 $("go").addEventListener("click",async()=>{
  const p=check();if(p){$("err").textContent=p;$("err").hidden=false;return;}
- const go=$("go");go.disabled=true;go.textContent="A enviar…";
+ $("err").hidden=true; const go=$("go");go.disabled=true;go.textContent="A enviar…";
  CODE="BC-"+Math.random().toString(36).slice(2,6).toUpperCase();
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
  const data={_subject:"Pedido de empréstimo "+CODE+" · caução "+fmt(V),_template:"table",_captcha:"false",
