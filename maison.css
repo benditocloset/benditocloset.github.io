@@ -76,3 +76,29 @@ html.maison.escuro .lang a{padding:5px 9px!important}
 html.maison main img:not(.mlogo){border-radius:0!important}
 html.maison body :is(b,strong){font-weight:400!important}
 html.maison .ico{display:none!important}
+
+/* Closet da Lu: cartões iguais aos da loja principal */
+html.maison.lu .grid{grid-template-columns:repeat(2,1fr)!important;gap:30px 14px!important}
+@media(min-width:900px){html.maison.lu .grid{grid-template-columns:repeat(4,1fr)!important;gap:44px 24px!important}}
+html.maison.lu .card{border:0!important;background:#fff!important;border-radius:0!important}
+html.maison.lu .photo{background:#f8f8f9!important;border-radius:0!important}
+html.maison.lu :is(.tagl,.st.ok,.count,.meta){display:none!important}
+html.maison.lu .st{background:#fff!important;color:#111!important;border:0!important;border-radius:0!important;font-size:10px!important;letter-spacing:.14em;text-transform:uppercase;font-weight:400!important}
+html.maison.lu .body{padding:12px 2px 6px!important;gap:4px!important}
+html.maison.lu .brandlabel{font-size:10.5px!important;letter-spacing:.16em!important;color:#777!important;font-weight:400!important}
+html.maison.lu h3.title{font-size:14px!important;text-transform:none!important;letter-spacing:0!important;font-weight:300!important;line-height:1.4!important}
+html.maison.lu .price{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-size:14px!important;font-weight:300!important;color:#111!important}
+html.maison.lu .row{gap:8px!important;padding-top:6px!important}
+html.maison.lu .buy{display:block;background:#f2f2f2!important;color:#999!important;border-radius:0!important;font-size:11px!important;font-weight:400!important;letter-spacing:.16em;text-transform:uppercase;padding:10px 6px!important}
+html.maison.lu .buy.on{background:#111!important;color:#fff!important}
+html.maison.lu .addbag{background:none!important;border:0!important;border-radius:0!important;color:#111!important;font-size:10.5px!important;font-weight:400!important;letter-spacing:.16em;text-transform:uppercase;text-decoration:underline;text-underline-offset:4px;padding:4px 0!important;margin-top:2px!important}
+html.maison.lu .addbag.in{color:#111!important}
+html.maison.lu #lubag{background:#111!important;color:#fff!important;border-radius:0!important;box-shadow:none!important;font-weight:400!important;font-size:11px!important;letter-spacing:.16em;text-transform:uppercase}
+html.maison.lu #lubag b{background:#fff!important;color:#111!important}
+html.maison.lu .filters{justify-content:flex-start!important}
+html.maison.lu .filters button{border:0!important;background:none!important;color:#111!important;font-size:12px!important;font-weight:400!important;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px 6px 0!important}
+html.maison.lu .filters button[aria-pressed=true]{background:none!important;color:#111!important;text-decoration:underline;text-underline-offset:5px}
+html.maison.lu :is(.how,.lu){border:1px solid #e6e6e6!important;border-radius:0!important}
+html.maison.lu .fact{border-radius:0!important}
+html.maison.lu .avatar{border:0!important;border-radius:50%!important}
+html.maison.lu .card,html.maison.lu .body{text-align:left!important;align-items:stretch}

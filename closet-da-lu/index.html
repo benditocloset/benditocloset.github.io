@@ -103,8 +103,8 @@ footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--muted);f
 #ludlg .tot{display:flex;justify-content:space-between;font-weight:700;margin:6px 0 4px}#ludlg .note{font-size:12.5px;color:var(--muted);margin:0 0 12px}
 #ludlg .send{display:block;text-align:center;background:var(--rose);color:#fff;border-radius:10px;padding:11px;font-weight:700;text-decoration:none}#ludlg .x{float:right;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer}
 </style>
-<link rel="stylesheet" href="/maison.css?v=98">
-<script>(function(){var H=document.documentElement,on=true;try{var q=location.search;if(/[?&]estilo=maison/.test(q)){localStorage.removeItem('bc-estilo');}if(/[?&]estilo=0/.test(q)){localStorage.setItem('bc-estilo','antigo');}if(localStorage.getItem('bc-estilo')==='antigo'){on=false;}}catch(e){}if(!on)return;H.classList.add('maison','escuro');document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('img[src*="logo.jpg"],img[src*="14-logo-bendito"],img[src*="logo-bc"]').forEach(function(i){if(i.closest('main article,.grid,.fotos'))return;i.src='/img/logo-maison-cor.png';i.removeAttribute('width');i.removeAttribute('height');i.classList.add('mlogo');});});})();</script>
+<link rel="stylesheet" href="/maison.css?v=99">
+<script>(function(){var H=document.documentElement,on=true;try{var q=location.search;if(/[?&]estilo=maison/.test(q)){localStorage.removeItem('bc-estilo');}if(/[?&]estilo=0/.test(q)){localStorage.setItem('bc-estilo','antigo');}if(localStorage.getItem('bc-estilo')==='antigo'){on=false;}}catch(e){}if(!on)return;H.classList.add('maison','escuro','lu');document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('img[src*="logo.jpg"],img[src*="14-logo-bendito"],img[src*="logo-bc"]').forEach(function(i){if(i.closest('main article,.grid,.fotos'))return;i.src='/img/logo-maison-cor.png';i.removeAttribute('width');i.removeAttribute('height');i.classList.add('mlogo');});});})();</script>
 </head>
 <body>
 <div class="wrap">
@@ -241,7 +241,7 @@ function abrirSaco(){
 document.addEventListener("click", e => {
   const a = e.target.closest("[data-bag]");
   if (a) { const id = a.dataset.bag; SACO = SACO.includes(id) ? SACO.filter(x => x!==id) : SACO.concat(id); guardarSaco();
-    a.classList.toggle("in", SACO.includes(id)); a.textContent = SACO.includes(id) ? "✓ No saco" : "+ Juntar ao saco"; return; }
+    a.classList.toggle("in", SACO.includes(id)); a.textContent = SACO.includes(id) ? "✓ No saco" : "+ Saco"; return; }
   if (e.target.closest("#lubag")) { abrirSaco(); return; }
   const r = e.target.closest("[data-rm]"); if (r) { SACO = SACO.filter(x => x!==r.dataset.rm); guardarSaco(); abrirSaco(); render(FILTRO_LU); return; }
   if (e.target.closest("#ludlg .x") || e.target.id==="ludlg") document.getElementById("ludlg").close();
@@ -264,7 +264,7 @@ function card(p){
       <span class="meta">${esc(p.detalhe)}</span>
       <div class="row"><span class="price">${p.preco} €</span>
       ${p.status==="vendido"?`<span class="buy">Vendida</span>`:`<a class="buy on" href="https://wa.me/${WA}?text=${msg}" target="_blank" rel="noopener">Quero esta peça</a>`}</div>
-      ${p.status==="vendido"?"":`<button type="button" class="addbag${SACO.includes(p.id)?" in":""}" data-bag="${p.id}">${SACO.includes(p.id)?"✓ No saco":"+ Juntar ao saco"}</button>`}
+      ${p.status==="vendido"?"":`<button type="button" class="addbag${SACO.includes(p.id)?" in":""}" data-bag="${p.id}">${SACO.includes(p.id)?"✓ No saco":"+ Saco"}</button>`}
     </div></article>`;
 }
 const embreve = `<article class="card"><div class="photo"><div class="ph">${cabide}<span>Mais peças da Lu<br>a caminho</span></div></div>
