@@ -5,5 +5,6 @@
   "workers_dev": true,
   "ai": { "binding": "AI" },
   "kv_namespaces": [{ "binding": "LIMITS", "id": "6dee5a7c9eb5443792f6023cccd7c3e5" }],
+  "triggers": { "crons": ["0 21 * * *"] },
   "vars": { "PER_DAY": "5", "TOTAL_DAY": "40" }
 }

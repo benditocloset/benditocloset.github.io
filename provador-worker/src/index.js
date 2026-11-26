@@ -205,6 +205,11 @@ async function comprar(req, env, j) {
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
   let resOk = true;
   try { const m = await pcsLer(env); for (const p of sel) m[p.id] = { s: o.id, e: quemCompra, ate: Date.now() + RES_MS }; await pcsGravar(env, m); } catch (e) { resOk = String(e.message || e); }
+  try {
+    await somar(env, "checkout");
+    const pcs = sel.map(p => p.marca + " – " + p.nome + " (" + p.preco + " €)").join("; ");
+    await mail(env, "ola@benditocloset.pt", "Alguém está a pagar no site · " + (sub + portes) + " €", moldura("Pagamento aberto no site", `<p><b>${esc(quemCompra)}</b> abriu o pagamento com cartão.</p><p><b>Peças:</b> ${esc(pcs)}<br><b>Portes:</b> ${portes} €</p><p>Se pagar, recebe o e-mail "Nova encomenda". Se não pagar, as peças voltam a ficar livres sozinhas.</p>`), quemCompra + " abriu o pagamento: " + pcs);
+  } catch (e) {}
   return j({ url: o.url, subtotal: sub, portes, pre: !!cus, res: resOk });
 }
 
@@ -335,6 +340,75 @@ async function mail(env, to, assunto, html, texto, responder) {
     return r.ok;
   } catch (e) { return false; }
 }
+// Estatísticas anónimas do site: só contagens por dia (sem IP, sem e-mail, sem cookies)
+const EV_SITE = ["vis", "pv", "provador", "jogo", "saco", "whatsapp", "cartao", "popup"];
+const diaLx = (d = new Date()) => d.toLocaleDateString("sv-SE", { timeZone: "Europe/Lisbon" });
+async function somar(env, ev, pagina) {
+  const k = "st:" + diaLx(); let o = {};
+  try { o = JSON.parse((await env.LIMITS.get(k)) || "{}"); } catch (e) {}
+  o[ev] = (o[ev] || 0) + 1;
+  if (pagina && ev === "pv") { o.pg = o.pg || {}; o.pg[pagina] = (o.pg[pagina] || 0) + 1; }
+  await env.LIMITS.put(k, JSON.stringify(o), { expirationTtl: 400 * 86400 });
+}
+async function evento(req, env) {
+  const origin = req.headers.get("Origin") || "";
+  if (!ALLOWED.includes(origin)) return new Response(null, { status: 204 });
+  let b = {}; try { b = JSON.parse(await req.text()); } catch (e) {}
+  const ev = String(b.e || ""); if (!EV_SITE.includes(ev)) return new Response(null, { status: 204 });
+  let p = String(b.p || "/").toLowerCase().replace(/[^a-z0-9/_-]/g, "").slice(0, 40);
+  p = p.split("/").filter(Boolean)[0] || "inicio";
+  await somar(env, ev, p);
+  return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": origin } });
+}
+async function creditosFashn(env) {
+  try { const r = await fetch("https://api.fashn.ai/v1/credits", { headers: { "Authorization": "Bearer " + env.FASHN_KEY } }); const o = await r.json(); return o && o.credits ? o.credits.total : null; } catch (e) { return null; }
+}
+async function contasTotal(env) {
+  let n = 0, cursor; try { do { const l = await env.LIMITS.list({ prefix: "cli:", cursor }); n += l.keys.length; cursor = l.list_complete ? null : l.cursor; } while (cursor); } catch (e) { return null; }
+  return n;
+}
+async function resumoDia(env, dia) {
+  dia = dia || diaLx();
+  let o = {}; try { o = JSON.parse((await env.LIMITS.get("st:" + dia)) || "{}"); } catch (e) {}
+  const provador = +((await env.LIMITS.get("all:" + dia)) || 0);
+  let pagos = 0, valor = 0, abertos = 0;
+  if (env.STRIPE_KEY) try {
+    const ini = Math.floor(new Date(dia + "T00:00:00Z").getTime() / 1000) - 3600;
+    const l = await stp(env, "checkout/sessions?limit=100&created[gte]=" + ini);
+    for (const ses of (l.data || [])) {
+      if (!(ses.metadata && ses.metadata.pecas) || diaLx(new Date(ses.created * 1000)) !== dia) continue;
+      if (/^Empr/i.test(ses.metadata.pecas)) continue;
+      if (ses.payment_status === "paid") { pagos++; valor += (ses.amount_total || 0) / 100; } else abertos++;
+    }
+  } catch (e) {}
+  return { dia, vis: o.vis || 0, pv: o.pv || 0, pg: o.pg || {}, provador, provadorClick: o.provador || 0, jogo: o.jogo || 0, saco: o.saco || 0,
+    whatsapp: o.whatsapp || 0, cartao: o.cartao || 0, popup: o.popup || 0, checkout: o.checkout || 0, contaNova: o.conta_nova || 0,
+    pagos, valor, abertos, creditos: await creditosFashn(env), contas: await contasTotal(env) };
+}
+function resumoHtml(r) {
+  const eur = v => v.toFixed(2).replace(".", ",") + " €";
+  const linhas = [
+    ["Visitantes (pessoas diferentes)", r.vis], ["Páginas vistas", r.pv],
+    ["Provador com IA: fotos geradas", r.provador], ["Jogo da memória: jogos terminados", r.jogo],
+    ["Peças adicionadas ao saco", r.saco], ["Cliques no WhatsApp", r.whatsapp], ["Cliques em pagar com cartão", r.cartao],
+    ["Inscrições no pop-up dos 10%", r.popup], ["Contas novas", r.contaNova], ["Pagamentos com cartão abertos", r.checkout],
+    ["Vendas pagas", r.pagos + (r.pagos ? " · " + eur(r.valor) : "")],
+    ["Contas no site (total)", r.contas == null ? "—" : r.contas],
+    ["Créditos do provador (FASHN) que restam", r.creditos == null ? "—" : r.creditos]
+  ];
+  const top = Object.entries(r.pg).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([p, n]) => `${p}: ${n}`).join(" · ");
+  const tab = linhas.map(([a, b]) => `<tr><td style="padding:6px 12px 6px 0;border-bottom:1px solid #EFE7DD">${esc(a)}</td><td style="padding:6px 0;border-bottom:1px solid #EFE7DD;text-align:right"><b>${esc(String(b))}</b></td></tr>`).join("");
+  const html = `<table style="width:100%;border-collapse:collapse;font-size:15px">${tab}</table>` + (top ? `<p style="font-size:13px;color:#6F625C">Páginas mais vistas: ${esc(top)}</p>` : "") +
+    `<p style="font-size:12px;color:#8a7d76">Visitantes e cliques contam todas as pessoas, aceitem ou não os cookies (contagem anónima, sem dados pessoais).</p>`;
+  const txt = linhas.map(([a, b]) => a + ": " + b).join("\n") + (top ? "\nPáginas mais vistas: " + top : "");
+  return { html, txt };
+}
+async function enviarResumo(env, dia) {
+  const r = await resumoDia(env, dia), h = resumoHtml(r);
+  const d = r.dia.split("-").reverse().join("/");
+  await mail(env, "ola@benditocloset.pt", `Resumo do dia ${d}: ${r.vis} visitantes · ${r.pagos} vendas`, moldura("Resumo do dia " + esc(d), h.html), "Resumo do dia " + d + "\n\n" + h.txt);
+  return r;
+}
 function moldura(titulo, corpo) {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;background:#F7F3EC;padding:26px 12px;font-family:Helvetica,Arial,sans-serif;color:#1C1517;font-size:15px;line-height:1.55"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #1C1517"><tr><td style="padding:30px 26px"><div style="font-family:Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.34em;text-transform:uppercase;text-align:center">Bendito Closet</div><h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:26px;line-height:1.25;margin:22px 0 16px;text-align:center">${titulo}</h1>${corpo}</td></tr></table><p style="font-size:11px;color:#6F625C;margin:14px 0 0;letter-spacing:.08em">benditocloset.pt</p></td></tr></table></body></html>`;
 }
@@ -417,6 +491,7 @@ async function abrirSessao(env, email, lang) {
   const s = rnd(32); await env.LIMITS.put("sess:" + s, email, { expirationTtl: 90 * 86400 });
   if (!(await env.LIMITS.get("cli:" + email))) {
     await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
+    try { await somar(env, "conta_nova"); await mail(env, "ola@benditocloset.pt", "Nova conta no site: " + email, moldura("Nova conta no site", `<p>Acabou de criar conta: <b>${esc(email)}</b></p><p>Língua: ${esc(String(lang || "pt"))}</p>`), "Nova conta no site: " + email); } catch (e) {}
     const t = BTXT[lang === "pt" ? "pt" : "en"];
     await mail(env, email, t[0], moldura(esc(t[1]), `<p>${esc(t[2])}</p><p>${esc(t[3])}</p>${botao("https://benditocloset.pt/conta/", t[4])}`), t[1] + "\n\n" + t[2] + "\n" + t[3] + "\nhttps://benditocloset.pt/conta/");
   }
@@ -645,6 +720,7 @@ ${faq}`;
   return j({ resposta });
 }
 export default {
+  async scheduled(ev, env, ctx) { ctx.waitUntil(enviarResumo(env)); },
   async fetch(req, env, ctx) {
     try { return await tratar(req, env, ctx); }
     catch (e) {
@@ -669,6 +745,13 @@ async function tratar(req, env, ctx) {
     if (url.pathname === "/lojas/pedido" && req.method === "POST") return lojaPedido(req, env, j);
     if (url.pathname === "/encomenda/procurar" && req.method === "POST") return encontrar(req, env, j);
     if (url.pathname === "/encomenda/acao" && req.method === "POST") return acaoCliente(req, env, j);
+    if (url.pathname === "/ev" && req.method === "POST") return evento(req, env);
+    if (url.pathname === "/resumo") {
+      if (!env.OWNER_TOKEN || url.searchParams.get("t") !== env.OWNER_TOKEN) return new Response("Sem acesso", { status: 403 });
+      const dia = /^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get("dia") || "") ? url.searchParams.get("dia") : undefined;
+      const res = url.searchParams.get("enviar") === "1" ? await enviarResumo(env, dia) : await resumoDia(env, dia);
+      return new Response(JSON.stringify(res, null, 1), { headers: { "Content-Type": "application/json; charset=utf-8" } });
+    }
     if (url.pathname === "/gestao") return gestao(req, env, url);
     if (url.pathname === "/etiqueta") return etiqueta(env, url);
     if (url.pathname === "/encomenda/confirmar" && req.method === "POST") return confirmar(req, env, j);

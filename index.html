@@ -1445,6 +1445,7 @@ aplicarIdioma();
     h.hidden = true;
     try { fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
       body: JSON.stringify({ email: em, lingua: LANG, origem: "Pop-up 10% do site", consentimento: "Sim", _subject: "Nova inscrição no Bendito Closet (cupão 10%)", _template: "table", _captcha: "false" }), keepalive:true }).catch(()=>{}); } catch(x) {}
+    try { window.bcEv && bcEv("popup"); } catch(x) {}
     try { localStorage.setItem("bc-cupao", "BENDITO10"); } catch(x) {} if (typeof CUPAO !== "undefined") CUPAO = "BENDITO10"; try { render(FILTRO); } catch(x) {}
     document.getElementById("pop-a").hidden = true; document.getElementById("pop-d").hidden = false;
     try { localStorage.setItem("bc-pop", "inscrita"); } catch(x) {}

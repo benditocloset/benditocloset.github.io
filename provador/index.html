@@ -165,7 +165,7 @@ $("#go").onclick=async()=>{if(!ME){alert(M.need);$("#file").click();return}
    <div class="acts">${sel.map(p=>`<a class="btn go" href="/?peca=${encodeURIComponent(p.id)}">${M.buy}${sel.length>1?": "+p.marca:""}</a>`).join("")}<a class="btn" href="${src}" download="bendito-provador.jpg">${M.save}</a><button class="btn dark" type="button" id="stack">${M.stack}</button><button class="btn out" type="button" id="again">${M.again}</button></div>`);
   $("#again").onclick=()=>{$("#res").hidden=true;$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};
   $("#stack").onclick=()=>{const n=new Image();n.onload=()=>{ME=n;MEsrc=shrink(n,1600);$("#meImg").src=MEsrc;BODY={sh:true,hip:true,feet:true};$("#meOk").textContent=M.stackOk;$("#meOk").style.color="";$("#res").hidden=true;PICK=[];paint();ready();$("#pcs").scrollIntoView({behavior:"smooth",block:"center"})};n.src=src};
-  try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}
+  try{typeof fbq==="function"&&fbq("trackCustom","ProvadorIA")}catch(e){}try{window.bcEv&&bcEv("provador")}catch(e){}
  }catch(e){show('<p>'+M.err+'</p>')}finally{BUSY=false;ready();refreshLeft()}};
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];
  const CT={sapatos:"shoes",bolsas:"bags"};if(DONO)CT.acessorios="accessories";/* relógio e óculos: só a dona vê, para testar (a IA ainda não os põe bem) */all.forEach(p=>{if(!VTO[p.id]&&CT[p.cat])VTO[p.id]=CT[p.cat]});

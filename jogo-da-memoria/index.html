@@ -106,7 +106,7 @@ function fim(){clearInterval(tick);const s=(performance.now()-t0)/1000;ULT=s;
  try{if(!localStorage.getItem("bc-cupao"))localStorage.setItem("bc-cupao","BENDITO10")}catch(e){}
  $("#res").innerHTML=`Encontrou os 8 pares em <b>${fmt(s)}</b> e <b>${jog}</b> jogadas.`;
  $("#pcs").innerHTML=P.map(p=>`<a href="/?peca=${p.id}"><img src="/img/${p.f}" alt="${p.m}" loading="lazy"></a>`).join("");
- $("#fim").classList.add("on");try{typeof fbq==="function"&&fbq("trackCustom","JogoMemoria")}catch(e){}}
+ $("#fim").classList.add("on");try{typeof fbq==="function"&&fbq("trackCustom","JogoMemoria")}catch(e){}try{window.bcEv&&bcEv("jogo")}catch(e){}}
 $("#fim").onclick=e=>{if(e.target.id==="fim")e.currentTarget.classList.remove("on")};
 $("#fx").onclick=()=>$("#fim").classList.remove("on");
 $("#outra").onclick=()=>{$("#fim").classList.remove("on");novo()};

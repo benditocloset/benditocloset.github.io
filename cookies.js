@@ -1,4 +1,17 @@
 /* Aviso de cookies (só aparece uma vez). Sem "Aceitar", o Google não guarda cookies de publicidade. */
+/* Contagem anónima de visitas e cliques (sem cookies, sem dados pessoais): só números por dia, para o resumo diário */
+(function () {
+  var U = 'https://bendito-provador-ia.nn45hn9bvr.workers.dev/ev';
+  window.bcEv = function (e) { try { navigator.sendBeacon(U, new Blob([JSON.stringify({ e: e, p: location.pathname })], { type: 'text/plain' })); } catch (x) {} };
+  bcEv('pv');
+  try { var h = new Date().toISOString().slice(0, 10); if (localStorage.getItem('bc-vis') !== h) { localStorage.setItem('bc-vis', h); bcEv('vis'); } } catch (x) {}
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : null; if (!t) return;
+    if (t.closest('a[href*="wa.me"],a[href*="api.whatsapp"]')) bcEv('whatsapp');
+    else if (t.closest('a[href*="buy.stripe.com"]')) bcEv('cartao');
+    else if (t.closest('[data-bag]')) bcEv('saco');
+  }, true);
+})();
 (function () {
   var k = 'bc-cookies', v; try { v = localStorage.getItem(k); } catch (e) {}
   /* Pixel da Meta: só carrega depois de a visitante aceitar */
