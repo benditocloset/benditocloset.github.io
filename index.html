@@ -455,13 +455,13 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
 @media(min-width:700px){.hero-img{left:auto;right:0;width:auto;height:100%}}
 </style>
 
-<!-- Estilo "maison" (à Gucci). Pré-visualização: ?estilo=maison (fica guardado); desligar: ?estilo=0 -->
+<!-- Estilo "maison" (à Gucci), ligado para todos desde 26/11/2026. Voltar ao antigo só neste navegador: ?estilo=0 ; voltar ao maison: ?estilo=maison. Para desligar para todos, pôr on=false. -->
 <script>
-(function(){try{var q=location.search,H=document.documentElement;
- if(/[?&]estilo=maison/.test(q)){localStorage.setItem('bc-estilo','maison');}
- if(/[?&]estilo=0/.test(q)){localStorage.removeItem('bc-estilo');}
- if(localStorage.getItem('bc-estilo')==='maison'){H.classList.add('maison','menu-novo');}
-}catch(e){}})();
+(function(){var H=document.documentElement,on=true;try{var q=location.search;
+ if(/[?&]estilo=maison/.test(q)){localStorage.removeItem('bc-estilo');}
+ if(/[?&]estilo=0/.test(q)){localStorage.setItem('bc-estilo','antigo');}
+ if(localStorage.getItem('bc-estilo')==='antigo'){on=false;}
+}catch(e){} if(on){H.classList.add('maison','menu-novo');}})();
 </script>
 <style>
 html.maison,html.maison body,html.maison .wrap,html.maison main,html.maison footer{background:#fff!important;color:#111!important}
