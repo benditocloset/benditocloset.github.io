@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>A minha conta · Bendito Closet</title>
+<link rel="icon" href="/img/app-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF6F0;--ink:#1C1517;--muted:#6F625C;--line:#E2D8CC;--gold:#9C6B22;--display:"Bodoni Moda",Didot,Georgia,serif;--body:"Jost","Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:300 16px/1.55 var(--body)}
+header{background:#0a0809;text-align:center;padding:14px 0}header img{width:130px;height:auto}
+.wrap{max-width:600px;margin:0 auto;padding:34px 22px 60px}
+.k{font:500 10px/1 var(--body);letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+h1{font:400 clamp(34px,9vw,48px)/1.05 var(--display);margin:12px 0 14px}
+h2{font:400 26px/1.2 var(--display);margin:34px 0 8px}
+p{margin:0 0 14px}.mut{color:var(--muted);font-size:14.5px}
+label{display:block;font:500 10.5px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;margin:18px 0 8px}
+input,select{width:100%;border:0;border-bottom:1px solid var(--ink);background:transparent;padding:10px 0;font:300 17px var(--body);color:var(--ink);border-radius:0}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+.chk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font:300 15px/1.45 var(--body);margin-top:20px}.chk input{width:auto;margin-top:4px}
+.btn{display:inline-block;border:1px solid var(--ink);background:var(--ink);color:var(--bg);padding:15px 26px;font:500 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;cursor:pointer;margin:22px 10px 0 0;text-decoration:none}
+.btn.o{background:transparent;color:var(--ink)}
+.btn[disabled]{opacity:.5;cursor:wait}
+.o{border-top:1px solid var(--line);padding:20px 0}
+.o .st{font:500 10px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:10px 0}
+.msg{border:1px solid var(--ink);padding:16px;margin:20px 0;background:#fff}
+.err{color:#8a1c1c;font-size:14.5px;margin-top:12px}
+.lang{display:flex;gap:14px;justify-content:center;margin-top:10px}.lang button{background:none;border:0;color:#cbbfb3;font:500 10.5px var(--body);letter-spacing:.2em;cursor:pointer}.lang button[aria-pressed=true]{color:#E6C68C}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+a{color:inherit}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><a href="/"><img src="/img/logo.jpg" alt="Bendito Closet" width="1000" height="667"></a>
+<div class="lang"><button data-l="pt">PT</button><button data-l="en">EN</button><button data-l="es">ES</button><button data-l="fr">FR</button><button data-l="de">DE</button><button data-l="it">IT</button></div></header>
+<main class="wrap">
+  <span class="k" data-t="k"></span>
+
+  <section id="entrar" hidden>
+    <h1 data-t="h"></h1>
+    <p class="mut" data-t="intro"></p>
+    <form id="fe">
+      <label for="em" data-t="email"></label>
+      <input id="em" type="email" autocomplete="email" required>
+      <button class="btn" type="submit" data-t="go"></button>
+      <p class="err" id="eerr" hidden></p>
+    </form>
+    <p class="msg" id="enviado" hidden></p>
+    <p class="mut" style="margin-top:26px" data-t="why"></p>
+  </section>
+
+  <section id="conta" hidden>
+    <h1 id="ola"></h1>
+    <p class="mut" id="quem"></p>
+    <h2 data-t="encT"></h2>
+    <div id="lista"></div>
+    <h2 data-t="dadT"></h2>
+    <p class="mut" data-t="dadP"></p>
+    <form id="fp">
+      <label for="nome" data-t="nome"></label><input id="nome" autocomplete="name">
+      <label for="tel" data-t="tel"></label><input id="tel" type="tel" autocomplete="tel">
+      <label for="l1" data-t="l1"></label><input id="l1" autocomplete="address-line1">
+      <label for="l2" data-t="l2"></label><input id="l2" autocomplete="address-line2">
+      <div class="two"><div><label for="cp" data-t="cp"></label><input id="cp" autocomplete="postal-code"></div><div><label for="cidade" data-t="cidade"></label><input id="cidade" autocomplete="address-level2"></div></div>
+      <label for="pais" data-t="pais"></label><input id="pais" autocomplete="country-name">
+      <label class="chk"><input type="checkbox" id="nov"><span data-t="nov"></span></label>
+      <button class="btn o" type="submit" data-t="save"></button>
+      <p class="mut" id="pok" hidden data-t="saved"></p>
+    </form>
+    <button class="btn o" id="sair" type="button" data-t="out" style="margin-top:40px"></button>
+  </section>
+
+  <p id="aguarde" class="mut" data-t="wait"></p>
+</main>
+<script>
+const W = "https://bendito-provador-ia.nn45hn9bvr.workers.dev";
+const T = {
+ pt:{k:"Cliente Bendito",h:"Entrar ou criar conta",intro:"Sem palavra-passe: escreva o seu e-mail e enviamos-lhe um link para entrar. Se ainda não tem conta, fica criada no mesmo momento.",email:"E-mail",go:"Enviar link",sent:e=>`Enviámos um link para ${e}. Abra o e-mail e toque em Entrar. O link vale 30 minutos. Se não o encontrar, veja na pasta de spam ou promoções.`,why:"Com a conta vê todas as suas encomendas num só sítio, cancela ou pede devoluções sem procurar nada, e o seu e-mail já aparece preenchido no pagamento.",err:"Não foi possível enviar agora. Tente outra vez daqui a pouco.",lim:"Já pedimos vários links para este e-mail hoje. Use o último que recebeu ou tente amanhã.",exp:"Este link já foi usado ou expirou. Peça um novo abaixo.",ola:n=>"Olá"+(n?", "+n:""),quem:e=>"Sessão iniciada como "+e,encT:"As suas encomendas",none:"Ainda não há encomendas com este e-mail.",ref:"Encomenda",tot:"Total",stOpen:"Em preparação",stSent:"Enviada",stRet:"Devolução pedida",stRef:"Reembolsada",ver:"Ver, cancelar ou devolver",dadT:"Os seus dados",dadP:"Guardamos só o que escrever aqui, para o ajudar nas próximas compras.",nome:"Nome",tel:"Telemóvel",l1:"Morada",l2:"Andar, porta (opcional)",cp:"Código postal",cidade:"Localidade",pais:"País",nov:"Quero receber novidades e peças novas por e-mail.",save:"Guardar",saved:"Guardado.",out:"Sair",wait:"Um momento…"},
+ en:{k:"Bendito client",h:"Sign in or create an account",intro:"No password: type your email and we'll send you a link to sign in. If you don't have an account yet, it's created at the same time.",email:"Email",go:"Send link",sent:e=>`We sent a link to ${e}. Open the email and tap Sign in. The link is valid for 30 minutes. If you can't find it, check your spam or promotions folder.`,why:"With an account you see all your orders in one place, cancel or request returns without searching, and your email is already filled in at checkout.",err:"We couldn't send it right now. Please try again shortly.",lim:"Several links were already requested for this email today. Use the latest one or try tomorrow.",exp:"This link was already used or has expired. Request a new one below.",ola:n=>"Hello"+(n?", "+n:""),quem:e=>"Signed in as "+e,encT:"Your orders",none:"No orders with this email yet.",ref:"Order",tot:"Total",stOpen:"Being prepared",stSent:"Shipped",stRet:"Return requested",stRef:"Refunded",ver:"View, cancel or return",dadT:"Your details",dadP:"We only keep what you write here, to help with your next orders.",nome:"Name",tel:"Mobile",l1:"Address",l2:"Floor, door (optional)",cp:"Postcode",cidade:"Town / city",pais:"Country",nov:"I'd like news and new pieces by email.",save:"Save",saved:"Saved.",out:"Sign out",wait:"One moment…"},
+ es:{k:"Cliente Bendito",h:"Entrar o crear cuenta",intro:"Sin contraseña: escribe tu e-mail y te enviamos un enlace para entrar. Si aún no tienes cuenta, se crea en ese momento.",email:"E-mail",go:"Enviar enlace",sent:e=>`Hemos enviado un enlace a ${e}. Abre el correo y pulsa Entrar. El enlace vale 30 minutos. Si no lo encuentras, mira en spam o promociones.`,why:"Con la cuenta ves todos tus pedidos en un solo sitio, cancelas o pides devoluciones sin buscar nada, y tu e-mail ya aparece rellenado en el pago.",err:"No se pudo enviar ahora. Inténtalo de nuevo en un momento.",lim:"Ya se pidieron varios enlaces para este e-mail hoy. Usa el último o inténtalo mañana.",exp:"Este enlace ya se usó o caducó. Pide uno nuevo abajo.",ola:n=>"Hola"+(n?", "+n:""),quem:e=>"Sesión iniciada como "+e,encT:"Tus pedidos",none:"Aún no hay pedidos con este e-mail.",ref:"Pedido",tot:"Total",stOpen:"En preparación",stSent:"Enviado",stRet:"Devolución pedida",stRef:"Reembolsado",ver:"Ver, cancelar o devolver",dadT:"Tus datos",dadP:"Solo guardamos lo que escribas aquí, para ayudarte en las próximas compras.",nome:"Nombre",tel:"Móvil",l1:"Dirección",l2:"Piso, puerta (opcional)",cp:"Código postal",cidade:"Localidad",pais:"País",nov:"Quiero recibir novedades y piezas nuevas por e-mail.",save:"Guardar",saved:"Guardado.",out:"Salir",wait:"Un momento…"},
+ fr:{k:"Cliente Bendito",h:"Se connecter ou créer un compte",intro:"Sans mot de passe : saisissez votre e-mail et nous vous envoyons un lien de connexion. Si vous n'avez pas encore de compte, il est créé au même moment.",email:"E-mail",go:"Envoyer le lien",sent:e=>`Nous avons envoyé un lien à ${e}. Ouvrez l'e-mail et touchez Me connecter. Le lien est valable 30 minutes. Sinon, regardez dans les spams ou promotions.`,why:"Avec un compte, vous voyez toutes vos commandes au même endroit, annulez ou demandez un retour sans rien chercher, et votre e-mail est déjà rempli au paiement.",err:"Envoi impossible pour le moment. Réessayez bientôt.",lim:"Plusieurs liens ont déjà été demandés aujourd'hui pour cet e-mail. Utilisez le dernier ou réessayez demain.",exp:"Ce lien a déjà été utilisé ou a expiré. Demandez-en un nouveau ci-dessous.",ola:n=>"Bonjour"+(n?", "+n:""),quem:e=>"Connectée en tant que "+e,encT:"Vos commandes",none:"Aucune commande avec cet e-mail pour l'instant.",ref:"Commande",tot:"Total",stOpen:"En préparation",stSent:"Expédiée",stRet:"Retour demandé",stRef:"Remboursée",ver:"Voir, annuler ou retourner",dadT:"Vos informations",dadP:"Nous gardons seulement ce que vous écrivez ici, pour vos prochaines commandes.",nome:"Nom",tel:"Portable",l1:"Adresse",l2:"Étage, porte (facultatif)",cp:"Code postal",cidade:"Ville",pais:"Pays",nov:"Je souhaite recevoir les nouveautés par e-mail.",save:"Enregistrer",saved:"Enregistré.",out:"Se déconnecter",wait:"Un instant…"},
+ de:{k:"Bendito Kundin",h:"Anmelden oder Konto erstellen",intro:"Ohne Passwort: Geben Sie Ihre E-Mail ein und wir senden Ihnen einen Anmeldelink. Falls Sie noch kein Konto haben, wird es dabei erstellt.",email:"E-Mail",go:"Link senden",sent:e=>`Wir haben einen Link an ${e} gesendet. Öffnen Sie die E-Mail und tippen Sie auf Anmelden. Der Link gilt 30 Minuten. Falls nicht da: Spam- oder Werbeordner prüfen.`,why:"Mit einem Konto sehen Sie alle Bestellungen an einem Ort, stornieren oder fordern Rücksendungen ohne Suchen an, und Ihre E-Mail ist an der Kasse schon ausgefüllt.",err:"Senden gerade nicht möglich. Bitte gleich erneut versuchen.",lim:"Für diese E-Mail wurden heute schon mehrere Links angefordert. Nutzen Sie den letzten oder versuchen Sie es morgen.",exp:"Dieser Link wurde schon benutzt oder ist abgelaufen. Fordern Sie unten einen neuen an.",ola:n=>"Hallo"+(n?", "+n:""),quem:e=>"Angemeldet als "+e,encT:"Ihre Bestellungen",none:"Noch keine Bestellungen mit dieser E-Mail.",ref:"Bestellung",tot:"Summe",stOpen:"In Vorbereitung",stSent:"Versandt",stRet:"Rücksendung angefragt",stRef:"Erstattet",ver:"Ansehen, stornieren oder zurücksenden",dadT:"Ihre Daten",dadP:"Wir speichern nur, was Sie hier eintragen, für Ihre nächsten Bestellungen.",nome:"Name",tel:"Handy",l1:"Adresse",l2:"Etage, Tür (optional)",cp:"PLZ",cidade:"Ort",pais:"Land",nov:"Ich möchte Neuheiten per E-Mail erhalten.",save:"Speichern",saved:"Gespeichert.",out:"Abmelden",wait:"Einen Moment…"},
+ it:{k:"Cliente Bendito",h:"Accedi o crea un account",intro:"Senza password: scrivi la tua e-mail e ti inviamo un link per accedere. Se non hai ancora un account, viene creato in quel momento.",email:"E-mail",go:"Invia link",sent:e=>`Abbiamo inviato un link a ${e}. Apri l'e-mail e tocca Accedi. Il link vale 30 minuti. Se non lo trovi, guarda in spam o promozioni.`,why:"Con l'account vedi tutti i tuoi ordini in un solo posto, annulli o chiedi un reso senza cercare nulla, e la tua e-mail è già compilata al pagamento.",err:"Invio non riuscito ora. Riprova tra poco.",lim:"Oggi sono già stati richiesti vari link per questa e-mail. Usa l'ultimo o riprova domani.",exp:"Questo link è già stato usato o è scaduto. Richiedine uno nuovo qui sotto.",ola:n=>"Ciao"+(n?", "+n:""),quem:e=>"Accesso come "+e,encT:"I tuoi ordini",none:"Ancora nessun ordine con questa e-mail.",ref:"Ordine",tot:"Totale",stOpen:"In preparazione",stSent:"Spedito",stRet:"Reso richiesto",stRef:"Rimborsato",ver:"Vedi, annulla o restituisci",dadT:"I tuoi dati",dadP:"Conserviamo solo ciò che scrivi qui, per i tuoi prossimi ordini.",nome:"Nome",tel:"Cellulare",l1:"Indirizzo",l2:"Piano, porta (facoltativo)",cp:"CAP",cidade:"Città",pais:"Paese",nov:"Voglio ricevere novità per e-mail.",save:"Salva",saved:"Salvato.",out:"Esci",wait:"Un momento…"}
+};
+let L = (()=>{ try{ const q=new URLSearchParams(location.search).get("lang"); if(T[q]) return q; const s=localStorage.getItem("bc-lang"); if(T[s]) return s; }catch(e){} const n=(navigator.language||"pt").slice(0,2); return T[n]?n:"pt"; })();
+const t = () => T[L];
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const eur = v => Number(v||0).toFixed(2).replace(".", ",") + " €";
+let EU = null, SESS = ""; try { SESS = localStorage.getItem("bc-sessao") || ""; } catch(e) {}
+async function post(p, body){ try { const r = await fetch(W+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); return {ok:r.ok, s:r.status, o:await r.json().catch(()=>({}))}; } catch(e){ return {ok:false, s:0, o:{}}; } }
+function paint(){
+  document.documentElement.lang=L;
+  document.querySelectorAll("[data-t]").forEach(e=>{const v=t()[e.dataset.t]; if(typeof v==="string") e.textContent=v;});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.l===L));
+  if (EU) mostrar(EU);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{L=b.dataset.l; try{localStorage.setItem("bc-lang",L)}catch(e){} paint();});
+function ecraEntrar(msg){ $("aguarde").hidden = true; $("conta").hidden = true; $("entrar").hidden = false; if (msg) { $("eerr").textContent = msg; $("eerr").hidden = false; } }
+function mostrar(d){
+  EU = d; $("aguarde").hidden = true; $("entrar").hidden = true; $("conta").hidden = false;
+  const p = d.perfil || {}, nome = (p.nome||"").split(" ")[0];
+  $("ola").textContent = t().ola(nome); $("quem").textContent = t().quem(d.email);
+  const L2 = d.encomendas || [];
+  $("lista").innerHTML = L2.length ? L2.map(o => {
+    const st = o.reembolso==="total" ? t().stRef : o.devolucao==="pedida" ? t().stRet : o.enviada ? t().stSent : t().stOpen;
+    return `<div class="o"><b>${t().ref} ${esc(o.ref)}</b> · ${esc(o.data)}<br>${esc(o.pecas)}<br><span class="mut">${t().tot}: ${eur(o.total)}</span><div class="st">${st}</div><a href="/encomenda/?s=${encodeURIComponent(o.id)}">${t().ver} →</a></div>`;
+  }).join("") : `<p class="mut">${t().none}</p>`;
+  for (const k of ["nome","tel","l1","l2","cp","cidade","pais"]) if (document.activeElement !== $(k)) $(k).value = p[k] || "";
+  $("nov").checked = !!p.novidades;
+}
+async function carregar(){
+  if (!SESS) return ecraEntrar();
+  const {ok, o} = await post("/conta/eu", {sessao:SESS});
+  if (!ok) { try { localStorage.removeItem("bc-sessao"); } catch(e){} SESS = ""; return ecraEntrar(); }
+  try { localStorage.setItem("bc-conta-email", o.email); } catch(e){}
+  mostrar(o);
+}
+$("fe").addEventListener("submit", async e => {
+  e.preventDefault(); $("eerr").hidden = true;
+  const b = e.target.querySelector("button"), email = $("em").value.trim(); b.disabled = true;
+  const {ok, s} = await post("/conta/entrar", {email, lang:L});
+  b.disabled = false;
+  if (!ok) { $("eerr").textContent = s===429 ? t().lim : t().err; $("eerr").hidden = false; return; }
+  $("fe").hidden = true; $("enviado").textContent = t().sent(email); $("enviado").hidden = false;
+});
+$("fp").addEventListener("submit", async e => {
+  e.preventDefault(); const b = e.target.querySelector("button"); b.disabled = true; $("pok").hidden = true;
+  const perfil = {}; for (const k of ["nome","tel","l1","l2","cp","cidade","pais"]) perfil[k] = $(k).value; perfil.novidades = $("nov").checked;
+  const {ok, o} = await post("/conta/perfil", {sessao:SESS, perfil});
+  b.disabled = false;
+  if (ok) { EU.perfil = o.perfil; $("pok").hidden = false; mostrar(EU); } else if (!SESS) ecraEntrar();
+});
+$("sair").onclick = async () => { await post("/conta/sair", {sessao:SESS}); try { localStorage.removeItem("bc-sessao"); localStorage.removeItem("bc-conta-email"); } catch(e){} SESS = ""; EU = null; ecraEntrar(); };
+paint();
+(async () => {
+  const q = new URLSearchParams(location.search), tk = q.get("t");
+  if (tk) {
+    try { history.replaceState(null, "", location.pathname); } catch(e){}
+    const {ok, o} = await post("/conta/validar", {t:tk});
+    if (ok && o.sessao) { SESS = o.sessao; try { localStorage.setItem("bc-sessao", SESS); } catch(e){} }
+    else if (!SESS) return ecraEntrar(t().exp);
+  }
+  carregar();
+})();
+</script>
+</body>
+</html>

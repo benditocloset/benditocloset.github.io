@@ -142,6 +142,7 @@ async function comprar(req, env, j) {
   f.set("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", String(e.max));
   e.c.forEach((c, i) => f.set(`shipping_address_collection[allowed_countries][${i}]`, c));
   f.set("phone_number_collection[enabled]", "true");
+  const quemCompra = await quem(env, b.sessao); if (quemCompra) f.set("customer_email", quemCompra);
   if (CUPOES[code]) f.set("discounts[0][coupon]", CUPOES[code]); else f.set("allow_promotion_codes", "true");
   const lista = sel.map(p => p.id).join(",");
   f.set("metadata[pecas]", lista.slice(0, 490)); f.set("metadata[envio]", e.n); f.set("metadata[portes_eur]", String(portes));
@@ -179,7 +180,7 @@ async function resumoEncomenda(env, ses) {
     total: (ses.amount_total || 0) / 100, email: (ses.customer_details && ses.customer_details.email) || "", nome: (ses.customer_details && ses.customer_details.name) || "",
     pecas: (pi && pi.description || "").replace(/^Bendito Closet · /, ""), envio: (ses.metadata && ses.metadata.envio) || "",
     last4: ch && ch.payment_method_details && ch.payment_method_details.card ? ch.payment_method_details.card.last4 : "",
-    pi: pi ? pi.id : "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: reemb || estado.reembolso || ""
+    pi: pi ? pi.id : "", recibo: (ch && ch.receipt_url) || "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: reemb || estado.reembolso || ""
   };
 }
 async function encontrar(req, env, j) {
@@ -255,16 +256,140 @@ async function confirmar(req, env, j) {
     const k = "conf:" + id, dup = !!(await env.LIMITS.get(k));
     if (!dup) await env.LIMITS.put(k, "1", { expirationTtl: 90 * 86400 });
     const tok = await hmac(env, "enc:" + id);
-    return j({ dup, ref: r.ref, email: r.email, nome: r.nome, pecas: r.pecas, total: r.total, envio: r.envio,
-      devolucao: "https://bendito-provador-ia.nn45hn9bvr.workers.dev/etiqueta?id=" + encodeURIComponent(id) + "&tok=" + tok,
-      encomenda: "https://benditocloset.pt/encomenda/?s=" + id });
+    const links = { encomenda: "https://benditocloset.pt/encomenda/?s=" + id, devolucao: W + "/etiqueta?id=" + encodeURIComponent(id) + "&tok=" + tok };
+    let enviado = false;
+    if (!dup && env.RESEND_KEY && r.email) {
+      const m = emailCompra(r, links, b.lang === "pt" ? "pt" : (LOCAIS.includes(b.lang) ? "en" : "pt"));
+      enviado = await mail(env, r.email, m.assunto, m.html, m.texto);
+      await mail(env, "ola@benditocloset.pt", "Nova encomenda " + r.ref + " · " + r.total.toFixed(2).replace(".", ",") + " €",
+        moldura("Nova encomenda " + esc(r.ref), `<p>${esc(r.nome)} · ${esc(r.email)}</p><p><b>Peças:</b> ${esc(r.pecas)}<br><b>Envio:</b> ${esc(r.envio)}<br><b>Total:</b> ${r.total.toFixed(2).replace(".", ",")} €</p><p>A cliente recebeu o recibo, o link da encomenda e a etiqueta de devolução. As etiquetas de envio e de devolução para imprimir estão na sua página de gestão.</p>${botao(W + "/etiqueta?id=" + encodeURIComponent(id) + "&tok=" + tok + "&tipo=envio", "Etiqueta de envio")}`),
+        "Nova encomenda " + r.ref + "\n" + r.nome + " · " + r.email + "\n" + r.pecas + "\n" + r.envio + "\nTotal: " + r.total.toFixed(2) + " €");
+    }
+    return j({ dup, enviado, ref: r.ref, email: r.email, nome: r.nome, pecas: r.pecas, total: r.total, envio: r.envio,
+      devolucao: links.devolucao, encomenda: links.encomenda });
   } catch (e) { return j({ error: "stripe" }, 502); }
+}
+// ===== E-mails do site pelo Resend, de ola@benditocloset.pt (segredo RESEND_KEY na Cloudflare) =====
+const W = "https://bendito-provador-ia.nn45hn9bvr.workers.dev";
+async function mail(env, to, assunto, html, texto) {
+  if (!env.RESEND_KEY || !to) return false;
+  try {
+    const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { "Authorization": "Bearer " + env.RESEND_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: "Bendito Closet <ola@benditocloset.pt>", to: [to], reply_to: "ola@benditocloset.pt", subject: assunto, html, text: texto }) });
+    return r.ok;
+  } catch (e) { return false; }
+}
+function moldura(titulo, corpo) {
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;background:#F7F3EC;padding:26px 12px;font-family:Helvetica,Arial,sans-serif;color:#1C1517;font-size:15px;line-height:1.55"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #1C1517"><tr><td style="padding:30px 26px"><div style="font-family:Georgia,'Times New Roman',serif;font-size:12px;letter-spacing:.34em;text-transform:uppercase;text-align:center">Bendito Closet</div><h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:26px;line-height:1.25;margin:22px 0 16px;text-align:center">${titulo}</h1>${corpo}</td></tr></table><p style="font-size:11px;color:#6F625C;margin:14px 0 0;letter-spacing:.08em">benditocloset.pt</p></td></tr></table></body></html>`;
+}
+const botao = (href, txt) => `<p style="text-align:center;margin:22px 0"><a href="${esc(href)}" style="display:inline-block;border:1px solid #1C1517;padding:13px 24px;color:#1C1517;text-decoration:none;font-size:12px;letter-spacing:.16em;text-transform:uppercase">${esc(txt)}</a></p>`;
+const eurTxt = v => Number(v || 0).toFixed(2).replace(".", ",") + " €";
+const ETXT = {
+  pt: { a: r => "Encomenda " + r.ref + " confirmada · Bendito Closet", t: "Obrigada pela sua compra", ola: n => "Olá" + (n ? " " + n.split(" ")[0] : "") + ",", p1: "A sua encomenda está confirmada. Assim que for enviada, recebe outro e-mail com o código de seguimento (tracking number), que também pode seguir na app Shop.",
+    enc: "Encomenda", pec: "Peças", env: "Envio", tot: "Total pago", rec: "Ver o recibo do pagamento", ver: "Ver, cancelar ou devolver",
+    canT: "Cancelar", can: "Enquanto a encomenda não for enviada, pode cancelá-la no botão acima. O reembolso é automático.",
+    devT: "Devolver", dev: ["Tem 14 dias depois de receber para pedir a devolução, no botão acima.", "Use a etiqueta de devolução: está no link abaixo e também vai impressa dentro da caixa.", "Entregue a encomenda nos CTT ou na Correos Express. Os portes da devolução são pagos por si, no balcão.", "Quando a peça chegar, fazemos o reembolso. A peça tem de voltar no mesmo estado."],
+    etq: "Etiqueta de devolução", conta: "Crie a sua conta com este e-mail para ver todas as suas encomendas e comprar mais depressa:", contaB: "A minha conta" },
+  en: { a: r => "Order " + r.ref + " confirmed · Bendito Closet", t: "Thank you for your order", ola: n => "Hello" + (n ? " " + n.split(" ")[0] : "") + ",", p1: "Your order is confirmed. As soon as it ships, you'll get another email with the tracking number, which you can also follow in the Shop app.",
+    enc: "Order", pec: "Items", env: "Shipping", tot: "Total paid", rec: "View your payment receipt", ver: "View, cancel or return",
+    canT: "Cancel", can: "Until your order ships, you can cancel it with the button above. The refund is automatic.",
+    devT: "Return", dev: ["You have 14 days after delivery to request a return, with the button above.", "Use the return label: it's at the link below and a printed copy also goes inside the box.", "Drop the parcel at CTT or Correos Express. Return shipping is paid by you at the counter.", "When the piece arrives, we refund you. It must come back in the same condition."],
+    etq: "Return label", conta: "Create your account with this email to see all your orders and check out faster:", contaB: "My account" }
+};
+function emailCompra(r, links, lang) {
+  const t = ETXT[lang] || ETXT.pt;
+  const linha = (k, v) => `<tr><td style="padding:7px 0;border-bottom:1px solid #E2D8CC;color:#6F625C;font-size:13px;width:36%;vertical-align:top">${esc(k)}</td><td style="padding:7px 0;border-bottom:1px solid #E2D8CC;vertical-align:top">${esc(v)}</td></tr>`;
+  const html = moldura(esc(t.t), `<p>${esc(t.ola(r.nome))}</p><p>${esc(t.p1)}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0">${linha(t.enc, r.ref)}${linha(t.pec, r.pecas)}${linha(t.env, r.envio)}${linha(t.tot, eurTxt(r.total))}</table>
+${r.recibo ? `<p style="text-align:center"><a href="${esc(r.recibo)}" style="color:#1C1517">${esc(t.rec)}</a></p>` : ""}
+${botao(links.encomenda, t.ver)}
+<p style="font-family:Georgia,serif;font-size:19px;margin:24px 0 6px">${esc(t.canT)}</p><p>${esc(t.can)}</p>
+<p style="font-family:Georgia,serif;font-size:19px;margin:24px 0 6px">${esc(t.devT)}</p><ol style="padding-left:20px;margin:0">${t.dev.map(x => `<li style="margin:0 0 6px">${esc(x)}</li>`).join("")}</ol>
+${botao(links.devolucao, t.etq)}
+<p style="border-top:1px solid #E2D8CC;padding-top:16px;font-size:14px;color:#6F625C">${esc(t.conta)} <a href="https://benditocloset.pt/conta/" style="color:#1C1517">${esc(t.contaB)}</a></p>`);
+  const texto = [t.ola(r.nome), "", t.p1, "", t.enc + ": " + r.ref, t.pec + ": " + r.pecas, t.env + ": " + r.envio, t.tot + ": " + eurTxt(r.total), r.recibo ? t.rec + ": " + r.recibo : "", "", t.ver + ": " + links.encomenda, "", t.canT + ": " + t.can, "", t.devT + ":", ...t.dev.map((x, i) => (i + 1) + ") " + x), "", t.etq + ": " + links.devolucao, "", t.conta + " https://benditocloset.pt/conta/"].join("\n");
+  return { assunto: t.a(r), html, texto };
+}
+function emailEnviada(r, est, link, etq) {
+  const html = moldura("A sua encomenda foi enviada", `<p>Olá${r.nome ? " " + esc(r.nome.split(" ")[0]) : ""},</p><p>A encomenda <b>${esc(r.ref)}</b> já está a caminho (${esc(r.pecas)}).</p>
+<p style="text-align:center;margin:20px 0 4px;color:#6F625C;font-size:12px;letter-spacing:.2em;text-transform:uppercase">${esc(est.transp)} · Tracking number</p><p style="text-align:center;font-family:Georgia,serif;font-size:24px;margin:0">${esc(est.track)}</p>
+${botao(link, "Seguir a encomenda")}
+<p>Também pode seguir a encomenda na app Shop (shop.app): toque em adicionar encomenda e cole o código, ou ligue o seu e-mail à app.</p>
+<p style="border-top:1px solid #E2D8CC;padding-top:16px;font-size:14px;color:#6F625C">Se quiser devolver: peça a devolução em <a href="https://benditocloset.pt/encomenda/?s=${esc(r.id)}" style="color:#1C1517">A minha encomenda</a> até 14 dias depois de receber, use a <a href="${esc(etq)}" style="color:#1C1517">etiqueta de devolução</a> (também vai impressa dentro da caixa) e entregue nos CTT ou na Correos Express. Os portes da devolução são pagos por si.</p>`);
+  const texto = `A encomenda ${r.ref} foi enviada.\nTransportadora: ${est.transp}\nTracking number: ${est.track}\nSeguir: ${link}\nTambém pode seguir na app Shop (shop.app).\n\nDevolver: https://benditocloset.pt/encomenda/?s=${r.id}\nEtiqueta de devolução: ${etq}\nOs portes da devolução são pagos pela cliente.`;
+  return { assunto: "A sua encomenda Bendito Closet foi enviada · tracking number " + est.track, html, texto };
+}
+
+// ===== Conta de cliente: entrar com um link enviado por e-mail (sem palavra-passe) =====
+const rnd = n => [...crypto.getRandomValues(new Uint8Array(n))].map(x => x.toString(16).padStart(2, "0")).join("");
+const emailOk = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length < 200;
+async function quem(env, s) { s = String(s || ""); return /^[a-f0-9]{64}$/.test(s) ? ((await env.LIMITS.get("sess:" + s)) || "") : ""; }
+const LTXT = {
+  pt: { a: "Entrar na sua conta · Bendito Closet", t: "Entrar na sua conta", p: "Toque no botão para entrar. O link é válido durante 30 minutos e só funciona uma vez.", b: "Entrar", n: "Se não foi a Mari que pediu este e-mail, pode ignorá-lo." },
+  en: { a: "Sign in to your account · Bendito Closet", t: "Sign in to your account", p: "Tap the button to sign in. The link is valid for 30 minutes and works only once.", b: "Sign in", n: "If you didn't request this email, you can ignore it." },
+  es: { a: "Entrar en tu cuenta · Bendito Closet", t: "Entrar en tu cuenta", p: "Pulsa el botón para entrar. El enlace es válido durante 30 minutos y solo funciona una vez.", b: "Entrar", n: "Si no has pedido este correo, puedes ignorarlo." },
+  fr: { a: "Connexion à votre compte · Bendito Closet", t: "Connexion à votre compte", p: "Touchez le bouton pour vous connecter. Le lien est valable 30 minutes et ne fonctionne qu'une fois.", b: "Me connecter", n: "Si vous n'avez pas demandé cet e-mail, ignorez-le." },
+  de: { a: "Anmeldung bei deinem Konto · Bendito Closet", t: "Bei deinem Konto anmelden", p: "Tippe auf den Button, um dich anzumelden. Der Link ist 30 Minuten gültig und funktioniert nur einmal.", b: "Anmelden", n: "Wenn du diese E-Mail nicht angefordert hast, kannst du sie ignorieren." },
+  it: { a: "Accedi al tuo account · Bendito Closet", t: "Accedi al tuo account", p: "Tocca il pulsante per accedere. Il link è valido 30 minuti e funziona una sola volta.", b: "Accedi", n: "Se non hai richiesto questa e-mail, puoi ignorarla." }
+};
+LTXT.pt.n = "Se não pediu este e-mail, pode ignorá-lo.";
+async function contaEntrar(req, env, j) {
+  if (!env.RESEND_KEY) return j({ error: "sem_email" }, 503);
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const email = String(b.email || "").trim().toLowerCase(), lang = LTXT[b.lang] ? b.lang : "pt";
+  if (!emailOk(email)) return j({ error: "dados" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
+  for (const [k, max] of [[`lg:${day}:${ip}`, 10], [`lge:${day}:${email}`, 5]]) {
+    const n = +((await env.LIMITS.get(k)) || 0); if (n >= max) return j({ error: "limite" }, 429);
+    await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  }
+  const tok = rnd(24); await env.LIMITS.put("login:" + tok, email, { expirationTtl: 1800 });
+  const t = LTXT[lang], link = "https://benditocloset.pt/conta/?t=" + tok;
+  const ok = await mail(env, email, t.a, moldura(esc(t.t), `<p style="text-align:center">${esc(t.p)}</p>${botao(link, t.b)}<p style="text-align:center;font-size:13px;color:#6F625C">${esc(t.n)}</p>`), t.t + "\n\n" + t.p + "\n" + link + "\n\n" + t.n);
+  return ok ? j({ ok: true }) : j({ error: "envio" }, 502);
+}
+async function contaValidar(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const t = String(b.t || ""); if (!/^[a-f0-9]{48}$/.test(t)) return j({ error: "dados" }, 400);
+  const email = await env.LIMITS.get("login:" + t); if (!email) return j({ error: "expirado" }, 410);
+  await env.LIMITS.delete("login:" + t);
+  const s = rnd(32); await env.LIMITS.put("sess:" + s, email, { expirationTtl: 90 * 86400 });
+  if (!(await env.LIMITS.get("cli:" + email))) await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
+  return j({ sessao: s, email });
+}
+async function contaEu(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const email = await quem(env, b.sessao); if (!email) return j({ error: "sessao" }, 401);
+  const perfil = JSON.parse((await env.LIMITS.get("cli:" + email)) || "{}"), encomendas = [];
+  if (env.STRIPE_KEY) try {
+    const o = await stp(env, "checkout/sessions?limit=30&customer_details[email]=" + encodeURIComponent(email));
+    for (const ses of (o.data || [])) {
+      if (ses.payment_status !== "paid" || !(ses.metadata && ses.metadata.pecas) || Date.now() / 1000 - ses.created > 400 * 86400) continue;
+      const r = await resumoEncomenda(env, ses); if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
+      r.tok = await hmac(env, "enc:" + r.id); delete r.pi; delete r.last4; encomendas.push(r);
+    }
+  } catch (e) {}
+  return j({ email, perfil, encomendas });
+}
+async function contaPerfil(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const email = await quem(env, b.sessao); if (!email) return j({ error: "sessao" }, 401);
+  const p = JSON.parse((await env.LIMITS.get("cli:" + email)) || "{}"), d = b.perfil || {};
+  for (const k of ["nome", "tel", "l1", "l2", "cp", "cidade", "pais"]) p[k] = String(d[k] || "").trim().slice(0, 120);
+  p.novidades = !!d.novidades; p.atualizado = new Date().toISOString();
+  await env.LIMITS.put("cli:" + email, JSON.stringify(p));
+  return j({ ok: true, perfil: p });
+}
+async function contaSair(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const s = String(b.sessao || ""); if (/^[a-f0-9]{64}$/.test(s)) await env.LIMITS.delete("sess:" + s);
+  return j({ ok: true });
 }
 // Página de gestão da Marianna (link privado com o token de dona)
 async function gestao(req, env, url) {
   const t = url.searchParams.get("t") || "";
   if (!env.OWNER_TOKEN || t !== env.OWNER_TOKEN) return new Response("Sem acesso", { status: 403 });
-  let msg = "", avisoCliente = null;
+  let msg = "", avisoCliente = null, continue_ = true;
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
     if (acao === "morada") { await env.LIMITS.put("cfg:morada", String(f.get("morada") || "").trim().slice(0, 400)); msg = "Morada de devolução guardada."; }
@@ -277,7 +402,12 @@ async function gestao(req, env, url) {
           if (est.track) {
             const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
             const link = est.transp === "CTT" ? "https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=" + encodeURIComponent(est.track) : "https://www.correosexpress.pt";
-            avisoCliente = { _subject: "A sua encomenda Bendito Closet foi enviada · tracking number " + est.track, _template: "table", _captcha: "false", _cc: r.email,
+            const tokE = await hmac(env, "enc:" + r.id);
+            if (env.RESEND_KEY && r.email) {
+              const m = emailEnviada(r, est, link, W + "/etiqueta?id=" + encodeURIComponent(r.id) + "&tok=" + tokE);
+              if (await mail(env, r.email, m.assunto, m.html, m.texto)) { msg += " E-mail enviado a " + r.email + "."; continue_ = false; }
+            }
+            if (continue_) avisoCliente = { _subject: "A sua encomenda Bendito Closet foi enviada · tracking number " + est.track, _template: "table", _captcha: "false", _cc: r.email,
               "Olá": r.nome || "", "Encomenda": r.ref, "Peças": r.pecas, "Transportadora": est.transp, "Tracking number (código de seguimento)": est.track,
               "Track your package (seguir a encomenda)": link, "App Shop": "Pode seguir a encomenda na app Shop (shop.app): cole o código em Adicionar encomenda, ou ligue o seu Gmail à app.",
               "Cancelar ou devolver": "https://benditocloset.pt/encomenda/?s=" + r.id,
@@ -285,6 +415,11 @@ async function gestao(req, env, url) {
           }
         }
         if (acao === "nao_enviada") { delete est.enviada; msg = "Desmarcada."; }
+        if (acao === "recusada") {
+          const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
+          if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "devolvida pela transportadora (não entregue)" });
+          est.devolucao = "recusada"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €.";
+        }
         if (acao === "recebida") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
           if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "devolução recebida" });
@@ -303,7 +438,7 @@ async function gestao(req, env, url) {
       if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
       const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
-      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
+      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada && r.devolucao !== "pedida" ? bt("recusada", "Devolvida pela transportadora → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
       const etqUrl = "/etiqueta?id=" + encodeURIComponent(r.id) + "&tok=" + await hmac(env, "enc:" + r.id);
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a><div class="a">${acoes}</div></div>`;
     }
@@ -399,6 +534,11 @@ export default {
     if (url.pathname === "/gestao") return gestao(req, env, url);
     if (url.pathname === "/etiqueta") return etiqueta(env, url);
     if (url.pathname === "/encomenda/confirmar" && req.method === "POST") return confirmar(req, env, j);
+    if (url.pathname === "/conta/entrar" && req.method === "POST") return contaEntrar(req, env, j);
+    if (url.pathname === "/conta/validar" && req.method === "POST") return contaValidar(req, env, j);
+    if (url.pathname === "/conta/eu" && req.method === "POST") return contaEu(req, env, j);
+    if (url.pathname === "/conta/perfil" && req.method === "POST") return contaPerfil(req, env, j);
+    if (url.pathname === "/conta/sair" && req.method === "POST") return contaSair(req, env, j);
     const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
     if (mc && req.method === "GET") return verContrato(mc[1], env);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);
