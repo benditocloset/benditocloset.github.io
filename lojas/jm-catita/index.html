@@ -218,7 +218,7 @@ footer .logo{color:var(--ink);margin-bottom:8px}
         <label><input type="checkbox" name="Extras" value="Revista">Revista</label>
         <label><input type="checkbox" name="Extras" value="Provador com IA">Provador com IA</label></div></fieldset>
       <fieldset><legend>Mais alguma coisa?</legend><textarea name="Notas" placeholder="Escreva aqui o que quiser acrescentar"></textarea></fieldset>
-      <button class="send" type="submit">Enviar respostas à Marianna</button>
+      <button class="send" type="submit">Enviar respostas</button>
     </form>
   </section>
 </main>
@@ -297,11 +297,15 @@ function pagar(){const tot=saco.reduce((a,s)=>a+P.find(x=>x.id==s.id).p,0);
 function pago(){saco=[];upd();document.getElementById("pay").innerHTML=`<div class="ok"><div>🎉</div><h2>Pagamento confirmado!</h2>
  <p class="sub">A cliente recebe a confirmação por e-mail, as peças saem do stock sozinhas e a Milena recebe a encomenda com a morada para enviar.</p>
  <button class="send" style="background:var(--ink)" onclick="fechar()">Continuar a ver a loja</button></div>`}
-function respostas(){const f=new FormData(document.getElementById("q")),o={};
- for(const [k,v] of f.entries()){if(!v)continue;o[k]=o[k]?o[k]+", "+v:v}
+async function respostas(){let fm=document.getElementById("q"),f=new FormData(fm),o={};
+ for(const [k,v] of f.entries()){if(!String(v).trim())continue;o[k]=o[k]?o[k]+", "+v:v}
+ if(!Object.keys(o).length){alert("Responda a pelo menos uma pergunta.");return}
+ o={"Loja":"JM Catita (Milena)",...o};
+ const bt=fm.querySelector("button[type=submit]");bt.disabled=true;bt.textContent="A enviar…";
+ let ok=false;try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/lojas/pedido",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({campos:o,origem:location.pathname})});ok=r.ok}catch(e){}
+ if(ok){fm.innerHTML='<div style="text-align:center;padding:16px 0"><div style="font-size:42px">💌</div><h2 style="font-family:Bodoni,serif;font-weight:500;font-size:26px;margin:6px 0">Recebi as suas respostas!</h2><p style="color:#7A6B60;line-height:1.5">Obrigada. Vou ler com atenção e envio-lhe a proposta em breve.</p></div>';return}
  const l=Object.entries(o).map(([k,v])=>"• "+k+": "+v).join("\n");
- if(!l){toast("Responda a pelo menos uma pergunta");return}
- location.href="https://wa.me/351936796783?text="+encodeURIComponent("Olá Marianna! Respostas da JM Catita:\n"+l)}
+ location.href="https://wa.me/351936796783?text="+encodeURIComponent("Olá Marianna! Respostas para a minha loja online:\n"+l)}
 chips();grid();modo(M);
 </script>
 </body>

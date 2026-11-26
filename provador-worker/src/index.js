@@ -327,11 +327,11 @@ async function confirmar(req, env, j) {
 }
 // ===== E-mails do site pelo Resend, de ola@benditocloset.pt (segredo RESEND_KEY na Cloudflare) =====
 const W = "https://bendito-provador-ia.nn45hn9bvr.workers.dev";
-async function mail(env, to, assunto, html, texto) {
+async function mail(env, to, assunto, html, texto, responder) {
   if (!env.RESEND_KEY || !to) return false;
   try {
     const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { "Authorization": "Bearer " + env.RESEND_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: "Bendito Closet <ola@benditocloset.pt>", to: [to], reply_to: "ola@benditocloset.pt", subject: assunto, html, text: texto }) });
+      body: JSON.stringify({ from: "Bendito Closet <ola@benditocloset.pt>", to: [to], reply_to: responder || "ola@benditocloset.pt", subject: assunto, html, text: texto }) });
     return r.ok;
   } catch (e) { return false; }
 }
@@ -598,6 +598,24 @@ async function faqTexto() {
     return [...blk.matchAll(/\['((?:[^'\\]|\\.)*)',\s*'((?:[^'\\]|\\.)*)'\]/g)].map(m => "P: " + m[1] + "\nR: " + m[2].replace(/<br>/g, "\n").replace(/<[^>]+>/g, "").replace(/\\'/g, "'")).join("\n\n");
   } catch (e) { return ""; }
 }
+// ===== Formulário de perguntas das lojas online: chega ao e-mail ola@ =====
+async function lojaPedido(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const c = b && typeof b.campos === "object" && b.campos ? b.campos : {};
+  const linhas = Object.entries(c).slice(0, 30).map(([k, v]) => [String(k).slice(0, 60), String(v || "").slice(0, 1500)]).filter(([, v]) => v.trim());
+  if (!linhas.length) return j({ error: "vazio" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `lped:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 8) return j({ error: "limite" }, 429);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  const em = String(c["E-mail"] || "").trim(), emOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em) ? em : "";
+  const loja = String(c["Loja"] || c["Nome"] || "nova cliente").slice(0, 80);
+  const origem = String(b.origem || "").slice(0, 80);
+  const tabela = linhas.map(([k, v]) => `<tr><td style="padding:7px 10px 7px 0;color:#6F625C;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:7px 0;vertical-align:top"><b>${esc(v).replace(/\n/g, "<br>")}</b></td></tr>`).join("");
+  const html = moldura("Respostas do formulário", `<p>${origem ? "Página: " + esc(origem) + "<br>" : ""}Recebido em ${new Date().toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" })}</p><table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-top:1px solid #E9DFD3;font-size:14.5px">${tabela}</table>${emOk ? "<p style=\"margin-top:18px\">Carregue em Responder para escrever diretamente à pessoa.</p>" : ""}`);
+  const texto = linhas.map(([k, v]) => k + ": " + v).join("\n");
+  const ok = await mail(env, "ola@benditocloset.pt", "Respostas do formulário (lojas): " + loja, html, texto, emOk || undefined);
+  return ok ? j({ ok: true }) : j({ error: "email" }, 502);
+}
 async function ajuda(req, env, j) {
   if (!env.AI) return j({ resposta: "[WHATSAPP]" });
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -648,6 +666,7 @@ async function tratar(req, env, ctx) {
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
     if (url.pathname === "/ajuda" && req.method === "POST") return ajuda(req, env, j);
+    if (url.pathname === "/lojas/pedido" && req.method === "POST") return lojaPedido(req, env, j);
     if (url.pathname === "/encomenda/procurar" && req.method === "POST") return encontrar(req, env, j);
     if (url.pathname === "/encomenda/acao" && req.method === "POST") return acaoCliente(req, env, j);
     if (url.pathname === "/gestao") return gestao(req, env, url);
