@@ -142,7 +142,8 @@ async function comprar(req, env, j) {
   f.set("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", String(e.max));
   e.c.forEach((c, i) => f.set(`shipping_address_collection[allowed_countries][${i}]`, c));
   f.set("phone_number_collection[enabled]", "true");
-  const quemCompra = await quem(env, b.sessao); if (quemCompra) f.set("customer_email", quemCompra);
+  const quemCompra = await quem(env, b.sessao); if (!quemCompra) return j({ error: "conta" }, 401);
+  f.set("customer_email", quemCompra);
   if (CUPOES[code]) f.set("discounts[0][coupon]", CUPOES[code]); else f.set("allow_promotion_codes", "true");
   const lista = sel.map(p => p.id).join(",");
   f.set("metadata[pecas]", lista.slice(0, 490)); f.set("metadata[envio]", e.n); f.set("metadata[portes_eur]", String(portes));
@@ -325,14 +326,32 @@ const rnd = n => [...crypto.getRandomValues(new Uint8Array(n))].map(x => x.toStr
 const emailOk = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length < 200;
 async function quem(env, s) { s = String(s || ""); return /^[a-f0-9]{64}$/.test(s) ? ((await env.LIMITS.get("sess:" + s)) || "") : ""; }
 const LTXT = {
-  pt: { a: "Entrar na sua conta · Bendito Closet", t: "Entrar na sua conta", p: "Toque no botão para entrar. O link é válido durante 30 minutos e só funciona uma vez.", b: "Entrar", n: "Se não foi a Mari que pediu este e-mail, pode ignorá-lo." },
-  en: { a: "Sign in to your account · Bendito Closet", t: "Sign in to your account", p: "Tap the button to sign in. The link is valid for 30 minutes and works only once.", b: "Sign in", n: "If you didn't request this email, you can ignore it." },
-  es: { a: "Entrar en tu cuenta · Bendito Closet", t: "Entrar en tu cuenta", p: "Pulsa el botón para entrar. El enlace es válido durante 30 minutos y solo funciona una vez.", b: "Entrar", n: "Si no has pedido este correo, puedes ignorarlo." },
-  fr: { a: "Connexion à votre compte · Bendito Closet", t: "Connexion à votre compte", p: "Touchez le bouton pour vous connecter. Le lien est valable 30 minutes et ne fonctionne qu'une fois.", b: "Me connecter", n: "Si vous n'avez pas demandé cet e-mail, ignorez-le." },
-  de: { a: "Anmeldung bei deinem Konto · Bendito Closet", t: "Bei deinem Konto anmelden", p: "Tippe auf den Button, um dich anzumelden. Der Link ist 30 Minuten gültig und funktioniert nur einmal.", b: "Anmelden", n: "Wenn du diese E-Mail nicht angefordert hast, kannst du sie ignorieren." },
-  it: { a: "Accedi al tuo account · Bendito Closet", t: "Accedi al tuo account", p: "Tocca il pulsante per accedere. Il link è valido 30 minuti e funziona una sola volta.", b: "Accedi", n: "Se non hai richiesto questa e-mail, puoi ignorarla." }
+  pt: { c: "O seu código", a: "Entrar na sua conta · Bendito Closet", t: "Entrar na sua conta", p: "Escreva o código no site, ou toque no botão para entrar. Vale durante 30 minutos.", b: "Entrar", n: "Se não foi a Mari que pediu este e-mail, pode ignorá-lo." },
+  en: { c: "Your code", a: "Sign in to your account · Bendito Closet", t: "Sign in to your account", p: "Type the code on the website, or tap the button to sign in. Valid for 30 minutes.", b: "Sign in", n: "If you didn't request this email, you can ignore it." },
+  es: { c: "Tu código", a: "Entrar en tu cuenta · Bendito Closet", t: "Entrar en tu cuenta", p: "Escribe el código en la web o pulsa el botón para entrar. Vale 30 minutos.", b: "Entrar", n: "Si no has pedido este correo, puedes ignorarlo." },
+  fr: { c: "Votre code", a: "Connexion à votre compte · Bendito Closet", t: "Connexion à votre compte", p: "Saisissez le code sur le site, ou touchez le bouton pour vous connecter. Valable 30 minutes.", b: "Me connecter", n: "Si vous n'avez pas demandé cet e-mail, ignorez-le." },
+  de: { c: "Ihr Code", a: "Anmeldung bei deinem Konto · Bendito Closet", t: "Bei deinem Konto anmelden", p: "Geben Sie den Code auf der Website ein oder tippen Sie auf den Button. 30 Minuten gültig.", b: "Anmelden", n: "Wenn du diese E-Mail nicht angefordert hast, kannst du sie ignorieren." },
+  it: { c: "Il tuo codice", a: "Accedi al tuo account · Bendito Closet", t: "Accedi al tuo account", p: "Scrivi il codice sul sito o tocca il pulsante per accedere. Vale 30 minuti.", b: "Accedi", n: "Se non hai richiesto questa e-mail, puoi ignorarla." }
 };
 LTXT.pt.n = "Se não pediu este e-mail, pode ignorá-lo.";
+async function abrirSessao(env, email) {
+  const s = rnd(32); await env.LIMITS.put("sess:" + s, email, { expirationTtl: 90 * 86400 });
+  if (!(await env.LIMITS.get("cli:" + email))) await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
+  return s;
+}
+async function contaCodigo(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const email = String(b.email || "").trim().toLowerCase(), c = String(b.codigo || "").replace(/\D/g, "");
+  if (!emailOk(email) || c.length !== 6) return j({ error: "dados" }, 400);
+  const raw = await env.LIMITS.get("cod:" + email); if (!raw) return j({ error: "expirado" }, 410);
+  const r = JSON.parse(raw);
+  if (r.c !== c) {
+    r.n++; if (r.n >= 5) { await env.LIMITS.delete("cod:" + email); return j({ error: "expirado" }, 410); }
+    await env.LIMITS.put("cod:" + email, JSON.stringify(r), { expirationTtl: 1800 }); return j({ error: "codigo" }, 400);
+  }
+  await env.LIMITS.delete("cod:" + email); if (r.tok) await env.LIMITS.delete("login:" + r.tok);
+  return j({ sessao: await abrirSessao(env, email), email });
+}
 async function contaEntrar(req, env, j) {
   if (!env.RESEND_KEY) return j({ error: "sem_email" }, 503);
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -344,18 +363,18 @@ async function contaEntrar(req, env, j) {
     await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
   }
   const tok = rnd(24); await env.LIMITS.put("login:" + tok, email, { expirationTtl: 1800 });
+  const cod = String(100000 + (crypto.getRandomValues(new Uint32Array(1))[0] % 900000));
+  await env.LIMITS.put("cod:" + email, JSON.stringify({ c: cod, n: 0, tok }), { expirationTtl: 1800 });
   const t = LTXT[lang], link = "https://benditocloset.pt/conta/?t=" + tok;
-  const ok = await mail(env, email, t.a, moldura(esc(t.t), `<p style="text-align:center">${esc(t.p)}</p>${botao(link, t.b)}<p style="text-align:center;font-size:13px;color:#6F625C">${esc(t.n)}</p>`), t.t + "\n\n" + t.p + "\n" + link + "\n\n" + t.n);
+  const ok = await mail(env, email, t.a + " · " + cod, moldura(esc(t.t), `<p style="text-align:center;color:#6F625C;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin:0">${esc(t.c)}</p><p style="text-align:center;font-family:Georgia,serif;font-size:36px;letter-spacing:.18em;margin:6px 0 18px">${cod}</p><p style="text-align:center">${esc(t.p)}</p>${botao(link, t.b)}<p style="text-align:center;font-size:13px;color:#6F625C">${esc(t.n)}</p>`), t.t + "\n\n" + t.c + ": " + cod + "\n\n" + t.p + "\n" + link + "\n\n" + t.n);
   return ok ? j({ ok: true }) : j({ error: "envio" }, 502);
 }
 async function contaValidar(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
   const t = String(b.t || ""); if (!/^[a-f0-9]{48}$/.test(t)) return j({ error: "dados" }, 400);
   const email = await env.LIMITS.get("login:" + t); if (!email) return j({ error: "expirado" }, 410);
-  await env.LIMITS.delete("login:" + t);
-  const s = rnd(32); await env.LIMITS.put("sess:" + s, email, { expirationTtl: 90 * 86400 });
-  if (!(await env.LIMITS.get("cli:" + email))) await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
-  return j({ sessao: s, email });
+  await env.LIMITS.delete("login:" + t); await env.LIMITS.delete("cod:" + email);
+  return j({ sessao: await abrirSessao(env, email), email });
 }
 async function contaEu(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -538,6 +557,7 @@ export default {
     if (url.pathname === "/etiqueta") return etiqueta(env, url);
     if (url.pathname === "/encomenda/confirmar" && req.method === "POST") return confirmar(req, env, j);
     if (url.pathname === "/conta/entrar" && req.method === "POST") return contaEntrar(req, env, j);
+    if (url.pathname === "/conta/codigo" && req.method === "POST") return contaCodigo(req, env, j);
     if (url.pathname === "/conta/validar" && req.method === "POST") return contaValidar(req, env, j);
     if (url.pathname === "/conta/eu" && req.method === "POST") return contaEu(req, env, j);
     if (url.pathname === "/conta/perfil" && req.method === "POST") return contaPerfil(req, env, j);
