@@ -809,6 +809,14 @@ async function tratar(req, env, ctx) {
     if (url.pathname === "/") return j({ ok: true, service: "bendito-provador" });
     if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
     if (url.pathname === "/pecas/estado" && req.method === "GET") return estadoPecas(req, env, j);
+    if (url.pathname === "/cupoes/estado" && req.method === "GET") {
+      const out = {};
+      for (const [cod, id] of Object.entries(CUPOES)) {
+        try { const c = await stp(env, "coupons/" + id); out[cod] = { cupao: true, valido: c.valid, pct: c.percent_off, ate: c.redeem_by ? new Date(c.redeem_by * 1000).toISOString() : null }; } catch (e) { out[cod] = { cupao: false, erro: String(e.message || e).slice(0, 80) }; }
+        try { const pc = await stp(env, "promotion_codes?limit=1&code=" + encodeURIComponent(cod)); const x = (pc.data || [])[0]; out[cod].codigo = x ? { ativo: x.active, ate: x.expires_at ? new Date(x.expires_at * 1000).toISOString() : null } : null; } catch (e) { out[cod].codigo = "erro"; }
+      }
+      return j(out);
+    }
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
     if (url.pathname === "/ajuda" && req.method === "POST") return ajuda(req, env, j);
