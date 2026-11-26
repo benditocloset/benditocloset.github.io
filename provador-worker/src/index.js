@@ -341,7 +341,7 @@ async function mail(env, to, assunto, html, texto, responder) {
   } catch (e) { return false; }
 }
 // Estatísticas anónimas do site: só contagens por dia (sem IP, sem e-mail, sem cookies)
-const EV_SITE = ["vis", "pv", "provador", "jogo", "saco", "whatsapp", "cartao", "popup"];
+const EV_SITE = ["vis", "pv", "provador", "jogo", "saco", "whatsapp", "cartao", "popup", "fav"];
 const diaLx = (d = new Date()) => d.toLocaleDateString("sv-SE", { timeZone: "Europe/Lisbon" });
 // Uma chave por contador (st:<dia>:<evento>), para dois cliques ao mesmo tempo não se apagarem um ao outro
 async function somar(env, ev, pagina) {
@@ -387,7 +387,7 @@ async function resumoDia(env, dia) {
       if (ses.payment_status === "paid") { pagos++; valor += (ses.amount_total || 0) / 100; } else abertos++;
     }
   } catch (e) {}
-  return { dia, vis: o.vis || 0, pv: o.pv || 0, pg: o.pg || {}, provador, provadorClick: o.provador || 0, jogo: o.jogo || 0, saco: o.saco || 0,
+  return { dia, vis: o.vis || 0, pv: o.pv || 0, pg: o.pg || {}, provador, provadorClick: o.provador || 0, jogo: o.jogo || 0, saco: o.saco || 0, fav: o.fav || 0,
     whatsapp: o.whatsapp || 0, cartao: o.cartao || 0, popup: o.popup || 0, checkout: o.checkout || 0, contaNova: o.conta_nova || 0,
     pagos, valor, abertos, creditos: await creditosFashn(env), contas: await contasTotal(env) };
 }
@@ -396,7 +396,7 @@ function resumoHtml(r) {
   const linhas = [
     ["Visitantes (pessoas diferentes)", r.vis], ["Páginas vistas", r.pv],
     ["Provador com IA: fotos geradas", r.provador], ["Jogo da memória: jogos terminados", r.jogo],
-    ["Peças adicionadas ao saco", r.saco], ["Cliques no WhatsApp", r.whatsapp], ["Cliques em pagar com cartão", r.cartao],
+    ["Peças adicionadas ao saco", r.saco], ["Peças marcadas como favoritas", r.fav], ["Cliques no WhatsApp", r.whatsapp], ["Cliques em pagar com cartão", r.cartao],
     ["Inscrições no pop-up dos 10%", r.popup], ["Contas novas", r.contaNova], ["Pagamentos com cartão abertos", r.checkout],
     ["Vendas pagas", r.pagos + (r.pagos ? " · " + eur(r.valor) : "")],
     ["Contas no site (total)", r.contas == null ? "—" : r.contas],
@@ -553,6 +553,15 @@ async function contaEu(req, env, j) {
     }
   } catch (e) {}
   return j({ email, perfil, encomendas });
+}
+// Favoritos da cliente (lista de ids das peças), guardados na conta
+async function contaFav(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const email = await quem(env, b.sessao); if (!email) return j({ error: "sessao" }, 401);
+  const fav = [...new Set((Array.isArray(b.fav) ? b.fav : []).map(String).filter(x => /^[a-z0-9-]{2,60}$/.test(x)))].slice(0, 200);
+  const p = JSON.parse((await env.LIMITS.get("cli:" + email)) || "{}"); p.fav = fav;
+  await env.LIMITS.put("cli:" + email, JSON.stringify(p));
+  return j({ ok: true, fav });
 }
 async function contaPerfil(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -776,6 +785,7 @@ async function tratar(req, env, ctx) {
     if (url.pathname === "/conta/validar" && req.method === "POST") return contaValidar(req, env, j);
     if (url.pathname === "/conta/eu" && req.method === "POST") return contaEu(req, env, j);
     if (url.pathname === "/conta/perfil" && req.method === "POST") return contaPerfil(req, env, j);
+    if (url.pathname === "/conta/fav" && req.method === "POST") return contaFav(req, env, j);
     if (url.pathname === "/conta/sair" && req.method === "POST") return contaSair(req, env, j);
     const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
     if (mc && req.method === "GET") return verContrato(mc[1], env);

@@ -108,6 +108,9 @@ header{position:relative}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .photo{aspect-ratio:4/5;background:var(--rose-soft);display:grid;place-items:center;position:relative}
 .photo img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
+.fav{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#9B1B3A;font-size:20px;line-height:38px;text-align:center;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.15);z-index:2}
+.fav.on{background:#9B1B3A;color:#fff}
+.photo .count.ilu{right:auto;left:10px;top:auto;bottom:10px}
 .count{position:absolute;bottom:10px;right:10px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff}
 .count.ilu{bottom:auto;top:10px;font-weight:500;background:rgba(0,0,0,.45)}
 .photo .ph{display:grid;justify-items:center;gap:8px;color:var(--halo);font-size:13px;font-weight:600}
@@ -1304,6 +1307,19 @@ document.addEventListener("submit", e => { if (e.target.id !== "cpform") return;
   CUPAO = document.getElementById("cpin").value.trim().toUpperCase(); try { localStorage.setItem("bc-cupao", CUPAO); } catch(x) {} bagPaint(); try { render(FILTRO); } catch(x) {} });
 function bagOpen(){ bagValid(); bagPaint(); const d = document.getElementById("saco"); try { d.showModal(); } catch(e) { d.setAttribute("open",""); } }
 if (new URLSearchParams(location.search).has("saco")) setTimeout(() => { try { bagOpen(); } catch(e) {} }, 500);
+/* Favoritos: guardados no telemóvel e, com sessão iniciada, também na conta */
+let FAV = (() => { try { return JSON.parse(localStorage.getItem("bc-fav") || "[]"); } catch(e) { return []; } })();
+const FAV_T = { pt:["Guardar nos favoritos","Tirar dos favoritos"], en:["Save to favourites","Remove from favourites"], es:["Guardar en favoritos","Quitar de favoritos"], fr:["Ajouter aux favoris","Retirer des favoris"], de:["Zu Favoriten","Aus Favoriten entfernen"], it:["Salva nei preferiti","Togli dai preferiti"] };
+function favBtn(p){ const on = FAV.includes(p.id), t = FAV_T[LANG] || FAV_T.pt; return `<button type="button" class="fav${on?" on":""}" data-fav="${p.id}" aria-pressed="${on}" aria-label="${on?t[1]:t[0]}" title="${on?t[1]:t[0]}">${on?"♥":"♡"}</button>`; }
+function favToggle(id){
+  const on = FAV.includes(id); FAV = on ? FAV.filter(x => x !== id) : [id, ...FAV];
+  try { localStorage.setItem("bc-fav", JSON.stringify(FAV)); } catch(e) {}
+  if (!on) { try { window.bcEv && bcEv("fav"); } catch(e) {} }
+  const p = PECAS.find(x => x.id === id); if (p) document.querySelectorAll(`[data-fav="${CSS.escape(id)}"]`).forEach(el => { el.outerHTML = favBtn(p); });
+  let s = ""; try { s = localStorage.getItem("bc-sessao") || ""; } catch(e) {}
+  if (s) fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/conta/fav", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ sessao:s, fav:FAV }), keepalive:true }).catch(()=>{});
+}
+document.addEventListener("click", e => { const f = e.target.closest("[data-fav]"); if (f) { e.preventDefault(); e.stopPropagation(); favToggle(f.dataset.fav); } }, true);
 document.addEventListener("click", e => {
   const a = e.target.closest("[data-bag]"); if (a) { e.preventDefault(); e.stopPropagation(); bagToggle(a.dataset.bag); return; }
   if (e.target.closest("#bagbtn")) { bagOpen(); return; }
@@ -1341,7 +1357,7 @@ function render(f){
           ? `${buyBtns(p)}${bagBtn(p)}${duvLink(p)}`
           : `<button type="button" class="buy" id="buy-${p.id}" data-id="${p.id}">Comprar pelo WhatsApp</button>`);
     card.innerHTML = `
-      <div class="photo">${photo}<span class="status ${cls}">${label}</span>${p.ilustrativa?`<span class="count ilu">${({pt:"Imagem ilustrativa",en:"Illustrative image",es:"Imagen ilustrativa",fr:"Image illustrative",de:"Illustratives Bild",it:"Immagine illustrativa"})[LANG]||"Imagem ilustrativa"}</span>`:""}</div>
+      <div class="photo">${photo}<span class="status ${cls}">${label}</span>${favBtn(p)}${p.ilustrativa?`<span class="count ilu">${({pt:"Imagem ilustrativa",en:"Illustrative image",es:"Imagen ilustrativa",fr:"Image illustrative",de:"Illustratives Bild",it:"Immagine illustrativa"})[LANG]||"Imagem ilustrativa"}</span>`:""}</div>
       <div class="body">
         <span class="brandlabel">${p.marca}</span>
         <h2 class="title">${nomeDe(p)}</h2>
