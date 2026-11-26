@@ -239,7 +239,7 @@ async function resumoEncomenda(env, ses) {
     total: (ses.amount_total || 0) / 100, portes: ((ses.total_details && ses.total_details.amount_shipping) || 0) / 100, email: (ses.customer_details && ses.customer_details.email) || "", nome: (ses.customer_details && ses.customer_details.name) || "",
     pecas: (pi && pi.description || "").replace(/^Bendito Closet · /, ""), envio: (ses.metadata && ses.metadata.envio) || "",
     last4: ch && ch.payment_method_details && ch.payment_method_details.card ? ch.payment_method_details.card.last4 : "",
-    pi: pi ? pi.id : "", recibo: (ch && ch.receipt_url) || "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: estado.reembolso === "total" ? "total" : (reemb || estado.reembolso || "")
+    pi: pi ? pi.id : "", recibo: (ch && ch.receipt_url) || "", enviada: !!estado.enviada, enviadaEm: estado.enviada || "", track: estado.track || "", transp: estado.transp || "", problema: estado.problema ? (estado.problema.estado || "pedido") : "", devolucao: estado.devolucao || "", reembolso: estado.reembolso === "total" ? "total" : (reemb || estado.reembolso || "")
   };
 }
 async function encontrar(req, env, j) {
@@ -270,7 +270,7 @@ async function encontrar(req, env, j) {
 async function acaoCliente(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
   const id = String(b.id || ""), acao = String(b.acao || "");
-  if (!/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id) || b.tok !== await hmac(env, "enc:" + id) || !["cancelar", "devolver"].includes(acao)) return j({ error: "dados" }, 400);
+  if (!/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id) || b.tok !== await hmac(env, "enc:" + id) || !["cancelar", "devolver", "problema"].includes(acao)) return j({ error: "dados" }, 400);
   try {
     const ses = await stp(env, "checkout/sessions/" + id);
     const r = await resumoEncomenda(env, ses), est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
@@ -283,11 +283,40 @@ async function acaoCliente(req, env, j) {
       await env.LIMITS.put("enc:" + id, JSON.stringify(est));
       return j({ ok: true, estado: "cancelada", encomenda: { ...r, pi: undefined, last4: undefined, reembolso: "total" } });
     }
+    if (acao === "problema") return problemaEntrega(env, j, b, ses, r, est);
     if (Date.now() / 1000 - r.criado > DIAS_DEV * 86400) return j({ error: "prazo" }, 409);
     est.devolucao = "pedida"; est.motivo = String(b.motivo || "").slice(0, 500); est.pedida = new Date().toISOString();
     await env.LIMITS.put("enc:" + id, JSON.stringify(est));
     return j({ ok: true, estado: "devolucao_pedida", encomenda: { ...r, pi: undefined, last4: undefined, devolucao: "pedida" } });
   } catch (e) { return j({ error: "stripe", detail: String(e.message || e) }, 502); }
+}
+// ===== Problema com a entrega (não chegou, danificada, peça errada) =====
+// Travões contra burla: só depois de enviada; "não chegou" só 7 dias depois do envio; um pedido por encomenda;
+// conta os pedidos anteriores do mesmo e-mail; o reembolso é sempre a dona que confirma na página de gestão.
+const DIAS_PROB = 7, TIPOS_PROB = { nao_chegou: "Não chegou", danificada: "Chegou danificada", errada: "Peça errada" };
+function linkTrack(transp, track) { return !track ? "" : transp === "CTT" ? "https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=" + encodeURIComponent(track) : "https://www.correosexpress.pt"; }
+async function problemaEntrega(env, j, b, ses, r, est) {
+  const tipo = String(b.tipo || "");
+  if (!TIPOS_PROB[tipo]) return j({ error: "dados" }, 400);
+  if (!r.enviada) return j({ error: "nao_enviada" }, 409);
+  if (est.problema) return j({ error: "ja_pedido" }, 409);
+  if (Date.now() / 1000 - r.criado > 60 * 86400) return j({ error: "prazo" }, 409);
+  const dias = (Date.now() - Date.parse(est.enviada)) / 86400000;
+  if (tipo === "nao_chegou" && dias < DIAS_PROB) return j({ error: "cedo", dias: Math.ceil(DIAS_PROB - dias) }, 409);
+  const ke = "prob:" + (r.email || "").toLowerCase(), antes = +((await env.LIMITS.get(ke)) || 0);
+  await env.LIMITS.put(ke, String(antes + 1), { expirationTtl: 400 * 86400 });
+  est.problema = { tipo, motivo: String(b.motivo || "").slice(0, 600), quando: new Date().toISOString(), estado: "pedido", antes };
+  await env.LIMITS.put("enc:" + r.id, JSON.stringify(est));
+  const tl = linkTrack(est.transp, est.track), eur = v => v.toFixed(2).replace(".", ",") + " €";
+  if (env.RESEND_KEY) {
+    await mail(env, "ola@benditocloset.pt", "Problema com a entrega · " + r.ref + " · " + TIPOS_PROB[tipo],
+      moldura("Problema com a entrega · " + esc(r.ref), `<p><b>${esc(TIPOS_PROB[tipo])}</b></p><p>${esc(r.nome)} · ${esc(r.email)}<br><b>Peças:</b> ${esc(r.pecas)}<br><b>Total:</b> ${eur(r.total)}<br><b>Enviada:</b> ${esc(String(est.enviada).slice(0, 10))} (${Math.floor(dias)} dias) · ${esc(est.transp || "")} ${esc(est.track || "sem código")}</p>${est.problema.motivo ? `<p><b>O que a cliente escreveu:</b><br>${esc(est.problema.motivo)}</p>` : ""}<p><b>Pedidos anteriores deste e-mail:</b> ${antes}${antes ? " ⚠ atenção" : ""}</p><p>Antes de reembolsar: veja o seguimento${tipo !== "nao_chegou" ? " e peça fotos à cliente (pode responder a este e-mail)" : ""}. Depois abra a sua página de gestão das encomendas e carregue em <b>Reembolsar</b> ou <b>Não reembolsar</b>.</p>${tl ? botao(tl, "Ver o seguimento") : ""}`),
+      "Problema com a entrega " + r.ref + " · " + TIPOS_PROB[tipo] + "\n" + r.nome + " · " + r.email + "\n" + r.pecas + "\nPedidos anteriores: " + antes, r.email);
+    if (r.email) await mail(env, r.email, "Recebemos o seu pedido · encomenda " + r.ref,
+      moldura("Recebemos o seu pedido", `<p>Olá${r.nome ? " " + esc(r.nome.split(" ")[0]) : ""},</p><p>Registámos o problema com a encomenda <b>${esc(r.ref)}</b> (${esc(TIPOS_PROB[tipo].toLowerCase())}). Vamos verificar com a transportadora e respondemos em até 2 dias úteis.${tipo !== "nao_chegou" ? " Para ajudar, responda a este e-mail com fotos da peça e da embalagem." : ""}</p><p>Se tiver direito a reembolso, ele é feito para o meio de pagamento que usou.</p>`),
+      "Registámos o problema com a encomenda " + r.ref + ". Respondemos em até 2 dias úteis.");
+  }
+  return j({ ok: true, estado: "problema_pedido", encomenda: { ...r, pi: undefined, last4: undefined, problema: "pedido" } });
 }
 // Etiqueta de devolução para imprimir (a morada de devolução fica guardada no KV, não no código público)
 async function etiqueta(env, url) {
@@ -608,6 +637,19 @@ async function gestao(req, env, url) {
           }
         }
         if (acao === "nao_enviada") { delete est.enviada; msg = "Desmarcada."; }
+        if ((acao === "problema_ok" || acao === "problema_nao") && est.problema) {
+          const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses), nota = String(f.get("nota") || "").trim().slice(0, 600);
+          if (acao === "problema_ok") {
+            if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "problema com a entrega: " + (TIPOS_PROB[est.problema.tipo] || "") });
+            est.problema.estado = "reembolsado"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €. A cliente recebe um e-mail.";
+          } else { est.problema.estado = "recusado"; msg = "Pedido marcado como não reembolsado. A cliente recebe um e-mail com a sua mensagem."; }
+          est.problema.resposta = nota; est.problema.fechado = new Date().toISOString();
+          if (env.RESEND_KEY && r.email) await mail(env, r.email, (acao === "problema_ok" ? "Reembolso feito" : "Resposta ao seu pedido") + " · encomenda " + r.ref,
+            moldura(acao === "problema_ok" ? "Reembolso feito" : "Resposta ao seu pedido", acao === "problema_ok"
+              ? `<p>Fizemos o reembolso de <b>${r.total.toFixed(2).replace(".", ",")} €</b> da encomenda ${esc(r.ref)}. Aparece no extrato em 5 a 10 dias úteis. Pedimos desculpa pelo incómodo.</p>${nota ? `<p>${esc(nota)}</p>` : ""}`
+              : `<p>Verificámos o pedido sobre a encomenda ${esc(r.ref)}.</p><p>${esc(nota || "Segundo a transportadora, a encomenda foi entregue na morada indicada. Se precisar de ajuda, responda a este e-mail.")}</p>`),
+            acao === "problema_ok" ? "Reembolso de " + r.total.toFixed(2) + " € feito." : (nota || "Segundo a transportadora, a encomenda foi entregue."));
+        }
         if (acao === "recusada") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
           const desc = Math.min(Math.max(+String(f.get("desconto") || "0").replace(",", ".") || 0, 0), r.total);
@@ -635,11 +677,14 @@ async function gestao(req, env, url) {
       const r = await resumoEncomenda(env, ses);
       if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
       if (r.reembolso !== "total") { const m = await pcsLer(env); if (idsDe(ses).some(pid => !(m[pid] && m[pid].v))) await pcVendidas(env, ses); }
-      const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
+      const estG = JSON.parse((await env.LIMITS.get("enc:" + r.id)) || "{}"), pb = estG.problema;
+      const st = r.reembolso === "total" ? "Reembolsada" : pb && pb.estado === "pedido" ? "⚠ Problema com a entrega: " + (TIPOS_PROB[pb.tipo] || "") : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
+      const pbInfo = pb ? `<div class="m" style="margin-top:8px">${esc(TIPOS_PROB[pb.tipo] || "")} · pedido em ${esc(String(pb.quando).slice(0, 10))}${pb.motivo ? "<br>“" + esc(pb.motivo) + "”" : ""}<br>Pedidos anteriores deste e-mail: <b>${pb.antes || 0}</b>${pb.estado !== "pedido" ? "<br>Resolvido: " + (pb.estado === "reembolsado" ? "reembolsado" : "não reembolsado") : ""}${estG.track ? `<br><a href="${esc(linkTrack(estG.transp, estG.track))}" target="_blank">Ver o seguimento (${esc(estG.track)})</a>` : ""}</div>` : "";
+      const pbAcoes = pb && pb.estado === "pedido" && r.reembolso !== "total" ? `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="problema_ok"><input name="nota" placeholder="Mensagem para a cliente (opcional)" style="padding:8px;border:1px solid #1C1517;width:220px"> <button>Reembolsar ${r.total.toFixed(2)} €</button></form><form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="problema_nao"><input name="nota" placeholder="Porquê (ex.: entregue a 3/12, assinado)" style="padding:8px;border:1px solid #1C1517;width:220px"> <button>Não reembolsar</button></form>` : "";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
       const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada && r.devolucao !== "pedida" ? `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="recusada">Devolvida pela transportadora · descontar portes <input name="desconto" value="${r.portes.toFixed(2)}" inputmode="decimal" style="width:70px;padding:8px;border:1px solid #1C1517"> € <button>Reembolsar o resto</button></form>` : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
       const etqUrl = "/etiqueta?id=" + encodeURIComponent(r.id) + "&tok=" + await hmac(env, "enc:" + r.id);
-      rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a><div class="a">${acoes}</div></div>`;
+      rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a>${pbInfo}<div class="a">${pbAcoes}${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
   return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
