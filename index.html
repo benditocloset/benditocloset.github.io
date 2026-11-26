@@ -14,7 +14,7 @@
 </script>
 <script src="/cookies.js" defer></script>
 <script src="/assinar.js" defer></script>
-<script src="/faq.js" defer></script>
+<script src="/faq.js?v=95" defer></script>
 
 <meta charset="utf-8">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -1566,7 +1566,8 @@ aplicarIdioma();
   const fechar = v => { try { localStorage.setItem("bc-pop", v || "visto"); } catch(e) {} d.close(); };
   const abrir = () => { if (visto || d.open || document.querySelector("dialog[open]")) return; visto = "1";
     fill(); document.getElementById("pop-e").placeholder = T().popE; try { d.showModal(); } catch(e) { d.setAttribute("open",""); } };
-  if (!visto && !/[?&]peca=/.test(location.search)) {
+  if (/[?&]cupao/.test(location.search)) { visto = ""; setTimeout(abrir, 800); }
+  else if (!visto && !/[?&]peca=/.test(location.search)) {
     setTimeout(abrir, 12000);
   }
   d.addEventListener("click", e => { if (e.target === d || e.target.closest(".px,.pn")) fechar(); if (e.target.closest("#pop-go")) { fechar("inscrita"); const g=document.getElementById("grid"); if (g) g.scrollIntoView({behavior:"smooth"}); } });
