@@ -148,8 +148,8 @@ footer .logo{color:var(--ink);margin-bottom:8px}
   <section class="how">
     <h2>Como comprar</h2>
     <div><b>1</b>Escolha as peças e o tamanho e junte ao saco.</div>
-    <div><b>2</b>Envie o pedido pelo WhatsApp com um toque. Confirmo a disponibilidade.</div>
-    <div><b>3</b>Pague por MB WAY ou transferência e receba em casa, ou levante na loja em Vendas Novas.</div>
+    <div><b>2</b>Envie o pedido pelo WhatsApp com um toque (ou pague logo no site). Confirmo a disponibilidade com o fornecedor.</div>
+    <div><b>3</b>As peças são encomendadas para si e chegam em 5 a 10 dias úteis, a casa ou para levantar na loja em Vendas Novas.</div>
   </section>
 
   <section class="prop" id="proposta">
@@ -254,7 +254,7 @@ const CAT=[["todas","Tudo"],["malhas","Blusas e malhas"],["calcas","Calças"],["
 let f="todas",saco=[],esc={};
 const eur=v=>v.toFixed(2).replace(".",",")+" €";
 function chips(){document.getElementById("chips").innerHTML=CAT.map(([k,l])=>`<button class="${k==f?"on":""}" onclick="f='${k}';chips();grid()">${l}</button>`).join("")}
-function grid(){document.getElementById("grid").innerHTML=P.filter(p=>f=="todas"||p.c==f).map(p=>`<article class="card"><div class="ph"><img loading="lazy" src="${p.id}.jpg" alt="${p.n}">${p.tag?`<span class="tag">${p.tag}</span>`:""}</div><div class="in"><h3>${p.n}</h3><div class="sz">${p.t.map(t=>`<button class="${esc[p.id]==t?"on":""}" onclick="esc['${p.id}']='${t}';grid()">${t}</button>`).join("")}</div><div class="pr">${p.p?eur(p.p):'<small>Preço por mensagem</small>'}</div><button class="add${p.p?"":" ask"}" onclick="add('${p.id}')">${p.p?"Juntar ao saco":"Juntar e pedir preço"}</button></div></article>`).join("")}
+function grid(){document.getElementById("grid").innerHTML=P.filter(p=>f=="todas"||p.c==f).map(p=>`<article class="card"><div class="ph"><img loading="lazy" src="${p.id}.jpg" alt="${p.n}">${p.tag?`<span class="tag">${p.tag}</span>`:""}</div><div class="in"><h3>${p.n}</h3><div class="sz">${p.t.map(t=>`<button class="${esc[p.id]==t?"on":""}" onclick="esc['${p.id}']='${t}';grid()">${t}</button>`).join("")}</div><div style="font-size:12.5px;color:var(--mut)">📦 Por encomenda · chega em 5 a 10 dias úteis</div><div class="pr">${p.p?eur(p.p):'<small>Preço por mensagem</small>'}</div><button class="add${p.p?"":" ask"}" onclick="add('${p.id}')">${p.p?"Juntar ao saco":"Juntar e pedir preço"}</button></div></article>`).join("")}
 function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),1800)}
 function add(id,t){const p=P.find(x=>x.id==id);t=t||esc[id]||(p.t.length==1?p.t[0]:null);if(!t){toast("Escolha primeiro o tamanho");return}saco.push({id,t});upd();toast("Juntou ao saco ✓")}
 function juntarLook(){add("blusa-ombro",esc["blusa-ombro"]||"M");add("calcas-bordadas",esc["calcas-bordadas"]||"38");abrir()}
