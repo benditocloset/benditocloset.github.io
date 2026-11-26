@@ -59,6 +59,9 @@ async function caucao(req, env, j) {
   const code = String(b.code || ""), ship = String(b.ship || ""), email = String(b.email || "").trim(), ids = Array.isArray(b.ids) ? b.ids.map(String) : [];
   const d1 = String(b.d1 || ""), d2 = String(b.d2 || "");
   if (!/^BC-[A-Z0-9]{4}$/.test(code) || !PORTES[ship] || !/^\S+@\S+\.\S+$/.test(email) || !ids.length || ids.length > 30 || !/^\d{4}-\d{2}-\d{2}$/.test(d1) || !/^\d{4}-\d{2}-\d{2}$/.test(d2)) return j({ error: "dados" }, 400);
+  // A caução é só retida no cartão (não é cobrada). A Stripe mantém a retenção 7 dias: a devolução tem de ser até 6 dias depois do pedido.
+  const hoje = new Date(); hoje.setUTCHours(12, 0, 0, 0); const lim = new Date(hoje); lim.setUTCDate(lim.getUTCDate() + 6);
+  if (new Date(d2 + "T12:00:00Z") > lim || d2 < d1) return j({ error: "datas" }, 400);
   const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `cau:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
   if (n >= 15) return j({ error: "limite" }, 429);
   await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
@@ -73,7 +76,7 @@ async function caucao(req, env, j) {
   f.set("mode", "payment"); f.set("locale", "pt"); f.set("customer_email", email); f.set("client_reference_id", code);
   f.set("success_url", "https://benditocloset.pt/emprestimo/?pago=" + code); f.set("cancel_url", "https://benditocloset.pt/emprestimo/#caucao");
   f.set("line_items[0][quantity]", "1"); f.set("line_items[0][price_data][currency]", "eur"); f.set("line_items[0][price_data][unit_amount]", String(cau));
-  f.set("line_items[0][price_data][product_data][name]", "Caução (devolvida) · pedido " + code);
+  f.set("line_items[0][price_data][product_data][name]", "Caução retida no cartão (não é cobrada) · pedido " + code);
   f.set("line_items[0][price_data][product_data][description]", lista.slice(0, 480));
   if (portes) {
     f.set("line_items[1][quantity]", "1"); f.set("line_items[1][price_data][currency]", "eur"); f.set("line_items[1][price_data][unit_amount]", String(portes));
@@ -81,13 +84,14 @@ async function caucao(req, env, j) {
   }
   const meta = { pedido: code, pecas: lista.slice(0, 490), datas: fd(d1) + " a " + fd(d2), envio: PORTES_NOME[ship], caucao_eur: (cau / 100).toFixed(2), portes_eur: (portes / 100).toFixed(2) };
   for (const [a, v] of Object.entries(meta)) { f.set(`metadata[${a}]`, v); f.set(`payment_intent_data[metadata][${a}]`, v); }
-  f.set("payment_intent_data[description]", "Empréstimo " + code + " · caução " + (cau / 100) + " € + portes " + (portes / 100) + " €");
+  f.set("payment_intent_data[description]", "Caução retida · empréstimo " + code + " · " + (cau / 100) + " €");
+  f.set("payment_intent_data[capture_method]", "manual");
+  f.set("payment_method_types[0]", "card");
+  f.set("custom_text[submit][message]", "A caução fica só retida no seu cartão, não é cobrada. É libertada quando as peças voltam em bom estado, ou automaticamente ao fim de 7 dias.");
   const call = body => fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body });
-  const f2 = new URLSearchParams(f); ["card", "mb_way", "multibanco"].forEach((t, i) => f2.set(`payment_method_types[${i}]`, t));
-  let r = await call(f2.toString()), o = await r.json();
-  if (!r.ok) { r = await call(f.toString()); o = await r.json(); }
+  const r = await call(f.toString()), o = await r.json();
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
-  return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100 });
+  return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100, retida: true });
 }
 
 // Compra de peças: pagamento com o preço do site e só os portes escolhidos pela cliente (calculados aqui).
@@ -148,6 +152,37 @@ async function comprar(req, env, j) {
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
   return j({ url: o.url, subtotal: sub, portes });
 }
+
+// Contrato assinado: guarda os dados e a assinatura (KV) e mostra-os numa página com o texto do contrato desse dia.
+const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+async function guardarContrato(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const code = String(b.code || ""), sig = String(b.assinatura || ""), dados = b.dados && typeof b.dados === "object" ? b.dados : null;
+  if (!/^BC-[A-Z0-9]{4}$/.test(code) || !/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(sig) || sig.length > 400000 || !dados || JSON.stringify(dados).length > 20000) return j({ error: "dados" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `ctr:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 20) return j({ error: "limite" }, 429);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  let texto = "";
+  try { const h = await (await fetch("https://benditocloset.pt/emprestimo/?v=" + Date.now())).text(); const a = h.indexOf('<h2 id="contrato"'), z = h.indexOf('<div id="signed"'); if (a > 0 && z > a) texto = h.slice(a, z).replace(/<script[\s\S]*?<\/script>/gi, "").replace(/\son\w+="[^"]*"/gi, ""); } catch (e) {}
+  const id = code + "-" + crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+  await env.LIMITS.put("contrato:" + id, JSON.stringify({ code, dados, sig, texto, ip, quando: new Date().toISOString() }));
+  return j({ url: "https://bendito-provador-ia.nn45hn9bvr.workers.dev/contrato/" + id });
+}
+async function verContrato(id, env) {
+  const raw = await env.LIMITS.get("contrato:" + id);
+  if (!raw) return new Response("Contrato não encontrado.", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  const c = JSON.parse(raw);
+  const linhas = Object.entries(c.dados).filter(([k]) => !k.startsWith("_") && k !== "email" && k !== "Dispositivo").map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("");
+  const html = `<!DOCTYPE html><html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Contrato assinado ${esc(c.code)} · Bendito Closet</title><style>body{margin:0;background:#F8F5F0;color:#1C1517;font:15px/1.6 system-ui,-apple-system,sans-serif}main{max-width:760px;margin:0 auto;padding:28px 20px 60px}h1{font-family:Georgia,serif;font-weight:400;font-size:28px;margin:0 0 4px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e6ddd3;border-radius:12px;margin:16px 0}th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid #f0e9e1;font-size:14px}th{width:36%;color:#6b5f62;font-weight:600}.sig{background:#fff;border:1px solid #e6ddd3;border-radius:12px;padding:12px;margin:12px 0}.sig img{max-width:100%;height:auto}.muted{color:#6b5f62;font-size:13px}button{border:1px solid #d9cfc4;background:#fff;border-radius:999px;padding:8px 14px;font:inherit;cursor:pointer}@media print{button{display:none}}</style></head><body><main>
+<div class="muted">BENDITO CLOSET</div><h1>Contrato de empréstimo assinado · ${esc(c.code)}</h1>
+<p class="muted">Assinado no site benditocloset.pt em ${esc(new Date(c.quando).toLocaleString("pt-PT", { timeZone: "Europe/Lisbon" }))} (hora de Lisboa).</p>
+<button onclick="print()">Guardar em PDF / imprimir</button>
+<table>${linhas}</table>
+<div class="sig"><div class="muted">Assinatura do Utilizador</div><img src="${c.sig}" alt="Assinatura"></div>
+${c.texto || '<p><a href="https://benditocloset.pt/emprestimo/#contrato">Texto do contrato</a></p>'}
+</main></body></html>`;
+  return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Content-Security-Policy": "default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'", "X-Robots-Tag": "noindex" } });
+}
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
@@ -158,6 +193,9 @@ export default {
     if (url.pathname === "/") return j({ ok: true, service: "bendito-provador" });
     if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
+    if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
+    const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
+    if (mc && req.method === "GET") return verContrato(mc[1], env);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);
     if (url.pathname === "/run" && req.method === "POST") {
       const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
