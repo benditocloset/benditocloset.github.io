@@ -1369,12 +1369,12 @@ function pintarBF(){
   }
 }
 const BF_CONTA = {
-  pt:{fal:(d,h)=>`Black Friday · −15% em tudo · termina em ${d} d ${h} h`, ult:(h,m)=>`Último dia da Black Friday · −15% · termina em ${h} h ${m} min`},
-  en:{fal:(d,h)=>`Black Friday · 15% off everything · ends in ${d}d ${h}h`, ult:(h,m)=>`Last day of Black Friday · 15% off · ends in ${h}h ${m}m`},
-  es:{fal:(d,h)=>`Black Friday · −15% en todo · termina en ${d} d ${h} h`, ult:(h,m)=>`Último día de Black Friday · −15% · termina en ${h} h ${m} min`},
-  fr:{fal:(d,h)=>`Black Friday · −15 % sur tout · fin dans ${d} j ${h} h`, ult:(h,m)=>`Dernier jour du Black Friday · −15 % · fin dans ${h} h ${m} min`},
-  de:{fal:(d,h)=>`Black Friday · 15 % auf alles · endet in ${d} T ${h} Std`, ult:(h,m)=>`Letzter Tag Black Friday · −15 % · endet in ${h} Std ${m} Min`},
-  it:{fal:(d,h)=>`Black Friday · −15% su tutto · termina tra ${d} g ${h} h`, ult:(h,m)=>`Ultimo giorno di Black Friday · −15% · termina tra ${h} h ${m} min`}
+  pt:{fal:(d,h)=>`Black Friday · −15% já aplicado em tudo, sem códigos · termina em ${d} d ${h} h`, ult:(h,m)=>`Último dia da Black Friday · −15% já aplicado · termina em ${h} h ${m} min`},
+  en:{fal:(d,h)=>`Black Friday · 15% off everything, applied automatically · ends in ${d}d ${h}h`, ult:(h,m)=>`Last day of Black Friday · 15% off, already applied · ends in ${h}h ${m}m`},
+  es:{fal:(d,h)=>`Black Friday · −15% ya aplicado en todo, sin códigos · termina en ${d} d ${h} h`, ult:(h,m)=>`Último día de Black Friday · −15% ya aplicado · termina en ${h} h ${m} min`},
+  fr:{fal:(d,h)=>`Black Friday · −15 % déjà appliqués sur tout, sans code · fin dans ${d} j ${h} h`, ult:(h,m)=>`Dernier jour du Black Friday · −15 % déjà appliqués · fin dans ${h} h ${m} min`},
+  de:{fal:(d,h)=>`Black Friday · 15 % auf alles, automatisch abgezogen · endet in ${d} T ${h} Std`, ult:(h,m)=>`Letzter Tag Black Friday · −15 % automatisch · endet in ${h} Std ${m} Min`},
+  it:{fal:(d,h)=>`Black Friday · −15% già applicato su tutto, senza codici · termina tra ${d} g ${h} h`, ult:(h,m)=>`Ultimo giorno di Black Friday · −15% già applicato · termina tra ${h} h ${m} min`}
 };
 setInterval(() => { try { pintarBF(); } catch(e) {} }, 60000);
 
