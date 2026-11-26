@@ -1133,7 +1133,7 @@ function cardBtn(p){
   const code = BF_ATIVA ? (cup ? "BENDITO10BF" : "BLACKFRIDAY15") : (cup ? "BENDITO10" : "");
   if (code) q.set("prefilled_promo_code", code);
   const t = CARD_TXT[LANG] || CARD_TXT.pt;
-  return `<a class="buy cartao" href="${u}?${q}" target="_blank" rel="noopener">${t}</a>`;
+  return `<a class="buy cartao" href="${u}?${q}" target="_blank" rel="noopener" data-buy="${p.id}">${t}</a>`;
 }
 
 /* SACO: a cliente junta várias peças e envia um só pedido pelo WhatsApp */
@@ -1178,7 +1178,7 @@ function bagPaint(){
   const cpBox = `<form class="cp" id="cpform"><label for="cpin">${T().cpL}</label><div><input id="cpin" value="${CUPAO.replace(/"/g,"")}" autocomplete="off" autocapitalize="characters"><button type="submit">${T().cpA}</button></div></form>${cpInfo}`;
   d.innerHTML = `<div class="sh"><h2>${t.title}</h2><button type="button" class="sx" aria-label="Fechar">×</button></div>
     ${items.length ? `<div class="sl">${items.map(p => `<div class="it"><img src="${(p.fotos||[p.foto])[0]}" alt=""><div><small>${p.marca}</small><span>${nomeDe(p)}</span><br><button type="button" class="rm" data-rm="${p.id}">${t.rm}</button></div><div class="p">${precoHTML(p)}</div></div>`).join("")}</div>
-    <div class="sf">${cpBox}<div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><a class="buy send" href="${href}" target="_blank" rel="noopener">${t.send}</a></div>`
+    <div class="sf">${cpBox}<div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><button type="button" class="buy pay" data-buybag>${(ENV_TXT[LANG]||ENV_TXT.pt).bag}</button><a class="buy send" href="${href}" target="_blank" rel="noopener">${t.send}</a></div>`
     : `<p class="empty">${t.empty}</p>`}`;
 }
 document.addEventListener("submit", e => { if (e.target.id !== "cpform") return; e.preventDefault();
@@ -1353,15 +1353,14 @@ function pintarDetalhe(){
 }
 /* Calculadora de portes (mesmas regras dos links de pagamento) */
 const PC_TXT = {
-  pt:{s:"📦 Calcular portes", pt:"Portugal", eu:"Outro país da Europa", ph:"Código postal (ex.: 4000-001)", cont:"Portugal continental", ilh:"Açores e Madeira", eur:"Europa (fora de Portugal)", ctt:"Entrega em casa com seguimento", inp:"Cacifo ou loja InPost", free:"Grátis", bad:"Escreva o código postal completo, por exemplo 4000-001.", freeWhy:"Portes grátis porque a compra é acima de 100 € (Portugal continental).", carr:"Enviamos por CTT, DHL ou Correos Express, com recolha e entrega em casa.", note:"Valores finais confirmados no pagamento."},
-  en:{s:"📦 Calculate shipping", pt:"Portugal", eu:"Another European country", ph:"Postcode (e.g. 4000-001)", cont:"Mainland Portugal", ilh:"Azores and Madeira", eur:"Europe (outside Portugal)", ctt:"Home delivery with tracking", inp:"InPost locker or shop", free:"Free", bad:"Enter the full postcode, for example 4000-001.", freeWhy:"Free shipping because your order is over €100 (mainland Portugal).", carr:"We ship with CTT, DHL or Correos Express, with home pickup and delivery.", note:"Final amounts confirmed at checkout."},
-  es:{s:"📦 Calcular envío", pt:"Portugal", eu:"Otro país de Europa", ph:"Código postal (ej.: 4000-001)", cont:"Portugal continental", ilh:"Azores y Madeira", eur:"Europa (fuera de Portugal)", ctt:"Entrega a domicilio con seguimiento", inp:"Taquilla o tienda InPost", free:"Gratis", bad:"Escribe el código postal completo, por ejemplo 4000-001.", freeWhy:"Envío gratis porque la compra supera los 100 € (Portugal continental).", carr:"Enviamos con CTT, DHL o Correos Express, con recogida y entrega a domicilio.", note:"Importes finales confirmados en el pago."},
-  fr:{s:"📦 Calculer la livraison", pt:"Portugal", eu:"Autre pays d'Europe", ph:"Code postal (ex. : 4000-001)", cont:"Portugal continental", ilh:"Açores et Madère", eur:"Europe (hors Portugal)", ctt:"Livraison à domicile avec suivi", inp:"Consigne ou point InPost", free:"Offerte", bad:"Indiquez le code postal complet, par exemple 4000-001.", freeWhy:"Livraison offerte car la commande dépasse 100 € (Portugal continental).", carr:"Expédition par CTT, DHL ou Correos Express, livrée à domicile.", note:"Montants définitifs confirmés au paiement."},
-  de:{s:"📦 Versand berechnen", pt:"Portugal", eu:"Anderes Land in Europa", ph:"Postleitzahl (z. B. 4000-001)", cont:"Portugiesisches Festland", ilh:"Azoren und Madeira", eur:"Europa (außerhalb Portugals)", ctt:"Lieferung nach Hause mit Sendungsverfolgung", inp:"InPost-Automat oder -Shop", free:"Kostenlos", bad:"Gib die vollständige Postleitzahl ein, z. B. 4000-001.", freeWhy:"Kostenloser Versand, da die Bestellung über 100 € liegt (Festland Portugal).", carr:"Versand mit CTT, DHL oder Correos Express, Lieferung nach Hause.", note:"Endbeträge werden an der Kasse bestätigt."},
-  it:{s:"📦 Calcola la spedizione", pt:"Portogallo", eu:"Altro paese europeo", ph:"CAP (es.: 4000-001)", cont:"Portogallo continentale", ilh:"Azzorre e Madeira", eur:"Europa (fuori dal Portogallo)", ctt:"Consegna a domicilio con tracciamento", inp:"Locker o negozio InPost", free:"Gratis", bad:"Scrivi il CAP completo, per esempio 4000-001.", freeWhy:"Spedizione gratuita perché l'ordine supera i 100 € (Portogallo continentale).", carr:"Spediamo con CTT, DHL o Correos Express, con consegna a domicilio.", note:"Importi finali confermati al pagamento."}
+  pt:{s:"📦 Calcular portes", pt:"Portugal", eu:"Outro país da Europa", ph:"Código postal (ex.: 4000-001)", cont:"Portugal continental", ilh:"Açores e Madeira", eur:"Europa (fora de Portugal)", ctt:"Entrega em casa com seguimento", inp:"Cacifo ou loja InPost", free:"Grátis", bad:"Escreva o código postal completo, por exemplo 4000-001.", freeWhy:"Portes grátis porque a compra é acima de 100 € (Portugal continental).", carr:"Enviamos por CTT, DHL ou Correos Express, com recolha e entrega em casa.", note:"Escolhe o envio ao carregar em «Comprar» e o valor passa direto para o pagamento."},
+  en:{s:"📦 Calculate shipping", pt:"Portugal", eu:"Another European country", ph:"Postcode (e.g. 4000-001)", cont:"Mainland Portugal", ilh:"Azores and Madeira", eur:"Europe (outside Portugal)", ctt:"Home delivery with tracking", inp:"InPost locker or shop", free:"Free", bad:"Enter the full postcode, for example 4000-001.", freeWhy:"Free shipping because your order is over €100 (mainland Portugal).", carr:"We ship with CTT, DHL or Correos Express, with home pickup and delivery.", note:"Choose your shipping when you tap «Buy now»: the amount goes straight to checkout."},
+  es:{s:"📦 Calcular envío", pt:"Portugal", eu:"Otro país de Europa", ph:"Código postal (ej.: 4000-001)", cont:"Portugal continental", ilh:"Azores y Madeira", eur:"Europa (fuera de Portugal)", ctt:"Entrega a domicilio con seguimiento", inp:"Taquilla o tienda InPost", free:"Gratis", bad:"Escribe el código postal completo, por ejemplo 4000-001.", freeWhy:"Envío gratis porque la compra supera los 100 € (Portugal continental).", carr:"Enviamos con CTT, DHL o Correos Express, con recogida y entrega a domicilio.", note:"Eliges el envío al tocar «Comprar» y el importe pasa directo al pago."},
+  fr:{s:"📦 Calculer la livraison", pt:"Portugal", eu:"Autre pays d'Europe", ph:"Code postal (ex. : 4000-001)", cont:"Portugal continental", ilh:"Açores et Madère", eur:"Europe (hors Portugal)", ctt:"Livraison à domicile avec suivi", inp:"Consigne ou point InPost", free:"Offerte", bad:"Indiquez le code postal complet, par exemple 4000-001.", freeWhy:"Livraison offerte car la commande dépasse 100 € (Portugal continental).", carr:"Expédition par CTT, DHL ou Correos Express, livrée à domicile.", note:"Choisissez la livraison en touchant « Acheter » : le montant passe directement au paiement."},
+  de:{s:"📦 Versand berechnen", pt:"Portugal", eu:"Anderes Land in Europa", ph:"Postleitzahl (z. B. 4000-001)", cont:"Portugiesisches Festland", ilh:"Azoren und Madeira", eur:"Europa (außerhalb Portugals)", ctt:"Lieferung nach Hause mit Sendungsverfolgung", inp:"InPost-Automat oder -Shop", free:"Kostenlos", bad:"Gib die vollständige Postleitzahl ein, z. B. 4000-001.", freeWhy:"Kostenloser Versand, da die Bestellung über 100 € liegt (Festland Portugal).", carr:"Versand mit CTT, DHL oder Correos Express, Lieferung nach Hause.", note:"Wähle den Versand beim Tippen auf „Kaufen“: der Betrag geht direkt zur Kasse."},
+  it:{s:"📦 Calcola la spedizione", pt:"Portogallo", eu:"Altro paese europeo", ph:"CAP (es.: 4000-001)", cont:"Portogallo continentale", ilh:"Azzorre e Madeira", eur:"Europa (fuori dal Portogallo)", ctt:"Consegna a domicilio con tracciamento", inp:"Locker o negozio InPost", free:"Gratis", bad:"Scrivi il CAP completo, per esempio 4000-001.", freeWhy:"Spedizione gratuita perché l'ordine supera i 100 € (Portogallo continentale).", carr:"Spediamo con CTT, DHL o Correos Express, con consegna a domicilio.", note:"Scegli la spedizione toccando «Acquista»: l'importo passa direttamente al pagamento."}
 };
-const PC_TAM = { roupas:"pequena", acessorios:"pequena", sapatos:"media", bolsas:"media", casacos:"grande" };
-const PC_RATE = { pequena:{cont:9, ilhas:9, eur:12, inpost:5.5}, media:{cont:10, ilhas:10, eur:24, inpost:6.5}, grande:{cont:12, ilhas:12, eur:24, inpost:6.5} };
+/* Portes: tabela única em ENV_TAB (script do pagamento, no fim da página) */
 const pcEur = v => v === 0 ? (PC_TXT[LANG]||PC_TXT.pt).free : (v % 1 ? v.toFixed(2).replace(".", ",") : v) + " €";
 function portesHTML(p){
   const t = PC_TXT[LANG] || PC_TXT.pt;
@@ -1369,17 +1368,18 @@ function portesHTML(p){
 }
 function portesCalc(box){
   const t = PC_TXT[LANG] || PC_TXT.pt, p = PECAS.find(x => x.id === box.dataset.id); if (!p) return;
-  const r = PC_RATE[PC_TAM[p.cat] || "media"], big = p.preco >= 100, out = box.querySelector(".cres"), inp = box.querySelector("input");
+  const e = (typeof ET === "function") ? ET() : null, out = box.querySelector(".cres"), inp = box.querySelector("input");
   const eu = box.querySelector('[data-z="eu"]').getAttribute("aria-pressed") === "true";
   inp.hidden = eu;
-  const line = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`;
-  if (eu) { out.innerHTML = line(t.eur + " · " + t.ctt, pcEur(r.eur)) + `<small>${t.carr||""}</small><small>${t.note}</small>`; return; }
+  const line = k => `<div><span>${e ? e[k] : k}</span><b>${pcEur(envPortes([p.id], k))}</b></div>`;
+  const end = `<small>${t.note}</small>`;
+  if (eu) { out.innerHTML = line("eu") + end; return; }
   const m = inp.value.replace(/\D/g, ""); if (m.length < 4) { out.innerHTML = m.length ? `<small>${t.bad}</small>` : ""; return; }
   const n = +m.slice(0, 4);
-  if (n >= 9000 && n <= 9999) out.innerHTML = line(t.ilh + " · " + t.ctt, pcEur(r.ilhas));
-  else if (n >= 1000) out.innerHTML = big ? line(t.cont + " · " + t.ctt, pcEur(0)) + `<small>${t.freeWhy||""}</small>` : line(t.cont + " · " + t.ctt, pcEur(r.cont));
+  if (n >= 9000 && n <= 9999) out.innerHTML = line("ilhas");
+  else if (n >= 1000) out.innerHTML = line("ctt") + line("cex") + (envPortes([p.id], "ctt") === 0 ? `<small>${t.freeWhy||""}</small>` : "");
   else { out.innerHTML = `<small>${t.bad}</small>`; return; }
-  out.innerHTML += `<small>${t.carr||""}</small><small>${t.note}</small>`;
+  out.innerHTML += end;
 }
 det.addEventListener("input", e => { const b = e.target.closest(".calc"); if (b) portesCalc(b); });
 det.addEventListener("click", e => { const z = e.target.closest(".calc [data-z]"); if (!z) return; const b = z.closest(".calc"); b.querySelectorAll("[data-z]").forEach(x => x.setAttribute("aria-pressed", x === z)); portesCalc(b); });
@@ -1457,6 +1457,76 @@ det.addEventListener("close", () => { try { history.replaceState(null, "", locat
     try { d.showModal(); } catch(e) { d.setAttribute("open",""); }
   });
   d.addEventListener("click", e => { if (e.target === d || e.target.closest(".ax")) d.close(); });
+})();
+</script>
+<script>
+/* Pagamento com os portes escolhidos: o site calcula, o servidor (worker) confirma o preço e abre a Stripe só com esse envio */
+const ENV_W = "https://bendito-provador-ia.nn45hn9bvr.workers.dev/comprar";
+const ENV_TAB = { ctt:{p:[7,9], gratis:100}, cex:{p:[10,12]}, ilhas:{p:[9,12]}, eu:{p:[18,24]} };
+const ENV_TXT = {
+  pt:{t:"Para onde enviamos?", ctt:"Portugal continental · CTT (2 a 3 dias úteis)", cex:"Portugal continental · Correos Express (24h)", ilhas:"Açores e Madeira · CTT (3 a 5 dias úteis)", eu:"Outro país da Europa · DHL ou Correos Express", free:"grátis", pecas:"Peças", portes:"Portes", tot:"Total", pay:"Pagar", wait:"A abrir o pagamento…", err:"Não foi possível abrir o pagamento. Tente outra vez ou fale connosco pelo WhatsApp.", sold:"Esta peça já foi vendida.", safe:"Pagamento seguro pela Stripe: cartão, MB WAY, Multibanco, Apple Pay, Google Pay ou Klarna.", disc:c=>`O desconto ${c} é aplicado no pagamento.`, freeWhy:"Portes grátis com CTT acima de 100 € (Portugal continental).", bag:"Pagar com cartão ou MB WAY", ok:"Obrigada pela sua compra! ✦ Vai receber a confirmação por e-mail."},
+  en:{t:"Where should we ship?", ctt:"Mainland Portugal · CTT (2–3 business days)", cex:"Mainland Portugal · Correos Express (24h)", ilhas:"Azores and Madeira · CTT (3–5 business days)", eu:"Another European country · DHL or Correos Express", free:"free", pecas:"Items", portes:"Shipping", tot:"Total", pay:"Pay", wait:"Opening checkout…", err:"We couldn't open the checkout. Please try again or message us on WhatsApp.", sold:"This piece has already been sold.", safe:"Secure payment by Stripe: card, MB WAY, Multibanco, Apple Pay, Google Pay or Klarna.", disc:c=>`The ${c} discount is applied at checkout.`, freeWhy:"Free CTT shipping over €100 (mainland Portugal).", bag:"Pay by card or MB WAY", ok:"Thank you for your order! ✦ You'll get a confirmation by e-mail."},
+  es:{t:"¿A dónde lo enviamos?", ctt:"Portugal continental · CTT (2 a 3 días hábiles)", cex:"Portugal continental · Correos Express (24 h)", ilhas:"Azores y Madeira · CTT (3 a 5 días hábiles)", eu:"Otro país de Europa · DHL o Correos Express", free:"gratis", pecas:"Piezas", portes:"Envío", tot:"Total", pay:"Pagar", wait:"Abriendo el pago…", err:"No se pudo abrir el pago. Inténtalo de nuevo o escríbenos por WhatsApp.", sold:"Esta pieza ya se ha vendido.", safe:"Pago seguro con Stripe: tarjeta, MB WAY, Multibanco, Apple Pay, Google Pay o Klarna.", disc:c=>`El descuento ${c} se aplica en el pago.`, freeWhy:"Envío gratis con CTT a partir de 100 € (Portugal continental).", bag:"Pagar con tarjeta o MB WAY", ok:"¡Gracias por tu compra! ✦ Recibirás la confirmación por e-mail."},
+  fr:{t:"Où livrons-nous ?", ctt:"Portugal continental · CTT (2 à 3 jours ouvrés)", cex:"Portugal continental · Correos Express (24 h)", ilhas:"Açores et Madère · CTT (3 à 5 jours ouvrés)", eu:"Autre pays d'Europe · DHL ou Correos Express", free:"offerte", pecas:"Pièces", portes:"Livraison", tot:"Total", pay:"Payer", wait:"Ouverture du paiement…", err:"Impossible d'ouvrir le paiement. Réessayez ou écrivez-nous sur WhatsApp.", sold:"Cette pièce a déjà été vendue.", safe:"Paiement sécurisé par Stripe : carte, MB WAY, Multibanco, Apple Pay, Google Pay ou Klarna.", disc:c=>`La réduction ${c} est appliquée au paiement.`, freeWhy:"Livraison CTT offerte dès 100 € (Portugal continental).", bag:"Payer par carte ou MB WAY", ok:"Merci pour votre commande ! ✦ Vous recevrez la confirmation par e-mail."},
+  de:{t:"Wohin sollen wir liefern?", ctt:"Portugiesisches Festland · CTT (2–3 Werktage)", cex:"Portugiesisches Festland · Correos Express (24 Std.)", ilhas:"Azoren und Madeira · CTT (3–5 Werktage)", eu:"Anderes Land in Europa · DHL oder Correos Express", free:"kostenlos", pecas:"Teile", portes:"Versand", tot:"Summe", pay:"Bezahlen", wait:"Zahlung wird geöffnet…", err:"Die Zahlung konnte nicht geöffnet werden. Bitte versuche es erneut oder schreib uns auf WhatsApp.", sold:"Dieses Teil ist bereits verkauft.", safe:"Sichere Zahlung über Stripe: Karte, MB WAY, Multibanco, Apple Pay, Google Pay oder Klarna.", disc:c=>`Der Rabatt ${c} wird an der Kasse abgezogen.`, freeWhy:"Kostenloser CTT-Versand ab 100 € (portugiesisches Festland).", bag:"Mit Karte oder MB WAY bezahlen", ok:"Danke für deine Bestellung! ✦ Du bekommst eine Bestätigung per E-Mail."},
+  it:{t:"Dove spediamo?", ctt:"Portogallo continentale · CTT (2–3 giorni lavorativi)", cex:"Portogallo continentale · Correos Express (24 ore)", ilhas:"Azzorre e Madeira · CTT (3–5 giorni lavorativi)", eu:"Altro paese europeo · DHL o Correos Express", free:"gratis", pecas:"Capi", portes:"Spedizione", tot:"Totale", pay:"Paga", wait:"Apertura del pagamento…", err:"Non è stato possibile aprire il pagamento. Riprova o scrivici su WhatsApp.", sold:"Questo capo è già stato venduto.", safe:"Pagamento sicuro con Stripe: carta, MB WAY, Multibanco, Apple Pay, Google Pay o Klarna.", disc:c=>`Lo sconto ${c} viene applicato al pagamento.`, freeWhy:"Spedizione CTT gratuita da 100 € (Portogallo continentale).", bag:"Paga con carta o MB WAY", ok:"Grazie per il tuo ordine! ✦ Riceverai la conferma via e-mail."}
+};
+const ET = () => ENV_TXT[LANG] || ENV_TXT.pt;
+function envCode(){ const cup = CUP_OK(CUPAO); return BF_ATIVA ? (cup ? "BENDITO10BF" : "BLACKFRIDAY15") : (cup ? "BENDITO10" : ""); }
+function envPortes(ids, k){
+  const ps = ids.map(id => PECAS.find(x => x.id === id)).filter(Boolean);
+  const sub = ps.reduce((a, p) => a + p.preco, 0), big = ps.some(p => !["roupas","acessorios"].includes(p.cat));
+  const e = ENV_TAB[k]; return e.gratis && sub >= e.gratis ? 0 : e.p[big ? 1 : 0];
+}
+let ENV = { ids: [], k: "ctt", fb: "" };
+(function(){
+  const st = document.createElement("style");
+  st.textContent = "#envio{border:0;border-radius:18px;padding:0;width:min(440px,94vw);background:var(--bg);color:var(--ink)}#envio::backdrop{background:rgba(0,0,0,.45)}#envio .eh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 6px}#envio h2{margin:0;font-family:var(--display);font-size:22px}#envio .ex{border:0;background:none;color:var(--ink);font-size:28px;cursor:pointer;line-height:1}#envio .eo{padding:6px 18px}#envio input{accent-color:var(--ink);width:18px;height:18px}#envio label{display:flex;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:12px;margin:8px 0;cursor:pointer;font-size:14.5px;line-height:1.3}#envio label:has(input:checked){border-color:var(--ink)}#envio label span{flex:1}#envio .es{padding:4px 18px 18px;font-size:14px}#envio .es div{display:flex;justify-content:space-between;margin:3px 0}#envio .es .tt{font-weight:700;font-size:17px;border-top:1px solid var(--line);padding-top:8px;margin-top:8px}#envio .es small{display:block;opacity:.7;margin-top:6px;line-height:1.4}#envio .buy{width:100%;margin-top:12px;border:0;cursor:pointer;font:inherit;font-weight:600}#envio .er{color:#b3261e;font-size:13.5px;margin-top:8px}#saco .pay{width:100%;border:0;cursor:pointer;margin-bottom:8px;font:inherit;font-weight:600}.envok{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:14px 18px;border-radius:14px;z-index:99;max-width:92vw;font-size:15px;box-shadow:0 8px 30px rgba(0,0,0,.3)}";
+  document.head.appendChild(st);
+  const d = document.createElement("dialog"); d.id = "envio"; document.body.appendChild(d);
+})();
+function envPaint(){
+  const d = document.getElementById("envio"), t = ET(), ids = ENV.ids;
+  const ps = ids.map(id => PECAS.find(x => x.id === id)).filter(Boolean);
+  const sub = ps.reduce((a, p) => a + precoFinal(p), 0), pt = envPortes(ids, ENV.k), code = envCode();
+  const eur = v => v === 0 ? t.free : euro(v);
+  d.innerHTML = `<div class="eh"><h2>${t.t}</h2><button type="button" class="ex" aria-label="Fechar">×</button></div>
+  <div class="eo">${["ctt","cex","ilhas","eu"].map(k => `<label><input type="radio" name="envk" value="${k}" ${k===ENV.k?"checked":""}><span>${t[k]}</span><b>${eur(envPortes(ids,k))}</b></label>`).join("")}</div>
+  <div class="es"><div><span>${t.pecas}</span><span>${euro(sub)}</span></div><div><span>${t.portes}</span><span>${eur(pt)}</span></div><div class="tt"><span>${t.tot}</span><span>${euro(sub+pt)}</span></div>
+  ${ENV.k==="ctt"&&pt===0?`<small>${t.freeWhy}</small>`:""}${code?`<small>${t.disc(code)}</small>`:""}<small>${t.safe}</small>
+  <button type="button" class="buy" id="envgo">${t.pay} ${euro(sub+pt)}</button><div class="er" id="enverr" hidden></div></div>`;
+}
+function envOpen(ids, fb){
+  ENV = { ids, k: ENV.k || "ctt", fb: fb || "" };
+  envPaint(); const d = document.getElementById("envio"); try { d.showModal(); } catch(e) { d.setAttribute("open",""); }
+}
+async function envGo(){
+  const t = ET(), b = document.getElementById("envgo"), er = document.getElementById("enverr");
+  b.disabled = true; b.textContent = t.wait; er.hidden = true;
+  try {
+    const r = await fetch(ENV_W, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ ids: ENV.ids, ship: ENV.k, lang: LANG, code: envCode() }) });
+    const o = await r.json().catch(() => ({}));
+    if (r.ok && o.url) { location.href = o.url; return; }
+    if (o.error === "peca") { er.textContent = t.sold; er.hidden = false; b.disabled = false; envPaint(); return; }
+  } catch(e) {}
+  if (ENV.fb) { window.open(ENV.fb, "_blank", "noopener"); b.disabled = false; envPaint(); return; }
+  b.disabled = false; envPaint(); const e2 = document.getElementById("enverr"); e2.textContent = t.err; e2.hidden = false;
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-buy]");
+  if (a) { e.preventDefault(); e.stopPropagation(); envOpen([a.dataset.buy], a.href); return; }
+  if (e.target.closest("[data-buybag]")) { e.preventDefault(); e.stopPropagation(); try { bagValid(); } catch(x) {} if (BAG.length) envOpen(BAG.slice(), ""); return; }
+  const d = document.getElementById("envio"); if (!d || !d.open) return;
+  if (e.target === d || e.target.closest("#envio .ex")) { d.close(); return; }
+  if (e.target.closest("#envgo")) { envGo(); }
+}, true);
+document.addEventListener("change", e => { if (e.target.name === "envk") { ENV.k = e.target.value; envPaint(); } });
+(function(){
+  const q = new URLSearchParams(location.search); if (q.get("compra") !== "ok") return;
+  try { BAG = []; localStorage.setItem("bc-saco", "[]"); } catch(e) {}
+  const n = document.createElement("div"); n.className = "envok"; n.textContent = ET().ok; document.body.appendChild(n);
+  setTimeout(() => n.remove(), 9000);
+  try { history.replaceState(null, "", location.pathname); } catch(e) {}
 })();
 </script>
 </body>

@@ -48,7 +48,8 @@ async function pecasDoSite() {
     const id = l.match(/^\s*\{\s*id:"([^"]+)"/); if (!id) continue;
     const g = k => { const r = l.match(new RegExp("\\b" + k + ":\\s*\"([^\"]*)\"")); return r ? r[1] : ""; };
     const pr = l.match(/\bpreco:\s*([\d.]+)/);
-    P[id[1]] = { cat: g("cat"), marca: g("marca"), nome: g("nome"), status: g("status"), preco: pr ? +pr[1] : 0 };
+    const fo = l.match(/\bfotos?:\s*\[?\s*"([^"]+)"/);
+    P[id[1]] = { cat: g("cat"), marca: g("marca"), nome: g("nome"), status: g("status"), preco: pr ? +pr[1] : 0, foto: fo ? fo[1] : "" };
   }
   return P;
 }
@@ -88,6 +89,65 @@ async function caucao(req, env, j) {
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
   return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100 });
 }
+
+// Compra de peças: pagamento com o preço do site e só os portes escolhidos pela cliente (calculados aqui).
+// Tabela aprovada a 25/11/2026: [roupa e acessórios, sapatos/malas/casacos]; CTT no continente grátis a partir de 100 €.
+const ENVIO = {
+  ctt: { n: "Portugal continental · CTT · 2 a 3 dias úteis", p: [7, 9], min: 2, max: 3, c: ["PT"], gratis: 100 },
+  cex: { n: "Portugal continental · Correos Express · 24h", p: [10, 12], min: 1, max: 1, c: ["PT"] },
+  ilhas: { n: "Açores e Madeira · CTT · 3 a 5 dias úteis", p: [9, 12], min: 3, max: 5, c: ["PT"] },
+  eu: { n: "Europa · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT","CH","NO","GB"] }
+};
+// Códigos que o site aplica sozinho → cupões da conta Bendito Closet (o cupão BF expira a 29/11 na própria Stripe)
+const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "5zMdM2cY", BENDITO10BF: "Ae5VZaMp" };
+const LOCAIS = ["pt", "en", "es", "fr", "de", "it"];
+async function comprar(req, env, j) {
+  if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const ids = Array.isArray(b.ids) ? [...new Set(b.ids.map(String))] : [];
+  const e = ENVIO[String(b.ship || "")], lang = LOCAIS.includes(b.lang) ? b.lang : "pt", code = String(b.code || "").toUpperCase();
+  if (!e || !ids.length || ids.length > 20) return j({ error: "dados" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `buy:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 40) return j({ error: "limite" }, 429);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  const P = await pecasDoSite(), sel = [];
+  for (const id of ids) { const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 409); sel.push({ id, ...p }); }
+  const sub = sel.reduce((a, p) => a + p.preco, 0);
+  const big = sel.some(p => !["roupas", "acessorios"].includes(p.cat));
+  let portes = e.p[big ? 1 : 0];
+  if (e.gratis && sub >= e.gratis) portes = 0;
+  const f = new URLSearchParams();
+  f.set("mode", "payment"); f.set("locale", lang);
+  f.set("success_url", "https://benditocloset.pt/?compra=ok&s={CHECKOUT_SESSION_ID}");
+  f.set("cancel_url", "https://benditocloset.pt/" + (ids.length === 1 ? "?peca=" + encodeURIComponent(ids[0]) : ""));
+  sel.forEach((p, i) => {
+    f.set(`line_items[${i}][quantity]`, "1");
+    f.set(`line_items[${i}][price_data][currency]`, "eur");
+    f.set(`line_items[${i}][price_data][unit_amount]`, String(Math.round(p.preco * 100)));
+    f.set(`line_items[${i}][price_data][product_data][name]`, (p.marca + " – " + p.nome).slice(0, 250));
+    if (p.foto) f.set(`line_items[${i}][price_data][product_data][images][0]`, "https://benditocloset.pt/" + p.foto.replace(/^\//, ""));
+    f.set(`line_items[${i}][price_data][product_data][metadata][peca]`, p.id);
+  });
+  f.set("shipping_options[0][shipping_rate_data][type]", "fixed_amount");
+  f.set("shipping_options[0][shipping_rate_data][display_name]", e.n);
+  f.set("shipping_options[0][shipping_rate_data][fixed_amount][amount]", String(portes * 100));
+  f.set("shipping_options[0][shipping_rate_data][fixed_amount][currency]", "eur");
+  f.set("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]", "business_day");
+  f.set("shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]", String(e.min));
+  f.set("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]", "business_day");
+  f.set("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", String(e.max));
+  e.c.forEach((c, i) => f.set(`shipping_address_collection[allowed_countries][${i}]`, c));
+  f.set("phone_number_collection[enabled]", "true");
+  if (CUPOES[code]) f.set("discounts[0][coupon]", CUPOES[code]); else f.set("allow_promotion_codes", "true");
+  const lista = sel.map(p => p.id).join(",");
+  f.set("metadata[pecas]", lista.slice(0, 490)); f.set("metadata[envio]", e.n); f.set("metadata[portes_eur]", String(portes));
+  f.set("payment_intent_data[metadata][pecas]", lista.slice(0, 490)); f.set("payment_intent_data[metadata][envio]", e.n);
+  f.set("payment_intent_data[description]", "Bendito Closet · " + sel.map(p => p.marca + " " + p.nome).join("; ").slice(0, 300));
+  const r = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body: f.toString() });
+  const o = await r.json();
+  if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
+  return j({ url: o.url, subtotal: sub, portes });
+}
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
@@ -97,6 +157,7 @@ export default {
     const url = new URL(req.url);
     if (url.pathname === "/") return j({ ok: true, service: "bendito-provador" });
     if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
+    if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);
     if (url.pathname === "/run" && req.method === "POST") {
       const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10);
