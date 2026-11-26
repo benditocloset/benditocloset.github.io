@@ -62,3 +62,14 @@ html.maison header.cover .mast{font-family:"Bodoni Moda",Didot,Georgia,serif!imp
 html.maison body,html.maison body :is(p,li,span,td,label,small,summary,figcaption,blockquote,input,textarea){font-weight:300}
 html.maison body :is(b,strong){font-weight:500}
 html.maison .card .title,html.maison .card .price{font-weight:300!important}
+
+/* Sistema único de letra (igual à página principal) */
+html.maison :is(h1,h2){font-size:16px!important;font-weight:400!important;letter-spacing:.14em!important}
+html.maison :is(h3,h4){font-size:13px!important;font-weight:400!important;letter-spacing:.14em!important}
+html.maison body :is(p,li,td,label,summary,blockquote){font-size:14px!important}
+html.maison header.cover .mast{font-size:clamp(64px,17vw,190px)!important}
+html.maison :is(.btn,a.btn,.send,.pb,button[type=submit],input[type=submit]){font-weight:400!important;font-size:11px!important}
+html.maison body>header:not(.cover) a[style]{font-size:14px!important;letter-spacing:.12em!important;padding:0 70px!important;text-transform:uppercase;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-weight:400!important}
+html.maison body>header:not(.cover) a[style] span{font-size:10.5px!important}
+html.maison.escuro .lang{top:12px!important;right:12px!important;font-size:10px!important;border-radius:0!important}
+html.maison.escuro .lang a{padding:5px 9px!important}
