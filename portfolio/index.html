@@ -119,7 +119,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     <h1 data-t="h1">Sites e lojas online que vendem, <em>feitos à medida no Porto.</em></h1>
     <p class="lead" data-t="lead">Sou a Marianna Werneck. Jornalista de formação, trabalhei em assessoria de imprensa de moda e hoje trabalho em tecnologia. Crio sites e lojas online para pequenos negócios: rápidos no telemóvel, com pagamento online, em várias línguas e preparados para aparecer no Google.</p>
     <div class="btns">
-      <a class="b r" id="wa" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
+      <a class="b r" id="wa" href="https://wa.me/351930504299" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
       <a class="b" href="mailto:ola@benditocloset.pt?subject=Or%C3%A7amento%20de%20site" data-t="mail">Enviar e-mail</a>
     </div>
   </div>
@@ -221,7 +221,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <h2 data-t="ch">Vamos criar o <em>seu</em> site?</h2>
   <p data-t="cp">Conte-me o que vende e eu respondo com uma proposta. Sem compromisso.</p>
   <div class="btns">
-    <a class="b r" id="wa2" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
+    <a class="b r" id="wa2" href="https://wa.me/351930504299" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
     <a class="b" href="mailto:ola@benditocloset.pt?subject=Or%C3%A7amento%20de%20site">ola@benditocloset.pt</a>
   </div>
 </div></div>
@@ -249,7 +249,7 @@ const PT={};document.querySelectorAll("[data-t]").forEach(e=>PT[e.dataset.t]=e.i
 const MSG={pt:"Olá Marianna! Vi o seu portfólio e gostava de um orçamento para um site.",en:"Hi Marianna! I saw your portfolio and I'd like a quote for a website."};
 function L(l){document.documentElement.lang=l==="en"?"en":"pt-PT";const D=l==="en"?EN:PT;document.querySelectorAll("[data-t]").forEach(e=>{if(D[e.dataset.t]!=null)e.innerHTML=D[e.dataset.t];});
  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===l));
- ["wa","wa2"].forEach(id=>document.getElementById(id).href="https://wa.me/351936796783?text="+encodeURIComponent(MSG[l]));
+ ["wa","wa2"].forEach(id=>document.getElementById(id).href="https://wa.me/351930504299?text="+encodeURIComponent(MSG[l]));
  try{localStorage.setItem("bc-pf-lang",l)}catch(e){}}
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>L(b.dataset.l));
 let l0="pt";try{const q=new URLSearchParams(location.search).get("lang");l0=q==="en"?"en":(localStorage.getItem("bc-pf-lang")||((navigator.language||"pt").startsWith("pt")?"pt":"en"));}catch(e){}

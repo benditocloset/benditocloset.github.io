@@ -3,3 +3,4 @@ Disallow: /portfolio/Marianna_Werneck_Web_Design_Portfolio.pdf
 Allow: /
 
 Sitemap: https://benditocloset.pt/sitemap.xml
+Disallow: /portfolio/Marianna_Werneck_Web_Designer_CV.pdf
