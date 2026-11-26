@@ -476,7 +476,7 @@ html.maison #mtop .ic svg{width:24px;height:24px}
 html.maison #mtop .n{position:absolute;top:-2px;right:-6px;background:#111;color:#fff;font-size:10px;line-height:16px;min-width:16px;height:16px;border-radius:8px;text-align:center;padding:0 3px}
 html.maison #mtop .n:empty,html.maison #mtop .n[data-z="1"]{display:none}
 html.maison header,html.maison .hero,html.maison #bagbtn,html.maison #contabtn,html.maison #menubtn,
-html.maison .servico,html.maison .rot,html.maison .trust,html.maison .minis,html.maison .games-after,
+html.maison .servico,html.maison .rot,html.maison .trust,html.maison .minis,
 html.maison .cta,html.maison #vip,html.maison #editoriais,html.maison #avaliacoes,html.maison [data-assinar],
 html.maison .card .meta,html.maison .card .note,html.maison .card .status.ok,html.maison .card .count,html.maison .card .brandlabel{display:none!important}
 html.maison .bf{background:#111!important;color:#fff!important;font-size:11px!important;letter-spacing:.12em;padding:9px 16px!important;text-align:center!important}
@@ -490,13 +490,13 @@ html.maison .filters button[aria-pressed="true"]{text-decoration:underline;text-
 html.maison .sortbar{justify-content:space-between!important;font-size:14px;padding:6px 0 14px!important}
 html.maison .sortbar select{border:0!important;background:none!important;text-decoration:underline;font-size:14px!important;padding:0!important}
 /* grelha de ponta a ponta */
-html.maison .grid{gap:0!important;margin:0 -20px!important;grid-template-columns:repeat(2,1fr)!important}
-@media(min-width:900px){html.maison .grid{grid-template-columns:repeat(4,1fr)!important;margin:0!important}}
-html.maison .card{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;border-right:1px solid #f0f0f0!important}
+html.maison .grid{gap:30px 14px!important;margin:8px 0 0!important;grid-template-columns:repeat(2,1fr)!important}
+@media(min-width:900px){html.maison .grid{grid-template-columns:repeat(4,1fr)!important;gap:44px 24px!important}}
+html.maison .card{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 html.maison .card .photo{background:#f8f8f9!important;border-radius:0!important;aspect-ratio:4/5}
 html.maison .card .photo img{border-radius:0!important;object-fit:cover}
-html.maison .card .body{padding:16px 16px 34px!important;text-align:left}
-html.maison .card .title{font-family:"Jost",sans-serif!important;font-style:normal!important;font-weight:400!important;font-size:14px!important;line-height:1.35!important;color:#111!important;margin:0 0 22px!important}
+html.maison .card .body{padding:12px 2px 6px!important;text-align:left}
+html.maison .card .title{font-family:"Jost",sans-serif!important;font-style:normal!important;font-weight:400!important;font-size:14px!important;line-height:1.35!important;color:#111!important;margin:0 0 10px!important}
 html.maison .card .row{display:block!important}
 html.maison .card .row .buy,html.maison .card .row button,html.maison .card .row a{display:none!important}
 html.maison .card .price{color:#111!important;font-size:14px!important;font-weight:400!important}
@@ -504,6 +504,26 @@ html.maison .card .price s{color:#999;margin-right:6px}
 html.maison .card .fav{background:transparent!important;box-shadow:none!important;border:0!important}
 html.maison .consign .box,html.maison .how{background:#fff!important;border-color:#eee!important}
 html.maison #mnu{background:#fff!important}
+/* Tipografia maison: uma só letra sem serifa, títulos em maiúsculas espaçadas, sem dourado nem itálico */
+html.maison{--display:"Jost",Helvetica,Arial,sans-serif;--halo:#111}
+html.maison body,html.maison p,html.maison li,html.maison a,html.maison button,html.maison select,html.maison input{font-family:"Jost",Helvetica,Arial,sans-serif!important}
+html.maison h1,html.maison h2,html.maison h3:not(.title),html.maison h4,html.maison .consign h2,html.maison .how h3,html.maison .step h3,html.maison .about h2{font-family:"Jost",Helvetica,Arial,sans-serif!important;font-style:normal!important;font-weight:500!important;text-transform:uppercase;letter-spacing:.12em!important;color:#111!important;line-height:1.3!important}
+html.maison h2{font-size:18px!important}
+html.maison h3{font-size:13px!important}
+html.maison h1 em,html.maison h2 em,html.maison h3 em,html.maison em{font-style:normal!important}
+html.maison p{color:#333!important;font-weight:400!important;font-size:14px!important;line-height:1.65!important}
+html.maison .step .n{font-family:"Jost",sans-serif!important;font-style:normal!important;color:#111!important;font-size:13px!important;font-weight:500!important;border:1px solid #111!important;border-radius:0!important;width:26px!important;height:26px!important;line-height:24px!important;text-align:center;display:inline-block!important;background:none!important}
+html.maison .consign a,html.maison .about a,html.maison .how a{color:#111!important;letter-spacing:.14em;font-size:11.5px!important}
+html.maison #faqbtn{display:none!important}
+html.maison .card .title{text-transform:none!important;letter-spacing:0!important}
+/* Brincadeiras (quiz, IA, memória, capa de revista, revista, app): lista limpa a preto e branco */
+html.maison .games-after{margin:56px 0 10px!important;border-top:1px solid #111!important;padding-top:0!important}
+html.maison .game{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:4px 14px;margin:0!important;padding:20px 2px!important;border:0!important;border-bottom:1px solid #e6e6e6!important;background:#fff!important;box-shadow:none!important;border-radius:0!important;text-align:left;width:100%}
+html.maison .game span{grid-column:1;color:#777!important;font-family:"Jost",Helvetica,Arial,sans-serif!important;font-size:10.5px!important;letter-spacing:.2em!important;text-transform:uppercase;font-weight:500!important}
+html.maison .game b{grid-column:1;font-family:"Jost",Helvetica,Arial,sans-serif!important;font-style:normal!important;font-weight:400!important;font-size:15px!important;line-height:1.45!important;color:#111!important}
+html.maison .game i{grid-column:2;grid-row:1/span 2;color:#111!important;font-style:normal;font-size:18px}
+html.maison #mnu a{font-family:"Jost",Helvetica,Arial,sans-serif!important;font-style:normal!important}
+
 </style>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
