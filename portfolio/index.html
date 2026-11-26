@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfólio · Marianna Werneck · Web design e lojas online</title>
+<meta name="description" content="Portfólio de Marianna Werneck: sites e lojas online para pequenos negócios, com pagamento online, várias línguas, provador com IA e experiências interativas. Porto, Portugal.">
+<link rel="canonical" href="https://benditocloset.pt/portfolio/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Portfólio · Marianna Werneck · Web design e lojas online">
+<meta property="og:description" content="Sites e lojas online que vendem, feitos à medida no Porto.">
+<meta property="og:image" content="https://benditocloset.pt/portfolio/img/bendito-d.jpg">
+<meta property="og:url" content="https://benditocloset.pt/portfolio/">
+<link rel="icon" href="/img/logo.jpg">
+<style>
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(/fonts/bodoni-moda-latin-400-italic.woff2) format("woff2");font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(/fonts/dm-sans-latin-600-normal.woff2) format("woff2");font-weight:600 700;font-display:swap}
+:root{--bg:#FAF6F0;--card:#fff;--ink:#1C1517;--muted:#6F625C;--line:#E9DFD3;--rose:#9E1B3F;--gold:#9C6B22;--dark:#0E0A0B}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "DM Sans",system-ui,sans-serif}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.top{position:sticky;top:0;z-index:5;background:rgba(250,246,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{font-family:"Bodoni Moda",serif;font-size:19px;text-decoration:none}
+.lang button{background:none;border:0;font:600 11px "DM Sans";letter-spacing:.18em;padding:6px 8px;cursor:pointer;color:var(--muted)}
+.lang button.on{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.k{font:600 11px "DM Sans";letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 14px}
+h1,h2,h3{font-family:"Bodoni Moda",serif;font-weight:400;margin:0}
+h1{font-size:clamp(38px,6vw,64px);line-height:1.05}
+h1 em,h2 em{color:var(--rose)}
+h2{font-size:clamp(30px,4.2vw,44px);line-height:1.1;margin-bottom:12px}
+h3{font-size:24px;line-height:1.2}
+.hero{padding:56px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center}
+.hero p.lead{font-size:18px;color:#3b3033;max-width:560px;margin:22px 0 28px}
+.hero .ph img{border-radius:2px;aspect-ratio:4/5;object-fit:cover;width:100%}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.b{display:inline-block;padding:14px 22px;font:600 12px "DM Sans";letter-spacing:.16em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink)}
+.b.p{background:var(--ink);color:#fff}
+.b.r{background:var(--rose);border-color:var(--rose);color:#fff}
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+.facts .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.facts div{padding:20px 14px;text-align:center;border-left:1px solid var(--line)}
+.facts div:first-child{border-left:0}
+.facts b{display:block;font:400 26px "Bodoni Moda",serif}
+.facts span{font-size:13px;color:var(--muted)}
+section{padding:70px 0}
+.sub{color:var(--muted);max-width:640px;margin:0 0 30px}
+.case{display:grid;grid-template-columns:1.5fr .5fr;gap:18px;align-items:end;margin-bottom:26px}
+.shot{border:1px solid var(--line);background:#fff;box-shadow:0 18px 40px -24px rgba(28,21,23,.35)}
+.shot.m{border-radius:22px;overflow:hidden;border:6px solid var(--dark)}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 26px;padding:0;margin:26px 0;list-style:none}
+.feat li{padding-left:22px;position:relative;font-size:15px}
+.feat li:before{content:"✦";position:absolute;left:0;color:var(--gold);font-size:12px;top:3px}
+.more{font:600 12px "DM Sans";letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+.dark{background:var(--dark);color:#F3EDE6}
+.dark .sub{color:#b8aba3}
+.dark .k{color:#d6b270}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+.card{background:#fff;border:1px solid var(--line);padding:0 0 18px;text-decoration:none;display:block;transition:transform .2s}
+.card:hover{transform:translateY(-3px)}
+.card img{border-bottom:1px solid var(--line)}
+.card h3{margin:16px 18px 4px;font-size:22px}
+.card p{margin:0 18px;color:var(--muted);font-size:14.5px}
+.dark .card{background:#1a1416;border-color:#2c2326}
+.dark .card img{border-color:#2c2326}
+.dark .card p{color:#b8aba3}
+.phones{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.phones a{text-decoration:none}
+.phones img{border-radius:18px;border:5px solid #2a2124}
+.phones b{display:block;font:400 18px "Bodoni Moda",serif;margin-top:12px}
+.phones span{display:block;font-size:13px;color:#b8aba3}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.tag{display:inline-block;font:600 10px "DM Sans";letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:4px 8px;margin:0 0 18px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+.steps div{background:#fff;border:1px solid var(--line);padding:24px}
+.steps div:before{counter-increment:s;content:counter(s);font:400 40px "Bodoni Moda",serif;color:var(--rose);display:block;margin-bottom:6px}
+.serv{columns:2;gap:40px;padding:0;list-style:none;margin:0 0 26px}
+.serv li{break-inside:avoid;border-top:1px solid var(--line);padding:12px 0}
+.serv b{display:block}
+.serv span{color:var(--muted);font-size:14.5px}
+.cta{text-align:center;padding:80px 0}
+.cta p{color:var(--muted);max-width:560px;margin:14px auto 28px}
+.cta .btns{justify-content:center}
+footer{border-top:1px solid var(--line);padding:26px 0;font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:860px){
+ .hero .wrap,.two,.case{grid-template-columns:1fr}
+ .hero .ph{max-width:340px}
+ .facts .wrap{grid-template-columns:1fr 1fr}
+ .facts div:nth-child(3){border-left:0}
+ .facts div:nth-child(n+3){border-top:1px solid var(--line)}
+ .feat{grid-template-columns:1fr}
+ .phones{grid-template-columns:repeat(2,1fr)}
+ .grid4{grid-template-columns:1fr 1fr}
+ .steps{grid-template-columns:1fr}
+ .serv{columns:1}
+ .case .shot.m{max-width:220px;margin:0 auto}
+ section{padding:54px 0}
+}
+@media (max-width:480px){.grid4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#">Marianna Werneck</a>
+  <div class="lang"><button data-l="pt" class="on">PT</button><button data-l="en">EN</button></div>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <p class="k" data-t="k1">Portfólio · Web design e lojas online</p>
+    <h1 data-t="h1">Sites e lojas online que vendem, <em>feitos à medida no Porto.</em></h1>
+    <p class="lead" data-t="lead">Sou a Marianna Werneck. Jornalista de formação, trabalhei em assessoria de imprensa de moda e hoje trabalho em tecnologia. Crio sites e lojas online para pequenos negócios: rápidos no telemóvel, com pagamento online, em várias línguas e preparados para aparecer no Google.</p>
+    <div class="btns">
+      <a class="b r" id="wa" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
+      <a class="b" href="mailto:ola@benditocloset.pt?subject=Or%C3%A7amento%20de%20site" data-t="mail">Enviar e-mail</a>
+    </div>
+  </div>
+  <div class="ph"><img src="/img/marianna.jpg" alt="Marianna Werneck" width="600" height="750"></div>
+</div></div>
+
+<div class="facts"><div class="wrap">
+  <div><b>6</b><span data-t="f1">línguas na mesma loja</span></div>
+  <div><b>Stripe</b><span data-t="f2">cartão, MB WAY, Apple Pay, Klarna</span></div>
+  <div><b>IA</b><span data-t="f3">provador virtual e assistente</span></div>
+  <div><b>0 €</b><span data-t="f4">de mensalidade de plataforma</span></div>
+</div></div>
+
+<section id="bendito"><div class="wrap">
+  <p class="k" data-t="c1k">Caso principal</p>
+  <h2 data-t="c1h">Bendito Closet <em>· a minha loja</em></h2>
+  <p class="sub" data-t="c1p">Uma loja online de moda de marca em segunda mão, que desenhei e construí sozinha, do zero. Hoje vende para Portugal e para a Europa e é a montra de tudo o que faço para os meus clientes.</p>
+  <div class="case">
+    <img class="shot" src="img/bendito-d.jpg" alt="Bendito Closet no computador" width="1200" height="750" loading="lazy">
+    <img class="shot m" src="img/bendito-m.jpg" alt="Bendito Closet no telemóvel" width="420" height="909" loading="lazy">
+  </div>
+  <ul class="feat">
+    <li data-t="b1">Loja em 6 línguas: português, inglês, espanhol, francês, alemão e italiano</li>
+    <li data-t="b2">Saco de compras e pagamento online com cartão, MB WAY, Apple Pay, Google Pay e Klarna</li>
+    <li data-t="b3">Conta de cliente sem palavra-passe, com encomendas, devoluções e favoritos</li>
+    <li data-t="b4">Provador virtual com IA: a cliente vê a peça vestida nela</li>
+    <li data-t="b5">Jogo da memória, quiz de estilo, "monta o look" e revista digital</li>
+    <li data-t="b6">Contrato de empréstimo de peças com assinatura digital no telemóvel</li>
+    <li data-t="b7">App instalável no telemóvel, sem passar pelas lojas de apps</li>
+    <li data-t="b8">Preparado para o Google e catálogo ligado ao Instagram Shopping</li>
+    <li data-t="b9">Avisos de vendas na hora e resumo diário de visitas por e-mail</li>
+  </ul>
+  <a class="more" href="https://benditocloset.pt/" target="_blank" rel="noopener" data-t="ver">Ver o site →</a>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap two">
+  <a class="card" href="/closet-da-lu/" target="_blank" rel="noopener">
+    <img src="img/lu-d.jpg" alt="Closet da Lu" width="1200" height="750" loading="lazy">
+    <h3 data-t="c2h">Closet da Lu</h3>
+    <p data-t="c2p">Uma montra própria para outra pessoa vender as peças dela dentro da loja: página, fotos, apresentação e envios para Portugal e Europa.</p>
+  </a>
+  <a class="card" href="/closet-brasil/" target="_blank" rel="noopener">
+    <img src="img/brasil-d.jpg" alt="Abra o seu closet, Brasil" width="1200" height="750" loading="lazy">
+    <h3 data-t="c3h">Abra o seu closet · Brasil</h3>
+    <p data-t="c3p">Página de vendas para clientes no Brasil, com preços em reais, pagamento por Pix e passo a passo para abrir uma montra.</p>
+  </a>
+</div></section>
+
+<section class="dark"><div class="wrap">
+  <p class="k" data-t="ik">Experiências interativas</p>
+  <h2 data-t="ih">Sites onde as pessoas <em>ficam</em></h2>
+  <p class="sub" data-t="ip">Um site que se usa e se partilha vende mais do que um catálogo parado. Estas experiências funcionam no telemóvel e trazem as pessoas de volta.</p>
+  <div class="phones">
+    <a href="/provador/" target="_blank" rel="noopener"><img src="img/provador-m.jpg" alt="" width="420" height="909" loading="lazy"><b data-t="i1">Provador com IA</b><span data-t="i1p">A cliente envia uma foto e vê a peça vestida</span></a>
+    <a href="/jogo-da-memoria/" target="_blank" rel="noopener"><img src="img/jogo-m.jpg" alt="" width="420" height="909" loading="lazy"><b>Le Jeu</b><span data-t="i2p">Jogo da memória que dá um cupão</span></a>
+    <a href="/estilo/" target="_blank" rel="noopener"><img src="img/estilo-m.jpg" alt="" width="420" height="909" loading="lazy"><b data-t="i3">Quiz de estilo</b><span data-t="i3p">5 perguntas e as peças certas para cada pessoa</span></a>
+    <a href="/monta-o-look/" target="_blank" rel="noopener"><img src="img/look-m.jpg" alt="" width="420" height="909" loading="lazy"><b data-t="i4">Monta o look</b><span data-t="i4p">Escolher peças e partilhar a capa nos stories</span></a>
+    <a href="/revista/" target="_blank" rel="noopener"><img src="img/revista-m.jpg" alt="" width="420" height="909" loading="lazy"><b>Bendito Edit</b><span data-t="i5p">Revista digital com looks e compras</span></a>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="k" data-t="pk">Projetos conceito</p>
+  <h2 data-t="ph">Ideias para <em>pequenos negócios</em></h2>
+  <p class="sub" data-t="pp">Sites de exemplo que criei para negócios inventados, para mostrar o que é possível em cada área. Abra-os no telemóvel: funcionam como sites reais.</p>
+  <span class="tag" data-t="tag">Negócios fictícios · projetos de demonstração</span>
+  <div class="grid4">
+    <a class="card" href="/lojas/exemplos/maison-amande/" target="_blank" rel="noopener"><img src="img/maison-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Maison Amande</h3><p data-t="p1">Pastelaria com encomendas de caixas de macarons</p></a>
+    <a class="card" href="/lojas/exemplos/atelier-mira/" target="_blank" rel="noopener"><img src="img/mira-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Atelier Mira</h3><p data-t="p2">Cabeleireiro com marcações online</p></a>
+    <a class="card" href="/lojas/exemplos/barro-linho/" target="_blank" rel="noopener"><img src="img/barro-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Barro &amp; Linho</h3><p data-t="p3">Loja de artesanato português com envios</p></a>
+    <a class="card" href="/lojas/exemplos/bigodes/" target="_blank" rel="noopener"><img src="img/bigodes-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Bigodes &amp; Companhia</h3><p data-t="p4">Loja de animais com banhos por marcação</p></a>
+    <a class="card" href="/lojas/exemplos/tasca/" target="_blank" rel="noopener"><img src="img/tasca-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Tasca da Ribeira</h3><p data-t="p5">Restaurante com pedidos para levantar e reservas</p></a>
+    <a class="card" href="/lojas/exemplos/forca/" target="_blank" rel="noopener"><img src="img/forca-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Força</h3><p data-t="p6">Personal trainer com planos e contacto direto</p></a>
+    <a class="card" href="/lojas/exemplos/app/" target="_blank" rel="noopener"><img src="img/app-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Mercado Vizinho</h3><p data-t="p7">Mercearia de bairro com app de encomendas</p></a>
+    <a class="card" href="/lojas/exemplos/jogo/" target="_blank" rel="noopener"><img src="img/pares-d.jpg" alt="" width="1200" height="750" loading="lazy"><h3>Pares do Porto</h3><p data-t="p8">Jogo de marca para campanhas e cupões</p></a>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <p class="k" data-t="sk">Serviços</p>
+  <h2 data-t="sh">O que posso fazer <em>pelo seu negócio</em></h2>
+  <ul class="serv">
+    <li><b data-t="s1">Lojas online</b><span data-t="s1p">Catálogo, saco de compras, pagamento online e avisos de cada venda</span></li>
+    <li><b data-t="s2">Sites de apresentação</b><span data-t="s2p">Para restaurantes, ateliers, serviços e profissionais liberais</span></li>
+    <li><b data-t="s3">Marcações e encomendas</b><span data-t="s3p">Pedidos pelo site ou pelo WhatsApp, sem comissões de plataformas</span></li>
+    <li><b data-t="s4">Páginas para anúncios</b><span data-t="s4p">Landing pages e formulários para campanhas no Instagram e no Facebook</span></li>
+    <li><b data-t="s5">Experiências interativas</b><span data-t="s5p">Quizzes, jogos, provador com IA e assistentes que respondem a clientes</span></li>
+    <li><b data-t="s6">Várias línguas e Google</b><span data-t="s6p">Tradução do site e preparação para aparecer nas pesquisas</span></li>
+  </ul>
+  <div class="steps">
+    <div><h3 data-t="st1">Conversa</h3><p data-t="st1p">Um café no Porto ou uma videochamada para perceber o que vende e para quem.</p></div>
+    <div><h3 data-t="st2">Proposta fechada</h3><p data-t="st2p">Preço fixo, o que está incluído e o prazo, por escrito e com contrato.</p></div>
+    <div><h3 data-t="st3">No ar em dias</h3><p data-t="st3p">Com os conteúdos prontos, o site fica online em poucos dias e eu ensino a gerir.</p></div>
+  </div>
+  <p style="margin-top:26px"><a class="more" href="/lojas/" data-t="pac">Ver pacotes e preços →</a></p>
+</div></section>
+
+<div class="cta"><div class="wrap">
+  <h2 data-t="ch">Vamos criar o <em>seu</em> site?</h2>
+  <p data-t="cp">Conte-me o que vende e eu respondo com uma proposta. Sem compromisso.</p>
+  <div class="btns">
+    <a class="b r" id="wa2" href="https://wa.me/351936796783" target="_blank" rel="noopener" data-t="wa">Pedir orçamento no WhatsApp</a>
+    <a class="b" href="mailto:ola@benditocloset.pt?subject=Or%C3%A7amento%20de%20site">ola@benditocloset.pt</a>
+  </div>
+</div></div>
+
+<footer><div class="wrap">
+  <span>© 2026 Marianna Werneck · Porto, Portugal</span>
+  <span><a href="https://benditocloset.pt/">benditocloset.pt</a> · <a href="https://www.instagram.com/benditocloset.pt/" target="_blank" rel="noopener">Instagram</a> · <a href="/privacidade/" data-t="priv">Privacidade</a></span>
+</div></footer>
+
+<script>
+const EN={k1:"Portfolio · Web design and online shops",h1:'Websites and online shops that sell, <em>made to measure in Porto.</em>',
+lead:"I'm Marianna Werneck. A journalist by training, I worked in fashion PR and today I work in tech. I build websites and online shops for small businesses: fast on mobile, with online payments, in several languages and ready to be found on Google.",
+wa:"Get a quote on WhatsApp",mail:"Send an email",f1:"languages in one shop",f2:"card, MB WAY, Apple Pay, Klarna",f3:"virtual fitting room and assistant",f4:"in platform fees",
+c1k:"Main case",c1h:'Bendito Closet <em>· my own shop</em>',c1p:"A pre-loved designer fashion shop that I designed and built on my own, from scratch. It sells to Portugal and Europe and showcases everything I do for my clients.",
+b1:"Shop in 6 languages: Portuguese, English, Spanish, French, German and Italian",b2:"Shopping bag and online payment by card, MB WAY, Apple Pay, Google Pay and Klarna",b3:"Password-free customer account with orders, returns and favourites",b4:"AI virtual fitting room: customers see the piece on themselves",b5:"Memory game, style quiz, \"build the look\" and a digital magazine",b6:"Item loan contract with digital signature on the phone",b7:"Installable phone app, without the app stores",b8:"Ready for Google, with a catalogue linked to Instagram Shopping",b9:"Instant sale alerts and a daily visits summary by email",ver:"Visit the site →",
+c2h:"Closet da Lu",c2p:"A dedicated showcase for another person to sell her pieces inside the shop: page, photos, introduction and shipping to Portugal and Europe.",c3h:"Open your closet · Brazil",c3p:"A sales page for clients in Brazil, with prices in reais, Pix payments and a step-by-step guide to open a showcase.",
+ik:"Interactive experiences",ih:'Websites where people <em>stay</em>',ip:"A website people use and share sells more than a static catalogue. These experiences work on mobile and bring people back.",
+i1:"AI fitting room",i1p:"Upload a photo and see the piece on you",i2p:"Memory game that unlocks a coupon",i3:"Style quiz",i3p:"5 questions and the right pieces for each person",i4:"Build the look",i4p:"Pick pieces and share the cover on stories",i5p:"Digital magazine with looks and shopping",
+pk:"Concept projects",ph:'Ideas for <em>small businesses</em>',pp:"Sample websites I created for made-up businesses, to show what's possible in each field. Open them on your phone: they work like real sites.",tag:"Fictional businesses · demo projects",
+p1:"Pâtisserie with macaron box orders",p2:"Hair studio with online booking",p3:"Portuguese crafts shop with shipping",p4:"Pet shop with grooming bookings",p5:"Restaurant with takeaway orders and reservations",p6:"Personal trainer with plans and direct contact",p7:"Neighbourhood grocer with an ordering app",p8:"Branded game for campaigns and coupons",
+sk:"Services",sh:'What I can do <em>for your business</em>',s1:"Online shops",s1p:"Catalogue, shopping bag, online payment and an alert for every sale",s2:"Showcase websites",s2p:"For restaurants, studios, services and freelancers",s3:"Bookings and orders",s3p:"Requests via the website or WhatsApp, with no platform commissions",s4:"Ad landing pages",s4p:"Landing pages and forms for Instagram and Facebook campaigns",s5:"Interactive experiences",s5p:"Quizzes, games, AI fitting room and assistants that answer customers",s6:"Languages and Google",s6p:"Website translation and search engine optimisation",
+st1:"A chat",st1p:"A coffee in Porto or a video call to understand what you sell and to whom.",st2:"Fixed proposal",st2p:"Fixed price, what's included and the timeline, in writing and with a contract.",st3:"Live in days",st3p:"With the content ready, the site goes live in a few days and I show you how to run it.",
+pac:"See packages and prices →",ch:'Shall we build <em>your</em> website?',cp:"Tell me what you sell and I'll reply with a proposal. No commitment.",priv:"Privacy"};
+const PT={};document.querySelectorAll("[data-t]").forEach(e=>PT[e.dataset.t]=e.innerHTML);
+const MSG={pt:"Olá Marianna! Vi o seu portfólio e gostava de um orçamento para um site.",en:"Hi Marianna! I saw your portfolio and I'd like a quote for a website."};
+function L(l){document.documentElement.lang=l==="en"?"en":"pt-PT";const D=l==="en"?EN:PT;document.querySelectorAll("[data-t]").forEach(e=>{if(D[e.dataset.t]!=null)e.innerHTML=D[e.dataset.t];});
+ document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===l));
+ ["wa","wa2"].forEach(id=>document.getElementById(id).href="https://wa.me/351936796783?text="+encodeURIComponent(MSG[l]));
+ try{localStorage.setItem("bc-pf-lang",l)}catch(e){}}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>L(b.dataset.l));
+let l0="pt";try{const q=new URLSearchParams(location.search).get("lang");l0=q==="en"?"en":(localStorage.getItem("bc-pf-lang")||((navigator.language||"pt").startsWith("pt")?"pt":"en"));}catch(e){}
+L(l0);
+</script>
+<script src="/cookies.js" defer></script>
+</body>
+</html>
