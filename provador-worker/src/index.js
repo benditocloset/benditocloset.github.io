@@ -177,10 +177,10 @@ async function resumoEncomenda(env, ses) {
   const reemb = ch ? (ch.amount_refunded >= ch.amount ? "total" : ch.amount_refunded > 0 ? "parcial" : "") : "";
   return {
     id: ses.id, ref: ses.id.slice(-8).toUpperCase(), data: new Date(ses.created * 1000).toISOString().slice(0, 10), criado: ses.created,
-    total: (ses.amount_total || 0) / 100, email: (ses.customer_details && ses.customer_details.email) || "", nome: (ses.customer_details && ses.customer_details.name) || "",
+    total: (ses.amount_total || 0) / 100, portes: ((ses.total_details && ses.total_details.amount_shipping) || 0) / 100, email: (ses.customer_details && ses.customer_details.email) || "", nome: (ses.customer_details && ses.customer_details.name) || "",
     pecas: (pi && pi.description || "").replace(/^Bendito Closet · /, ""), envio: (ses.metadata && ses.metadata.envio) || "",
     last4: ch && ch.payment_method_details && ch.payment_method_details.card ? ch.payment_method_details.card.last4 : "",
-    pi: pi ? pi.id : "", recibo: (ch && ch.receipt_url) || "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: reemb || estado.reembolso || ""
+    pi: pi ? pi.id : "", recibo: (ch && ch.receipt_url) || "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: estado.reembolso === "total" ? "total" : (reemb || estado.reembolso || "")
   };
 }
 async function encontrar(req, env, j) {
@@ -417,8 +417,11 @@ async function gestao(req, env, url) {
         if (acao === "nao_enviada") { delete est.enviada; msg = "Desmarcada."; }
         if (acao === "recusada") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
-          if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "devolvida pela transportadora (não entregue)" });
-          est.devolucao = "recusada"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €.";
+          const desc = Math.min(Math.max(+String(f.get("desconto") || "0").replace(",", ".") || 0, 0), r.total);
+          const valor = Math.round((r.total - desc) * 100);
+          if (r.reembolso !== "total" && valor > 0) await stp(env, "refunds", "POST", { payment_intent: r.pi, amount: String(valor), reason: "requested_by_customer", "metadata[motivo]": "devolvida pela transportadora (não entregue)", "metadata[portes_descontados_eur]": desc.toFixed(2) });
+          est.devolucao = "recusada"; est.reembolso = "total"; est.descontado = desc;
+          msg = "Reembolso feito: " + (valor / 100).toFixed(2) + " € (descontados " + desc.toFixed(2) + " € de portes).";
         }
         if (acao === "recebida") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
@@ -438,7 +441,7 @@ async function gestao(req, env, url) {
       if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
       const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
-      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada && r.devolucao !== "pedida" ? bt("recusada", "Devolvida pela transportadora → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
+      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada && r.devolucao !== "pedida" ? `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="recusada">Devolvida pela transportadora · descontar portes <input name="desconto" value="${r.portes.toFixed(2)}" inputmode="decimal" style="width:70px;padding:8px;border:1px solid #1C1517"> € <button>Reembolsar o resto</button></form>` : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
       const etqUrl = "/etiqueta?id=" + encodeURIComponent(r.id) + "&tok=" + await hmac(env, "enc:" + r.id);
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a><div class="a">${acoes}</div></div>`;
     }
