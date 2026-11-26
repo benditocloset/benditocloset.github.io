@@ -88,6 +88,21 @@ footer .logo{color:var(--ink);margin-bottom:8px}
 .op{display:flex;flex-wrap:wrap;gap:7px}.op label{border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:14px;cursor:pointer;background:var(--bg)}
 .op input{position:absolute;opacity:0;pointer-events:none}.op label:has(input:checked){background:var(--ink);color:#fff;border-color:var(--ink)}
 .q textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:12px;padding:12px;font:15px DM;background:var(--bg)}
+.modo{position:sticky;top:61px;z-index:19;display:flex;gap:6px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--line)}
+.modo button{flex:1;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 6px;font:600 13px DM;cursor:pointer;color:var(--ink);line-height:1.25}
+.modo button small{display:block;font-weight:400;font-size:11.5px;color:var(--mut)}
+.modo button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.modo button.on small{color:#ddd}
+.ben{margin:22px 0 4px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 16px 10px}
+.ben h3{font-family:Bodoni,serif;font-weight:500;font-size:22px;margin-bottom:8px}
+.ben ul{list-style:none;font-size:14.5px;line-height:1.5}.ben li{padding-left:24px;position:relative;margin-bottom:7px}
+.ben li:before{content:"✓";position:absolute;left:2px;color:var(--ac);font-weight:700}
+.ben li.x:before{content:"!";color:var(--gold)}
+.pay{display:none}.paying .pay{display:block}.paying .cart{display:none}
+.mt{display:flex;flex-direction:column;gap:8px;margin:10px 0 14px}
+.mt label{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:15px;cursor:pointer}
+.mt label:has(input:checked){border-color:var(--ink);background:var(--bg)}
+.mt small{color:var(--mut);display:block;font-size:12.5px}
+.ok{text-align:center;padding:10px 0}.ok div{font-size:46px}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none}
 .toast.on{opacity:1}
 </style>
@@ -98,6 +113,7 @@ footer .logo{color:var(--ink);margin-bottom:8px}
   <div class="logo">JM Catita<small>Vendas Novas · Moda</small></div>
   <button class="bag" onclick="abrir()">Saco<b id="n">0</b></button>
 </header>
+<div class="modo"><button id="mWA" onclick="modo('wa')">💬 Venda pelo WhatsApp<small>sem cartão</small></button><button id="mPG" onclick="modo('cartao')">💳 Pagamento no site<small>cartão, MB WAY, Klarna</small></button></div>
 <section class="hero">
   <div>
     <div class="eyebrow">🌻 Nova coleção de inverno</div>
@@ -114,6 +130,7 @@ footer .logo{color:var(--ink);margin-bottom:8px}
 <main>
   <h2 id="loja">Novidades</h2>
   <p class="sub">Escolha o tamanho, junte ao saco e envie o pedido. Respondo em minutos.</p>
+  <div class="ben" id="ben"></div>
   <div class="chips" id="chips"></div>
   <div class="grid" id="grid"></div>
 
@@ -212,23 +229,24 @@ footer .logo{color:var(--ink);margin-bottom:8px}
 </footer>
 <a class="wa" href="https://wa.me/351966814500?text=Ol%C3%A1%20JM%20Catita!" aria-label="WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.7c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.7 10.7 0 1 1 16 26.7zm5.9-8c-.3-.2-1.9-1-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5l-.7-.3z"/></svg></a>
 <div id="w"><div class="ov" onclick="fechar()"></div>
-<div class="drawer"><h2>O seu saco</h2><div id="lst"></div>
+<div class="drawer"><div class="cart"><h2>O seu saco</h2><div id="lst"></div>
 <div class="tot"><span>Total</span><span id="tot"></span></div>
 <p class="note" id="nota"></p>
-<button class="send" onclick="enviar()">Enviar pedido pelo WhatsApp</button></div></div>
+<button class="send" id="sendb" onclick="enviar()">Enviar pedido pelo WhatsApp</button></div>
+<div class="pay" id="pay"></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 const WA="351966814500";
 const P=[
  {id:"blusa-riscas",n:"Blusa de malha às riscas",c:"malhas",t:["M","L","XL","XXL"],p:21,tag:"Tamanho grande"},
  {id:"blusa-ombro",n:"Blusa ombro a ombro com debrum",c:"malhas",t:["S","M","L"],p:17,tag:"8 cores"},
- {id:"casaco-xadrez-capuz",n:"Casaco Siena xadrez com capuz",c:"casacos",t:["S","M","L","XL"],p:null,tag:"Novo"},
- {id:"calcas-bordadas",n:"Calças de ganga vintage bordadas",c:"calcas",t:["34","36","38","40","42"],p:null,tag:"Novo"},
- {id:"camisola-estrela",n:"Camisola de malha com estrela",c:"malhas",t:["S","M"],p:null},
- {id:"casaco-franjas",n:"Casaco de malha com franjas",c:"casacos",t:["S","M","L"],p:null},
- {id:"calcas-botoes",n:"Calças de ganga com botões",c:"calcas",t:["34","36","38","40","42"],p:null},
- {id:"casaco-xadrez",n:"Casaco de malha grossa com bolsos",c:"casacos",t:["S/M","L/XL"],p:null},
- {id:"calcas-camuflado",n:"Calças camuflado",c:"calcas",t:["Castanho","Camel","Bege"],p:null},
+ {id:"casaco-xadrez-capuz",n:"Casaco Siena xadrez com capuz",c:"casacos",t:["S","M","L","XL"],p:39.9,tag:"Novo"},
+ {id:"calcas-bordadas",n:"Calças de ganga vintage bordadas",c:"calcas",t:["34","36","38","40","42"],p:29.9,tag:"Novo"},
+ {id:"camisola-estrela",n:"Camisola de malha com estrela",c:"malhas",t:["S","M"],p:22},
+ {id:"casaco-franjas",n:"Casaco de malha com franjas",c:"casacos",t:["S","M","L"],p:34.9,tag:"Últimas unidades"},
+ {id:"calcas-botoes",n:"Calças de ganga com botões",c:"calcas",t:["34","36","38","40","42"],p:29.9},
+ {id:"casaco-xadrez",n:"Casaco de malha grossa com bolsos",c:"casacos",t:["S/M","L/XL"],p:32},
+ {id:"calcas-camuflado",n:"Calças camuflado",c:"calcas",t:["Castanho","Camel","Bege"],p:24.9},
  {id:"perfume-lara",n:"Perfume Lara White · 100 ml",c:"beleza",t:["100 ml"],p:20,tag:"Entrega imediata"},
  {id:"champo",n:"Champô Pinky Bombs · 520 g",c:"beleza",t:["520 g"],p:6,tag:"Entrega imediata"}
 ];
@@ -244,18 +262,47 @@ function upd(){document.getElementById("n").textContent=saco.length;
  document.getElementById("lst").innerHTML=saco.length?saco.map((s,i)=>{const p=P.find(x=>x.id==s.id);return `<div class="li"><img src="${p.id}.jpg" alt=""><div>${p.n}<br><small>${s.t} · ${p.p?eur(p.p):"preço a confirmar"}</small></div><button onclick="saco.splice(${i},1);upd()" aria-label="Tirar">×</button></div>`}).join(""):'<p class="sub">O saco está vazio.</p>';
  const tot=saco.reduce((a,s)=>a+(P.find(x=>x.id==s.id).p||0),0),falta=saco.some(s=>!P.find(x=>x.id==s.id).p);
  document.getElementById("tot").textContent=eur(tot)+(falta?" +":"");
- document.getElementById("nota").textContent=falta?"Algumas peças têm o preço confirmado por mensagem.":"Portes e forma de pagamento combinados no WhatsApp."}
+ document.getElementById("nota").textContent=falta?"Algumas peças têm o preço confirmado por mensagem.":(M=="cartao"?"Paga já no passo seguinte, com cartão, MB WAY, Multibanco ou Klarna.":"Portes e forma de pagamento combinados no WhatsApp.")}
 function abrir(){upd();document.getElementById("w").className="open"}
 function fechar(){document.getElementById("w").className=""}
 function enviar(){if(!saco.length){toast("O saco está vazio");return}
+ if(M=="cartao"){pagar();return}
  const l=saco.map(s=>{const p=P.find(x=>x.id==s.id);return "• "+p.n+" ("+s.t+")"+(p.p?" "+eur(p.p):" — preço?")}).join("\n");
  location.href="https://wa.me/"+WA+"?text="+encodeURIComponent("Olá JM Catita! Gostava de encomendar:\n"+l+"\n\nTotal: "+document.getElementById("tot").textContent)}
+let M=new URLSearchParams(location.search).get("modo")=="cartao"?"cartao":"wa";
+const BEN={wa:`<h3>Venda pelo WhatsApp</h3><ul>
+<li>A cliente escolhe as peças e o pedido chega ao seu WhatsApp já escrito, com tamanhos e total.</li>
+<li>Continua a receber por MB WAY ou transferência, como já faz.</li>
+<li>Fala com a cliente, tira dúvidas e manda mais fotos: a conversa ajuda a vender.</li>
+<li>Não precisa de atividade aberta para começar e não paga comissão por venda.</li>
+<li class="x">Quando vende uma peça, é preciso marcá-la como vendida no site (num painel simples no telemóvel, ou com a manutenção mensal).</li></ul>`,
+cartao:`<h3>Pagamento no site</h3><ul>
+<li>A cliente paga na hora com cartão, MB WAY, Multibanco ou Apple Pay, mesmo de madrugada.</li>
+<li>Com a Klarna, a cliente divide em 3 vezes sem juros e a Milena recebe o valor todo.</li>
+<li>O stock atualiza-se sozinho: quando a cliente paga, o tamanho vendido sai do site.</li>
+<li>Recebe um e-mail com cada encomenda, já paga, com a morada para enviar.</li>
+<li class="x">Precisa de atividade aberta nas Finanças. Cada pagamento tem uma pequena comissão (cerca de 1,5% + 0,25 € no cartão).</li></ul>`};
+function modo(m){M=m;document.getElementById("mWA").className=m=="wa"?"on":"";document.getElementById("mPG").className=m=="cartao"?"on":"";
+ document.getElementById("ben").innerHTML=BEN[m];document.getElementById("sendb").textContent=m=="wa"?"Enviar pedido pelo WhatsApp":"Pagar agora";
+ document.getElementById("sendb").style.background=m=="wa"?"#25D366":"var(--ac)";upd()}
+function pagar(){const tot=saco.reduce((a,s)=>a+P.find(x=>x.id==s.id).p,0);
+ document.getElementById("pay").innerHTML=`<h2>Pagamento</h2><p class="sub" style="margin:0">Total ${eur(tot)} · envio grátis acima de 50 €</p>
+ <div class="mt"><label><input type="radio" name="mp" checked> <span>💳 Cartão<small>Visa, Mastercard</small></span></label>
+ <label><input type="radio" name="mp"> <span>📱 MB WAY<small>Confirma na app, em segundos</small></span></label>
+ <label><input type="radio" name="mp"> <span>🏧 Multibanco<small>Referência para pagar no multibanco</small></span></label>
+ <label><input type="radio" name="mp"> <span>🛍️ Klarna · 3 x ${eur(tot/3)}<small>Sem juros, sujeito a aprovação da Klarna</small></span></label></div>
+ <button class="send" style="background:var(--ac)" onclick="pago()">Pagar ${eur(tot)}</button>
+ <p class="note" style="text-align:center;margin-top:10px">Simulação: nenhum pagamento é feito.</p>`;
+ document.getElementById("w").className="open paying"}
+function pago(){saco=[];upd();document.getElementById("pay").innerHTML=`<div class="ok"><div>🎉</div><h2>Pagamento confirmado!</h2>
+ <p class="sub">A cliente recebe a confirmação por e-mail, as peças saem do stock sozinhas e a Milena recebe a encomenda com a morada para enviar.</p>
+ <button class="send" style="background:var(--ink)" onclick="fechar()">Continuar a ver a loja</button></div>`}
 function respostas(){const f=new FormData(document.getElementById("q")),o={};
  for(const [k,v] of f.entries()){if(!v)continue;o[k]=o[k]?o[k]+", "+v:v}
  const l=Object.entries(o).map(([k,v])=>"• "+k+": "+v).join("\n");
  if(!l){toast("Responda a pelo menos uma pergunta");return}
  location.href="https://wa.me/351936796783?text="+encodeURIComponent("Olá Marianna! Respostas da JM Catita:\n"+l)}
-chips();grid();upd();
+chips();grid();modo(M);
 </script>
 </body>
 </html>
