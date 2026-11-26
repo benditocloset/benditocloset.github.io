@@ -13,7 +13,7 @@
       ['As peças são originais?', 'Sim. São peças originais, do meu armário e de closets que eu escolho. Na descrição de cada peça indicamos o estado e qualquer defeito.'],
       ['Como sei o tamanho certo?', 'O tamanho está na descrição de cada peça. Se quiser medidas exatas, pergunte-me no WhatsApp: envio fotos com a fita métrica.'],
       ['A peça ainda está disponível?', 'Se tem o botão “Comprar”, está disponível. Cada peça é única: quando é vendida, aparece como “Vendido”.'],
-      ['Posso devolver?', 'Sim, até 14 dias depois de receber. Avise-nos primeiro pelo WhatsApp. A peça tem de voltar no mesmo estado. Os portes da devolução ficam a cargo da cliente e devolvemos o valor pago assim que recebermos a peça.'],
+      ['Posso devolver?', 'Sim, até 14 dias depois de receber. Peça a devolução em <a href="/encomenda/">A minha encomenda</a> (se ainda não foi enviada, pode cancelar lá e o reembolso é imediato). A peça tem de voltar no mesmo estado. Os portes da devolução ficam a cargo da cliente e devolvemos o valor pago assim que recebermos a peça.'],
       ['Há algum desconto?', 'Inscreva-se com o seu email no site e ganhe <b>10% na primeira compra</b>. Na Black Friday (27 a 29 de novembro) há −15% em tudo, e os 10% acumulam.'],
       ['Quero vender as minhas peças aqui', 'Abrimos o seu closet no nosso site: escolhemos até 5 peças consigo, criamos fotos profissionais e publicamos no site e no Instagram. Veja em <a href="/#venda-connosco">“Abra o seu closet”</a>.']
     ]},
@@ -28,7 +28,7 @@
       ['Are the pieces authentic?', 'Yes. They are original pieces from my wardrobe and from closets I select. Each description states the condition and any flaws.'],
       ['How do I know my size?', 'The size is in each description. For exact measurements, ask me on WhatsApp and I will send photos with a tape measure.'],
       ['Is the piece still available?', 'If it has the “Buy now” button, it is available. Every piece is one of a kind: once sold, it shows as “Sold”.'],
-      ['Can I return it?', 'Yes, up to 14 days after delivery. Let us know first on WhatsApp. The piece must come back in the same condition. Return shipping is paid by the customer and we refund the amount paid as soon as we receive it.'],
+      ['Can I return it?', 'Yes, up to 14 days after delivery. Request it at <a href="/encomenda/">My order</a> (if it has not shipped yet, you can cancel there for an immediate refund). The piece must come back in the same condition. Return shipping is paid by the customer and we refund the amount paid as soon as we receive it.'],
       ['Is there a discount?', 'Sign up with your email on the site and get <b>10% off your first purchase</b>. On Black Friday (27–29 November) everything is −15%, and the 10% stacks.'],
       ['I want to sell my pieces here', 'We open your closet on our site: we pick up to 5 pieces with you, create professional photos and publish them on the site and Instagram. See <a href="/#venda-connosco">“Open your closet”</a>.']
     ]},
@@ -43,7 +43,7 @@
       ['¿Las prendas son originales?', 'Sí. Son prendas originales, de mi armario y de closets que selecciono. En cada descripción indicamos el estado y cualquier defecto.'],
       ['¿Cómo sé mi talla?', 'La talla está en cada descripción. Para medidas exactas, pregúntame por WhatsApp y te envío fotos con cinta métrica.'],
       ['¿La prenda sigue disponible?', 'Si tiene el botón “Comprar”, está disponible. Cada prenda es única: cuando se vende, aparece como “Vendido”.'],
-      ['¿Puedo devolverla?', 'Sí, hasta 14 días después de recibirla. Avísanos antes por WhatsApp. La prenda debe volver en el mismo estado. El envío de la devolución corre a cargo de la clienta y devolvemos el importe pagado en cuanto la recibimos.'],
+      ['¿Puedo devolverla?', 'Sí, hasta 14 días después de recibirla. Pídela en <a href="/encomenda/">Mi pedido</a> (si aún no se ha enviado, puedes cancelarlo allí con reembolso inmediato). La prenda debe volver en el mismo estado. El envío de la devolución corre a cargo de la clienta y devolvemos el importe pagado en cuanto la recibimos.'],
       ['¿Hay algún descuento?', 'Suscríbete con tu email en la web y consigue <b>un 10% en tu primera compra</b>. En Black Friday (27–29 de noviembre) hay −15% en todo, y el 10% se suma.'],
       ['Quiero vender mis prendas aquí', 'Abrimos tu closet en nuestra web: elegimos contigo hasta 5 prendas, hacemos fotos profesionales y las publicamos en la web y en Instagram. Mira <a href="/#venda-connosco">“Abre tu closet”</a>.']
     ]},
@@ -58,7 +58,7 @@
       ['Les pièces sont-elles authentiques ?', 'Oui. Ce sont des pièces originales, de ma garde-robe et de closets que je sélectionne. Chaque description indique l\'état et les éventuels défauts.'],
       ['Comment connaître ma taille ?', 'La taille figure dans chaque description. Pour des mesures exactes, demandez-moi sur WhatsApp : j\'envoie des photos avec un mètre ruban.'],
       ['La pièce est-elle encore disponible ?', 'Si elle a le bouton « Acheter », elle est disponible. Chaque pièce est unique : une fois vendue, elle apparaît comme « Vendu ».'],
-      ['Puis-je la retourner ?', 'Oui, jusqu\'à 14 jours après réception. Prévenez-nous d\'abord sur WhatsApp. La pièce doit revenir dans le même état. Les frais de retour sont à la charge de la cliente et nous remboursons le montant payé dès réception.'],
+      ['Puis-je la retourner ?', 'Oui, jusqu\'à 14 jours après réception. Demandez-le sur <a href="/encomenda/">Ma commande</a> (si elle n\'est pas encore expédiée, vous pouvez l\'annuler avec remboursement immédiat). La pièce doit revenir dans le même état. Les frais de retour sont à la charge de la cliente et nous remboursons le montant payé dès réception.'],
       ['Y a-t-il une réduction ?', 'Inscrivez-vous avec votre email sur le site et obtenez <b>10 % sur votre premier achat</b>. Pendant le Black Friday (27–29 novembre), tout est à −15 %, et les 10 % se cumulent.'],
       ['Je veux vendre mes pièces ici', 'Nous ouvrons votre closet sur notre site : nous choisissons avec vous jusqu\'à 5 pièces, faisons des photos professionnelles et les publions sur le site et Instagram. Voir <a href="/#venda-connosco">« Ouvrez votre closet »</a>.']
     ]},
@@ -73,7 +73,7 @@
       ['Sind die Teile echt?', 'Ja. Es sind Originalteile aus meinem Kleiderschrank und aus Closets, die ich auswähle. Jede Beschreibung nennt den Zustand und eventuelle Mängel.'],
       ['Wie finde ich meine Größe?', 'Die Größe steht in jeder Beschreibung. Für genaue Maße frag mich auf WhatsApp: Ich schicke Fotos mit Maßband.'],
       ['Ist das Teil noch verfügbar?', 'Wenn es den Button „Kaufen“ hat, ist es verfügbar. Jedes Teil ist ein Unikat: Nach dem Verkauf steht es als „Verkauft“.'],
-      ['Kann ich zurückgeben?', 'Ja, bis 14 Tage nach Erhalt. Sag uns zuerst auf WhatsApp Bescheid. Das Teil muss im gleichen Zustand zurückkommen. Die Rücksendekosten trägt die Kundin, und wir erstatten den gezahlten Betrag nach Erhalt.'],
+      ['Kann ich zurückgeben?', 'Ja, bis 14 Tage nach Erhalt. Beantrage sie unter <a href="/encomenda/">Meine Bestellung</a> (noch nicht versandt? Dort stornieren, sofortige Erstattung). Das Teil muss im gleichen Zustand zurückkommen. Die Rücksendekosten trägt die Kundin, und wir erstatten den gezahlten Betrag nach Erhalt.'],
       ['Gibt es einen Rabatt?', 'Melde dich mit deiner E-Mail auf der Website an und erhalte <b>10 % auf deinen ersten Einkauf</b>. Am Black Friday (27.–29. November) gibt es −15 % auf alles, und die 10 % kommen dazu.'],
       ['Ich möchte meine Teile hier verkaufen', 'Wir eröffnen dein Closet auf unserer Website: Wir wählen mit dir bis zu 5 Teile aus, machen Profifotos und veröffentlichen sie auf der Website und auf Instagram. Siehe <a href="/#venda-connosco">„Dein Closet“</a>.']
     ]},
@@ -88,7 +88,7 @@
       ['I capi sono originali?', 'Sì. Sono capi originali, dal mio armadio e da closet che seleziono. Ogni descrizione indica lo stato e gli eventuali difetti.'],
       ['Come scelgo la taglia?', 'La taglia è in ogni descrizione. Per misure esatte chiedimi su WhatsApp: invio foto con il metro.'],
       ['Il capo è ancora disponibile?', 'Se ha il pulsante “Acquista”, è disponibile. Ogni capo è unico: una volta venduto, appare come “Venduto”.'],
-      ['Posso restituirlo?', 'Sì, entro 14 giorni dalla consegna. Avvisaci prima su WhatsApp. Il capo deve tornare nelle stesse condizioni. La spedizione del reso è a carico della cliente e rimborsiamo l\'importo pagato appena lo riceviamo.'],
+      ['Posso restituirlo?', 'Sì, entro 14 giorni dalla consegna. Richiedilo in <a href="/encomenda/">Il mio ordine</a> (se non è ancora spedito, puoi annullarlo lì con rimborso immediato). Il capo deve tornare nelle stesse condizioni. La spedizione del reso è a carico della cliente e rimborsiamo l\'importo pagato appena lo riceviamo.'],
       ['C\'è uno sconto?', 'Iscriviti con la tua email sul sito e ottieni <b>il 10% sul primo acquisto</b>. Al Black Friday (27–29 novembre) tutto è −15%, e il 10% si somma.'],
       ['Voglio vendere i miei capi qui', 'Apriamo il tuo closet sul nostro sito: scegliamo con te fino a 5 capi, facciamo foto professionali e li pubblichiamo sul sito e su Instagram. Vedi <a href="/#venda-connosco">“Apri il tuo closet”</a>.']
     ]}
@@ -132,23 +132,23 @@
   }
   window.bcAjuda = chatOpen;
   function L() { var l = (document.documentElement.lang || 'pt').slice(0, 2); return D[l] ? l : 'pt'; }
-  var css = '#faqbtn{position:fixed;right:14px;bottom:14px;z-index:40;display:flex;align-items:center;gap:7px;background:#c9a36a;color:#141012;border:0;border-radius:999px;padding:11px 16px;font:700 14px Montserrat,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}' +
+  var css = '#faqbtn{position:fixed;right:14px;bottom:14px;z-index:40;display:flex;align-items:center;gap:7px;background:#FAF6F0;color:#1C1517;border:1px solid #1C1517;border-radius:999px;padding:11px 16px;font:700 14px Jost,Montserrat,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}' +
     '#faqbtn svg{width:18px;height:18px}' +
-    '#faqbox{position:fixed;right:14px;bottom:70px;z-index:41;width:min(360px,calc(100vw - 28px));max-height:min(560px,calc(100vh - 100px));overflow:auto;background:#141012;color:#f4ece4;border:1px solid #c9a36a;border-radius:16px;padding:16px;font:14px/1.5 Montserrat,system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.55);display:none}' +
-    '#faqbox.open{display:block}#faqbox h3{margin:0 24px 4px 0;font:600 20px "Cormorant Garamond",Georgia,serif;color:#fff}#faqbox p.s{margin:0 0 10px;color:#b8ab97;font-size:13px}' +
-    '#faqbox .q{display:block;width:100%;text-align:left;background:none;border:1px solid #3a2f2a;color:#f4ece4;border-radius:10px;padding:9px 12px;margin:0 0 7px;font:inherit;cursor:pointer}#faqbox .q:hover{border-color:#c9a36a}' +
-    '#faqbox .a{background:#1e1719;border-radius:10px;padding:12px;margin:8px 0}#faqbox .a a{color:#c9a36a}#faqbox .bk{background:none;border:0;color:#c9a36a;font:inherit;cursor:pointer;padding:0}' +
-    '#faqbox .wa{display:block;text-align:center;margin-top:10px;background:#25d366;color:#0b2414;border-radius:10px;padding:10px;font-weight:700;text-decoration:none}' +
-    '#faqbox .xx{position:absolute;top:10px;right:12px;background:none;border:0;color:#b8ab97;font-size:20px;cursor:pointer}' +
-    '#faqbox .cf{display:flex;gap:6px;margin:8px 0}#faqbox .ci{flex:1;min-width:0;background:#1e1719;border:1px solid #3a2f2a;color:#fff;border-radius:10px;padding:10px;font:inherit;font-size:16px}#faqbox .cf button{background:#c9a36a;color:#141012;border:0;border-radius:10px;padding:0 14px;font:700 14px inherit;cursor:pointer}' +
-    '#faqbox .cl{max-height:300px;overflow:auto}#faqbox .m{border-radius:12px;padding:9px 12px;margin:6px 0;max-width:88%;white-space:pre-wrap}#faqbox .m.b{background:#1e1719}#faqbox .m.u{background:#c9a36a;color:#141012;margin-left:auto}#faqbox .m.t{opacity:.6}';
+    '#faqbox{position:fixed;right:14px;bottom:70px;z-index:41;width:min(360px,calc(100vw - 28px));max-height:min(560px,calc(100vh - 100px));overflow:auto;background:#FAF6F0;color:#1C1517;border:1px solid #1C1517;border-radius:0;padding:16px;font:14px/1.5 Jost,Montserrat,system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.55);display:none}' +
+    '#faqbox.open{display:block}#faqbox h3{margin:0 24px 4px 0;font:400 22px "Bodoni Moda",Didot,Georgia,serif;color:#1C1517}#faqbox p.s{margin:0 0 10px;color:#6F625C;font-size:13px}' +
+    '#faqbox .q{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #E2D8CC;color:#1C1517;border-radius:0;padding:9px 12px;margin:0 0 7px;font:inherit;cursor:pointer}#faqbox .q:hover{border-color:#c9a36a}' +
+    '#faqbox .a{background:#fff;border:1px solid #E2D8CC;border-radius:0;padding:12px;margin:8px 0}#faqbox .a a{color:#1C1517;text-decoration:underline}#faqbox .bk{background:none;border:0;color:#9C6B22;font:inherit;cursor:pointer;padding:0}' +
+    '#faqbox .wa{display:block;text-align:center;margin-top:10px;background:#1C1517;color:#FAF6F0;border-radius:0;padding:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:11.5px;text-decoration:none}' +
+    '#faqbox .xx{position:absolute;top:10px;right:12px;background:none;border:0;color:#6F625C;font-size:20px;cursor:pointer}' +
+    '#faqbox .cf{display:flex;gap:6px;margin:8px 0}#faqbox .ci{flex:1;min-width:0;background:#fff;border:1px solid #1C1517;color:#1C1517;border-radius:0;padding:10px;font:inherit;font-size:16px}#faqbox .cf button{background:#c9a36a;color:#141012;border:0;border-radius:10px;padding:0 14px;font:700 14px inherit;cursor:pointer}' +
+    '#faqbox .cl{max-height:300px;overflow:auto}#faqbox .m{border-radius:12px;padding:9px 12px;margin:6px 0;max-width:88%;white-space:pre-wrap}#faqbox .m.b{background:#fff;border:1px solid #E2D8CC}#faqbox .m.u{background:#1C1517;color:#FAF6F0;margin-left:auto}#faqbox .m.t{opacity:.6}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
   var btn = document.createElement('button'); btn.id = 'faqbtn'; btn.type = 'button';
   var box = document.createElement('div'); box.id = 'faqbox'; box.setAttribute('role', 'dialog');
   function wa(d) { return '<a class="wa" href="https://wa.me/' + WA + '?text=' + encodeURIComponent(d.waMsg) + '" target="_blank" rel="noopener">' + d.wa + '</a>'; }
   function lista() { var d = D[L()]; var c = CT[L()]; CHAT = { peca: '', nome: '', hist: [] }; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><h3>' + d.t + '</h3><div class="cl"></div>' + chatForm(c) + '<p class="s">' + c.or + '</p>' +
       d.q.map(function (x, i) { return '<button class="q" type="button" data-i="' + i + '">' + x[0] + '</button>'; }).join('') + wa(d); }
-  function resp(i) { var d = D[L()], x = d.q[i]; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><button class="bk" type="button">' + d.back + '</button><h3 style="margin-top:8px">' + x[0] + '</h3><div class="a">' + x[1] + '</div>' + wa(d); box.scrollTop = 0; }
+  function resp(i) { var d = D[L()], x = d.q[i]; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><button class="bk" type="button">' + d.back + '</button><h3 style="margin-top:8px">' + x[0] + '</h3><div class="a">' + x[1] + '</div>' + (x[1].indexOf('/encomenda/') > -1 ? '<a class="wa" href="/encomenda/">' + ({pt:'Cancelar ou devolver uma encomenda',en:'Cancel or return an order',es:'Cancelar o devolver un pedido',fr:'Annuler ou retourner une commande',de:'Bestellung stornieren oder zurücksenden',it:'Annulla o restituisci un ordine'}[L()] || 'Cancelar ou devolver uma encomenda') + '</a>' : wa(d)); box.scrollTop = 0; }
   function label() { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>' + D[L()].btn; }
   btn.addEventListener('click', function () { if (box.classList.toggle('open')) lista(); });
   box.addEventListener('submit', function (e) { if (!e.target.closest('.cf')) return; e.preventDefault(); var i = box.querySelector('.ci'), q = (i.value || '').trim(); if (q.length < 2) return; i.value = ''; if (!box.querySelector('.cl .m')) { var h = box.querySelector('h3'); box.querySelectorAll('.q,p.s,.wa').forEach(function (x) { x.remove(); }); } chatSend(q); });

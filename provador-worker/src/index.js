@@ -153,6 +153,118 @@ async function comprar(req, env, j) {
   return j({ url: o.url, subtotal: sub, portes });
 }
 
+// ===== Encomendas: a cliente cancela ou pede devolução no site (sem WhatsApp) =====
+// Precisa de a chave restrita STRIPE_KEY ter também: Checkout Sessions (leitura), PaymentIntents (leitura), Charges (leitura), Refunds (escrita).
+// Regras (decisão da Marianna, 26/11/2026): cancelar antes de a peça ser enviada → reembolso automático na hora.
+// Devolver depois de receber → pedido registado; o reembolso sai quando a Marianna marca "Peça recebida" na página de gestão.
+const DIAS_DEV = 30; // limite para pedir devolução, contado da compra (14 dias depois de receber + envio)
+async function stp(env, path, method = "GET", params = null) {
+  const r = await fetch("https://api.stripe.com/v1/" + path, { method, headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body: params ? new URLSearchParams(params).toString() : undefined });
+  const o = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error((o.error && o.error.message) || ("stripe " + r.status));
+  return o;
+}
+async function hmac(env, msg) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(String(env.OWNER_TOKEN || "bc")), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const s = new Uint8Array(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(msg)));
+  return [...s].slice(0, 16).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+async function resumoEncomenda(env, ses) {
+  const pi = typeof ses.payment_intent === "object" ? ses.payment_intent : (ses.payment_intent ? await stp(env, "payment_intents/" + ses.payment_intent + "?expand[]=latest_charge") : null);
+  const ch = pi && typeof pi.latest_charge === "object" ? pi.latest_charge : null;
+  const estado = JSON.parse((await env.LIMITS.get("enc:" + ses.id)) || "{}");
+  const reemb = ch ? (ch.amount_refunded >= ch.amount ? "total" : ch.amount_refunded > 0 ? "parcial" : "") : "";
+  return {
+    id: ses.id, ref: ses.id.slice(-8).toUpperCase(), data: new Date(ses.created * 1000).toISOString().slice(0, 10), criado: ses.created,
+    total: (ses.amount_total || 0) / 100, email: (ses.customer_details && ses.customer_details.email) || "", nome: (ses.customer_details && ses.customer_details.name) || "",
+    pecas: (pi && pi.description || "").replace(/^Bendito Closet · /, ""), envio: (ses.metadata && ses.metadata.envio) || "",
+    last4: ch && ch.payment_method_details && ch.payment_method_details.card ? ch.payment_method_details.card.last4 : "",
+    pi: pi ? pi.id : "", enviada: !!estado.enviada, devolucao: estado.devolucao || "", reembolso: reemb || estado.reembolso || ""
+  };
+}
+async function encontrar(req, env, j) {
+  if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `enc:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 15) return j({ error: "limite" }, 429);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  try {
+    let lista = [];
+    if (b.s && /^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(String(b.s))) {
+      const ses = await stp(env, "checkout/sessions/" + b.s);
+      if (ses.payment_status === "paid") lista = [await resumoEncomenda(env, ses)];
+    } else {
+      const email = String(b.email || "").trim().toLowerCase(), l4 = String(b.last4 || "").replace(/\D/g, "");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || l4.length !== 4) return j({ error: "dados" }, 400);
+      const o = await stp(env, "checkout/sessions?limit=20&customer_details[email]=" + encodeURIComponent(email));
+      for (const ses of (o.data || [])) {
+        if (ses.payment_status !== "paid" || Date.now() / 1000 - ses.created > DIAS_DEV * 86400 || !(ses.metadata && ses.metadata.pecas)) continue;
+        const r = await resumoEncomenda(env, ses);
+        if (r.last4 === l4) lista.push(r);
+      }
+    }
+    for (const r of lista) { r.tok = await hmac(env, "enc:" + r.id); delete r.pi; delete r.last4; }
+    return j({ encomendas: lista });
+  } catch (e) { return j({ error: "stripe", detail: String(e.message || e) }, 502); }
+}
+async function acaoCliente(req, env, j) {
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const id = String(b.id || ""), acao = String(b.acao || "");
+  if (!/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id) || b.tok !== await hmac(env, "enc:" + id) || !["cancelar", "devolver"].includes(acao)) return j({ error: "dados" }, 400);
+  try {
+    const ses = await stp(env, "checkout/sessions/" + id);
+    const r = await resumoEncomenda(env, ses), est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
+    if (r.reembolso === "total") return j({ ok: true, estado: "ja_reembolsada", encomenda: r });
+    if (acao === "cancelar") {
+      if (r.enviada) return j({ error: "ja_enviada" }, 409);
+      await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "cancelada pela cliente no site" });
+      est.reembolso = "total"; est.cancelada = new Date().toISOString();
+      await env.LIMITS.put("enc:" + id, JSON.stringify(est));
+      return j({ ok: true, estado: "cancelada", encomenda: { ...r, pi: undefined, last4: undefined, reembolso: "total" } });
+    }
+    if (Date.now() / 1000 - r.criado > DIAS_DEV * 86400) return j({ error: "prazo" }, 409);
+    est.devolucao = "pedida"; est.motivo = String(b.motivo || "").slice(0, 500); est.pedida = new Date().toISOString();
+    await env.LIMITS.put("enc:" + id, JSON.stringify(est));
+    return j({ ok: true, estado: "devolucao_pedida", encomenda: { ...r, pi: undefined, last4: undefined, devolucao: "pedida" } });
+  } catch (e) { return j({ error: "stripe", detail: String(e.message || e) }, 502); }
+}
+// Página de gestão da Marianna (link privado com o token de dona)
+async function gestao(req, env, url) {
+  const t = url.searchParams.get("t") || "";
+  if (!env.OWNER_TOKEN || t !== env.OWNER_TOKEN) return new Response("Sem acesso", { status: 403 });
+  let msg = "";
+  if (req.method === "POST") {
+    const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
+    if (/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) {
+      const est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
+      try {
+        if (acao === "enviada") { est.enviada = new Date().toISOString(); msg = "Marcada como enviada."; }
+        if (acao === "nao_enviada") { delete est.enviada; msg = "Desmarcada."; }
+        if (acao === "recebida") {
+          const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
+          if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "devolução recebida" });
+          est.devolucao = "recebida"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €.";
+        }
+        await env.LIMITS.put("enc:" + id, JSON.stringify(est));
+      } catch (e) { msg = "Erro: " + esc(e.message || e); }
+    }
+  }
+  let rows = "";
+  try {
+    const o = await stp(env, "checkout/sessions?limit=40&expand[]=data.payment_intent.latest_charge");
+    for (const ses of (o.data || [])) {
+      if (ses.payment_status !== "paid" || !(ses.metadata && ses.metadata.pecas) || Date.now() / 1000 - ses.created > 60 * 86400) continue;
+      const r = await resumoEncomenda(env, ses);
+      const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
+      const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
+      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : bt("enviada", "Marcar como enviada"));
+      rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)}<div class="a">${acoes}</div></div>`;
+    }
+  } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
+  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+}
+function est_motivo(r) { return ""; }
+
 // Contrato assinado: guarda os dados e a assinatura (KV) e mostra-os numa página com o texto do contrato desse dia.
 const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 async function guardarContrato(req, env, j) {
@@ -235,6 +347,9 @@ export default {
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
     if (url.pathname === "/ajuda" && req.method === "POST") return ajuda(req, env, j);
+    if (url.pathname === "/encomenda/procurar" && req.method === "POST") return encontrar(req, env, j);
+    if (url.pathname === "/encomenda/acao" && req.method === "POST") return acaoCliente(req, env, j);
+    if (url.pathname === "/gestao") return gestao(req, env, url);
     const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
     if (mc && req.method === "GET") return verContrato(mc[1], env);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);

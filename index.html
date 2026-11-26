@@ -458,7 +458,7 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
       <a class="go" href="#grid" data-i18n="heroB">Ver as peças</a>
     </div>
   </section>
-  <p class="servico"><span data-i18n="sv1">Envio CTT · Correos Express</span><br><b data-i18n="sv2">Portes grátis acima de 100 € em Portugal</b><br><span data-i18n="sv3">Cartão · MB WAY · Klarna</span></p>
+  <p class="servico" onclick="location.href='#como-comprar'" style="cursor:pointer"><span data-i18n="sv1">Envio CTT · Correos Express</span><br><b data-i18n="sv2">Portes grátis acima de 100 € em Portugal</b><br><span data-i18n="sv3">Cartão · MB WAY · Klarna</span></p>
 
   <section class="rot" id="pagamentos" aria-roledescription="carousel" aria-label="Destaques">
     <a class="sl on" href="#grid" style="--img:url(img/banner-pagar.jpg)">
@@ -511,7 +511,7 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
   </script>
 
 
-  <div class="trust"><span><b aria-hidden="true">📸</b><i data-i18n="tr1">Fotos reais de cada peça</i></span><span><b aria-hidden="true">↩︎</b><i data-i18n="tr2">Devolução em 14 dias</i></span><span><b aria-hidden="true">🔒</b><i data-i18n="tr3">Pagamento seguro</i></span></div>
+  <div class="trust"><span onclick="location.href='#grid'" style="cursor:pointer"><b aria-hidden="true">📸</b><i data-i18n="tr1">Fotos reais de cada peça</i></span><span onclick="location.href='/encomenda/'" style="cursor:pointer"><b aria-hidden="true">↩︎</b><i data-i18n="tr2">Devolução em 14 dias</i></span><span onclick="location.href='#como-comprar'" style="cursor:pointer"><b aria-hidden="true">🔒</b><i data-i18n="tr3">Pagamento seguro</i></span></div>
   <div class="minis"><a class="mi ia" href="/provador/" data-i18n="ia1">Novo · Provador com IA</a><a class="mi qz" href="/estilo/" data-i18n="qz1">Novo · Quiz</a></div>
   <h2 class="sec-t"><small data-i18n="secK">A coleção</small><span data-i18n="secT">As peças</span></h2>
   <nav class="filters" aria-label="Filtrar peças">
@@ -535,7 +535,7 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
   </div>
   <script>if(matchMedia("(max-width:700px)").matches){var _r=document.getElementById("pagamentos");if(_r)document.getElementById("grid").after(_r);}</script>
 
-  <section class="how" aria-label="Como comprar">
+  <section class="how" id="como-comprar" aria-label="Como comprar">
     <div class="step"><span class="n">1</span><div><h3 data-i18n="s1t">Escolha a peça</h3><p data-i18n="s1p">Toque em “Comprar agora”. Abre o WhatsApp com a mensagem já pronta, com o nome da peça.</p></div></div>
     <div class="step"><span class="n">2</span><div><h3 data-i18n="s2t">Combine o pagamento</h3><p data-i18n="s2p">MB WAY, transferência bancária ou Revolut. A peça fica reservada para si durante 24 horas.</p></div></div>
     <div class="step"><span class="n">3</span><div><h3 data-i18n="s3t">Receba em casa</h3><p data-i18n="s3p">Enviamos com código de seguimento, em até 2 dias úteis após o pagamento, para Portugal e toda a Europa. Portes grátis em compras acima de 100 € em Portugal continental.</p></div></div>
@@ -1611,8 +1611,11 @@ document.addEventListener("change", e => { if (e.target.name === "envk") { ENV.k
 (function(){
   const q = new URLSearchParams(location.search); if (q.get("compra") !== "ok") return;
   try { BAG = []; localStorage.setItem("bc-saco", "[]"); } catch(e) {}
-  const n = document.createElement("div"); n.className = "envok"; n.textContent = ET().ok; document.body.appendChild(n);
-  setTimeout(() => n.remove(), 9000);
+  const sid = q.get("s") || "", LK = {pt:"Ver, cancelar ou devolver a encomenda →",en:"View, cancel or return your order →",es:"Ver, cancelar o devolver el pedido →",fr:"Voir, annuler ou retourner la commande →",de:"Bestellung ansehen, stornieren oder zurücksenden →",it:"Vedi, annulla o restituisci l'ordine →"};
+  const n = document.createElement("div"); n.className = "envok"; n.textContent = ET().ok;
+  if (/^cs_/.test(sid)) { try { localStorage.setItem("bc-ultima-encomenda", sid); } catch(e) {} const a = document.createElement("a"); a.href = "/encomenda/?s=" + encodeURIComponent(sid); a.textContent = LK[LANG] || LK.pt; a.style.cssText = "display:block;margin-top:8px;color:inherit;text-decoration:underline"; n.appendChild(a); }
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 25000);
   try { history.replaceState(null, "", location.pathname); } catch(e) {}
 })();
 </script>
