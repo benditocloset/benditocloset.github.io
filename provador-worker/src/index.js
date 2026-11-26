@@ -650,7 +650,17 @@ async function guardarContrato(req, env, j) {
   try { const h = await (await fetch("https://benditocloset.pt/emprestimo/?v=" + Date.now())).text(); const a = h.indexOf('<h2 id="contrato"'), z = h.indexOf('<div id="signed"'); if (a > 0 && z > a) texto = h.slice(a, z).replace(/<script[\s\S]*?<\/script>/gi, "").replace(/\son\w+="[^"]*"/gi, ""); } catch (e) {}
   const id = code + "-" + crypto.randomUUID().replace(/-/g, "").slice(0, 16);
   await env.LIMITS.put("contrato:" + id, JSON.stringify({ code, dados, sig, texto, ip, quando: new Date().toISOString() }));
-  return j({ url: "https://bendito-provador-ia.nn45hn9bvr.workers.dev/contrato/" + id });
+  const url = "https://bendito-provador-ia.nn45hn9bvr.workers.dev/contrato/" + id;
+  // E-mails (antes iam pelo FormSubmit, que às vezes não respondia): à Bendito e cópia a quem assinou
+  const cli = String(dados["E-mail"] || "").trim(), ok1 = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cli);
+  const tab = Object.entries(dados).filter(([k]) => k !== "Dispositivo").map(([k, v]) => `<tr><td style="padding:4px 10px 4px 0;color:#6F625C;vertical-align:top">${esc(k)}</td><td style="padding:4px 0">${esc(v)}</td></tr>`).join("");
+  const txt = Object.entries(dados).filter(([k]) => k !== "Dispositivo").map(([k, v]) => k + ": " + v).join("\n");
+  const mail1 = await mail(env, "ola@benditocloset.pt", "Contrato de empréstimo assinado " + code + " · caução " + (dados["Caução"] || ""),
+    moldura("Contrato de empréstimo assinado " + esc(code), `<table style="border-collapse:collapse;font-size:14px">${tab}</table>${botao(url, "Ver o contrato assinado")}`), txt + "\n\nContrato: " + url, ok1 ? cli : undefined);
+  if (ok1) await mail(env, cli, "Cópia do seu contrato de empréstimo " + code + " · Bendito Closet",
+    moldura("O seu contrato de empréstimo " + esc(code), `<p>Obrigada! Aqui fica a cópia do contrato que assinou no site. Pode abri-lo, imprimi-lo ou guardá-lo em PDF.</p>${botao(url, "Ver o contrato assinado")}<table style="border-collapse:collapse;font-size:14px;margin-top:14px">${tab}</table>`),
+    "Cópia do seu contrato de empréstimo " + code + "\n" + url + "\n\n" + txt);
+  return j({ url, mail: mail1 });
 }
 async function verContrato(id, env) {
   const raw = await env.LIMITS.get("contrato:" + id);

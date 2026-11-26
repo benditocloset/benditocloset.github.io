@@ -254,14 +254,15 @@ $("go").addEventListener("click",async()=>{
  const when=new Date();data["Assinado por"]=$("sname").value.trim();data["Data e hora da assinatura"]=when.toLocaleString("pt-PT")+" ("+Intl.DateTimeFormat().resolvedOptions().timeZone+")";data["Dispositivo"]=navigator.userAgent;
  data._cc=$("mail").value.trim();
  const png=sigPNG();let curl="";
- try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/assinatura",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,dados:Object.fromEntries(Object.entries(data).filter(([k])=>k[0]!=="_")),assinatura:png.toDataURL("image/jpeg",.85)})});const o=await r.json();if(r.ok&&o.url)curl=o.url;}catch(e){}
+ const TO=ms=>{try{return AbortSignal.timeout(ms);}catch(e){return undefined;}};let mailOk=false;
+ try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/assinatura",{method:"POST",signal:TO(25000),headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,dados:Object.fromEntries(Object.entries(data).filter(([k])=>k[0]!=="_")),assinatura:png.toDataURL("image/jpeg",.85)})});const o=await r.json();if(r.ok&&o.url){curl=o.url;mailOk=!!o.mail;}}catch(e){}
  data["Contrato assinado"]=curl||"(não foi possível guardar a cópia online; a assinatura está no site)";
  data._subject="Contrato de empréstimo assinado "+CODE+" · Bendito Closet";
- let ok=false;
- try{const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});ok=r.ok;}catch(e){}
+ let ok=!!curl&&mailOk;
+ if(!ok)try{const r=await fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",signal:TO(15000),headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});ok=r.ok;}catch(e){}
  const sg=$("signed");sg.querySelector(".sc").textContent=CODE;sg.querySelector(".sv").textContent=fmt(V);sg.querySelector(".spo").textContent=ent()+(portes()?" ("+fmt(portes())+")":"");sg.querySelector(".sp").textContent=data["Peças"];sg.querySelector(".sd1").textContent=data["Entrega"];sg.querySelector(".sd2").textContent=data["Devolução até"];sg.querySelector(".sn").textContent=data["Assinado por"];sg.querySelector(".spub").textContent=data["Veículos"]+" · "+data["Produção e onde sai"]+" · "+data["Data prevista de publicação"];sg.querySelector(".st").textContent=data["Data e hora da assinatura"];sg.querySelector("img").src=png.toDataURL("image/png");
  if(!ok){go.disabled=false;go.textContent="Tentar outra vez";$("err").innerHTML='Não foi possível enviar o pedido. Tente outra vez ou envie-o para <a href="mailto:ola@benditocloset.pt?subject='+encodeURIComponent("Pedido de empréstimo "+CODE)+'&body='+encodeURIComponent(Object.entries(data).filter(([k])=>k[0]!=="_").map(([k,v])=>k+": "+v).join("\n"))+'">ola@benditocloset.pt</a>.';$("err").hidden=false;return;}
- let wurl="",werr="";try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/caucao",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,ship:SH,email:$("mail").value.trim(),ids:[...S],d1:$("d1").value,d2:$("d2").value})});const o=await r.json();if(r.ok&&o.url&&Math.abs(o.total-V)<0.01)wurl=o.url;else werr=o.error||"";}catch(e){}
+ let wurl="",werr="";try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/caucao",{method:"POST",signal:TO(25000),headers:{"Content-Type":"application/json"},body:JSON.stringify({code:CODE,ship:SH,email:$("mail").value.trim(),ids:[...S],d1:$("d1").value,d2:$("d2").value})});const o=await r.json();if(r.ok&&o.url&&Math.abs(o.total-V)<0.01)wurl=o.url;else werr=o.error||"";}catch(e){}
  $("code").textContent=CODE;
  if(curl){$("ctr").href=curl;$("ctrw").hidden=false;}
  if(wurl){$("pay").href=wurl;$("pay").textContent="Reter a caução de "+fmt(V)+" no cartão";}
