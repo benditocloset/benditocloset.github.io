@@ -455,42 +455,71 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
 @media(min-width:700px){.hero-img{left:auto;right:0;width:auto;height:100%}}
 </style>
 
-<!-- Estilo "maison" (minimalista, à Gucci). Pré-visualização: ?estilo=maison (fica guardado); desligar: ?estilo=0 -->
+<!-- Estilo "maison" (à Gucci). Pré-visualização: ?estilo=maison (fica guardado); desligar: ?estilo=0 -->
 <script>
 (function(){try{var q=location.search,H=document.documentElement;
- if(/[?&]estilo=maison/.test(q)){localStorage.setItem('bc-estilo','maison');localStorage.setItem('bc-menu','1');}
+ if(/[?&]estilo=maison/.test(q)){localStorage.setItem('bc-estilo','maison');}
  if(/[?&]estilo=0/.test(q)){localStorage.removeItem('bc-estilo');}
  if(localStorage.getItem('bc-estilo')==='maison'){H.classList.add('maison','menu-novo');}
 }catch(e){}})();
 </script>
 <style>
-html.maison body{background:#fff!important;color:#111!important}
-html.maison header{background:#fff!important;box-shadow:0 0 0 100vmax #fff!important;border-bottom:1px solid #eee!important;padding-top:56px!important}
-html.maison header .lang{display:none!important}
-html.maison .brand{width:190px!important;margin:0 auto!important}
-html.maison .brand img{content:url(/img/logo-maison.png)}
+html.maison,html.maison body,html.maison .wrap,html.maison main,html.maison footer{background:#fff!important;color:#111!important}
+html.maison body{font-family:"Jost","Helvetica Neue",Arial,sans-serif!important}
+/* barra de topo à Gucci */
+#mtop{display:none}
+html.maison #mtop{display:flex;position:sticky;top:0;z-index:40;background:#fff;align-items:center;justify-content:space-between;height:64px;padding:0 18px;border-bottom:1px solid #e6e6e6}
+html.maison #mtop .lg img{height:34px;width:auto;display:block}
+html.maison #mtop .ic{display:flex;gap:18px;align-items:center}
+html.maison #mtop .ic a,html.maison #mtop .ic button{background:none;border:0;padding:4px;color:#111;cursor:pointer;position:relative;display:grid;place-items:center}
+html.maison #mtop .ic svg{width:24px;height:24px}
+html.maison #mtop .n{position:absolute;top:-2px;right:-6px;background:#111;color:#fff;font-size:10px;line-height:16px;min-width:16px;height:16px;border-radius:8px;text-align:center;padding:0 3px}
+html.maison #mtop .n:empty,html.maison #mtop .n[data-z="1"]{display:none}
+html.maison header,html.maison .hero,html.maison #bagbtn,html.maison #contabtn,html.maison #menubtn,
 html.maison .servico,html.maison .rot,html.maison .trust,html.maison .minis,html.maison .games-after,
 html.maison .cta,html.maison #vip,html.maison #editoriais,html.maison #avaliacoes,html.maison [data-assinar],
-html.maison .card .meta,html.maison .card .note,html.maison .card .status.ok,html.maison .card .count{display:none!important}
-html.maison,html.maison .wrap,html.maison main,html.maison footer{background:#fff!important}
-html.maison .hero .k{letter-spacing:.3em}
-html.maison .hero .go{background:#fff!important;color:#111!important;border:0!important;border-radius:0!important;letter-spacing:.2em;text-transform:uppercase;font-size:12px!important;padding:14px 26px!important}
-html.maison .filters{border-top:1px solid #eee;border-bottom:1px solid #eee;background:#fff}
-html.maison .filters button{background:transparent!important;border:0!important;border-radius:0!important;color:#111!important;text-transform:uppercase;letter-spacing:.18em;font-size:11px!important}
-html.maison .filters button[aria-pressed="true"]{border-bottom:1px solid #111!important}
-html.maison .grid{gap:2px!important}
-html.maison .card{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-html.maison .card .photo{background:#f5f5f5!important;border-radius:0!important}
-html.maison .card .photo img{border-radius:0!important}
-html.maison .card .body{padding:12px 4px 22px!important;text-align:left}
-html.maison .card .brandlabel{color:#111!important;font-size:10px!important;letter-spacing:.22em!important;text-transform:uppercase}
-html.maison .card .title{font-family:var(--body)!important;font-style:normal!important;font-weight:400!important;font-size:14px!important;color:#111!important;margin:4px 0!important}
+html.maison .card .meta,html.maison .card .note,html.maison .card .status.ok,html.maison .card .count,html.maison .card .brandlabel{display:none!important}
+html.maison .bf{background:#111!important;color:#fff!important;font-size:11px!important;letter-spacing:.12em;padding:9px 16px!important;text-align:center!important}
+/* título da secção à Gucci */
+html.maison .sec-t{text-align:left!important;margin:26px 0 0!important;padding:0 0 18px!important;border-bottom:1px solid #e6e6e6}
+html.maison .sec-t small{display:none!important}
+html.maison .sec-t span{font-family:"Jost",sans-serif!important;font-style:normal!important;font-weight:600!important;font-size:19px!important;letter-spacing:.08em;text-transform:uppercase;color:#111!important}
+html.maison .filters{justify-content:flex-start!important;border:0!important;background:#fff;padding:14px 0 4px!important}
+html.maison .filters button{background:transparent!important;border:0!important;border-radius:0!important;color:#111!important;font-size:13px!important;padding:6px 10px 6px 0!important;margin-right:8px}
+html.maison .filters button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:5px}
+html.maison .sortbar{justify-content:space-between!important;font-size:14px;padding:6px 0 14px!important}
+html.maison .sortbar select{border:0!important;background:none!important;text-decoration:underline;font-size:14px!important;padding:0!important}
+/* grelha de ponta a ponta */
+html.maison .grid{gap:0!important;margin:0 -20px!important;grid-template-columns:repeat(2,1fr)!important}
+@media(min-width:900px){html.maison .grid{grid-template-columns:repeat(4,1fr)!important;margin:0!important}}
+html.maison .card{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important;border-right:1px solid #f0f0f0!important}
+html.maison .card .photo{background:#f8f8f9!important;border-radius:0!important;aspect-ratio:4/5}
+html.maison .card .photo img{border-radius:0!important;object-fit:cover}
+html.maison .card .body{padding:16px 16px 34px!important;text-align:left}
+html.maison .card .title{font-family:"Jost",sans-serif!important;font-style:normal!important;font-weight:400!important;font-size:14px!important;line-height:1.35!important;color:#111!important;margin:0 0 22px!important}
 html.maison .card .row{display:block!important}
 html.maison .card .row .buy,html.maison .card .row button,html.maison .card .row a{display:none!important}
 html.maison .card .price{color:#111!important;font-size:14px!important;font-weight:400!important}
+html.maison .card .price s{color:#999;margin-right:6px}
+html.maison .card .fav{background:transparent!important;box-shadow:none!important;border:0!important}
 html.maison .consign .box,html.maison .how{background:#fff!important;border-color:#eee!important}
-html.maison #bagbtn,html.maison #contabtn,html.maison #menubtn{background:#fff!important;color:#111!important;border:1px solid #111!important;box-shadow:none!important}
+html.maison #mnu{background:#fff!important}
 </style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(!document.documentElement.classList.contains('maison')) return;
+  var t=document.createElement('div'); t.id='mtop';
+  t.innerHTML='<a class="lg" href="/" aria-label="Bendito Closet"><img src="/img/logo-maison-texto.png" alt="Bendito Closet"></a>'+
+   '<div class="ic"><button type="button" id="m-bag" aria-label="Saco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="n" id="m-bagn"></span></button>'+
+   '<a href="/conta/" aria-label="Conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>'+
+   '<button type="button" id="m-menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>';
+  var bf=document.getElementById('bf'); (bf&&bf.nextSibling)?bf.parentNode.insertBefore(t,bf.nextSibling):document.body.prepend(t);
+  document.getElementById('m-bag').onclick=function(){var b=document.getElementById('bagbtn'); if(b) b.click();};
+  document.getElementById('m-menu').onclick=function(){var b=document.getElementById('menubtn'); if(b) b.click();};
+  function sync(){var s=document.getElementById('bagn'),n=document.getElementById('m-bagn'); if(s&&n){n.textContent=s.textContent; n.setAttribute('data-z', (s.textContent.trim()==='0'||!s.textContent.trim())?'1':'0');}}
+  sync(); var s=document.getElementById('bagn'); if(s) new MutationObserver(sync).observe(s,{childList:true,characterData:true,subtree:true});
+});
+</script>
 </head>
 <body>
 <a id="bf" class="bf" href="#grid" hidden></a>
@@ -1805,6 +1834,7 @@ body.mnu-open{overflow:hidden}
       <a href="https://wa.me/351936796783" target="_blank" rel="noopener">Fale connosco no WhatsApp</a>
       <a href="/imprensa/">Imprensa</a>
     </div>
+    <p class="pro" style="letter-spacing:.1em">Idioma: <a href="#" data-l="pt">PT</a> · <a href="#" data-l="en">EN</a> · <a href="#" data-l="es">ES</a> · <a href="#" data-l="fr">FR</a> · <a href="#" data-l="de">DE</a> · <a href="#" data-l="it">IT</a></p>
     <p class="pro">Para profissionais: <a href="/lojas/">lojas online para o seu negócio</a></p>
   </nav>
 </div>
@@ -1820,7 +1850,7 @@ body.mnu-open{overflow:hidden}
   b.addEventListener('click',abrir); m.querySelector('.x').addEventListener('click',fechar);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') fechar(); });
   m.addEventListener('click',function(e){
-    var a=e.target.closest('a'); if(!a) return; var f=a.getAttribute('data-m');
+    var a=e.target.closest('a'); if(!a) return; var L=a.getAttribute('data-l'); if(L){e.preventDefault(); var lb=document.getElementById('lang-'+L); if(lb) lb.click(); fechar(); return;} var f=a.getAttribute('data-m');
     fechar();
     if(f){ e.preventDefault();
       var o=document.getElementById('ordem');
