@@ -232,13 +232,24 @@ async function acaoCliente(req, env, j) {
 async function gestao(req, env, url) {
   const t = url.searchParams.get("t") || "";
   if (!env.OWNER_TOKEN || t !== env.OWNER_TOKEN) return new Response("Sem acesso", { status: 403 });
-  let msg = "";
+  let msg = "", avisoCliente = null;
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
     if (/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) {
       const est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
       try {
-        if (acao === "enviada") { est.enviada = new Date().toISOString(); msg = "Marcada como enviada."; }
+        if (acao === "enviada") {
+          est.enviada = new Date().toISOString(); est.track = String(f.get("track") || "").trim().slice(0, 60); est.transp = String(f.get("transp") || "CTT").slice(0, 30);
+          msg = "Marcada como enviada." + (est.track ? " A cliente recebe o código de seguimento por e-mail." : "");
+          if (est.track) {
+            const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
+            const link = est.transp === "CTT" ? "https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=" + encodeURIComponent(est.track) : "https://www.correosexpress.pt";
+            avisoCliente = { _subject: "A sua encomenda Bendito Closet foi enviada · tracking number " + est.track, _template: "table", _captcha: "false", _cc: r.email,
+              "Olá": r.nome || "", "Encomenda": r.ref, "Peças": r.pecas, "Transportadora": est.transp, "Tracking number (código de seguimento)": est.track,
+              "Track your package (seguir a encomenda)": link, "App Shop": "Pode seguir a encomenda na app Shop (shop.app): cole o código em Adicionar encomenda, ou ligue o seu Gmail à app.",
+              "Cancelar ou devolver": "https://benditocloset.pt/encomenda/?s=" + r.id };
+          }
+        }
         if (acao === "nao_enviada") { delete est.enviada; msg = "Desmarcada."; }
         if (acao === "recebida") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
@@ -258,11 +269,11 @@ async function gestao(req, env, url) {
       if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
       const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
-      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : bt("enviada", "Marcar como enviada"));
+      const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)}<div class="a">${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
-  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 function est_motivo(r) { return ""; }
 
