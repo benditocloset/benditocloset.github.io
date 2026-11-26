@@ -56,7 +56,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <p class="muted">Versão de 25 de novembro de 2026</p>
 
 <div class="box">
-<p style="margin:0"><b>Em resumo:</b> a Bendito Closet empresta as peças para a sua produção, até 7 dias. Como caução, o valor das peças fica <b>só retido no seu cartão</b>, sem ser cobrado. Se as peças voltarem como saíram, a retenção é libertada e não paga nada. Se voltarem com defeito ou dano, é cobrada a reparação ou o valor da peça. Se não voltarem, é cobrado o valor das peças.</p>
+<p style="margin:0"><b>Em resumo:</b> a Bendito Closet empresta as peças para a sua produção, até 7 dias. Como caução, só por segurança, o valor das peças fica <b>só retido no seu cartão</b>, sem ser cobrado. Se as peças voltarem como saíram, a retenção é libertada e não paga nada. Se voltarem com defeito ou dano, é cobrada a reparação ou o valor da peça. Se não voltarem, é cobrado o valor das peças.</p>
 </div>
 
 
@@ -119,7 +119,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <div class="done" id="done" hidden>
 <p><b>Pedido <span id="code"></span> enviado ✓</b><br>Enviámos o contrato assinado para o seu e-mail e para a Bendito Closet.</p>
 <p id="ctrw" hidden><a id="ctr" href="#" target="_blank" rel="noopener">Ver o contrato assinado →</a></p>
-<p>Último passo: a caução fica <b>só retida no seu cartão</b>, não é cobrada. É libertada quando as peças voltam em bom estado, ou automaticamente ao fim de 7 dias.</p>
+<p>Último passo: a caução serve <b>só de garantia, por segurança das peças</b>. Não é um pagamento e nenhum valor sai da sua conta. Durante o empréstimo, o valor fica reservado no limite do cartão, como na reserva de um hotel ou no aluguer de um carro, e volta a ficar disponível quando a retenção é libertada: logo que as peças voltam em bom estado, ou automaticamente ao fim de 7 dias.</p>
 <a class="pay" id="pay" href="#">Reter a caução no cartão</a>
 <p class="err" id="payerr" hidden>Não foi possível abrir a retenção da caução agora. A Marianna envia-lhe o link por e-mail.</p>
 <button type="button" class="cp" id="copy" style="font-size:14px;padding:8px 14px;margin-top:12px">Guardar cópia do contrato (PDF)</button>
@@ -239,7 +239,7 @@ if(/[?&]collab/.test(location.search)||/\/collab\//.test(document.referrer)){set
 $("addv").addEventListener("click",()=>{addVeic();const l=[...document.querySelectorAll("#veics .vn")].pop();l&&l.focus();});
 $("veics").addEventListener("click",e=>{const x=e.target.closest(".vx");if(x){x.closest(".veic").remove();renum();}});
 function ent(){return SHIP.find(x=>x.k===SH).n;}
-function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 7 dias, com devolução até "+lim6.toLocaleDateString("pt-PT")+".":(n>7?"Escolheu "+n+" dias. O empréstimo é de até 7 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (devolvida)</span><span>${fmt(V)}</span></div><div><span>Portes ida e volta</span><span>${SH==="mao"?"—":"grátis"}</span></div><div class="t"><span>Total a pagar</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · caução de "+fmt(T):"Enviar pedido";return p;}
+function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 7 dias, com devolução até "+lim6.toLocaleDateString("pt-PT")+".":(n>7?"Escolheu "+n+" dias. O empréstimo é de até 7 dias.":n<0?"A devolução tem de ser depois da entrega.":"Empréstimo de "+(n||1)+" dia"+((n||1)>1?"s":"")+".");$("morL").style.display=SH==="mao"?"none":"";renderShip();const T=V+portes();$("sum").innerHTML=S.size?`<div><span>Caução (só retida, não cobrada)</span><span>${fmt(V)}</span></div><div><span>Portes ida e volta</span><span>${SH==="mao"?"—":"grátis"}</span></div><div class="t"><span>Fica retido no cartão</span><span>${fmt(T)}</span></div>`:"";const p=problem();$("go").disabled=false;$("go").textContent=S.size?"Enviar pedido · caução de "+fmt(T):"Enviar pedido";return p;}
 list.addEventListener("change",e=>{const c=e.target;if(c.type!=="checkbox")return;c.checked?S.add(c.value):S.delete(c.value);total();});
 q.addEventListener("input",render);
 $("d1").addEventListener("change",()=>{if($("d1").value){const a=new Date($("d1").value+"T12:00");$("d2").min=iso(a);const m=new Date(a);m.setDate(m.getDate()+7);$("d2").max=iso(m<lim6?m:lim6);}check();});
