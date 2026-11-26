@@ -112,7 +112,7 @@ document.getElementById("res").addEventListener("click", async e => {
   b.disabled = false;
   if (!ok) { m.innerHTML = `<p class="err">${res.error==="ja_enviada"?t().sentNo:res.error==="prazo"?t().late:t().errAct}</p>`; return; }
   if (res.estado==="cancelada") { o.reembolso="total"; avisar(o, "Encomenda cancelada e reembolsada", {"Reembolso": eur(o.total)}); show(LAST); document.getElementById("m"+i).innerHTML = `<p class="msg">${t().okCancel(eur(o.total))}</p>`; }
-  else if (res.estado==="devolucao_pedida") { o.devolucao="pedida"; avisar(o, "Pedido de devolução", {"Motivo": motivo || "(não indicado)", "Próximo passo": "Enviar à cliente a morada para a devolução. Quando a peça chegar, abrir a página de gestão e carregar em Peça recebida."}); show(LAST); document.getElementById("m"+i).innerHTML = `<p class="msg">${t().okRet}</p>`; }
+  else if (res.estado==="devolucao_pedida") { o.devolucao="pedida"; avisar(o, "Pedido de devolução", {"Motivo": motivo || "(não indicado)", "Próximo passo": "Enviar à cliente a morada para a devolução. Quando a peça chegar, abrir a página de gestão e carregar em Peça recebida."}); show(LAST); document.getElementById("m"+i).innerHTML = `<p class="msg">${t().okRet}</p><a class="btn o" target="_blank" rel="noopener" href="${W}/etiqueta?id=${encodeURIComponent(o.id)}&tok=${o.tok}">${({pt:"Etiqueta de devolução",en:"Return label",es:"Etiqueta de devolución",fr:"Étiquette de retour",de:"Rücksendeetikett",it:"Etichetta di reso"})[L]}</a>`; }
   else { o.reembolso="total"; show(LAST); }
 });
 document.getElementById("f").addEventListener("submit", async e => {
