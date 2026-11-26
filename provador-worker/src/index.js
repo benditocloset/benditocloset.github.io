@@ -49,7 +49,7 @@ async function pecasDoSite() {
     const g = k => { const r = l.match(new RegExp("\\b" + k + ":\\s*\"([^\"]*)\"")); return r ? r[1] : ""; };
     const pr = l.match(/\bpreco:\s*([\d.]+)/);
     const fo = l.match(/\bfotos?:\s*\[?\s*"([^"]+)"/);
-    P[id[1]] = { cat: g("cat"), marca: g("marca"), nome: g("nome"), status: g("status"), preco: pr ? +pr[1] : 0, foto: fo ? fo[1] : "" };
+    P[id[1]] = { cat: g("cat"), marca: g("marca"), nome: g("nome"), detalhe: g("detalhe"), status: g("status"), preco: pr ? +pr[1] : 0, foto: fo ? fo[1] : "" };
   }
   return P;
 }
@@ -183,6 +183,46 @@ ${c.texto || '<p><a href="https://benditocloset.pt/emprestimo/#contrato">Texto d
 </main></body></html>`;
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Content-Security-Policy": "default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'", "X-Robots-Tag": "noindex" } });
 }
+
+// Assistente "Tenho uma dúvida": responde com a IA da Cloudflare (Workers AI) só com os factos do site.
+// Se não souber, responde [WHATSAPP] e o site passa a conversa para o WhatsApp da Marianna.
+const LINGUAS = { pt: "português de Portugal", en: "English", es: "español", fr: "français", de: "Deutsch", it: "italiano" };
+async function faqTexto() {
+  try {
+    const t = await (await fetch("https://benditocloset.pt/faq.js?w=" + Math.floor(Date.now() / 600000), { cf: { cacheTtl: 600 } })).text();
+    const a = t.indexOf("pt: {"), b = t.indexOf("en: {");
+    const blk = a >= 0 && b > a ? t.slice(a, b) : "";
+    return [...blk.matchAll(/\['((?:[^'\\]|\\.)*)',\s*'((?:[^'\\]|\\.)*)'\]/g)].map(m => "P: " + m[1] + "\nR: " + m[2].replace(/<br>/g, "\n").replace(/<[^>]+>/g, "").replace(/\\'/g, "'")).join("\n\n");
+  } catch (e) { return ""; }
+}
+async function ajuda(req, env, j) {
+  if (!env.AI) return j({ resposta: "[WHATSAPP]" });
+  let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
+  const q = String(b.q || "").trim().slice(0, 600), lang = LINGUAS[b.lang] ? b.lang : "pt", pid = String(b.peca || "");
+  const hist = Array.isArray(b.hist) ? b.hist.slice(-6).map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: String(m.content || "").slice(0, 600) })) : [];
+  if (q.length < 2) return j({ error: "pergunta" }, 400);
+  const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `aju:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
+  if (n >= 40) return j({ resposta: "[WHATSAPP]" });
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
+  const [P, faq] = await Promise.all([pecasDoSite(), faqTexto()]);
+  const p = P[pid];
+  const peca = p ? `PEÇA EM QUESTÃO: ${p.marca} – ${p.nome}. Descrição: ${p.detalhe || "(sem mais detalhes)"}. Preço: ${p.preco} €. Categoria: ${p.cat}. Estado: ${p.status === "vendido" ? "VENDIDA (já não está disponível)" : "disponível"}.` : "";
+  const sistema = `És o assistente da loja online Bendito Closet (benditocloset.pt), um brechó de moda de marca em segunda mão em Portugal, da Marianna Werneck. Respondes SEMPRE em ${LINGUAS[lang]}, de forma curta (no máximo 3 frases), simpática e direta, a tratar a cliente por "você".
+Usa APENAS os factos abaixo. Nunca inventes medidas, tamanhos, estados, prazos, preços, descontos ou políticas que não estejam escritos aqui. Não prometas nada em nome da Marianna.
+Se a resposta não estiver claramente nos factos, ou se a cliente pedir medidas, mais fotos, negociar o preço, reservar, saber o estado de uma encomenda, fazer uma reclamação, devolução ou reembolso, ou falar com uma pessoa, responde exatamente e só: [WHATSAPP]
+${peca}
+FACTOS DA LOJA:
+- Compra no site: botão «Comprar» na peça ou «Pagar o saco»; a cliente escolhe o envio e paga na Stripe (cartão, MB WAY, Multibanco, Apple Pay, Google Pay ou Klarna).
+- Portes (roupa e acessórios / sapatos, malas e casacos): Portugal continental CTT 2-3 dias úteis 7 €/9 € (grátis acima de 100 €); Portugal continental Correos Express 24h 10 €/12 €; Açores e Madeira CTT 9 €/12 €; Europa DHL ou Correos Express 18 €/24 €.
+- Cada peça é única. Se tem «Comprar» está disponível.
+- Empréstimo de peças para editoriais e produções: até 7 dias, pedido e contrato no site em benditocloset.pt/emprestimo, caução igual ao valor das peças só retida no cartão (não cobrada), portes de ida e volta grátis.
+${faq}`;
+  const messages = [{ role: "system", content: sistema }, ...hist, { role: "user", content: q }];
+  let resposta = "";
+  try { const r = await env.AI.run("@cf/meta/llama-3.3-70b-instruct-fp8-fast", { messages, max_tokens: 220, temperature: 0.2 }); resposta = String((r && r.response) || "").trim(); } catch (e) { resposta = ""; }
+  if (!resposta || /\[WHATSAPP\]/i.test(resposta)) resposta = "[WHATSAPP]";
+  return j({ resposta });
+}
 export default {
   async fetch(req, env) {
     const origin = req.headers.get("Origin") || "";
@@ -194,6 +234,7 @@ export default {
     if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
+    if (url.pathname === "/ajuda" && req.method === "POST") return ajuda(req, env, j);
     const mc = url.pathname.match(/^\/contrato\/(BC-[A-Z0-9]{4}-[a-f0-9]{16})$/);
     if (mc && req.method === "GET") return verContrato(mc[1], env);
     if (!ALLOWED.includes(origin)) return j({ error: "origin" }, 403);

@@ -1119,7 +1119,7 @@ const CARD_TXT = { pt:"Comprar", en:"Buy now", es:"Comprar",
 const DUV_TXT = { pt:["Tenho uma dúvida","Olá! Tenho uma dúvida sobre"], en:["Ask a question","Hi! I have a question about"], es:["Tengo una duda","¡Hola! Tengo una duda sobre"],
   fr:["Une question ?","Bonjour ! J'ai une question sur"], de:["Frage stellen","Hallo! Ich habe eine Frage zu"], it:["Ho una domanda","Ciao! Ho una domanda su"] };
 function duvLink(p){ const d = DUV_TXT[LANG] || DUV_TXT.pt;
-  return `<a class="duvida" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(d[1]+": "+nomeDe(p)+" ("+p.marca+")")}" target="_blank" rel="noopener">${d[0]}</a>`; }
+  return `<a class="duvida" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(d[1]+": "+nomeDe(p)+" ("+p.marca+")")}" target="_blank" rel="noopener" data-duv="${p.id}" data-nome="${(p.marca+" – "+nomeDe(p)).replace(/"/g,"&quot;")}">${d[0]}</a>`; }
 /* Botão principal: cartão (Stripe). Sem link Stripe (peça nova) → WhatsApp como antes. */
 function buyBtns(p){
   if (STRIPE[p.id]) return cardBtn(p).replace('class="buy cartao"','class="buy"');
@@ -1514,6 +1514,8 @@ async function envGo(){
   b.disabled = false; envPaint(); const e2 = document.getElementById("enverr"); e2.textContent = t.err; e2.hidden = false;
 }
 document.addEventListener("click", e => {
+  const q = e.target.closest("a[data-duv]");
+  if (q && window.bcAjuda) { e.preventDefault(); e.stopPropagation(); try { const dd = document.getElementById("det"); if (dd && dd.open) dd.close(); } catch(x) {} window.bcAjuda(q.dataset.duv, q.dataset.nome); return; }
   const a = e.target.closest("a[data-buy]");
   if (a) { e.preventDefault(); e.stopPropagation(); envOpen([a.dataset.buy], a.href); return; }
   if (e.target.closest("[data-buybag]")) { e.preventDefault(); e.stopPropagation(); try { bagValid(); } catch(x) {} if (BAG.length) envOpen(BAG.slice(), ""); return; }

@@ -8,7 +8,7 @@
       ['O provador deu erro ou o resultado ficou estranho', '• <b>"Esta foto só mostra o rosto"</b>: a IA precisa de ver o corpo, pelo menos até à cintura. Para calças, saias e vestidos, corpo inteiro. Para sapatos e ténis, os pés.<br>• <b>Rosto ou braços deformados, roupa a aparecer por baixo:</b> use uma foto <b>sem espelho</b>, tirada por outra pessoa, de frente e com boa luz. Selfies ao espelho (telemóvel à frente, reflexos) confundem a IA.<br>• <b>Pode ser um print</b> da sua foto: o site corta as barras do ecrã.<br>• <b>De roupa interior?</b> A IA veste por baixo uma t-shirt branca e calças de ganga.<br>• <b>Quer só a blusa com a sua saia?</b> Desmarque a opção 👖 das calças de ganga.<br>• <b>Relógios, óculos e outros acessórios</b> ainda não dá para provar: a IA ainda não os mostra bem.<br>• Uma prova que falha <b>não conta</b> nas 5 do dia.<br>• Continua estranho? Fale connosco no WhatsApp.'],
       ['Como instalo a app? Não consigo no iPhone', 'A app Bendito é grátis e instala-se a partir do site, sem App Store.<br><b>Android:</b> toque em “App · Grátis” na página inicial e depois em <b>Instalar</b>. É direto.<br><b>iPhone:</b> a Apple não deixa nenhum site instalar-se com um toque, por isso é pelo menu do navegador: no <b>Safari</b>, toque em <b>☰</b> (ao lado do endereço) → <b>Partilhar</b> → <b>Adicionar à Tela de Início</b>, com <b>“Abrir como app web”</b> ligado. No <b>Chrome</b>: <b>Partilhar ⬆</b> (em cima) → <b>Adicionar à Tela de Início</b>.<br><b>Não aparece a opção?</b> Está dentro do Instagram ou do Google: toque em ⋯ → <b>Abrir no navegador</b> e repita.<br><b>A app abre com a barra do navegador?</b> Apague o ícone e volte a adicionar pelo Safari, com “Abrir como app web” ligado.<br><b>Não abre?</b> Feche-a (deslize para cima) e abra de novo; se continuar, apague e adicione outra vez.'],
       ['Quanto tempo demora a entrega?', 'Enviamos com código de seguimento, em até 2 dias úteis depois do pagamento. Em Portugal chega normalmente em poucos dias úteis; para o resto da Europa pode demorar um pouco mais.'],
-      ['Como posso pagar?', 'Toque em <b>“Comprar”</b> na peça: abre o pagamento seguro, com cartão, MB WAY, Apple Pay, Google Pay ou Klarna. Quer várias peças? Junte-as ao saco e envie o pedido: combinamos um só envio.'],
+      ['Como posso pagar?', 'Toque em <b>“Comprar”</b> na peça: abre o pagamento seguro, com cartão, MB WAY, Apple Pay, Google Pay ou Klarna. Quer várias peças? Junte-as ao saco e carregue em <b>“Pagar o saco”</b>: paga tudo de uma vez, com um só envio.'],
       ['Posso pagar em prestações?', 'Sim. Com a Klarna, paga em 3 prestações sem juros. Sujeito a verificação de elegibilidade pela Klarna. Podem ser aplicadas taxas por atraso.'],
       ['As peças são originais?', 'Sim. São peças originais, do meu armário e de closets que eu escolho. Na descrição de cada peça indicamos o estado e qualquer defeito.'],
       ['Como sei o tamanho certo?', 'O tamanho está na descrição de cada peça. Se quiser medidas exatas, pergunte-me no WhatsApp: envio fotos com a fita métrica.'],
@@ -93,6 +93,44 @@
       ['Voglio vendere i miei capi qui', 'Apriamo il tuo closet sul nostro sito: scegliamo con te fino a 5 capi, facciamo foto professionali e li pubblichiamo sul sito e su Instagram. Vedi <a href="/#venda-connosco">“Apri il tuo closet”</a>.']
     ]}
   };
+
+  var CT = {
+    pt: { ask: 'Escreva a sua pergunta', ph: 'Ex.: Serve a quem veste M?', send: 'Enviar', think: 'A pensar…', min: 'Um minuto: vou passá-la à Marianna no WhatsApp, ela responde-lhe lá.', open: 'Abrir o WhatsApp', about: 'Pergunta sobre', hi: 'Olá! Pergunte o que quiser sobre esta peça ou sobre a loja.', hi0: 'Olá! Pergunte o que quiser sobre a loja, as peças, os portes ou os pagamentos.', or: 'ou escolha uma pergunta:' },
+    en: { ask: 'Type your question', ph: 'E.g. Does it fit a size M?', send: 'Send', think: 'Thinking…', min: 'One minute: I\'ll pass you to Marianna on WhatsApp, she\'ll answer you there.', open: 'Open WhatsApp', about: 'Question about', hi: 'Hi! Ask anything about this piece or the shop.', hi0: 'Hi! Ask anything about the shop, pieces, shipping or payments.', or: 'or choose a question:' },
+    es: { ask: 'Escribe tu pregunta', ph: 'Ej.: ¿Le vale a una talla M?', send: 'Enviar', think: 'Pensando…', min: 'Un minuto: te paso con Marianna por WhatsApp, ella te responde allí.', open: 'Abrir WhatsApp', about: 'Pregunta sobre', hi: '¡Hola! Pregunta lo que quieras sobre esta prenda o la tienda.', hi0: '¡Hola! Pregunta lo que quieras sobre la tienda, las prendas, el envío o los pagos.', or: 'o elige una pregunta:' },
+    fr: { ask: 'Écrivez votre question', ph: 'Ex. : Ça va pour une taille M ?', send: 'Envoyer', think: 'Je réfléchis…', min: 'Une minute : je vous passe à Marianna sur WhatsApp, elle vous répond là-bas.', open: 'Ouvrir WhatsApp', about: 'Question sur', hi: 'Bonjour ! Posez votre question sur cette pièce ou la boutique.', hi0: 'Bonjour ! Posez votre question sur la boutique, les pièces, la livraison ou le paiement.', or: 'ou choisissez une question :' },
+    de: { ask: 'Schreib deine Frage', ph: 'z. B. Passt es bei Größe M?', send: 'Senden', think: 'Einen Moment…', min: 'Eine Minute: Ich verbinde dich mit Marianna auf WhatsApp, sie antwortet dir dort.', open: 'WhatsApp öffnen', about: 'Frage zu', hi: 'Hallo! Frag alles zu diesem Teil oder zum Shop.', hi0: 'Hallo! Frag alles zum Shop, zu den Teilen, zum Versand oder zur Zahlung.', or: 'oder wähle eine Frage:' },
+    it: { ask: 'Scrivi la tua domanda', ph: 'Es.: Va bene per una taglia M?', send: 'Invia', think: 'Sto pensando…', min: 'Un minuto: ti passo a Marianna su WhatsApp, ti risponde lì.', open: 'Apri WhatsApp', about: 'Domanda su', hi: 'Ciao! Chiedi quello che vuoi su questo capo o sul negozio.', hi0: 'Ciao! Chiedi quello che vuoi sul negozio, i capi, la spedizione o i pagamenti.', or: 'oppure scegli una domanda:' }
+  };
+  var CHAT = { peca: '', nome: '', hist: [] };
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function chatForm(c) { return '<form class="cf"><input class="ci" maxlength="500" placeholder="' + c.ph + '" aria-label="' + c.ask + '"><button type="submit">' + c.send + '</button></form>'; }
+  function chatOpen(peca, nome) {
+    var c = CT[L()]; CHAT = { peca: peca || '', nome: nome || '', hist: [] };
+    box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><h3>' + (nome ? c.about + ' ' + esc(nome) : D[L()].t) + '</h3><div class="cl"><div class="m b">' + (nome ? c.hi : c.hi0) + '</div></div>' + chatForm(c) + '<button class="bk" type="button" style="margin-top:10px">' + D[L()].back + '</button>';
+    box.classList.add('open'); var i = box.querySelector('.ci'); if (i) setTimeout(function () { i.focus(); }, 50);
+  }
+  function waLinkQ(q) { var d = D[L()]; return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(d.waMsg + (CHAT.nome ? ' (' + CHAT.nome + ')' : '') + (q ? '\n' + q : '')); }
+  function chatSend(q) {
+    var c = CT[L()], cl = box.querySelector('.cl'); if (!cl) return;
+    cl.insertAdjacentHTML('beforeend', '<div class="m u">' + esc(q) + '</div><div class="m b t">' + c.think + '</div>'); cl.scrollTop = cl.scrollHeight; box.scrollTop = box.scrollHeight;
+    var f = box.querySelector('.cf button'); if (f) f.disabled = true;
+    fetch('https://bendito-provador-ia.nn45hn9bvr.workers.dev/ajuda', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ q: q, lang: L(), peca: CHAT.peca, hist: CHAT.hist }) })
+      .then(function (r) { return r.json(); }).catch(function () { return { resposta: '[WHATSAPP]' }; }).then(function (o) {
+        var t = box.querySelector('.m.t'); if (t) t.remove(); if (f) f.disabled = false;
+        var r = String((o && o.resposta) || '[WHATSAPP]');
+        if (r.indexOf('[WHATSAPP]') >= 0) {
+          var u = waLinkQ(q);
+          cl.insertAdjacentHTML('beforeend', '<div class="m b">' + c.min + '</div><a class="wa" href="' + u + '" target="_blank" rel="noopener">' + c.open + '</a>');
+          setTimeout(function () { try { window.open(u, '_blank', 'noopener'); } catch (e) {} }, 1800);
+        } else {
+          CHAT.hist.push({ role: 'user', content: q }, { role: 'assistant', content: r });
+          cl.insertAdjacentHTML('beforeend', '<div class="m b">' + esc(r) + '</div>');
+        }
+        cl.scrollTop = cl.scrollHeight; box.scrollTop = box.scrollHeight;
+      });
+  }
+  window.bcAjuda = chatOpen;
   function L() { var l = (document.documentElement.lang || 'pt').slice(0, 2); return D[l] ? l : 'pt'; }
   var css = '#faqbtn{position:fixed;right:14px;bottom:14px;z-index:40;display:flex;align-items:center;gap:7px;background:#c9a36a;color:#141012;border:0;border-radius:999px;padding:11px 16px;font:700 14px Montserrat,system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}' +
     '#faqbtn svg{width:18px;height:18px}' +
@@ -101,16 +139,19 @@
     '#faqbox .q{display:block;width:100%;text-align:left;background:none;border:1px solid #3a2f2a;color:#f4ece4;border-radius:10px;padding:9px 12px;margin:0 0 7px;font:inherit;cursor:pointer}#faqbox .q:hover{border-color:#c9a36a}' +
     '#faqbox .a{background:#1e1719;border-radius:10px;padding:12px;margin:8px 0}#faqbox .a a{color:#c9a36a}#faqbox .bk{background:none;border:0;color:#c9a36a;font:inherit;cursor:pointer;padding:0}' +
     '#faqbox .wa{display:block;text-align:center;margin-top:10px;background:#25d366;color:#0b2414;border-radius:10px;padding:10px;font-weight:700;text-decoration:none}' +
-    '#faqbox .xx{position:absolute;top:10px;right:12px;background:none;border:0;color:#b8ab97;font-size:20px;cursor:pointer}';
+    '#faqbox .xx{position:absolute;top:10px;right:12px;background:none;border:0;color:#b8ab97;font-size:20px;cursor:pointer}' +
+    '#faqbox .cf{display:flex;gap:6px;margin:8px 0}#faqbox .ci{flex:1;min-width:0;background:#1e1719;border:1px solid #3a2f2a;color:#fff;border-radius:10px;padding:10px;font:inherit;font-size:16px}#faqbox .cf button{background:#c9a36a;color:#141012;border:0;border-radius:10px;padding:0 14px;font:700 14px inherit;cursor:pointer}' +
+    '#faqbox .cl{max-height:300px;overflow:auto}#faqbox .m{border-radius:12px;padding:9px 12px;margin:6px 0;max-width:88%;white-space:pre-wrap}#faqbox .m.b{background:#1e1719}#faqbox .m.u{background:#c9a36a;color:#141012;margin-left:auto}#faqbox .m.t{opacity:.6}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
   var btn = document.createElement('button'); btn.id = 'faqbtn'; btn.type = 'button';
   var box = document.createElement('div'); box.id = 'faqbox'; box.setAttribute('role', 'dialog');
   function wa(d) { return '<a class="wa" href="https://wa.me/' + WA + '?text=' + encodeURIComponent(d.waMsg) + '" target="_blank" rel="noopener">' + d.wa + '</a>'; }
-  function lista() { var d = D[L()]; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><h3>' + d.t + '</h3><p class="s">' + d.s + '</p>' +
+  function lista() { var d = D[L()]; var c = CT[L()]; CHAT = { peca: '', nome: '', hist: [] }; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><h3>' + d.t + '</h3><div class="cl"></div>' + chatForm(c) + '<p class="s">' + c.or + '</p>' +
       d.q.map(function (x, i) { return '<button class="q" type="button" data-i="' + i + '">' + x[0] + '</button>'; }).join('') + wa(d); }
   function resp(i) { var d = D[L()], x = d.q[i]; box.innerHTML = '<button class="xx" type="button" aria-label="×">×</button><button class="bk" type="button">' + d.back + '</button><h3 style="margin-top:8px">' + x[0] + '</h3><div class="a">' + x[1] + '</div>' + wa(d); box.scrollTop = 0; }
   function label() { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>' + D[L()].btn; }
   btn.addEventListener('click', function () { if (box.classList.toggle('open')) lista(); });
+  box.addEventListener('submit', function (e) { if (!e.target.closest('.cf')) return; e.preventDefault(); var i = box.querySelector('.ci'), q = (i.value || '').trim(); if (q.length < 2) return; i.value = ''; if (!box.querySelector('.cl .m')) { var h = box.querySelector('h3'); box.querySelectorAll('.q,p.s,.wa').forEach(function (x) { x.remove(); }); } chatSend(q); });
   box.addEventListener('click', function (e) {
     var q = e.target.closest('.q'); if (q) return resp(+q.dataset.i);
     if (e.target.closest('.bk')) return lista();
