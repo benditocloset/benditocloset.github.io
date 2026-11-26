@@ -23,9 +23,10 @@ input,textarea{width:100%;border:0;border-bottom:1px solid var(--ink);background
 textarea{border:1px solid var(--line);padding:10px;min-height:90px}
 input:focus,textarea:focus{outline:none;border-color:var(--gold)}
 .btn{display:inline-block;border:1px solid var(--ink);background:var(--ink);color:var(--bg);padding:15px 26px;font:500 11px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;cursor:pointer;margin:22px 10px 0 0;text-decoration:none}
-.btn.o{background:transparent;color:var(--ink)}
+.btn.o{background:transparent;color:var(--ink);border:1px solid var(--ink);padding:15px 26px}
+.btn{-webkit-appearance:none;appearance:none;border-radius:0;white-space:nowrap}
 .btn[disabled]{opacity:.5;cursor:wait}
-.o{border-top:1px solid var(--line);padding:24px 0}
+div.o,section.o{border-top:1px solid var(--line);padding:24px 0}
 .o .st{font:500 10px/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:10px 0}
 .msg{border:1px solid var(--ink);padding:16px;margin:20px 0;background:#fff}
 .err{color:#8a1c1c;font-size:14.5px;margin-top:12px}

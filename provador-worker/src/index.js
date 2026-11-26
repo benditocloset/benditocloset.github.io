@@ -143,7 +143,9 @@ async function comprar(req, env, j) {
   e.c.forEach((c, i) => f.set(`shipping_address_collection[allowed_countries][${i}]`, c));
   f.set("phone_number_collection[enabled]", "true");
   const quemCompra = await quem(env, b.sessao); if (!quemCompra) return j({ error: "conta" }, 401);
-  f.set("customer_email", quemCompra);
+  const cus = await clienteStripe(env, quemCompra, e.c);
+  if (cus) { f.set("customer", cus); f.set("customer_update[shipping]", "auto"); f.set("customer_update[name]", "auto"); }
+  else f.set("customer_email", quemCompra);
   if (CUPOES[code]) f.set("discounts[0][coupon]", CUPOES[code]); else f.set("allow_promotion_codes", "true");
   const lista = sel.map(p => p.id).join(",");
   f.set("metadata[pecas]", lista.slice(0, 490)); f.set("metadata[envio]", e.n); f.set("metadata[portes_eur]", String(portes));
@@ -152,7 +154,7 @@ async function comprar(req, env, j) {
   const r = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body: f.toString() });
   const o = await r.json();
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
-  return j({ url: o.url, subtotal: sub, portes });
+  return j({ url: o.url, subtotal: sub, portes, pre: !!cus });
 }
 
 // ===== Encomendas: a cliente cancela ou pede devolução no site (sem WhatsApp) =====
@@ -321,6 +323,26 @@ ${botao(link, "Seguir a encomenda")}
   return { assunto: "A sua encomenda Bendito Closet foi enviada · tracking number " + est.track, html, texto };
 }
 
+// Cliente na Stripe com a morada da conta: o pagamento abre com nome, telemóvel e morada preenchidos.
+// Precisa de "Customers: escrita" na chave restrita; sem isso, o pagamento abre só com o e-mail preenchido.
+async function clienteStripe(env, email, paises) {
+  try {
+    const p = JSON.parse((await env.LIMITS.get("cli:" + email)) || "{}");
+    const prm = { email };
+    if (p.nome) prm.name = p.nome;
+    if (p.tel) prm.phone = p.tel;
+    const pais = /^[A-Z]{2}$/.test(p.pais || "") ? p.pais : (/portugal/i.test(p.pais || "") ? "PT" : "");
+    if (p.nome && p.l1 && p.cp && p.cidade && pais && paises.includes(pais)) {
+      prm["shipping[name]"] = p.nome; if (p.tel) prm["shipping[phone]"] = p.tel;
+      prm["shipping[address][line1]"] = p.l1; if (p.l2) prm["shipping[address][line2]"] = p.l2;
+      prm["shipping[address][postal_code]"] = p.cp; prm["shipping[address][city]"] = p.cidade; prm["shipping[address][country]"] = pais;
+    }
+    if (p.cus) { await stp(env, "customers/" + p.cus, "POST", prm); return p.cus; }
+    const c = await stp(env, "customers", "POST", { ...prm, "metadata[origem]": "conta benditocloset.pt" });
+    p.cus = c.id; await env.LIMITS.put("cli:" + email, JSON.stringify(p));
+    return c.id;
+  } catch (e) { return ""; }
+}
 // ===== Conta de cliente: entrar com um link enviado por e-mail (sem palavra-passe) =====
 const rnd = n => [...crypto.getRandomValues(new Uint8Array(n))].map(x => x.toString(16).padStart(2, "0")).join("");
 const emailOk = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e) && e.length < 200;
@@ -334,9 +356,17 @@ const LTXT = {
   it: { c: "Il tuo codice", a: "Accedi al tuo account · Bendito Closet", t: "Accedi al tuo account", p: "Scrivi il codice sul sito o tocca il pulsante per accedere. Vale 30 minuti.", b: "Accedi", n: "Se non hai richiesto questa e-mail, puoi ignorarla." }
 };
 LTXT.pt.n = "Se não pediu este e-mail, pode ignorá-lo.";
-async function abrirSessao(env, email) {
+const BTXT = {
+  pt: ["A sua conta Bendito Closet está criada", "Bem-vinda", "A partir de agora, sempre que entrar com este e-mail, vê todas as suas encomendas num só sítio, cancela ou pede devoluções sem procurar nada, e o pagamento já abre com os seus dados.", "Guarde a sua morada na conta para não ter de a escrever de novo.", "Ver a minha conta"],
+  en: ["Your Bendito Closet account is ready", "Welcome", "From now on, whenever you sign in with this email, you'll see all your orders in one place, cancel or request returns without searching, and checkout opens with your details.", "Save your address in your account so you don't have to type it again.", "Go to my account"]
+};
+async function abrirSessao(env, email, lang) {
   const s = rnd(32); await env.LIMITS.put("sess:" + s, email, { expirationTtl: 90 * 86400 });
-  if (!(await env.LIMITS.get("cli:" + email))) await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
+  if (!(await env.LIMITS.get("cli:" + email))) {
+    await env.LIMITS.put("cli:" + email, JSON.stringify({ criado: new Date().toISOString() }));
+    const t = BTXT[lang === "pt" ? "pt" : "en"];
+    await mail(env, email, t[0], moldura(esc(t[1]), `<p>${esc(t[2])}</p><p>${esc(t[3])}</p>${botao("https://benditocloset.pt/conta/", t[4])}`), t[1] + "\n\n" + t[2] + "\n" + t[3] + "\nhttps://benditocloset.pt/conta/");
+  }
   return s;
 }
 async function contaCodigo(req, env, j) {
@@ -350,7 +380,7 @@ async function contaCodigo(req, env, j) {
     await env.LIMITS.put("cod:" + email, JSON.stringify(r), { expirationTtl: 1800 }); return j({ error: "codigo" }, 400);
   }
   await env.LIMITS.delete("cod:" + email); if (r.tok) await env.LIMITS.delete("login:" + r.tok);
-  return j({ sessao: await abrirSessao(env, email), email });
+  return j({ sessao: await abrirSessao(env, email, b.lang), email });
 }
 async function contaEntrar(req, env, j) {
   if (!env.RESEND_KEY) return j({ error: "sem_email" }, 503);
@@ -374,7 +404,7 @@ async function contaValidar(req, env, j) {
   const t = String(b.t || ""); if (!/^[a-f0-9]{48}$/.test(t)) return j({ error: "dados" }, 400);
   const email = await env.LIMITS.get("login:" + t); if (!email) return j({ error: "expirado" }, 410);
   await env.LIMITS.delete("login:" + t); await env.LIMITS.delete("cod:" + email);
-  return j({ sessao: await abrirSessao(env, email), email });
+  return j({ sessao: await abrirSessao(env, email, b.lang), email });
 }
 async function contaEu(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -394,7 +424,8 @@ async function contaPerfil(req, env, j) {
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
   const email = await quem(env, b.sessao); if (!email) return j({ error: "sessao" }, 401);
   const p = JSON.parse((await env.LIMITS.get("cli:" + email)) || "{}"), d = b.perfil || {};
-  for (const k of ["nome", "tel", "l1", "l2", "cp", "cidade", "pais"]) p[k] = String(d[k] || "").trim().slice(0, 120);
+  for (const k of ["nome", "tel", "l1", "l2", "cp", "cidade"]) p[k] = String(d[k] || "").trim().slice(0, 120);
+  p.pais = /^[A-Za-z]{2}$/.test(String(d.pais || "")) ? String(d.pais).toUpperCase() : "PT";
   p.novidades = !!d.novidades; p.atualizado = new Date().toISOString();
   await env.LIMITS.put("cli:" + email, JSON.stringify(p));
   return j({ ok: true, perfil: p });
