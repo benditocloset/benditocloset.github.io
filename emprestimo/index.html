@@ -28,7 +28,7 @@ ol{padding-left:20px}li{margin:5px 0}
 .h3{font-size:15px;margin:22px 0 8px}
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px}
 .calc label:not(.it){display:block;font-size:13px;color:#6b5f62;margin:4px 0}
-.calc label input:not([type=checkbox]):not([type=radio]),.calc textarea{display:block;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #d9cfc4;border-radius:10px;font:inherit;font-size:16px;color:#1C1517;background:#fff;margin-top:4px}
+.calc label input:not([type=checkbox]):not([type=radio]),.calc textarea,.calc select{display:block;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #d9cfc4;border-radius:10px;font:inherit;font-size:16px;color:#1C1517;background:#fff;margin-top:4px}
 .calc .opt{display:flex!important;gap:8px;align-items:flex-start;font-size:15px!important;color:#1C1517!important}
 .calc .acc{margin:18px 0 6px}
 .sigw{position:relative;border:1px dashed #c9bdb1;border-radius:12px;background:#fffdfa;touch-action:none}
@@ -77,13 +77,21 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <div id="ship"></div>
 <p class="steps" id="shipnote"></p>
 <div class="sum" id="sum"></div>
-<label id="morL">Morada de entrega<textarea id="mor" rows="2" autocomplete="street-address"></textarea></label>
+<div id="morL">
+<label>Morada (rua, número e andar) *<input id="mor" autocomplete="address-line1" required placeholder="Ex.: Rua das Flores, 12, 2.º esq."></label>
+<div class="row">
+<label>Código postal *<input id="cp" autocomplete="postal-code" inputmode="numeric" required placeholder="Ex.: 4000-001"></label>
+<label>Localidade *<input id="loc" autocomplete="address-level2" required placeholder="Ex.: Porto"></label>
+<label>País *<select id="pais" autocomplete="country-name"><option>Portugal</option><option>Espanha</option><option>França</option><option>Itália</option><option>Alemanha</option><option>Bélgica</option><option>Países Baixos</option><option>Luxemburgo</option><option>Irlanda</option><option>Áustria</option><option>Suíça</option><option>Reino Unido</option><option>Outro país da Europa</option></select></label>
+</div>
+</div>
 
 <h3 class="h3">4. Os seus dados</h3>
+<p class="steps">* obrigatório</p>
 <div class="row">
-<label>Nome<input id="nome" autocomplete="name" required></label>
-<label>E-mail<input id="mail" type="email" autocomplete="email" required></label>
-<label>Telemóvel<input id="tel" type="tel" autocomplete="tel" required></label>
+<label>Nome *<input id="nome" autocomplete="name" required></label>
+<label>E-mail *<input id="mail" type="email" autocomplete="email" required></label>
+<label>Telemóvel *<input id="tel" type="tel" autocomplete="tel" required></label>
 <label>Publicação ou empresa onde vão sair as peças *<input id="pub" autocomplete="organization" required placeholder="Ex.: revista, jornal, marca, agência"></label>
 <label>Site ou @ da publicação *<input id="link" required placeholder="Ex.: www.revista.pt ou @revista"></label>
 <label>NIF (opcional)<input id="nif" inputmode="numeric"></label>
@@ -187,7 +195,9 @@ function problem(){
  const n=days();if($("d1").value<iso(tom))return "A data de entrega tem de ser a partir de amanhã.";
  if(n<0)return "A data de devolução tem de ser depois da entrega.";
  if(n>15)return "O empréstimo é de até 15 dias.";
- if(SH!=="mao"&&$("mor").value.trim().length<8)return "Escreva a morada de entrega.";
+ if(SH!=="mao"){if($("mor").value.trim().length<6)return "Escreva a morada de entrega (rua e número).";
+  const cp=$("cp").value.trim();if($("pais").value==="Portugal"?!/^\d{4}-?\d{3}$/.test(cp):cp.length<3)return "Escreva o código postal completo (ex.: 4000-001).";
+  if($("loc").value.trim().length<2)return "Escreva a localidade.";}
  if(!$("nome").value.trim())return "Escreva o seu nome.";
  if(!/^\S+@\S+\.\S+$/.test($("mail").value.trim()))return "Escreva um e-mail válido.";
  if($("tel").value.replace(/\D/g,"").length<9)return "Escreva o seu telemóvel.";
@@ -219,7 +229,7 @@ function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 
 list.addEventListener("change",e=>{const c=e.target;if(c.type!=="checkbox")return;c.checked?S.add(c.value):S.delete(c.value);total();});
 q.addEventListener("input",render);
 $("d1").addEventListener("change",()=>{if($("d1").value){const a=new Date($("d1").value+"T12:00");$("d2").min=iso(a);const m=new Date(a);m.setDate(m.getDate()+15);$("d2").max=iso(m);}check();});
-document.querySelectorAll("#caucao input,#caucao textarea").forEach(i=>i.addEventListener("input",()=>{$("err").hidden=true;check();}));
+document.querySelectorAll("#caucao input,#caucao textarea,#caucao select").forEach(i=>i.addEventListener("input",()=>{$("err").hidden=true;check();}));
 
 $("go").addEventListener("click",async()=>{
  const p=check();if(p){$("err").textContent=p;$("err").hidden=false;return;}
@@ -228,7 +238,7 @@ $("go").addEventListener("click",async()=>{
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
  const data={_subject:"Pedido de empréstimo "+CODE+" · caução "+fmt(V),_template:"table",_captcha:"false",
   "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":SH==="mao"?"—":"por conta da Bendito Closet","Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
-  "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":$("mor").value.trim(),
+  "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":SH==="mao"?"—":$("mor").value.trim()+", "+$("cp").value.trim()+" "+$("loc").value.trim()+", "+$("pais").value,
   "Nome":$("nome").value.trim(),"E-mail":$("mail").value.trim(),_replyto:$("mail").value.trim(),"Telemóvel":$("tel").value.trim(),
   "Publicação/empresa":$("pub").value.trim(),"Site ou @":$("link").value.trim(),"Produção e onde sai":$("prod").value.trim(),"Data prevista de publicação":$("dpub").value.trim(),"NIF":$("nif").value.trim(),"Notas":$("obs").value.trim(),
   "Contrato":"Aceite no site (versão de 25/11/2026)"};
