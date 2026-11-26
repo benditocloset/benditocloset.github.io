@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /portfolio/Marianna_Werneck_Web_Design_Portfolio.pdf
 Allow: /
 
 Sitemap: https://benditocloset.pt/sitemap.xml
