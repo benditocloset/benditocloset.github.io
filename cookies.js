@@ -3,8 +3,9 @@
 (function () {
   var U = 'https://bendito-provador-ia.nn45hn9bvr.workers.dev/ev';
   window.bcEv = function (e) { try { navigator.sendBeacon(U, new Blob([JSON.stringify({ e: e, p: location.pathname })], { type: 'text/plain' })); } catch (x) {} };
-  bcEv('pv');
-  try { var h = new Date().toISOString().slice(0, 10); if (localStorage.getItem('bc-vis') !== h) { localStorage.setItem('bc-vis', h); bcEv('vis'); } } catch (x) {}
+  var ev = 'pv';
+  try { var h = new Date().toISOString().slice(0, 10); if (localStorage.getItem('bc-vis') !== h) { localStorage.setItem('bc-vis', h); ev = ['pv', 'vis']; } } catch (x) {}
+  bcEv(ev);
   document.addEventListener('click', function (e) {
     var t = e.target.closest ? e.target : null; if (!t) return;
     if (t.closest('a[href*="wa.me"],a[href*="api.whatsapp"]')) bcEv('whatsapp');

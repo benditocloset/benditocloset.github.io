@@ -343,21 +343,20 @@ async function mail(env, to, assunto, html, texto, responder) {
 // Estatísticas anónimas do site: só contagens por dia (sem IP, sem e-mail, sem cookies)
 const EV_SITE = ["vis", "pv", "provador", "jogo", "saco", "whatsapp", "cartao", "popup"];
 const diaLx = (d = new Date()) => d.toLocaleDateString("sv-SE", { timeZone: "Europe/Lisbon" });
+// Uma chave por contador (st:<dia>:<evento>), para dois cliques ao mesmo tempo não se apagarem um ao outro
 async function somar(env, ev, pagina) {
-  const k = "st:" + diaLx(); let o = {};
-  try { o = JSON.parse((await env.LIMITS.get(k)) || "{}"); } catch (e) {}
-  o[ev] = (o[ev] || 0) + 1;
-  if (pagina && ev === "pv") { o.pg = o.pg || {}; o.pg[pagina] = (o.pg[pagina] || 0) + 1; }
-  await env.LIMITS.put(k, JSON.stringify(o), { expirationTtl: 400 * 86400 });
+  const k = "st:" + diaLx() + ":" + ev + (pagina ? ":" + pagina : "");
+  const n = +((await env.LIMITS.get(k)) || 0);
+  await env.LIMITS.put(k, String(n + 1), { expirationTtl: 400 * 86400 });
 }
 async function evento(req, env) {
   const origin = req.headers.get("Origin") || "";
   if (!ALLOWED.includes(origin)) return new Response(null, { status: 204 });
   let b = {}; try { b = JSON.parse(await req.text()); } catch (e) {}
-  const ev = String(b.e || ""); if (!EV_SITE.includes(ev)) return new Response(null, { status: 204 });
+  const evs = (Array.isArray(b.e) ? b.e : [b.e]).map(String).filter(x => EV_SITE.includes(x)).slice(0, 3);
   let p = String(b.p || "/").toLowerCase().replace(/[^a-z0-9/_-]/g, "").slice(0, 40);
   p = p.split("/").filter(Boolean)[0] || "inicio";
-  await somar(env, ev, p);
+  for (const ev of evs) { await somar(env, ev); if (ev === "pv") await somar(env, "pg", p); }
   return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": origin } });
 }
 async function creditosFashn(env) {
@@ -369,7 +368,14 @@ async function contasTotal(env) {
 }
 async function resumoDia(env, dia) {
   dia = dia || diaLx();
-  let o = {}; try { o = JSON.parse((await env.LIMITS.get("st:" + dia)) || "{}"); } catch (e) {}
+  const o = { pg: {} };
+  try {
+    const l = await env.LIMITS.list({ prefix: "st:" + dia + ":" });
+    for (const k of l.keys) {
+      const partes = k.name.split(":"), v = +((await env.LIMITS.get(k.name)) || 0);
+      if (partes[2] === "pg") o.pg[partes[3]] = v; else o[partes[2]] = v;
+    }
+  } catch (e) {}
   const provador = +((await env.LIMITS.get("all:" + dia)) || 0);
   let pagos = 0, valor = 0, abertos = 0;
   if (env.STRIPE_KEY) try {
