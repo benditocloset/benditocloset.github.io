@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="pt"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>A enviar imagem…</title></head><body style="font:15px system-ui;padding:20px">A enviar a imagem do anúncio para o Gestor de Anúncios…
+<script>
+/* Envia uma imagem pública do site (só da pasta /img/) para a janela do Gestor de Anúncios que abriu esta página. */
+(async()=>{const p=new URLSearchParams(location.search).get("src")||"";if(!/^\/img\/[\w\/.-]+\.(jpg|jpeg|png)$/.test(p)||!window.opener)return;
+const b=await (await fetch(p,{cache:"no-cache"})).arrayBuffer();
+window.opener.postMessage({bcImg:true,name:p.split("/").pop(),type:p.endsWith(".png")?"image/png":"image/jpeg",buf:b},"https://adsmanager.facebook.com",[b]);
+document.body.textContent="Imagem enviada. Pode fechar esta janela.";setTimeout(()=>window.close(),1500);})();
+</script></body></html>
