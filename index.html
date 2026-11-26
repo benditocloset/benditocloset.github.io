@@ -36,6 +36,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <title>Bendito Closet · Brechó online de marcas em Portugal · Peças únicas</title>
 <link rel="canonical" href="https://benditocloset.pt/">
+<link rel="preload" as="image" href="/img/marianna.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -436,6 +437,10 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
 #faqbtn{background:#FAF6F0!important;color:#1C1517!important;border:1px solid #1C1517!important}
 .grid .card .status.ok{display:none!important}
 .grid .card .status{top:auto!important;bottom:10px!important;left:10px!important}
+.hero{background-image:none!important}
+.hero-img{position:absolute;left:0;top:0;width:100%;height:auto;display:block;z-index:0}
+.hero:before{z-index:1}.hero .hx{z-index:2!important}
+@media(min-width:700px){.hero-img{left:auto;right:0;width:auto;height:100%}}
 </style>
 </head>
 <body>
@@ -451,6 +456,7 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
   <script>if(new Date()>=new Date("2027-01-01T00:00:00"))document.getElementById("btn-lu").remove();</script>
 
   <section class="hero" aria-label="Bendito Closet">
+    <img class="hero-img" src="/img/marianna.jpg" alt="Marianna, do Bendito Closet" width="560" height="700" fetchpriority="high" decoding="async">
     <div class="hx">
       <span class="k" data-i18n="heroK">Closet de marca · Peças únicas</span>
       <h1><span data-i18n="h1a">O meu armário,</span><em data-i18n="h1b">aberto para si.</em></h1>
