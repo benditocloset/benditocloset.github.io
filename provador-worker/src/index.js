@@ -291,12 +291,12 @@ const ETXT = {
   pt: { a: r => "Encomenda " + r.ref + " confirmada · Bendito Closet", t: "Obrigada pela sua compra", ola: n => "Olá" + (n ? " " + n.split(" ")[0] : "") + ",", p1: "A sua encomenda está confirmada. Assim que for enviada, recebe outro e-mail com o código de seguimento (tracking number), que também pode seguir na app Shop.",
     enc: "Encomenda", pec: "Peças", env: "Envio", tot: "Total pago", rec: "Ver o recibo do pagamento", ver: "Ver, cancelar ou devolver",
     canT: "Cancelar", can: "Enquanto a encomenda não for enviada, pode cancelá-la no botão acima. O reembolso é automático.",
-    devT: "Devolver", dev: ["Tem 14 dias depois de receber para pedir a devolução, no botão acima.", "Use a etiqueta de devolução: está no link abaixo e também vai impressa dentro da caixa.", "Entregue a encomenda nos CTT ou na Correos Express. Os portes da devolução são pagos por si, no balcão.", "Quando a peça chegar, fazemos o reembolso. A peça tem de voltar no mesmo estado."],
+    devT: "Devolver", dev: ["Tem 14 dias depois de receber para pedir a devolução, no botão acima.", "Use a etiqueta de devolução: está no link abaixo e também vai impressa dentro da caixa.", "Entregue a encomenda nos CTT ou na Correos Express. Os portes da devolução são pagos por si, no balcão.", "Quando a peça chegar, fazemos o reembolso. A peça tem de voltar no mesmo estado."], recusa: "Se a encomenda for recusada ou não for levantada, o reembolso é feito sem os portes.",
     etq: "Etiqueta de devolução", conta: "Crie a sua conta com este e-mail para ver todas as suas encomendas e comprar mais depressa:", contaB: "A minha conta" },
   en: { a: r => "Order " + r.ref + " confirmed · Bendito Closet", t: "Thank you for your order", ola: n => "Hello" + (n ? " " + n.split(" ")[0] : "") + ",", p1: "Your order is confirmed. As soon as it ships, you'll get another email with the tracking number, which you can also follow in the Shop app.",
     enc: "Order", pec: "Items", env: "Shipping", tot: "Total paid", rec: "View your payment receipt", ver: "View, cancel or return",
     canT: "Cancel", can: "Until your order ships, you can cancel it with the button above. The refund is automatic.",
-    devT: "Return", dev: ["You have 14 days after delivery to request a return, with the button above.", "Use the return label: it's at the link below and a printed copy also goes inside the box.", "Drop the parcel at CTT or Correos Express. Return shipping is paid by you at the counter.", "When the piece arrives, we refund you. It must come back in the same condition."],
+    devT: "Return", dev: ["You have 14 days after delivery to request a return, with the button above.", "Use the return label: it's at the link below and a printed copy also goes inside the box.", "Drop the parcel at CTT or Correos Express. Return shipping is paid by you at the counter.", "When the piece arrives, we refund you. It must come back in the same condition."], recusa: "If the order is refused or not collected, the refund is made without the shipping cost.",
     etq: "Return label", conta: "Create your account with this email to see all your orders and check out faster:", contaB: "My account" }
 };
 function emailCompra(r, links, lang) {
@@ -307,10 +307,10 @@ function emailCompra(r, links, lang) {
 ${r.recibo ? `<p style="text-align:center"><a href="${esc(r.recibo)}" style="color:#1C1517">${esc(t.rec)}</a></p>` : ""}
 ${botao(links.encomenda, t.ver)}
 <p style="font-family:Georgia,serif;font-size:19px;margin:24px 0 6px">${esc(t.canT)}</p><p>${esc(t.can)}</p>
-<p style="font-family:Georgia,serif;font-size:19px;margin:24px 0 6px">${esc(t.devT)}</p><ol style="padding-left:20px;margin:0">${t.dev.map(x => `<li style="margin:0 0 6px">${esc(x)}</li>`).join("")}</ol>
+<p style="font-family:Georgia,serif;font-size:19px;margin:24px 0 6px">${esc(t.devT)}</p><ol style="padding-left:20px;margin:0">${t.dev.map(x => `<li style="margin:0 0 6px">${esc(x)}</li>`).join("")}</ol><p style="font-size:14px;color:#6F625C;margin-top:10px">${esc(t.recusa)}</p>
 ${botao(links.devolucao, t.etq)}
 <p style="border-top:1px solid #E2D8CC;padding-top:16px;font-size:14px;color:#6F625C">${esc(t.conta)} <a href="https://benditocloset.pt/conta/" style="color:#1C1517">${esc(t.contaB)}</a></p>`);
-  const texto = [t.ola(r.nome), "", t.p1, "", t.enc + ": " + r.ref, t.pec + ": " + r.pecas, t.env + ": " + r.envio, t.tot + ": " + eurTxt(r.total), r.recibo ? t.rec + ": " + r.recibo : "", "", t.ver + ": " + links.encomenda, "", t.canT + ": " + t.can, "", t.devT + ":", ...t.dev.map((x, i) => (i + 1) + ") " + x), "", t.etq + ": " + links.devolucao, "", t.conta + " https://benditocloset.pt/conta/"].join("\n");
+  const texto = [t.ola(r.nome), "", t.p1, "", t.enc + ": " + r.ref, t.pec + ": " + r.pecas, t.env + ": " + r.envio, t.tot + ": " + eurTxt(r.total), r.recibo ? t.rec + ": " + r.recibo : "", "", t.ver + ": " + links.encomenda, "", t.canT + ": " + t.can, "", t.devT + ":", ...t.dev.map((x, i) => (i + 1) + ") " + x), t.recusa, "", t.etq + ": " + links.devolucao, "", t.conta + " https://benditocloset.pt/conta/"].join("\n");
   return { assunto: t.a(r), html, texto };
 }
 function emailEnviada(r, est, link, etq) {
