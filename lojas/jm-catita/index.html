@@ -79,6 +79,15 @@ footer .logo{color:var(--ink);margin-bottom:8px}
 .tot{display:flex;justify-content:space-between;font-weight:600;margin:14px 0 4px}
 .note{font-size:12.5px;color:var(--mut);margin-bottom:14px}
 .send{width:100%;border:0;border-radius:12px;background:#25D366;color:#fff;padding:15px;font:600 16px DM;cursor:pointer}
+.prop{margin-top:44px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 18px}
+.prop h2{margin:0 0 4px}.prop h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);margin:16px 0 8px}
+.prop ul{padding-left:18px;font-size:14.5px;line-height:1.55}.prop li{margin-bottom:4px}
+.price{font-family:Bodoni,serif;font-size:30px;margin:6px 0 2px}
+.no li{color:var(--mut)}
+.q{margin-top:16px}.q fieldset{border:0;margin:0 0 16px}.q legend{font-weight:600;font-size:15px;margin-bottom:8px}
+.op{display:flex;flex-wrap:wrap;gap:7px}.op label{border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:14px;cursor:pointer;background:var(--bg)}
+.op input{position:absolute;opacity:0;pointer-events:none}.op label:has(input:checked){background:var(--ink);color:#fff;border-color:var(--ink)}
+.q textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:12px;padding:12px;font:15px DM;background:var(--bg)}
 .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;z-index:50;opacity:0;transition:opacity .25s;pointer-events:none}
 .toast.on{opacity:1}
 </style>
@@ -94,7 +103,7 @@ footer .logo{color:var(--ink);margin-bottom:8px}
     <div class="eyebrow">🌻 Nova coleção de inverno</div>
     <h1>Conforto com <i>estilo</i>, para todos os dias</h1>
     <p>Malhas, casacos e calças escolhidos a dedo. Encomende pelo telemóvel e receba em casa ou levante na loja.</p>
-    <a class="btn" href="#loja">Ver as novidades</a>
+    <a class="btn" href="#loja">Ver as novidades</a> <a class="btn" href="#proposta" style="background:transparent;color:#fff;border:1.5px solid #fff;margin-left:6px">Ver a proposta</a>
   </div>
 </section>
 <div class="trust">
@@ -124,6 +133,72 @@ footer .logo{color:var(--ink);margin-bottom:8px}
     <div><b>1</b>Escolha as peças e o tamanho e junte ao saco.</div>
     <div><b>2</b>Envie o pedido pelo WhatsApp com um toque. Confirmo a disponibilidade.</div>
     <div><b>3</b>Pague por MB WAY ou transferência e receba em casa, ou levante na loja em Vendas Novas.</div>
+  </section>
+
+  <section class="prop" id="proposta">
+    <div class="eyebrow" style="color:var(--ac)">Proposta para a JM Catita</div>
+    <h2>Pacote base</h2>
+    <div class="price">800 € <small style="display:block;font-family:DM;font-size:14px;color:var(--mut)">+ IVA · pagamento único, sem mensalidade nem comissão</small></div>
+    <h4>Inclui</h4>
+    <ul>
+      <li>Loja online com a sua marca, para telemóvel e computador</li>
+      <li>Até 30 peças carregadas por mim, com fotos, tamanhos e preços</li>
+      <li>Saco de compras e pedido enviado para o seu WhatsApp</li>
+      <li>Ligação do domínio e e-mail profissional</li>
+      <li>Loja preparada e registada no Google</li>
+      <li>2 rondas de ajustes e 30 dias de suporte</li>
+      <li>Pronta em até 2 semanas depois de receber as fotos e os dados</li>
+    </ul>
+    <h4>Não inclui</h4>
+    <ul class="no">
+      <li><b>Instagram e Facebook:</b> as publicações, stories e respostas continuam a ser da sua responsabilidade. Se quiser que eu trate disso, o serviço de social media tem orçamento à parte.</li>
+      <li>Peças novas, preços e vendidos depois da entrega: pode fazer sozinha (explico como) ou contratar a manutenção mensal.</li>
+      <li>Pagamento online no próprio site e extras como o "Monte o seu look", a revista ou o provador com IA: orçamento à parte.</li>
+      <li>O domínio (cerca de 10 € por ano), registado em seu nome.</li>
+    </ul>
+    <p class="sub" style="margin:14px 0 0">O valor final depende das respostas abaixo: stock com vários tamanhos e cores, mais peças ou extras alteram o orçamento.</p>
+
+    <form class="q" id="q" onsubmit="event.preventDefault();respostas()">
+      <h4>Caixa de perguntas</h4>
+      <fieldset><legend>1. Tem stock ou peças únicas?</legend><div class="op">
+        <label><input type="radio" name="Stock" value="Tenho stock (vários tamanhos e cores do mesmo modelo)">Tenho stock, vários tamanhos e cores</label>
+        <label><input type="radio" name="Stock" value="Peças únicas">Peças únicas</label>
+        <label><input type="radio" name="Stock" value="As duas coisas">As duas coisas</label></div></fieldset>
+      <fieldset><legend>2. Quantos modelos quer na loja ao início?</legend><div class="op">
+        <label><input type="radio" name="Modelos" value="Até 30">Até 30</label>
+        <label><input type="radio" name="Modelos" value="30 a 60">30 a 60</label>
+        <label><input type="radio" name="Modelos" value="Mais de 60">Mais de 60</label></div></fieldset>
+      <fieldset><legend>3. De quanto em quanto tempo chegam novidades?</legend><div class="op">
+        <label><input type="radio" name="Novidades" value="Todas as semanas">Todas as semanas</label>
+        <label><input type="radio" name="Novidades" value="Todos os meses">Todos os meses</label>
+        <label><input type="radio" name="Novidades" value="Raramente">Raramente</label></div></fieldset>
+      <fieldset><legend>4. Quem vai pôr as peças novas no site depois da entrega?</legend><div class="op">
+        <label><input type="radio" name="Atualizações" value="Eu própria">Eu própria</label>
+        <label><input type="radio" name="Atualizações" value="Quero manutenção mensal">Quero manutenção mensal</label></div></fieldset>
+      <fieldset><legend>5. Fotos das peças</legend><div class="op">
+        <label><input type="radio" name="Fotos" value="Já tenho fotos boas">Já tenho fotos boas</label>
+        <label><input type="radio" name="Fotos" value="Preciso de ajuda com as fotos">Preciso de ajuda</label></div></fieldset>
+      <fieldset><legend>6. Como quer receber os pagamentos?</legend><div class="op">
+        <label><input type="radio" name="Pagamento" value="MB WAY ou transferência, combinado no WhatsApp">MB WAY ou transferência, pelo WhatsApp</label>
+        <label><input type="radio" name="Pagamento" value="Pagamento online no site">Pagamento online no site</label></div></fieldset>
+      <fieldset><legend>7. Entregas</legend><div class="op">
+        <label><input type="radio" name="Entregas" value="Envio por correio">Envio por correio</label>
+        <label><input type="radio" name="Entregas" value="Levantamento na loja">Levantamento na loja</label>
+        <label><input type="radio" name="Entregas" value="As duas">As duas</label></div></fieldset>
+      <fieldset><legend>8. Já tem domínio (ex.: jmcatita.pt)?</legend><div class="op">
+        <label><input type="radio" name="Domínio" value="Sim">Sim</label>
+        <label><input type="radio" name="Domínio" value="Não">Não</label></div></fieldset>
+      <fieldset><legend>9. Instagram e Facebook</legend><div class="op">
+        <label><input type="radio" name="Redes sociais" value="Continuo a tratar eu">Continuo a tratar eu</label>
+        <label><input type="radio" name="Redes sociais" value="Quero orçamento de social media">Quero orçamento de social media</label></div></fieldset>
+      <fieldset><legend>10. Algum extra lhe interessa?</legend><div class="op">
+        <label><input type="checkbox" name="Extras" value="Assistente virtual">Assistente virtual</label>
+        <label><input type="checkbox" name="Extras" value="Monte o seu look">Monte o seu look</label>
+        <label><input type="checkbox" name="Extras" value="Revista">Revista</label>
+        <label><input type="checkbox" name="Extras" value="Provador com IA">Provador com IA</label></div></fieldset>
+      <fieldset><legend>Mais alguma coisa?</legend><textarea name="Notas" placeholder="Escreva aqui o que quiser acrescentar"></textarea></fieldset>
+      <button class="send" type="submit">Enviar respostas à Marianna</button>
+    </form>
   </section>
 </main>
 <footer>
@@ -171,6 +246,11 @@ function fechar(){document.getElementById("w").className=""}
 function enviar(){if(!saco.length){toast("O saco está vazio");return}
  const l=saco.map(s=>{const p=P.find(x=>x.id==s.id);return "• "+p.n+" ("+s.t+")"+(p.p?" "+eur(p.p):" — preço?")}).join("\n");
  location.href="https://wa.me/"+WA+"?text="+encodeURIComponent("Olá JM Catita! Gostava de encomendar:\n"+l+"\n\nTotal: "+document.getElementById("tot").textContent)}
+function respostas(){const f=new FormData(document.getElementById("q")),o={};
+ for(const [k,v] of f.entries()){if(!v)continue;o[k]=o[k]?o[k]+", "+v:v}
+ const l=Object.entries(o).map(([k,v])=>"• "+k+": "+v).join("\n");
+ if(!l){toast("Responda a pelo menos uma pergunta");return}
+ location.href="https://wa.me/351936796783?text="+encodeURIComponent("Olá Marianna! Respostas da JM Catita:\n"+l)}
 chips();grid();upd();
 </script>
 </body>
