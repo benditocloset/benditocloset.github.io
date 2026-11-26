@@ -38,6 +38,7 @@ ol{padding-left:20px}li{margin:5px 0}
 @media print{.calc,.top{display:none}#signed{display:block!important}}
 .sum{background:#F8F5F0;border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}.sum div{display:flex;justify-content:space-between}.sum .t{font-weight:700;font-size:18px;border-top:1px solid #e6ddd3;margin-top:6px;padding-top:6px}
 .veic{border:1px solid #eee3d8;border-radius:12px;padding:8px 12px 4px;margin:8px 0;position:relative;grid-column:1/-1}.veic .vt{font-size:13px;font-weight:600;color:#1C1517;display:flex;justify-content:space-between;align-items:center}.veic .vx{border:0;background:none;color:#9B1B3A;font:inherit;font-size:13px;cursor:pointer}#veics,#addv{grid-column:1/-1}
+.bad{border-color:#9B1B3A!important;box-shadow:0 0 0 3px rgba(155,27,58,.15)}
 .err{color:#9B1B3A;font-size:14px;margin:8px 0}
 button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 .done{border-top:1px solid #eee;margin-top:16px;padding-top:10px}
@@ -190,25 +191,27 @@ function render(){const t=(q.value||"").toLowerCase();list.innerHTML=P.filter(p=
 function sel(){return P.filter(p=>S.has(p.id));}
 function total(){const s=sel();V=s.reduce((a,p)=>a+p.preco,0);$("tot").textContent=fmt(V);$("sel").textContent=s.length?s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join(" · "):"";check();}
 function days(){const a=$("d1").value,b=$("d2").value;if(!a||!b)return null;return Math.round((new Date(b+"T12:00")-new Date(a+"T12:00"))/864e5);}
-function problem(){
- if(!S.size)return "Escolha pelo menos uma peça.";
- if(!$("d1").value||!$("d2").value)return "Escolha as datas.";
- const n=days();if($("d1").value<iso(tom))return "A data de entrega tem de ser a partir de amanhã.";
- if(n<0)return "A data de devolução tem de ser depois da entrega.";
- if(n>15)return "O empréstimo é de até 15 dias.";
- if(SH!=="mao"){if($("mor").value.trim().length<6)return "Escreva a morada de entrega (rua e número).";
-  const cp=$("cp").value.trim();if($("pais").value==="Portugal"?!/^\d{4}-?\d{3}$/.test(cp):cp.length<3)return "Escreva o código postal completo (ex.: 4000-001).";
-  if($("loc").value.trim().length<2)return "Escreva a localidade.";}
- if(!$("nome").value.trim())return "Escreva o seu nome.";
- if(!/^\S+@\S+\.\S+$/.test($("mail").value.trim()))return "Escreva um e-mail válido.";
- if($("tel").value.replace(/\D/g,"").length<9)return "Escreva o seu telemóvel.";
- if(pts<15)return "Assine o contrato no quadro.";
- if($("sname").value.trim().split(/\s+/).length<2)return "Escreva o seu nome completo junto da assinatura.";
- const vv=veics();if(!vv.length)return "Indique pelo menos um veículo (publicação ou empresa).";
- for(let i=0;i<vv.length;i++){if(vv[i].n.length<2)return "Escreva o nome do veículo "+(i+1)+" (publicação ou empresa).";if(vv[i].l.length<3)return "Escreva o site ou o @ do veículo "+(i+1)+".";}
- if($("prod").value.trim().length<10)return "Descreva a produção e onde vai ser publicada.";
- if($("dpub").value.trim().length<3)return "Escreva a data prevista de publicação.";
- if(!$("ok").checked)return "Marque a caixa para aceitar e assinar o contrato.";
+let BAD=null;
+function problem(){BAD=null;const X=(m,el)=>{BAD=el;return m;};
+ if(!S.size)return X("Escolha pelo menos uma peça.",$("q"));
+ if(!$("d1").value)return X("Escolha a data em que recebe as peças.",$("d1"));
+ if(!$("d2").value)return X("Escolha a data de devolução.",$("d2"));
+ const n=days();if($("d1").value<iso(tom))return X("A data de entrega tem de ser a partir de amanhã.",$("d1"));
+ if(n<0)return X("A data de devolução tem de ser depois da entrega.",$("d2"));
+ if(n>15)return X("O empréstimo é de até 15 dias.",$("d2"));
+ if(SH!=="mao"){if($("mor").value.trim().length<4)return X("Escreva a morada de entrega (rua e número).",$("mor"));
+  const cp=$("cp").value.trim();if($("pais").value==="Portugal"?!/^\d{4}\s*-?\s*\d{3}$/.test(cp):cp.length<3)return X("Escreva o código postal completo (ex.: 4000-001).",$("cp"));
+  if($("loc").value.trim().length<2)return X("Escreva a localidade.",$("loc"));}
+ if(!$("nome").value.trim())return X("Escreva o seu nome.",$("nome"));
+ if(!/^\S+@\S+\.\S+$/.test($("mail").value.trim()))return X("Escreva um e-mail válido.",$("mail"));
+ if($("tel").value.replace(/\D/g,"").length<9)return X("Escreva o seu telemóvel.",$("tel"));
+ const vv=veics(),vd=[...document.querySelectorAll("#veics .veic")];
+ for(let i=0;i<vv.length;i++){if(vv[i].n.length<2)return X("Escreva o nome do veículo "+(i+1)+" (publicação ou empresa).",vd[i].querySelector(".vn"));if(vv[i].l.length<2)return X("Escreva o site ou o @ do veículo "+(i+1)+".",vd[i].querySelector(".vl"));}
+ if($("prod").value.trim().length<2)return X("Escreva a produção: o que vão fazer e onde vai ser publicado.",$("prod"));
+ if($("dpub").value.trim().length<2)return X("Escreva a data prevista de publicação.",$("dpub"));
+ if(pts<8)return X("Assine o contrato no quadro com o dedo.",$("sig"));
+ if($("sname").value.trim().split(/\s+/).length<2)return X("Escreva o seu nome completo junto da assinatura.",$("sname"));
+ if(!$("ok").checked)return X("Marque a caixa para aceitar e assinar o contrato.",$("ok"));
  return "";}
 const cv=$("sig"),cx=cv.getContext("2d");let strokes=0,pts=0,draw=false,last=null;
 function sizeSig(){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;const img=pts?cv.toDataURL():null;cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0);cx.lineWidth=2.2;cx.lineCap="round";cx.lineJoin="round";cx.strokeStyle="#1C1517";if(img){const i=new Image();i.onload=()=>cx.drawImage(i,0,0,r.width,r.height);i.src=img;}}
@@ -236,10 +239,10 @@ function check(){const n=days();$("dmsg").textContent=n==null?"Empréstimo até 
 list.addEventListener("change",e=>{const c=e.target;if(c.type!=="checkbox")return;c.checked?S.add(c.value):S.delete(c.value);total();});
 q.addEventListener("input",render);
 $("d1").addEventListener("change",()=>{if($("d1").value){const a=new Date($("d1").value+"T12:00");$("d2").min=iso(a);const m=new Date(a);m.setDate(m.getDate()+15);$("d2").max=iso(m);}check();});
-document.querySelectorAll("#caucao input,#caucao textarea,#caucao select").forEach(i=>i.addEventListener("input",()=>{$("err").hidden=true;check();}));
+document.querySelectorAll("#caucao input,#caucao textarea,#caucao select").forEach(i=>i.addEventListener("input",()=>{$("err").hidden=true;i.classList.remove("bad");check();}));
 
 $("go").addEventListener("click",async()=>{
- const p=check();if(p){$("err").textContent=p;$("err").hidden=false;return;}
+ const p=check();if(p){$("err").textContent=p;$("err").hidden=false;document.querySelectorAll(".bad").forEach(x=>x.classList.remove("bad"));if(BAD){BAD.classList.add("bad");BAD.scrollIntoView({behavior:"smooth",block:"center"});try{if(BAD.focus&&BAD.id!=="sig")BAD.focus({preventScroll:true});}catch(e){}}return;}
  $("err").hidden=true; const go=$("go");go.disabled=true;go.textContent="A enviar…";
  CODE="BC-"+Math.random().toString(36).slice(2,6).toUpperCase();
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
