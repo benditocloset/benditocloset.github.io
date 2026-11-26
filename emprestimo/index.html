@@ -83,7 +83,8 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <p class="steps" id="shipnote"></p>
 <div class="sum" id="sum"></div>
 <div id="morL">
-<label>Morada (rua, número e andar) *<input id="mor" autocomplete="address-line1" required placeholder="Ex.: Rua das Flores, 12, 2.º esq."></label>
+<label>Rua e número *<input id="mor" autocomplete="address-line1" required placeholder="Ex.: Rua das Flores, 12"></label>
+<label>Andar e porta<input id="andar" autocomplete="address-line2" placeholder="Ex.: 2.º esq., 7.º dto. trás (deixe vazio se for moradia)"></label>
 <div class="row">
 <label>Código postal *<input id="cp" autocomplete="postal-code" inputmode="numeric" required placeholder="Ex.: 4000-001"></label>
 <label>Localidade *<input id="loc" autocomplete="address-level2" required placeholder="Ex.: Porto"></label>
@@ -97,6 +98,7 @@ button.pay{width:100%;border:0;font:inherit;font-weight:600;cursor:pointer}
 <label>Nome *<input id="nome" autocomplete="name" required></label>
 <label>E-mail *<input id="mail" type="email" autocomplete="email" required></label>
 <label>Telemóvel *<input id="tel" type="tel" autocomplete="tel" required></label>
+<p class="vhint" style="font-size:13px;line-height:1.5;color:#555;margin:10px 0 4px;grid-column:1/-1"><b>Vem da collab do Instagram?</b> No veículo 1 escreva <b>Collab Bendito Closet</b> e, em «Site ou @», o <b>seu</b> Instagram (ex.: @omeuperfil). Em «Produção», conte que tipo de vídeo quer gravar.</p>
 <div id="veics"></div>
 <button type="button" class="cp" id="addv" style="font-size:14px;padding:7px 14px;margin:2px 0 8px">+ Adicionar outro veículo</button>
 <label>NIF (opcional)<input id="nif" inputmode="numeric"></label>
@@ -233,6 +235,7 @@ function addVeic(){const w=$("veics"),n=w.children.length+1;const d=document.cre
 function veics(){return [...document.querySelectorAll("#veics .veic")].map(d=>({n:d.querySelector(".vn").value.trim(),l:d.querySelector(".vl").value.trim()}));}
 function renum(){[...document.querySelectorAll("#veics .veic .vt span")].forEach((s,i)=>s.textContent="Veículo "+(i+1));}
 addVeic();
+if(/[?&]collab/.test(location.search)||/\/collab\//.test(document.referrer)){setTimeout(()=>{const n=document.querySelector("#veics .vn");if(n&&!n.value){n.value="Collab Bendito Closet";}const vl=document.querySelector("#veics .vl");if(vl)vl.placeholder="O seu Instagram, ex.: @omeuperfil";const pr=$("prod");if(pr&&!pr.value)pr.placeholder="Ex.: reel no meu Instagram a usar a peça, com o look completo";},0);}
 $("addv").addEventListener("click",()=>{addVeic();const l=[...document.querySelectorAll("#veics .vn")].pop();l&&l.focus();});
 $("veics").addEventListener("click",e=>{const x=e.target.closest(".vx");if(x){x.closest(".veic").remove();renum();}});
 function ent(){return SHIP.find(x=>x.k===SH).n;}
@@ -249,7 +252,7 @@ $("go").addEventListener("click",async()=>{
  const s=sel(),fd=d=>d.split("-").reverse().join("/");
  const data={_subject:"Pedido de empréstimo "+CODE+" · caução "+fmt(V),_template:"table",_captcha:"false",
   "Pedido":CODE,"Caução":fmt(V),"Portes ida e volta":SH==="mao"?"—":"por conta da Bendito Closet","Peças":s.map(p=>p.marca+" "+p.nome+" ("+fmt(p.preco)+")").join("; "),
-  "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":SH==="mao"?"—":$("mor").value.trim()+", "+$("cp").value.trim()+" "+$("loc").value.trim()+", "+$("pais").value,
+  "Entrega":fd($("d1").value),"Devolução até":fd($("d2").value)+" ("+days()+" dias)","Envio":ent(),"Morada":SH==="mao"?"—":$("mor").value.trim()+($("andar").value.trim()?", "+$("andar").value.trim():"")+", "+$("cp").value.trim()+" "+$("loc").value.trim()+", "+$("pais").value,
   "Nome":$("nome").value.trim(),"E-mail":$("mail").value.trim(),_replyto:$("mail").value.trim(),"Telemóvel":$("tel").value.trim(),
   "Veículos":veics().map((v,i)=>(i+1)+". "+v.n+" ("+v.l+")").join("; "),"Produção e onde sai":$("prod").value.trim(),"Data prevista de publicação":$("dpub").value.trim(),"NIF":$("nif").value.trim(),"Notas":$("obs").value.trim(),
   "Contrato":"Aceite no site (versão de 25/11/2026)"};
@@ -279,5 +282,6 @@ const pg=new URLSearchParams(location.search).get("pago");if(pg&&/^BC-[A-Z0-9]{4
 })();
 </script>
 <script src="/faq.js?v=96" defer></script>
+<script src="/cp-pt.js?v=1" defer></script>
 </body>
 </html>
