@@ -91,7 +91,7 @@ async function caucao(req, env, j) {
   const call = body => fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body });
   const r = await call(f.toString()), o = await r.json();
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
-  { const m = await pcsLer(env); for (const p of sel) m[p.id] = { s: o.id, e: quemCompra, ate: Date.now() + RES_MS }; await pcsGravar(env, m); }
+  let resOk = true; try { const m = await pcsLer(env); for (const p of sel) m[p.id] = { s: o.id, e: quemCompra, ate: Date.now() + RES_MS }; await pcsGravar(env, m); } catch (e) { resOk = String(e.message || e); }
   await limparCacheEstado();
   return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100, retida: true });
 }
@@ -143,6 +143,7 @@ async function estadoPecas(req, env, j) {
     if (st === "vendido") out.vendidas.push(id); else if (st === "reservado") out.reservadas.push(id);
   }
   if (mudou) await pcsGravar(env, all);
+  out.n = Object.keys(all).length;
   return j(out);
 }
 async function limparCacheEstado() {}
@@ -204,7 +205,7 @@ async function comprar(req, env, j) {
   const r = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body: f.toString() });
   const o = await r.json();
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
-  return j({ url: o.url, subtotal: sub, portes, pre: !!cus });
+  return j({ url: o.url, subtotal: sub, portes, pre: !!cus, res: resOk });
 }
 
 // ===== Encomendas: a cliente cancela ou pede devolução no site (sem WhatsApp) =====
