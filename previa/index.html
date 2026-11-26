@@ -361,9 +361,10 @@ header .brand{width:150px!important}
 header{padding-bottom:6px!important}
 .topnav a{font-size:10.5px!important;letter-spacing:.22em!important;font-weight:500!important}
 .intro{display:none!important}
-.hero{position:relative;margin:0 -20px;min-height:min(125vw,680px);background:#2b2b2d url(/img/marianna.jpg) 50% 12%/cover no-repeat;display:flex;align-items:flex-end;overflow:hidden}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,9,0) 30%,rgba(10,8,9,.55) 58%,rgba(10,8,9,.92) 100%)}
-.hero .hx{position:relative;z-index:1;padding:0 26px 40px;max-width:600px;color:#F4ECE4}
+.hero{position:relative;margin:0 -20px;background:#0a0809 url(/img/marianna.jpg) 50% 0/100% auto no-repeat;overflow:hidden}
+.hero:before{content:"";position:absolute;left:0;right:0;top:0;height:125vw;background:linear-gradient(180deg,rgba(10,8,9,0) 45%,rgba(10,8,9,.6) 75%,#0a0809 100%)}
+.hero .hx{position:relative;z-index:1;padding:96vw 26px 44px;max-width:600px;color:#F4ECE4}
+@media(min-width:700px){.hero{margin:0;background-size:auto 100%;background-position:right top;min-height:600px;display:flex;align-items:center}.hero:before{height:100%;background:linear-gradient(90deg,#0a0809 38%,rgba(10,8,9,.2) 75%)}.hero .hx{padding:60px 48px}}
 .hero .k{display:block;font:500 10px/1.4 var(--body);letter-spacing:.34em;text-transform:uppercase;color:#D9A85B}
 .hero h1{font-family:var(--display);font-weight:500;font-size:clamp(44px,12vw,76px);line-height:.95;margin:14px 0 18px;color:#fff;letter-spacing:-.01em}
 .hero h1 em{display:block;color:#D9A85B}
