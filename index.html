@@ -567,7 +567,7 @@ html.maison #mnu .x{width:40px!important;height:40px!important;background:none!i
 html.maison #pop{max-width:420px;background:#fff!important;color:#111!important;border:0!important;border-radius:0!important;padding:40px 28px 28px!important}
 html.maison #pop::backdrop{background:rgba(0,0,0,.45)}
 html.maison #pop .px{color:#111!important;font-size:26px;outline:0!important}
-html.maison #pop .pk{color:#777!important;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-size:10.5px!important;letter-spacing:.22em!important;font-weight:400!important}
+html.maison #pop .pk{text-transform:uppercase;color:#777!important;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-size:10.5px!important;letter-spacing:.22em!important;font-weight:400!important}
 html.maison #pop h2{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif!important;font-style:normal!important;font-weight:400!important;text-transform:uppercase;letter-spacing:.12em!important;font-size:19px!important;line-height:1.35!important;margin:14px 0 12px!important;color:#111!important}
 html.maison #pop p{color:#555!important;font-size:14px!important}
 html.maison #pop input[type=email]{background:#fff!important;color:#111!important;border:0!important;border-bottom:1px solid #111!important;border-radius:0!important;padding:12px 2px!important;margin-bottom:16px!important}
@@ -1594,7 +1594,15 @@ aplicarIdioma();
 <script>
 (function(){
   const d = document.getElementById("pop"); if (!d) return;
-  const fill = () => d.querySelectorAll("[data-i18n]").forEach(el => { const v = T()[el.dataset.i18n]; if (typeof v === "string") el.textContent = v; }); fill();
+  const POP_BF = {
+    pt:{popK:"Black Friday · o gerente enlouqueceu", popT:"Mais 10%, em cima dos 15%", popP:"Deixe o seu email e o cupão BENDITO10 soma-se à Black Friday na primeira compra: 23,5% de desconto. Só até domingo à meia-noite.", popDoneP:"O seu cupão BENDITO10 já está aplicado e soma-se aos 15% da Black Friday. Vale na primeira compra, até domingo à meia-noite."},
+    en:{popK:"Black Friday · the manager lost it", popT:"An extra 10%, on top of the 15%", popP:"Leave your email and BENDITO10 stacks with Black Friday on your first order: 23.5% off. Only until Sunday at midnight.", popDoneP:"Your BENDITO10 code is applied and stacks with the 15% Black Friday discount. Valid on your first order, until Sunday at midnight."},
+    es:{popK:"Black Friday · el gerente se volvió loco", popT:"Un 10% más, encima del 15%", popP:"Deja tu email y el cupón BENDITO10 se suma a la Black Friday en tu primera compra: 23,5% de descuento. Solo hasta el domingo a medianoche.", popDoneP:"Tu cupón BENDITO10 ya está aplicado y se suma al 15% de la Black Friday. Válido en la primera compra, hasta el domingo a medianoche."},
+    fr:{popK:"Black Friday · le gérant a perdu la tête", popT:"10 % de plus, en plus des 15 %", popP:"Laissez votre e-mail : le code BENDITO10 se cumule avec le Black Friday sur votre première commande, soit 23,5 % de remise. Jusqu'à dimanche minuit.", popDoneP:"Votre code BENDITO10 est appliqué et se cumule avec les 15 % du Black Friday. Valable sur la première commande, jusqu'à dimanche minuit."},
+    de:{popK:"Black Friday · der Chef ist durchgedreht", popT:"10 % extra, zusätzlich zu den 15 %", popP:"E-Mail eintragen: BENDITO10 gilt zusätzlich zum Black Friday bei Ihrer ersten Bestellung – 23,5 % Rabatt. Nur bis Sonntag Mitternacht.", popDoneP:"Ihr Code BENDITO10 ist aktiv und gilt zusätzlich zu den 15 % Black Friday. Für die erste Bestellung, bis Sonntag Mitternacht."},
+    it:{popK:"Black Friday · il direttore è impazzito", popT:"Un altro 10%, oltre al 15%", popP:"Lascia la tua email e il codice BENDITO10 si somma al Black Friday sul primo ordine: 23,5% di sconto. Solo fino a domenica a mezzanotte.", popDoneP:"Il tuo codice BENDITO10 è già applicato e si somma al 15% del Black Friday. Valido sul primo ordine, fino a domenica a mezzanotte."}
+  };
+  const fill = () => d.querySelectorAll("[data-i18n]").forEach(el => { const k = el.dataset.i18n, b = (typeof BF_ATIVA !== "undefined" && BF_ATIVA) ? (POP_BF[LANG] || POP_BF.pt) : null; const v = (b && b[k]) || T()[k]; if (typeof v === "string") el.textContent = v; }); fill();
   let visto = ""; try { visto = localStorage.getItem("bc-pop") || ""; } catch(e) {}
   const fechar = v => { try { localStorage.setItem("bc-pop", v || "visto"); } catch(e) {} d.close(); };
   const abrir = () => { if (visto || d.open || document.querySelector("dialog[open]")) return; visto = "1";
