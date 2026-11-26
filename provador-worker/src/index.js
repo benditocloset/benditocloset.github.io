@@ -192,7 +192,7 @@ async function encontrar(req, env, j) {
     let lista = [];
     if (b.s && /^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(String(b.s))) {
       const ses = await stp(env, "checkout/sessions/" + b.s);
-      if (ses.payment_status === "paid") lista = [await resumoEncomenda(env, ses)];
+      if (ses.payment_status === "paid") { const r = await resumoEncomenda(env, ses); if (!/^Empr[eé]stimo/i.test(r.pecas)) lista = [r]; }
     } else {
       const email = String(b.email || "").trim().toLowerCase(), l4 = String(b.last4 || "").replace(/\D/g, "");
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || l4.length !== 4) return j({ error: "dados" }, 400);
@@ -200,7 +200,7 @@ async function encontrar(req, env, j) {
       for (const ses of (o.data || [])) {
         if (ses.payment_status !== "paid" || Date.now() / 1000 - ses.created > DIAS_DEV * 86400 || !(ses.metadata && ses.metadata.pecas)) continue;
         const r = await resumoEncomenda(env, ses);
-        if (r.last4 === l4) lista.push(r);
+        if (r.last4 === l4 && !/^Empr[eé]stimo/i.test(r.pecas)) lista.push(r);
       }
     }
     for (const r of lista) { r.tok = await hmac(env, "enc:" + r.id); delete r.pi; delete r.last4; }
@@ -255,6 +255,7 @@ async function gestao(req, env, url) {
     for (const ses of (o.data || [])) {
       if (ses.payment_status !== "paid" || !(ses.metadata && ses.metadata.pecas) || Date.now() / 1000 - ses.created > 60 * 86400) continue;
       const r = await resumoEncomenda(env, ses);
+      if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
       const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
       const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : bt("enviada", "Marcar como enviada"));
