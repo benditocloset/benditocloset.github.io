@@ -97,7 +97,7 @@ async function caucao(req, env, j) {
 // Compra de peças: pagamento com o preço do site e só os portes escolhidos pela cliente (calculados aqui).
 // Tabela aprovada a 25/11/2026: [roupa e acessórios, sapatos/malas/casacos]; CTT no continente grátis a partir de 100 €.
 const ENVIO = {
-  ctt: { n: "Portugal continental · CTT · 2 a 3 dias úteis", p: [7, 9], min: 2, max: 3, c: ["PT"], gratis: 100 },
+  ctt: { n: "Portugal continental · Entrega em casa com seguimento · 2 a 3 dias úteis", p: [9, 11], min: 2, max: 3, c: ["PT"], gratis: 100 },
   cex: { n: "Portugal continental · Correos Express · 24h", p: [10, 12], min: 1, max: 1, c: ["PT"] },
   ilhas: { n: "Açores e Madeira · CTT · 3 a 5 dias úteis", p: [9, 12], min: 3, max: 5, c: ["PT"] },
   eu: { n: "Europa · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT","CH","NO","GB"] }
@@ -634,7 +634,7 @@ Se a resposta não estiver claramente nos factos, ou se a cliente pedir medidas,
 ${peca}
 FACTOS DA LOJA:
 - Compra no site: botão «Comprar» na peça ou «Pagar o saco»; a cliente escolhe o envio e paga na Stripe (cartão, MB WAY, Multibanco, Apple Pay, Google Pay ou Klarna).
-- Portes (roupa e acessórios / sapatos, malas e casacos): Portugal continental CTT 2-3 dias úteis 7 €/9 € (grátis acima de 100 €); Portugal continental Correos Express 24h 10 €/12 €; Açores e Madeira CTT 9 €/12 €; Europa DHL ou Correos Express 18 €/24 €.
+- Portes (roupa e acessórios / sapatos, malas e casacos): Portugal continental entrega em casa com seguimento 2-3 dias úteis 9 €/11 € (grátis acima de 100 €); Portugal continental Correos Express 24h 10 €/12 €; Açores e Madeira CTT 9 €/12 €; Europa DHL ou Correos Express 18 €/24 €.
 - Cada peça é única. Se tem «Comprar» está disponível.
 - Empréstimo de peças para editoriais e produções: até 7 dias, pedido e contrato no site em benditocloset.pt/emprestimo, caução igual ao valor das peças só retida no cartão (não cobrada), portes de ida e volta grátis.
 ${faq}`;
