@@ -305,7 +305,7 @@ async function respostas(){let fm=document.getElementById("q"),f=new FormData(fm
  let ok=false;try{const r=await fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/lojas/pedido",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({campos:o,origem:location.pathname})});ok=r.ok}catch(e){}
  if(ok){fm.innerHTML='<div style="text-align:center;padding:16px 0"><div style="font-size:42px">💌</div><h2 style="font-family:Bodoni,serif;font-weight:500;font-size:26px;margin:6px 0">Recebi as suas respostas!</h2><p style="color:#7A6B60;line-height:1.5">Obrigada. Vou ler com atenção e envio-lhe a proposta em breve.</p></div>';return}
  const l=Object.entries(o).map(([k,v])=>"• "+k+": "+v).join("\n");
- location.href="https://wa.me/351936796783?text="+encodeURIComponent("Olá Marianna! Respostas para a minha loja online:\n"+l)}
+ location.href="https://wa.me/351930504299?text="+encodeURIComponent("Olá Marianna! Respostas para a minha loja online:\n"+l)}
 chips();grid();modo(M);
 </script>
 </body>
