@@ -86,7 +86,7 @@ async function caucao(req, env, j) {
   for (const [a, v] of Object.entries(meta)) { f.set(`metadata[${a}]`, v); f.set(`payment_intent_data[metadata][${a}]`, v); }
   f.set("payment_intent_data[description]", "Caução retida · empréstimo " + code + " · " + (cau / 100) + " €");
   f.set("payment_intent_data[capture_method]", "manual");
-  f.set("payment_method_types[0]", "card");
+  f.set("allowed_payment_method_types[0]", "card");
   f.set("custom_text[submit][message]", "A caução fica só retida no seu cartão, não é cobrada. É libertada quando as peças voltam em bom estado, ou automaticamente ao fim de 7 dias.");
   const call = body => fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body });
   const r = await call(f.toString()), o = await r.json();
