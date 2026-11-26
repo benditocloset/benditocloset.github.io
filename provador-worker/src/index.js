@@ -91,6 +91,8 @@ async function caucao(req, env, j) {
   const call = body => fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { "Authorization": "Bearer " + env.STRIPE_KEY, "Content-Type": "application/x-www-form-urlencoded" }, body });
   const r = await call(f.toString()), o = await r.json();
   if (!r.ok || !o.url) return j({ error: "stripe", detail: o.error && o.error.message }, 502);
+  { const m = await pcsLer(env); for (const p of sel) m[p.id] = { s: o.id, e: quemCompra, ate: Date.now() + RES_MS }; await pcsGravar(env, m); }
+  await limparCacheEstado();
   return j({ url: o.url, caucao: cau / 100, portes: portes / 100, total: (cau + portes) / 100, retida: true });
 }
 
@@ -105,6 +107,45 @@ const ENVIO = {
 // Códigos que o site aplica sozinho → cupões da conta Bendito Closet (o cupão BF expira a 29/11 na própria Stripe)
 const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "5zMdM2cY", BENDITO10BF: "Ae5VZaMp" };
 const LOCAIS = ["pt", "en", "es", "fr", "de", "it"];
+// ===== Reserva e venda automáticas: cada peça só pode ser paga uma vez =====
+// KV "pcs" = { <id da peça>: {s: sessão Stripe, e: e-mail, ate: reservada até (ms), v: 1 se vendida} } — uma só chave, poucas escritas
+const RES_MS = 30 * 60 * 1000;
+const idsDe = ses => String((ses.metadata && ses.metadata.pecas) || "").split(",").map(x => x.trim()).filter(Boolean);
+async function pcsLer(env) { try { return JSON.parse((await env.LIMITS.get("pcs")) || "{}"); } catch (e) { return {}; } }
+async function pcsGravar(env, m) { await env.LIMITS.put("pcs", JSON.stringify(m)); }
+async function pcGet(env, id) { return (await pcsLer(env))[id] || null; }
+async function pcPut(env, id, meta) { const m = await pcsLer(env); m[id] = meta; await pcsGravar(env, m); }
+// resolve uma reserva que já passou do prazo: pagou → vendida; não pagou → livre. Devolve [estado, mudou]
+async function pcResolver(env, m) {
+  if (!m) return ["", false];
+  if (m.v) return ["vendido", false];
+  if (m.ate > Date.now()) return ["reservado", false];
+  try {
+    const ses = await stp(env, "checkout/sessions/" + m.s);
+    if (ses.payment_status === "paid") { m.v = 1; delete m.ate; return ["vendido", true]; }
+    if (ses.status === "open") return ["reservado", false];
+  } catch (e) { return ["", false]; }
+  return [null, true]; // expirou sem pagar: apagar
+}
+async function pcEstado(env, id, m) {
+  const all = await pcsLer(env); m = all[id];
+  const [st, mudou] = await pcResolver(env, m);
+  if (mudou) { if (st === null) delete all[id]; else all[id] = m; await pcsGravar(env, all); }
+  return st || "";
+}
+async function pcVendidas(env, ses) { const m = await pcsLer(env); for (const id of idsDe(ses)) m[id] = { s: ses.id, v: 1 }; await pcsGravar(env, m); }
+async function pcLibertar(env, ses) { const m = await pcsLer(env); let x = false; for (const id of idsDe(ses)) if (m[id] && m[id].s === ses.id) { delete m[id]; x = true; } if (x) await pcsGravar(env, m); }
+async function estadoPecas(req, env, j) {
+  const all = await pcsLer(env), out = { vendidas: [], reservadas: [] }; let mudou = false;
+  for (const id of Object.keys(all)) {
+    const [st, mu] = await pcResolver(env, all[id]);
+    if (mu) { mudou = true; if (st === null) { delete all[id]; continue; } }
+    if (st === "vendido") out.vendidas.push(id); else if (st === "reservado") out.reservadas.push(id);
+  }
+  if (mudou) await pcsGravar(env, all);
+  return j(out);
+}
+async function limparCacheEstado() {}
 async function comprar(req, env, j) {
   if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -114,8 +155,17 @@ async function comprar(req, env, j) {
   const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `buy:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
   if (n >= 40) return j({ error: "limite" }, 429);
   await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
-  const P = await pecasDoSite(), sel = [];
-  for (const id of ids) { const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 409); sel.push({ id, ...p }); }
+  const quemCompra = await quem(env, b.sessao); if (!quemCompra) return j({ error: "conta" }, 401);
+  const P = await pecasDoSite(), sel = [], antigas = new Set();
+  for (const id of ids) {
+    const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 409);
+    const st = await pcEstado(env, id), m = await pcGet(env, id);
+    if (st === "vendido") return j({ error: "peca", id }, 409);
+    if (st === "reservado") { if (m.e !== quemCompra) return j({ error: "reservada", id }, 409); antigas.add(m.s); }
+    sel.push({ id, ...p });
+  }
+  // a mesma cliente a abrir o pagamento outra vez: fecha o pagamento anterior para não pagar duas vezes
+  for (const sid of antigas) { try { await stp(env, "checkout/sessions/" + sid + "/expire", "POST"); } catch (e) {} }
   const sub = sel.reduce((a, p) => a + p.preco, 0);
   const big = sel.some(p => !["roupas", "acessorios"].includes(p.cat));
   let portes = e.p[big ? 1 : 0];
@@ -142,7 +192,7 @@ async function comprar(req, env, j) {
   f.set("shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]", String(e.max));
   e.c.forEach((c, i) => f.set(`shipping_address_collection[allowed_countries][${i}]`, c));
   f.set("phone_number_collection[enabled]", "true");
-  const quemCompra = await quem(env, b.sessao); if (!quemCompra) return j({ error: "conta" }, 401);
+  f.set("expires_at", String(Math.floor((Date.now() + RES_MS) / 1000) + 10));
   const cus = await clienteStripe(env, quemCompra, e.c);
   if (cus) { f.set("customer", cus); f.set("customer_update[shipping]", "auto"); f.set("customer_update[name]", "auto"); }
   else f.set("customer_email", quemCompra);
@@ -223,6 +273,7 @@ async function acaoCliente(req, env, j) {
       if (r.enviada) return j({ error: "ja_enviada" }, 409);
       await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "cancelada pela cliente no site" });
       est.reembolso = "total"; est.cancelada = new Date().toISOString();
+      await pcLibertar(env, ses); await limparCacheEstado();
       await env.LIMITS.put("enc:" + id, JSON.stringify(est));
       return j({ ok: true, estado: "cancelada", encomenda: { ...r, pi: undefined, last4: undefined, reembolso: "total" } });
     }
@@ -255,6 +306,7 @@ async function confirmar(req, env, j) {
     const ses = await stp(env, "checkout/sessions/" + id);
     if (ses.payment_status !== "paid") return j({ error: "nao_paga" }, 409);
     const r = await resumoEncomenda(env, ses);
+    if (r.reembolso !== "total") { await pcVendidas(env, ses); await limparCacheEstado(); }
     if (/^Empr[eé]stimo/i.test(r.pecas)) return j({ error: "dados" }, 400);
     const k = "conf:" + id, dup = !!(await env.LIMITS.get(k));
     if (!dup) await env.LIMITS.put(k, "1", { expirationTtl: 90 * 86400 });
@@ -471,12 +523,14 @@ async function gestao(req, env, url) {
           const valor = Math.round((r.total - desc) * 100);
           if (r.reembolso !== "total" && valor > 0) await stp(env, "refunds", "POST", { payment_intent: r.pi, amount: String(valor), reason: "requested_by_customer", "metadata[motivo]": "devolvida pela transportadora (não entregue)", "metadata[portes_descontados_eur]": desc.toFixed(2) });
           est.devolucao = "recusada"; est.reembolso = "total"; est.descontado = desc;
+          await pcLibertar(env, ses); await limparCacheEstado();
           msg = "Reembolso feito: " + (valor / 100).toFixed(2) + " € (descontados " + desc.toFixed(2) + " € de portes).";
         }
         if (acao === "recebida") {
           const ses = await stp(env, "checkout/sessions/" + id), r = await resumoEncomenda(env, ses);
           if (r.reembolso !== "total") await stp(env, "refunds", "POST", { payment_intent: r.pi, reason: "requested_by_customer", "metadata[motivo]": "devolução recebida" });
-          est.devolucao = "recebida"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €.";
+          est.devolucao = "recebida"; est.reembolso = "total"; msg = "Reembolso feito: " + r.total.toFixed(2) + " €. A peça voltou a ficar disponível no site.";
+          await pcLibertar(env, ses); await limparCacheEstado();
         }
         await env.LIMITS.put("enc:" + id, JSON.stringify(est));
       } catch (e) { msg = "Erro: " + esc(e.message || e); }
@@ -489,6 +543,7 @@ async function gestao(req, env, url) {
       if (ses.payment_status !== "paid" || !(ses.metadata && ses.metadata.pecas) || Date.now() / 1000 - ses.created > 60 * 86400) continue;
       const r = await resumoEncomenda(env, ses);
       if (/^Empr[eé]stimo/i.test(r.pecas)) continue;
+      if (r.reembolso !== "total") { const m = await pcsLer(env); if (idsDe(ses).some(pid => !(m[pid] && m[pid].v))) await pcVendidas(env, ses); }
       const st = r.reembolso === "total" ? "Reembolsada" : r.devolucao === "pedida" ? "Devolução pedida" : r.enviada ? "Enviada" : "Por enviar";
       const bt = (a, l) => `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="${a}"><button>${l}</button></form>`;
       const acoes = r.reembolso === "total" ? "" : (r.devolucao === "pedida" ? bt("recebida", "Peça recebida → reembolsar " + r.total.toFixed(2) + " €") : "") + (r.enviada && r.devolucao !== "pedida" ? `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="recusada">Devolvida pela transportadora · descontar portes <input name="desconto" value="${r.portes.toFixed(2)}" inputmode="decimal" style="width:70px;padding:8px;border:1px solid #1C1517"> € <button>Reembolsar o resto</button></form>` : "") + (r.enviada ? bt("nao_enviada", "Desmarcar enviada") : `<form method="post"><input type="hidden" name="id" value="${esc(r.id)}"><input type="hidden" name="acao" value="enviada"><select name="transp"><option>CTT</option><option>Correos Express</option></select> <input name="track" placeholder="Código de seguimento" style="padding:8px;border:1px solid #1C1517"> <button>Marcar como enviada</button></form>`);
@@ -579,6 +634,7 @@ export default {
     const url = new URL(req.url);
     if (url.pathname === "/") return j({ ok: true, service: "bendito-provador" });
     if (url.pathname === "/caucao" && req.method === "POST") return caucao(req, env, j);
+    if (url.pathname === "/pecas/estado" && req.method === "GET") return estadoPecas(req, env, j);
     if (url.pathname === "/comprar" && req.method === "POST") return comprar(req, env, j);
     if (url.pathname === "/assinatura" && req.method === "POST") return guardarContrato(req, env, j);
     if (url.pathname === "/ajuda" && req.method === "POST") return ajuda(req, env, j);

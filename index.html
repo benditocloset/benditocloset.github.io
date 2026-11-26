@@ -1117,6 +1117,13 @@ const T = () => UI[LANG];
 const nomeDe = p => (TR[LANG] && TR[LANG][p.id]) ? TR[LANG][p.id][0] : p.nome;
 const detDe  = p => (TR[LANG] && TR[LANG][p.id]) ? TR[LANG][p.id][1] : p.detalhe;
 let FILTRO = "all";
+/* Estado em tempo real: quando alguém paga, a peça passa a Vendido; enquanto paga (30 min), fica Reservada */
+fetch("https://bendito-provador-ia.nn45hn9bvr.workers.dev/pecas/estado", { cache: "no-store" }).then(r => r.json()).then(o => {
+  let mud = false;
+  (o.vendidas || []).forEach(id => { const p = PECAS.find(x => x.id === id); if (p && p.status !== "vendido") { p.status = "vendido"; mud = true; } });
+  (o.reservadas || []).forEach(id => { const p = PECAS.find(x => x.id === id); if (p && p.status === "disponivel") { p.status = "reservado"; mud = true; } });
+  if (mud) { try { render(FILTRO); } catch(x) {} try { bagValid(); bagPaint(); } catch(x) {} }
+}).catch(() => {});
 let ORDEM = "novo";
 function aplicarIdioma(){
   document.documentElement.lang = LANG==="pt" ? "pt-PT" : LANG;
@@ -1647,9 +1654,10 @@ async function envGo(){
     const o = await r.json().catch(() => ({}));
     if (r.ok && o.url) { location.href = o.url; return; }
     if (r.status === 401 && o.error === "conta") { try { localStorage.removeItem("bc-sessao"); } catch(x) {} envConta(1); return; }
-    if (o.error === "peca") { er.textContent = t.sold; er.hidden = false; b.disabled = false; envPaint(); return; }
+    if (o.error === "reservada") { const RT = {pt:"Alguém está a pagar esta peça neste momento. Se não for comprada nos próximos 30 minutos, volta a ficar disponível.",en:"Someone is paying for this piece right now. If it isn't bought within 30 minutes, it becomes available again.",es:"Alguien está pagando esta pieza ahora mismo. Si no se compra en 30 minutos, vuelve a estar disponible.",fr:"Quelqu'un est en train de payer cette pièce. Si elle n'est pas achetée d'ici 30 minutes, elle redevient disponible.",de:"Jemand bezahlt dieses Teil gerade. Wird es nicht innerhalb von 30 Minuten gekauft, ist es wieder verfügbar.",it:"Qualcuno sta pagando questo capo in questo momento. Se non viene acquistato entro 30 minuti, torna disponibile."};
+      const p = PECAS.find(x => x.id === o.id); if (p) p.status = "reservado"; b.disabled = false; envPaint(); const e3 = document.getElementById("enverr"); e3.textContent = RT[LANG] || RT.pt; e3.hidden = false; try { render(FILTRO); } catch(x) {} return; }
+    if (o.error === "peca") { const p = PECAS.find(x => x.id === o.id); if (p) p.status = "vendido"; try { render(FILTRO); bagValid(); } catch(x) {} er.textContent = t.sold; er.hidden = false; b.disabled = false; envPaint(); return; }
   } catch(e) {}
-  if (ENV.fb) { const em = (() => { try { return localStorage.getItem("bc-conta-email") || ""; } catch(x) { return ""; } })(); window.open(ENV.fb + (em ? (ENV.fb.includes("?") ? "&" : "?") + "prefilled_email=" + encodeURIComponent(em) : ""), "_blank", "noopener"); b.disabled = false; envPaint(); return; }
   b.disabled = false; envPaint(); const e2 = document.getElementById("enverr"); e2.textContent = t.err; e2.hidden = false;
 }
 document.addEventListener("click", e => {
