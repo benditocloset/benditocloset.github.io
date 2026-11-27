@@ -656,14 +656,22 @@ async function gestao(req, env, url) {
       }
     }
     // Cauções de empréstimo (retidas no cartão): libertar (peças voltaram bem) ou cobrar um valor (dano ou peça não devolvida)
-    if (/^pi_[A-Za-z0-9]{10,}$/.test(id) && (acao === "libertar" || acao === "cobrar")) {
+    if (/^pi_[A-Za-z0-9]{10,}$/.test(id) && (acao === "libertar" || acao === "cobrar" || acao === "recusar")) {
       try {
         const pi = await stp(env, "payment_intents/" + id + "?expand[]=latest_charge");
         if (pi.status !== "requires_capture") msg = "Esta caução já não está retida (estado: " + pi.status + ").";
         else {
           const email = pi.receipt_email || (pi.latest_charge && pi.latest_charge.billing_details && pi.latest_charge.billing_details.email) || "";
           const ped = (pi.metadata && pi.metadata.pedido) || "";
-          if (acao === "libertar") {
+          if (acao === "recusar") {
+            // Pedido recusado: liberta a caução sem cobrar nada e avisa a pessoa com simpatia
+            await stp(env, "payment_intents/" + id + "/cancel", "POST", { cancellation_reason: "requested_by_customer" });
+            await limparCacheEstado();
+            msg = "Pedido recusado: a caução de " + (pi.amount / 100).toFixed(2) + " € foi libertada e a pessoa recebeu um e-mail.";
+            if (env.RESEND_KEY && email) await mail(env, email, "O seu pedido de empréstimo " + ped,
+              moldura("Desta vez não foi possível", `<p>Obrigada pelo seu pedido de empréstimo ${esc(ped)} e pelo interesse no Bendito Closet.</p><p>Desta vez não conseguimos aceitar o pedido, por isso libertámos a caução de <b>${(pi.amount / 100).toFixed(2).replace(".", ",")} €</b>: nada foi cobrado e o valor volta a ficar disponível no seu cartão. Alguns bancos levam uns dias a atualizar.</p><p>Fica o convite para uma próxima produção. Pode escrever-nos quando quiser.</p>`),
+              "Desta vez não conseguimos aceitar o pedido " + ped + ". A caução foi libertada e nada foi cobrado.");
+          } else if (acao === "libertar") {
             await stp(env, "payment_intents/" + id + "/cancel", "POST", { cancellation_reason: "requested_by_customer" });
             await limparCacheEstado();
             msg = "Caução libertada: " + (pi.amount / 100).toFixed(2) + " €. O valor volta ao limite do cartão (o banco pode levar alguns dias a mostrar).";
@@ -758,7 +766,7 @@ async function gestao(req, env, url) {
       if (pi.status !== "requires_capture") continue;
       const ped = (pi.metadata && pi.metadata.pedido) || "", dias = Math.max(0, 7 - Math.floor((Date.now() / 1000 - pi.created) / 86400));
       const fm = (a, inner) => `<form method="post"><input type="hidden" name="id" value="${esc(pi.id)}"><input type="hidden" name="acao" value="${a}">${inner}</form>`;
-      cau += `<div class="o"><b>${esc(ped || pi.id)}</b> · ${(pi.amount / 100).toFixed(2)} € retidos · ${new Date(pi.created * 1000).toLocaleDateString("pt-PT", { timeZone: "Europe/Lisbon" })}<br>${esc((pi.metadata && pi.metadata.pecas) || pi.description || "")}<br><small>${esc((pi.metadata && pi.metadata.datas) || "")} · liberta-se sozinha em ${dias} dia${dias === 1 ? "" : "s"}</small><div class="a">${fm("libertar", `<button>Peças voltaram bem → libertar ${(pi.amount / 100).toFixed(2)} €</button>`)}${fm("cobrar", `Cobrar <input name="valor" inputmode="decimal" placeholder="0,00" style="width:70px;padding:8px;border:1px solid #1C1517"> € <input name="motivo" placeholder="Motivo (ex.: mancha no punho)" style="padding:8px;border:1px solid #1C1517;width:200px"> <button>Cobrar e libertar o resto</button>`)}</div></div>`;
+      cau += `<div class="o"><b>${esc(ped || pi.id)}</b> · ${(pi.amount / 100).toFixed(2)} € retidos · ${new Date(pi.created * 1000).toLocaleDateString("pt-PT", { timeZone: "Europe/Lisbon" })}<br>${esc((pi.metadata && pi.metadata.pecas) || pi.description || "")}<br><small>${esc((pi.metadata && pi.metadata.datas) || "")} · liberta-se sozinha em ${dias} dia${dias === 1 ? "" : "s"}</small><div class="a">${fm("libertar", `<button>Peças voltaram bem → libertar ${(pi.amount / 100).toFixed(2)} €</button>`)}${fm("recusar", `<button>Recusar pedido (não cobra nada)</button>`)}${fm("cobrar", `Cobrar <input name="valor" inputmode="decimal" placeholder="0,00" style="width:70px;padding:8px;border:1px solid #1C1517"> € <input name="motivo" placeholder="Motivo (ex.: mancha no punho)" style="padding:8px;border:1px solid #1C1517;width:200px"> <button>Cobrar e libertar o resto</button>`)}</div></div>`;
     }
   } catch (e) { cau = "<p>Erro ao ler as cauções: " + esc(e.message || e) + "</p>"; }
   let rows = "";
