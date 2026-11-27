@@ -1,5 +1,5 @@
 /* Bendito Closet: app instalável. Rede primeiro (nunca mostra preços antigos); sem rede, usa a última cópia. */
-const C = "bendito-v129";
+const C = "bendito-v130";
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", e => {

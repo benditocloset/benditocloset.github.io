@@ -14,9 +14,10 @@
   var css = document.createElement("style");
   css.textContent = ".as-box{background:#1C1517;color:#F7EFE8;border-radius:18px;padding:28px 22px;margin:34px auto;max-width:760px;font-family:'DM Sans',system-ui,sans-serif;text-align:left}" +
     ".as-box .as-k{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#E7A6B8;font-weight:600}" +
-    ".as-box h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:400;font-style:italic;font-size:clamp(26px,5vw,36px);line-height:1.1;margin:8px 0 8px;color:#fff}" +
+    ".as-box h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:400;font-style:italic;font-size:clamp(26px,5vw,36px);line-height:1.1;margin:8px 0 8px;color:#fff!important}" +
     ".as-box p{margin:0 0 16px;color:#d8cdc6;font-size:14.5px;line-height:1.5}" +
     ".as-box form{display:flex;gap:8px;flex-wrap:wrap}.as-box input[type=email]{flex:1 1 220px;min-width:0;border:1px solid #5b4d50;background:#2a2124;color:#fff;border-radius:999px;padding:13px 18px;font:inherit;font-size:15px}" +
+    ".as-box select{flex:1 1 160px;min-width:0;border:1px solid #5b4d50;background:#2a2124;color:#fff;border-radius:999px;padding:13px 18px;font:inherit;font-size:15px}" +
     ".as-box button{border:0;border-radius:999px;padding:13px 22px;background:#E7A6B8;color:#1C1517;font:600 14px 'DM Sans',system-ui,sans-serif;cursor:pointer}" +
     ".as-box label{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:#bfb2ab;margin-top:12px;line-height:1.4}.as-box label input{margin-top:2px;accent-color:#E7A6B8}" +
     ".as-box .as-h{color:#ffb4c2;font-size:13px;margin-top:8px}.as-box .as-ok{font-size:16px;color:#fff;margin:4px 0 0}";
@@ -26,7 +27,7 @@
     try { done = localStorage.getItem("bc-revista") === "inscrita"; } catch (e) {}
     el.innerHTML = '<div class="as-box"><div class="as-k">' + t.k + '</div><h3>' + t.t + '</h3>' +
       (done ? '<p class="as-ok">' + t.ok + '</p>' :
-      '<p>' + t.p + '</p><form novalidate><input type="email" autocomplete="email" placeholder="' + t.e + '" aria-label="' + t.e + '" required><button type="submit">' + t.b + '</button></form>' +
+      '<p>' + t.p + '</p><form novalidate><input type="email" autocomplete="email" placeholder="' + t.e + '" aria-label="' + t.e + '" required>' + (window.bcPais ? bcPais.select(lang(), "as-pais") : "") + '<button type="submit">' + t.b + '</button></form>' +
       '<label><input type="checkbox"> <span>' + t.c + ' <a href="/privacidade/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">' + (lang()==="pt"?"Política de privacidade":"Privacy policy") + '</a></span></label><div class="as-h" hidden>' + t.need + '</div>') + '</div>';
     var f = el.querySelector("form"); if (!f) return;
     f.addEventListener("submit", function (e) {
@@ -35,7 +36,7 @@
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em) || !ok) { h.hidden = false; return; }
       try {
         fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ email: em, lingua: lang(), origem: el.getAttribute("data-assinar") || "Site", consentimento: "Sim", _subject: "Nova inscrição na revista Bendito Edit", _template: "table", _captcha: "false" }), keepalive: true }).catch(function () {});
+          body: JSON.stringify({ email: em, pais: (window.bcPais ? bcPais.valor(f.querySelector("select[name=pais]")).pais : ""), fuso: (window.bcPais ? bcPais.valor().fuso : ""), lingua: lang(), origem: el.getAttribute("data-assinar") || "Site", consentimento: "Sim", _subject: "Nova inscrição na revista Bendito Edit", _template: "table", _captcha: "false" }), keepalive: true }).catch(function () {});
       } catch (x) {}
       try { localStorage.setItem("bc-revista", "inscrita"); localStorage.setItem("bc-cupao", "BENDITO10"); } catch (x) {}
       el.querySelector(".as-box").innerHTML = '<div class="as-k">' + t.k + '</div><h3>' + t.t + '</h3><p class="as-ok">' + t.ok + '</p>';

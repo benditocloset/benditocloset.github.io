@@ -13,7 +13,7 @@
   gtag('js', new Date());
 </script>
 <script src="/cookies.js" defer></script>
-<script src="/assinar.js" defer></script>
+<script src="/assinar.js?v=2" defer></script>
 <script src="/faq.js?v=97" defer></script>
 
 <meta charset="utf-8">
@@ -259,6 +259,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #pop h2{font-family:var(--display);font-size:32px;line-height:1.1;margin:8px 0 8px}
 #pop p{color:var(--muted);font-size:15px;margin:0 0 14px}
 #pop input[type=email]{width:100%;box-sizing:border-box;font:inherit;font-size:16px;background:#000;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+#pop select[name=pais]{width:100%;box-sizing:border-box;font:inherit;font-size:16px;background:#fff;color:#111;border:0;border-bottom:1px solid #111;border-radius:0;padding:12px 2px;margin-bottom:16px}
 #pop .pc{display:flex;gap:8px;text-align:left;font-size:12px;color:var(--muted);align-items:flex-start;margin-bottom:12px}
 #pop .pc input{margin-top:2px;accent-color:var(--halo)}
 #pop .pe{color:#E8A0A0;font-size:13px;margin:-4px 0 10px}
@@ -603,6 +604,7 @@ document.addEventListener('DOMContentLoaded',function(){
   sync(); var s=document.getElementById('bagn'); if(s) new MutationObserver(sync).observe(s,{childList:true,characterData:true,subtree:true});
 });
 </script>
+<script src="/pais.js?v=1"></script>
 </head>
 <body>
 <a id="bf" class="bf" href="#grid" hidden></a>
@@ -1635,7 +1637,7 @@ aplicarIdioma();
 <dialog id="pop" aria-labelledby="pop-t">
   <button type="button" class="px" aria-label="Fechar">×</button>
   <div id="pop-a"><span class="pk" data-i18n="popK"></span><h2 id="pop-t" data-i18n="popT"></h2><p data-i18n="popP"></p>
-  <form id="pop-f" novalidate><input type="email" id="pop-e" autocomplete="email" required>
+  <form id="pop-f" novalidate><input type="email" id="pop-e" autocomplete="email" required><span id="pop-pais"></span>
   <label class="pc"><input type="checkbox" id="pop-ok"><span data-i18n="popC"></span></label>
   <a class="pc-priv" href="/privacidade/" target="_blank" rel="noopener" style="display:block;font-size:11px;color:inherit;opacity:.7;text-decoration:underline;margin-top:4px">Política de privacidade · Privacy</a>
   <p class="pe" id="pop-h" hidden></p>
@@ -1657,7 +1659,7 @@ aplicarIdioma();
   let visto = ""; try { visto = localStorage.getItem("bc-pop") || ""; } catch(e) {}
   const fechar = v => { try { localStorage.setItem("bc-pop", v || "visto"); } catch(e) {} d.close(); };
   const abrir = () => { if (visto || d.open || document.querySelector("dialog[open]")) return; visto = "1";
-    fill(); document.getElementById("pop-e").placeholder = T().popE; try { d.showModal(); } catch(e) { d.setAttribute("open",""); } };
+    fill(); document.getElementById("pop-e").placeholder = T().popE; try { const pp=document.getElementById("pop-pais"); if (window.bcPais && !pp.firstChild) pp.innerHTML = bcPais.select(LANG); } catch(x) {} try { d.showModal(); } catch(e) { d.setAttribute("open",""); } };
   if (/[?&]cupao/.test(location.search)) { visto = ""; setTimeout(abrir, 800); }
   else if (!visto && !/[?&]peca=/.test(location.search)) {
     setTimeout(abrir, 12000);
@@ -1669,7 +1671,7 @@ aplicarIdioma();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em) || !ok) { h.textContent = T().popNeed; h.hidden = false; return; }
     h.hidden = true;
     try { fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body: JSON.stringify({ email: em, lingua: LANG, origem: "Pop-up 10% do site", consentimento: "Sim", _subject: "Nova inscrição no Bendito Closet (cupão 10%)", _template: "table", _captcha: "false" }), keepalive:true }).catch(()=>{}); } catch(x) {}
+      body: JSON.stringify({ email: em, pais: (window.bcPais ? bcPais.valor(document.querySelector("#pop-pais select")).pais : ""), fuso: (window.bcPais ? bcPais.valor().fuso : ""), lingua: LANG, origem: "Pop-up 10% do site", consentimento: "Sim", _subject: "Nova inscrição no Bendito Closet (cupão 10%)", _template: "table", _captcha: "false" }), keepalive:true }).catch(()=>{}); } catch(x) {}
     try { window.bcEv && bcEv("popup"); } catch(x) {}
     try { localStorage.setItem("bc-cupao", "BENDITO10"); } catch(x) {} if (typeof CUPAO !== "undefined") CUPAO = "BENDITO10"; try { render(FILTRO); } catch(x) {}
     document.getElementById("pop-a").hidden = true; document.getElementById("pop-d").hidden = false;

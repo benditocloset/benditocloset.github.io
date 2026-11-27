@@ -30,6 +30,7 @@
       '<input type="text" name="nome" autocomplete="name" placeholder="' + t.n + '" aria-label="' + t.n + '">' +
       '<input type="email" name="email" autocomplete="email" placeholder="' + t.e + '" aria-label="' + t.e + '">' +
       '<select name="tipo" aria-label="' + t.tipo + '">' + opts + '</select>' +
+      (window.bcPais ? bcPais.select(lang()) : '') +
       '<input type="text" name="veiculo" placeholder="' + t.v + '" aria-label="' + t.v + '">' +
       '<label><input type="checkbox"> <span>' + t.c + ' <a href="/privacidade/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">' + (lang()==="pt"?"Política de privacidade":"Privacy policy") + '</a></span></label><div class="pf-h" hidden>' + t.need + '</div>' +
       '<button type="submit">' + t.b + '</button></form></div>';
@@ -41,7 +42,7 @@
       if (!g("nome") || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(g("email")) || !g("tipo") || !ok) { h.hidden = false; return; }
       try {
         fetch("https://formsubmit.co/ajax/ola@benditocloset.pt", { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ nome: g("nome"), email: g("email"), tipo: g("tipo"), veiculo: g("veiculo"), lingua: lang(), origem: "Lista profissional · " + (el.getAttribute("data-profissional") || "Site"), consentimento: "Sim",
+          body: JSON.stringify({ nome: g("nome"), email: g("email"), pais: (window.bcPais ? bcPais.valor(f.querySelector("select[name=pais]")).pais : ""), fuso: (window.bcPais ? bcPais.valor().fuso : ""), tipo: g("tipo"), veiculo: g("veiculo"), lingua: lang(), origem: "Lista profissional · " + (el.getAttribute("data-profissional") || "Site"), consentimento: "Sim",
             _subject: "Novo contacto profissional: " + g("tipo"), _template: "table", _captcha: "false" }), keepalive: true }).catch(function () {});
       } catch (x) {}
       try { localStorage.setItem("bc-profissional", "sim"); } catch (x) {}
