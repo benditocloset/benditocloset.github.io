@@ -142,7 +142,7 @@ html.maison .month :is(h1,h2,h3){color:#fff!important}html.maison .month .kick{c
     <div class="gl" id="gifts"></div>
   </section>
   <a class="game" href="/monta-o-look/"><span class="kick" data-t="gmk">Agora é a sua vez</span><b data-t="gmt">Monte o seu look e faça a sua capa</b><span data-t="gmp">Escolha peças do closet, nós fazemos a capa de revista para o seu story →</span></a>
-  <p style="text-align:center;margin:28px 0 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn" href="/revista/Bendito-Edit-01-Dezembro-2026.pdf?v=6" download>⬇ PDF · Edição portuguesa</a><a class="btn" href="/revista/Bendito-Edit-01-December-2026-EN.pdf?v=6" download>⬇ PDF · International edition (EN)</a></p>
+  <p style="text-align:center;margin:28px 0 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn" href="/revista/Bendito-Edit-01-Dezembro-2026.pdf?v=7" download>⬇ PDF · Edição portuguesa</a><a class="btn" href="/revista/Bendito-Edit-01-December-2026-EN.pdf?v=7" download>⬇ PDF · International edition (EN)</a></p>
   <div data-assinar="Revista Bendito Edit Nº 01"></div>
 </main>
 <footer><span data-t="ft">Bendito Edit é a revista mensal do Bendito Closet · brechó de marcas em Portugal</span> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a></footer>
@@ -195,7 +195,7 @@ function render(){
   const m=P[MONTH.id];
   $("#month").innerHTML=m?`<img src="/${m.foto}" alt="${m.marca} ${nome(m)}" loading="lazy"><div><div class="kick">${MONTH[LANG][0]}</div><h2>${MONTH[LANG][1]}</h2><p>${MONTH[LANG][2]}</p><p style="font-family:var(--serif);font-size:34px;color:#fff;margin:6px 0 0">${m.status==="vendido"?t.sold:fmt(m.preco)}</p><div class="acts"><a class="btn buy" href="/?peca=${m.id}">${t.see}</a></div></div>`:"";
   const tc=P[TECH.id];
-  $("#tech").innerHTML=tc?`<img src="/${tc.foto}" alt="${tc.marca} ${nome(tc)}" loading="lazy" style="aspect-ratio:4/5;object-position:50% 20%"><div><div class="kick">${TECH[LANG][0]}</div><h2>${TECH[LANG][1]}</h2><p>${TECH[LANG][2]}</p><img src="/img/nike-mind-sola.jpg" alt="Nike Mind" loading="lazy" style="width:140px;aspect-ratio:4/5;border-radius:4px;margin:4px 0 0"><p style="font-size:12px;color:#9c8f88;margin:6px 0 0">${TECH[LANG][3]}</p><p style="font-family:var(--serif);font-size:34px;color:#fff;margin:6px 0 0">${tc.status==="vendido"?t.sold:fmt(tc.preco)}</p><div class="acts"><a class="btn buy" href="/?peca=${tc.id}">${t.see}</a></div></div>`:"";
+  $("#tech").innerHTML=tc?`<img src="/${tc.foto}" alt="${tc.marca} ${nome(tc)}" loading="lazy" style="aspect-ratio:4/5;object-position:50% 20%"><div><div class="kick">${TECH[LANG][0]}</div><h2>${TECH[LANG][1]}</h2><p>${TECH[LANG][2]}</p><img src="/img/nike-mind-sola-2.jpg" alt="Nike Mind" loading="lazy" style="width:140px;aspect-ratio:4/5;border-radius:4px;margin:4px 0 0"><p style="font-size:12px;color:#9c8f88;margin:6px 0 0">${TECH[LANG][3]}</p><p style="font-family:var(--serif);font-size:34px;color:#fff;margin:6px 0 0">${tc.status==="vendido"?t.sold:fmt(tc.preco)}</p><div class="acts"><a class="btn buy" href="/?peca=${tc.id}">${t.see}</a></div></div>`:"";
   $("#him").innerHTML=HIM.map(card).join("");
   const g=Object.values(P).filter(p=>p.status==="disponivel"&&!p.mesma&&p.preco<=20).sort((a,b)=>a.preco-b.preco);
   $("#gifts").innerHTML=g.map(p=>card(p.id)).join("");
