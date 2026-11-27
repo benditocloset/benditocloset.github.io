@@ -111,7 +111,7 @@ footer a{color:var(--rose)}
     </div>
   </section>
 </main>
-<footer><span data-t="foot">Bendito Closet · moda de marca em segunda mão, no Porto</span> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a><span class="copy" style="display:block;width:100%;font-size:11px;opacity:.75;margin-top:8px">© 2026 Bendito Closet · Todos os direitos reservados. Site, textos e conteúdos criados por Marianna Werneck. Proibida a reprodução sem autorização. · <a href="/privacidade/">Privacidade</a></span></footer>
+<footer><span data-t="foot">Bendito Closet · moda de marca em segunda mão, em Portugal</span> · <a href="https://www.instagram.com/benditocloset.pt/">@benditocloset.pt</a><span class="copy" style="display:block;width:100%;font-size:11px;opacity:.75;margin-top:8px">© 2026 Bendito Closet · Todos os direitos reservados. Site, textos e conteúdos criados por Marianna Werneck. Proibida a reprodução sem autorização. · <a href="/privacidade/">Privacidade</a></span></footer>
 <div class="toast" id="toast" role="status"></div>
 <script>
 (function(){
@@ -151,24 +151,24 @@ const QIMG=[
 const KEYS=Object.keys(STY);
 const Q={
  pt:[
-  ["Sábado à tarde. Onde está você?",{paris:"Numa esplanada, de óculos escuros",porto:"A passear pela Ribeira, de ténis",noite:"Já a escolher a roupa para logo à noite",rio:"Na praia, com os pés na areia",sporty:"Saí do treino direto para o brunch"}],
+  ["Sábado à tarde. Onde está você?",{paris:"Numa esplanada, de óculos escuros",porto:"A passear pela cidade, de ténis",noite:"Já a escolher a roupa para logo à noite",rio:"Na praia, com os pés na areia",sporty:"Saí do treino direto para o brunch"}],
   ["A peça que nunca falha:",{paris:"Um casaco bem cortado",porto:"Malha boa com jeans",noite:"Qualquer coisa que brilhe",rio:"Um vestido leve",sporty:"Uns ténis bons"}],
   ["Escolha uma paleta:",{paris:"Bege, preto e um toque de vermelho",porto:"Azul-marinho e camel",noite:"Dourado e prateado",rio:"Verde, estampados e cor",sporty:"Branco com bordô"}],
-  ["A viagem dos sonhos:",{paris:"Paris, claro",porto:"De Lisboa ao Porto, de comboio",noite:"Ibiza, para dançar",rio:"Rio de Janeiro",sporty:"Nova Iorque, a correr no Central Park"}],
+  ["A viagem dos sonhos:",{paris:"Paris, claro",porto:"Uma viagem de comboio pelo Douro",noite:"Ibiza, para dançar",rio:"Rio de Janeiro",sporty:"Nova Iorque, a correr no Central Park"}],
   ["O elogio que mais gosta de ouvir:",{paris:"Está sempre elegante",porto:"Como é que está sempre gira sem esforço?",noite:"Ninguém brilha como você",rio:"Que energia boa a sua",sporty:"Está sempre pronta para tudo"}]
  ],
  en:[
   ["Saturday afternoon. Where are you?",{paris:"At a café terrace, in sunglasses",porto:"Strolling by the river, in sneakers",noite:"Already picking tonight's outfit",rio:"At the beach, toes in the sand",sporty:"Straight from the gym to brunch"}],
   ["The piece that never fails:",{paris:"A well-cut coat",porto:"Good knitwear with jeans",noite:"Anything that sparkles",rio:"A light dress",sporty:"Great sneakers"}],
   ["Pick a palette:",{paris:"Beige, black and a touch of red",porto:"Navy and camel",noite:"Gold and silver",rio:"Green, prints and colour",sporty:"White with burgundy"}],
-  ["Dream trip:",{paris:"Paris, of course",porto:"Lisbon to Porto by train",noite:"Ibiza, to dance",rio:"Rio de Janeiro",sporty:"New York, running in Central Park"}],
+  ["Dream trip:",{paris:"Paris, of course",porto:"A train trip through the Douro Valley",noite:"Ibiza, to dance",rio:"Rio de Janeiro",sporty:"New York, running in Central Park"}],
   ["The compliment you love most:",{paris:"You always look so elegant",porto:"How are you always effortlessly cute?",noite:"Nobody shines like you",rio:"You have such good energy",sporty:"You're always ready for anything"}]
  ]
 };
 const TXT={
- pt:{eyebrow:"Jogo · Novo",h1:'Qual é o seu <em>estilo?</em>',lead:"5 perguntas, 1 minuto. No fim mostramos o seu estilo, as peças do closet que são a sua cara e uma imagem para partilhar no story.",start:"Começar →",back:"← Voltar",resEy:"O seu estilo é",save:"Guardar para o story",toLook:"Fazer a minha capa com estas peças",share:"Desafiar uma amiga",again:"Fazer outra vez",pcsL:"As peças do closet com o seu estilo",moreT:"✨ Quer ver estas peças vestidas em si?",moreP:'No Monta o look, ponha a sua foto e toque em "Provar com IA".',moreA:"Ir ao provador →",foot:"Bendito Closet · moda de marca em segunda mão, no Porto",navGame:"Monta o look",
+ pt:{eyebrow:"Jogo · Novo",h1:'Qual é o seu <em>estilo?</em>',lead:"5 perguntas, 1 minuto. No fim mostramos o seu estilo, as peças do closet que são a sua cara e uma imagem para partilhar no story.",start:"Começar →",back:"← Voltar",resEy:"O seu estilo é",save:"Guardar para o story",toLook:"Fazer a minha capa com estas peças",share:"Desafiar uma amiga",again:"Fazer outra vez",pcsL:"As peças do closet com o seu estilo",moreT:"✨ Quer ver estas peças vestidas em si?",moreP:'No Monta o look, ponha a sua foto e toque em "Provar com IA".',moreA:"Ir ao provador →",foot:"Bendito Closet · moda de marca em segunda mão, em Portugal",navGame:"Monta o look",
   q:(i)=>`Pergunta ${i} de 5`,cardTop:"O MEU ESTILO É",cardBottom:"Descubra o seu em benditocloset.pt/estilo",saved:"Imagem pronta! Publique no story e marque @benditocloset.pt",shareText:(n)=>`Deu "${n}" no quiz do Bendito Closet ✨ Qual é o seu estilo?`,copied:"Link copiado!",sold:"vendida"},
- en:{eyebrow:"Game · New",h1:'What\'s your <em>style?</em>',lead:"5 questions, 1 minute. At the end we show your style, the closet pieces that are so you, and an image to share on your story.",start:"Start →",back:"← Back",resEy:"Your style is",save:"Save for my story",toLook:"Make my cover with these pieces",share:"Challenge a friend",again:"Play again",pcsL:"Closet pieces in your style",moreT:"✨ Want to see these pieces on you?",moreP:'In Build the look, add your photo and tap "Try on with AI".',moreA:"Go to the fitting room →",foot:"Bendito Closet · pre-loved designer fashion from Porto",navGame:"Build the look",
+ en:{eyebrow:"Game · New",h1:'What\'s your <em>style?</em>',lead:"5 questions, 1 minute. At the end we show your style, the closet pieces that are so you, and an image to share on your story.",start:"Start →",back:"← Back",resEy:"Your style is",save:"Save for my story",toLook:"Make my cover with these pieces",share:"Challenge a friend",again:"Play again",pcsL:"Closet pieces in your style",moreT:"✨ Want to see these pieces on you?",moreP:'In Build the look, add your photo and tap "Try on with AI".',moreA:"Go to the fitting room →",foot:"Bendito Closet · pre-loved designer fashion from Portugal",navGame:"Build the look",
   q:(i)=>`Question ${i} of 5`,cardTop:"MY STYLE IS",cardBottom:"Find yours at benditocloset.pt/estilo",saved:"Image ready! Post it on your story and tag @benditocloset.pt",shareText:(n)=>`I got "${n}" on the Bendito Closet quiz ✨ What's your style?`,copied:"Link copied!",sold:"sold"}
 };
 const T=()=>TXT[LANG];
