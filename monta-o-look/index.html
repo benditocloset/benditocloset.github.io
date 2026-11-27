@@ -314,6 +314,6 @@ var pt=(document.documentElement.lang||"pt").indexOf("pt")===0,el=document.getEl
 el.innerHTML=(pt?"A foto não abriu aqui dentro do Instagram? Abra no "+br+": ":"Photo didn't open inside the app? Open in "+br+": ")+'<button type="button" id="cpl" style="border:0;background:var(--rose);color:#fff;border-radius:999px;padding:6px 12px;font:600 13px inherit;cursor:pointer">'+(pt?"Copiar link":"Copy link")+"</button>";
 el.style.display="block";document.getElementById("cpl").onclick=function(e){var u="https://benditocloset.pt/monta-o-look/";(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(function(){}).then(function(){e.target.textContent=pt?"Copiado ✓ cole no "+br:"Copied ✓"})}};
 </script>
-<script src="/faq.js?v=96" defer></script>
+<script src="/faq.js?v=97" defer></script>
 </body>
 </html>

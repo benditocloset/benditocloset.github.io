@@ -154,6 +154,6 @@ paint();
 (async()=>{ let s = new URLSearchParams(location.search).get("s"); if (!s) { try { if (localStorage.getItem("bc-sessao")) return; } catch(e){} } if (!s) { try { s = localStorage.getItem("bc-ultima-encomenda"); } catch(e){} }
   if (s && /^cs_/.test(s)) { const {ok,o} = await post("/encomenda/procurar", {s}); if (ok) show(o.encomendas||[]); } })();
 </script>
-<script src="/faq.js?v=96" defer></script>
+<script src="/faq.js?v=97" defer></script>
 </body>
 </html>

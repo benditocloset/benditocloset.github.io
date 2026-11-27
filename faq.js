@@ -138,7 +138,7 @@
   }
   window.bcAjuda = chatOpen;
   function L() { var l = (document.documentElement.lang || 'pt').slice(0, 2); return D[l] ? l : 'pt'; }
-  var css = '#faqbtn{position:fixed;right:14px;bottom:14px;z-index:40;display:flex;align-items:center;gap:7px;background:#111;color:#fff;border:0;border-radius:0;padding:11px 16px;font:700 14px "Helvetica Neue",Helvetica,Arial,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}' +
+  var css = '#faqbtn{position:fixed;right:14px;bottom:14px;left:auto!important;width:auto!important;margin:0!important;z-index:40;display:flex;align-items:center;gap:7px;background:#111;color:#fff;border:0;border-radius:0;padding:11px 16px;font:700 14px "Helvetica Neue",Helvetica,Arial,sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.45)}' +
     '#faqbtn svg{width:18px;height:18px}' +
     '#faqbox{position:fixed;right:14px;bottom:70px;z-index:41;width:min(360px,calc(100vw - 28px));max-height:min(560px,calc(100vh - 100px));overflow:auto;background:#fff;color:#1C1517;border:1px solid #1C1517;border-radius:0;padding:16px;font:14px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.55);display:none}' +
     '#faqbox.open{display:block}#faqbox h3{margin:0 24px 4px 0;font:400 15px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1C1517}#faqbox p.s{margin:0 0 10px;color:#666;font-size:13px}' +
