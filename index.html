@@ -1463,7 +1463,7 @@ function bagCount(){
 }
 function bagToggle(id){
   const i = BAG.indexOf(id);
-  if (i >= 0) BAG.splice(i,1); else BAG.push(id);
+  if (i >= 0) BAG.splice(i,1); else { BAG.push(id); try { window.bcEv && bcEv("saco"); } catch(x) {} }
   bagSave(); bagCount();
   document.querySelectorAll(`[data-bag="${CSS.escape(id)}"]`).forEach(el => { el.outerHTML = bagBtn(PECAS.find(x=>x.id===id)); });
   if (i < 0) { const bb = document.getElementById("bagbtn"); bb.classList.remove("pulse"); void bb.offsetWidth; bb.classList.add("pulse"); }

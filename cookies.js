@@ -10,9 +10,10 @@
   bcEv(ev);
   document.addEventListener('click', function (e) {
     var t = e.target.closest ? e.target : null; if (!t) return;
-    if (t.closest('a[href*="wa.me"],a[href*="api.whatsapp"]')) bcEv('whatsapp');
+    if (t.closest('[data-buy]')) bcEv('cartao'); /* botão Comprar (mesmo quando o link de reserva é o WhatsApp) */
+    else if (t.closest('a[href*="wa.me"],a[href*="api.whatsapp"]')) bcEv('whatsapp');
     else if (t.closest('a[href*="buy.stripe.com"]')) bcEv('cartao');
-    else if (t.closest('[data-bag]')) bcEv('saco');
+    /* o saco conta-se no próprio site, só quando a peça entra (tirar do saco não conta) */
   }, true);
 })();
 (function () {
