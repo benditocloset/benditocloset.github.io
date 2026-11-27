@@ -31,7 +31,7 @@
       '<input type="email" name="email" autocomplete="email" placeholder="' + t.e + '" aria-label="' + t.e + '">' +
       '<select name="tipo" aria-label="' + t.tipo + '">' + opts + '</select>' +
       '<input type="text" name="veiculo" placeholder="' + t.v + '" aria-label="' + t.v + '">' +
-      '<label><input type="checkbox"> <span>' + t.c + '</span></label><div class="pf-h" hidden>' + t.need + '</div>' +
+      '<label><input type="checkbox"> <span>' + t.c + ' <a href="/privacidade/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">' + (lang()==="pt"?"Política de privacidade":"Privacy policy") + '</a></span></label><div class="pf-h" hidden>' + t.need + '</div>' +
       '<button type="submit">' + t.b + '</button></form></div>';
     var f = el.querySelector("form");
     f.addEventListener("submit", function (e) {

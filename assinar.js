@@ -27,7 +27,7 @@
     el.innerHTML = '<div class="as-box"><div class="as-k">' + t.k + '</div><h3>' + t.t + '</h3>' +
       (done ? '<p class="as-ok">' + t.ok + '</p>' :
       '<p>' + t.p + '</p><form novalidate><input type="email" autocomplete="email" placeholder="' + t.e + '" aria-label="' + t.e + '" required><button type="submit">' + t.b + '</button></form>' +
-      '<label><input type="checkbox"> <span>' + t.c + '</span></label><div class="as-h" hidden>' + t.need + '</div>') + '</div>';
+      '<label><input type="checkbox"> <span>' + t.c + ' <a href="/privacidade/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">' + (lang()==="pt"?"Política de privacidade":"Privacy policy") + '</a></span></label><div class="as-h" hidden>' + t.need + '</div>') + '</div>';
     var f = el.querySelector("form"); if (!f) return;
     f.addEventListener("submit", function (e) {
       e.preventDefault();
