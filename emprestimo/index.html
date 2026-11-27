@@ -278,7 +278,7 @@ $("go").addEventListener("click",async()=>{
 });
 $("copy")&&$("copy").addEventListener("click",()=>window.print());
 document.addEventListener("click",e=>{const b=e.target.closest(".cp[data-cp]");if(!b)return;const t=b.dataset.cp==="v"?num(V+portes()):CODE;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="copiado ✓";setTimeout(()=>b.textContent="copiar",1500);}).catch(()=>{});});
-fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];P=all.filter(p=>p.status!=="vendido"&&p.status!=="collab"&&(p.foto||(p.fotos&&p.fotos[0]))&&p.preco).map(p=>({id:p.id,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));render();}).catch(()=>{list.innerHTML='<p class="steps">Não foi possível carregar as peças. Recarregue a página.</p>'});
+fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);const all=m?Function('"use strict";return '+m[1])():[];P=all.filter(p=>!p.mesma&&p.status!=="vendido"&&p.status!=="collab"&&(p.foto||(p.fotos&&p.fotos[0]))&&p.preco).map(p=>({id:p.id,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,foto:(p.foto||p.fotos[0]).replace(/^\//,"")}));render();}).catch(()=>{list.innerHTML='<p class="steps">Não foi possível carregar as peças. Recarregue a página.</p>'});
 check();
 const pg=new URLSearchParams(location.search).get("pago");if(pg&&/^BC-[A-Z0-9]{4}$/.test(pg)){$("pcode").textContent=pg;$("pago").hidden=false;$("pago").scrollIntoView();}
 })();
