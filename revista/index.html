@@ -172,6 +172,7 @@ const TX={
 const $=s=>document.querySelector(s);
 let LANG=(()=>{let l=new URLSearchParams(location.search).get("lang");try{l=l||localStorage.getItem("bc-lang")}catch(e){}if(!l)l=/^pt/i.test(navigator.language||"pt")?"pt":"en";return l==="pt"?"pt":"en"})();
 let P={},TR={};
+const FOTO_R={"pepe-coturno-ele":"img/pepe-botas-festival.jpg"};
 const fmt=v=>(Math.round(v*100)/100).toLocaleString("pt-PT",{minimumFractionDigits:v%1?2:0})+" €";
 const nome=p=>(LANG!=="pt"&&TR[p.id])?TR[p.id][0]:p.nome;
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2600)}
@@ -198,7 +199,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-buy]");if(
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{LANG=b.dataset.l;try{localStorage.setItem("bc-lang",LANG)}catch(e){}render()});
 render();
 fetch("/",{cache:"no-cache"}).then(r=>r.text()).then(h=>{
-  const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);(m?Function('"use strict";return '+m[1])():[]).forEach(p=>{P[p.id]={id:p.id,mesma:p.mesma,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,status:p.status,foto:(p.foto||(p.fotos||[])[0]||"").replace(/^\//,"")}});
+  const m=h.match(/const PECAS = (\[[\s\S]*?\n\]);/);(m?Function('"use strict";return '+m[1])():[]).forEach(p=>{P[p.id]={id:p.id,mesma:p.mesma,cat:p.cat,marca:p.marca,nome:p.nome,preco:p.preco,status:p.status,foto:(FOTO_R[p.id]||p.foto||(p.fotos||[])[0]||"").replace(/^\//,"")}});
   const e=h.match(/const EN = (\{[\s\S]*?\n\});/);if(e){try{TR=Function('"use strict";return '+e[1])()}catch(x){}}
   render();
 }).catch(()=>{});
