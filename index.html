@@ -443,6 +443,7 @@ h1,h2,h3,.hero h1,.sec-t,.card h3,.card .nome,.card h2,.card .title,.game b,.how
 @media (max-width:640px){.bf{padding-right:150px!important;text-align:left}}
 .status,.status.ok{color:#1C1517!important;background:rgba(250,246,240,.95)!important}
 .status.res{color:#7a5a1e!important}.status.sold{color:#8a7f78!important}.status.col{color:#1C1517!important}
+.cupp{display:block;font-size:11px;letter-spacing:.04em;color:#1C1517;font-weight:400;margin-top:2px}.cupl{display:block;font-size:11px;opacity:.85;margin-top:3px;text-transform:none;letter-spacing:.02em}
 html.maison .card .row .buy.colb,html.maison .buy.colb,.buy.colb{display:block;width:100%;box-sizing:border-box;white-space:normal!important;line-height:1.4;background:none!important;border:1px solid #1C1517!important;color:#1C1517!important;font-size:10px!important;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:10px 6px!important;cursor:default}
 .consign a,.consign .box a,section a[style*="border:1px solid var(--halo)"]{background:transparent!important;color:#1C1517!important;border:0!important;border-bottom:1px solid #1C1517!important;border-radius:0!important;padding:10px 0!important;min-height:0!important;box-shadow:none!important;font-size:11px!important;letter-spacing:.2em!important;text-transform:uppercase;font-weight:500!important;display:inline-block!important;width:auto!important;margin:6px 22px 6px 0!important}
 #bagbtn{background:#FAF6F0!important;color:#1C1517!important;border:1px solid #1C1517!important}
@@ -1347,7 +1348,7 @@ document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click
 }));
 
 const grid = document.getElementById("grid");
-const euro = n => n.toLocaleString("pt-PT",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+const euro = n => n.toLocaleString("pt-PT",{style:"currency",currency:"EUR",minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});
 
 /* BLACK FRIDAY: 27 a 29 de novembro de 2026 (Lisboa = UTC em novembro).
    Antes: faixa de aviso. Durante: faixa + preços com desconto. Depois: desaparece sozinho.
@@ -1364,8 +1365,13 @@ const BF_TXT = {
   de:{aviso:"<b>Bendito Black Friday</b> · 27.–29. November · 15% auf alles. Merk dir schon deine Favoriten!", ativa:"<b>Bendito Black Friday</b> · 15% auf alles bis Sonntag, 29. November · Preise bereits reduziert", msg:"(Black-Friday-Preis, -15%)"},
   it:{aviso:"<b>Black Friday Bendito</b> · dal 27 al 29 novembre · 15% su tutto. Scegli subito i tuoi preferiti!", ativa:"<b>Black Friday Bendito</b> · 15% su tutto fino a domenica 29 novembre · prezzi già scontati", msg:"(prezzo Black Friday, -15%)"}
 };
-const precoFinal = p => BF_ATIVA && p.status!=="vendido" ? Math.round(p.preco*(1-BF_DESC)) : p.preco;
-const precoHTML = p => precoFinal(p)!==p.preco ? `<s>${euro(p.preco)}</s>${euro(precoFinal(p))}` : euro(p.preco);
+const precoFinal = p => BF_ATIVA && p.status!=="vendido" ? Math.round(p.preco*(1-BF_DESC)*100)/100 : p.preco;
+/* Cupão de boas-vindas (BENDITO10) ativo neste aparelho: mostra também o preço final com os dois descontos */
+const temCup = () => { try { return CUP_OK(CUPAO); } catch(e) { return false; } };
+const CUP_PRECO = {pt:"com o seu cupão",en:"with your coupon",es:"con tu cupón",fr:"avec votre code",de:"mit deinem Gutschein",it:"con il tuo coupon"};
+const precoHTML = p => (precoFinal(p)!==p.preco ? `<s>${euro(p.preco)}</s>${euro(precoFinal(p))}` : euro(p.preco))
+  + (temCup() && p.status!=="vendido" && !FORA(p) ? `<span class="cupp">${euro(Math.round(precoFinal(p)*0.9*100)/100)} ${CUP_PRECO[LANG]||CUP_PRECO.pt}</span>` : "");
+const CUP_LINHA = {pt:"O seu cupão de boas-vindas está ativo: mais −10% em cima, aplicado sozinho no pagamento",en:"Your welcome coupon is active: an extra 10% off on top, applied automatically at checkout",es:"Tu cupón de bienvenida está activo: un 10% más encima, aplicado solo al pagar",fr:"Votre code de bienvenue est actif : −10 % en plus, appliqué automatiquement au paiement",de:"Dein Willkommensgutschein ist aktiv: zusätzlich −10 %, automatisch beim Bezahlen abgezogen",it:"Il tuo coupon di benvenuto è attivo: un altro −10% in più, applicato da solo al pagamento"};
 function pintarBF(){
   const el = document.getElementById("bf"); if (!el) return;
   const t = BF_TXT[LANG] || BF_TXT.pt;
@@ -1375,6 +1381,7 @@ function pintarBF(){
     if (ms > 0) { const d = Math.floor(ms/864e5), h = Math.floor(ms%864e5/36e5), m = Math.floor(ms%36e5/6e4);
       el.innerHTML = ms < 864e5 ? c.ult(h, m) : c.fal(d, h); }
   }
+  if (BF_ATIVA && temCup()) el.innerHTML += `<span class="cupl">${CUP_LINHA[LANG]||CUP_LINHA.pt}</span>`;
 }
 const BF_CONTA = {
   pt:{fal:(d,h)=>`Black Friday · −15% já aplicado em tudo, sem códigos · termina em ${d} d ${h} h`, ult:(h,m)=>`Último dia da Black Friday · −15% já aplicado · termina em ${h} h ${m} min`},
@@ -1457,7 +1464,7 @@ function bagPaint(){
   const cpBox = `<form class="cp" id="cpform"><label for="cpin">${T().cpL}</label><div><input id="cpin" value="${CUPAO.replace(/"/g,"")}" autocomplete="off" autocapitalize="characters"><button type="submit">${T().cpA}</button></div></form>${cpInfo}`;
   d.innerHTML = `<div class="sh"><h2>${t.title}</h2><button type="button" class="sx" aria-label="Fechar">×</button></div>
     ${items.length ? `<div class="sl">${items.map(p => `<div class="it"><img src="${(p.fotos||[p.foto])[0]}" alt=""><div><small>${p.marca}</small><span>${nomeDe(p)}</span><br><button type="button" class="rm" data-rm="${p.id}">${t.rm}</button></div><div class="p">${precoHTML(p)}</div></div>`).join("")}</div>
-    <div class="sf">${cpBox}<div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><p class="ship" style="opacity:.75;font-size:12.5px">${({pt:"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva.",en:"One-of-a-kind pieces: being in your bag does not reserve them. First to pay takes it.",es:"Piezas únicas: estar en la bolsa no las reserva. Quien paga primero se la lleva.",fr:"Pièces uniques : le panier ne les réserve pas. La première personne qui paie l’emporte.",de:"Einzelstücke: Die Tasche reserviert sie nicht. Wer zuerst bezahlt, bekommt es.",it:"Capi unici: essere nel carrello non li riserva. Chi paga per primo lo prende."})[LANG]||"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva."}</p><button type="button" class="buy pay" data-buybag>${(ENV_TXT[LANG]||ENV_TXT.pt).bag}</button></div>`
+    <div class="sf">${cpBox}${(BF_ATIVA||CUP_OK(CUPAO)) ? `<p class="ship" style="font-size:12.5px">${({pt:"Descontos já incluídos",en:"Discounts included",es:"Descuentos incluidos",fr:"Réductions incluses",de:"Rabatte enthalten",it:"Sconti inclusi"})[LANG]||"Descontos já incluídos"}: ${[BF_ATIVA?"−15% Black Friday":"",CUP_OK(CUPAO)?"−10% "+(({pt:"cupão de boas-vindas",en:"welcome coupon",es:"cupón de bienvenida",fr:"code de bienvenue",de:"Willkommensgutschein",it:"coupon di benvenuto"})[LANG]||"cupão de boas-vindas"):""].filter(Boolean).join(" + ")}</p>` : ""}<div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><p class="ship" style="opacity:.75;font-size:12.5px">${({pt:"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva.",en:"One-of-a-kind pieces: being in your bag does not reserve them. First to pay takes it.",es:"Piezas únicas: estar en la bolsa no las reserva. Quien paga primero se la lleva.",fr:"Pièces uniques : le panier ne les réserve pas. La première personne qui paie l’emporte.",de:"Einzelstücke: Die Tasche reserviert sie nicht. Wer zuerst bezahlt, bekommt es.",it:"Capi unici: essere nel carrello non li riserva. Chi paga per primo lo prende."})[LANG]||"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva."}</p><button type="button" class="buy pay" data-buybag>${(ENV_TXT[LANG]||ENV_TXT.pt).bag}</button></div>`
     : `<p class="empty">${t.empty}</p>`}`;
 }
 document.addEventListener("submit", e => { if (e.target.id !== "cpform") return; e.preventDefault();
