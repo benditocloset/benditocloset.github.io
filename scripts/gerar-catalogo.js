@@ -61,8 +61,8 @@ const ld = {
   "@graph": [
     { "@type": "OnlineStore", "@id": SITE + "/#loja", name: "Bendito Closet", url: SITE + "/",
       logo: SITE + "/img/logo.jpg", image: SITE + "/img/logo.jpg",
-      description: "Brechó online de moda de marca em segunda mão: bolsas, casacos, roupas, sapatos e acessórios. Peças únicas, envio para Portugal e toda a Europa.",
-      areaServed: "Europe", hasMerchantReturnPolicy: DEVOLUCAO, sameAs: ["https://www.instagram.com/benditocloset.pt/"] },
+      description: "Brechó online de moda de marca em segunda mão: bolsas, casacos, roupas, sapatos e acessórios. Peças únicas, envio para Portugal e toda a União Europeia.",
+      areaServed: "European Union", hasMerchantReturnPolicy: DEVOLUCAO, sameAs: ["https://www.instagram.com/benditocloset.pt/"] },
     { "@type": "ItemList", name: "Peças disponíveis", itemListElement: disp.map((p, i) => ({
       "@type": "ListItem", position: i + 1, item: {
         "@type": "Product", name: `${p.marca} – ${p.nome}`, sku: p.id, brand: { "@type": "Brand", name: p.marca },

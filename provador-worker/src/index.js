@@ -96,12 +96,13 @@ async function caucao(req, env, j) {
 }
 
 // Compra de peças: pagamento com o preço do site e só os portes escolhidos pela cliente (calculados aqui).
+// Só Portugal e União Europeia (decisão de 27/11/2026: sem Suíça, Noruega e Reino Unido até falar com contabilista).
 // Tabela aprovada a 25/11/2026: [roupa e acessórios, sapatos/malas/casacos]; CTT no continente grátis a partir de 100 €.
 const ENVIO = {
   ctt: { n: "Portugal continental · Entrega em casa com seguimento · 2 a 3 dias úteis", p: [9, 11], min: 2, max: 3, c: ["PT"], gratis: 100 },
   cex: { n: "Portugal continental · Correos Express · 24h", p: [10, 12], min: 1, max: 1, c: ["PT"] },
   ilhas: { n: "Açores e Madeira · CTT · 3 a 5 dias úteis", p: [9, 12], min: 3, max: 5, c: ["PT"] },
-  eu: { n: "Europa · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT","CH","NO","GB"] }
+  eu: { n: "União Europeia · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT"] }
 };
 // Códigos que o site aplica sozinho → cupões da conta Bendito Closet (o cupão BF expira a 29/11 na própria Stripe)
 // Jogo da memória (decisão de 27/11/2026): −5% em todas as compras, somado ao cupão de boas-vindas (1.ª compra) e à Black Friday
