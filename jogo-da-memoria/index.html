@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Le Jeu · Mémoire du Closet · Bendito Closet</title>
-<meta name="description" content="Encontre os 8 pares de peças do Bendito Closet e ganhe 10% de desconto na primeira compra.">
+<meta name="description" content="Encontre os 8 pares de peças do Bendito Closet e ganhe 5% de desconto em todas as compras.">
 <meta property="og:title" content="Le Jeu · Mémoire du Closet · Bendito Closet">
-<meta property="og:description" content="Encontre os 8 pares de peças de marca e ganhe 10% de desconto.">
+<meta property="og:description" content="Encontre os 8 pares de peças de marca e ganhe 5% de desconto em todas as compras.">
 <meta property="og:image" content="https://benditocloset.pt/img/jogo-capa.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <link rel="icon" href="/img/logo.jpg">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -57,7 +57,7 @@ h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;fon
 <div class="wrap">
   <div class="eb">Le Jeu · Mémoire du Closet</div>
   <h1>Encontre os pares</h1>
-  <p class="sub">8 pares de peças de marca do meu closet. Encontre todos e ganhe <b>10% de desconto</b> na sua primeira compra.</p>
+  <p class="sub">8 pares de peças de marca do meu closet. Encontre todos e ganhe <b>5% de desconto em todas as compras</b>, também nas próximas.</p>
   <div class="hud"><div><small>Tempo</small><b id="t">0,0s</b></div><div><small>Jogadas</small><b id="j">0</b></div><div><small>Recorde</small><b id="r">—</b></div></div>
   <div class="grid" id="g"></div>
   <button class="btn out" id="novo" type="button">Baralhar de novo</button>
@@ -66,10 +66,10 @@ h1{font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-weight:400;fon
   <button class="x" id="fx" type="button" aria-label="Fechar">×</button>
   <h2 id="fimT">Conseguiu!</h2>
   <p id="res" style="margin:0"></p>
-  <div class="cupao">BENDITO10</div>
-  <p class="small">10% na primeira compra. O cupão já ficou guardado: entra sozinho quando pagar com cartão no site. Se comprar pelo WhatsApp, diga este código.</p>
+  <div class="cupao">−5% SEMPRE</div>
+  <p class="small">Ganhou 5% de desconto em todas as compras, também nas próximas. Já ficou guardado neste telemóvel e entra sozinho quando pagar no site, somado ao cupão de boas-vindas e à Black Friday. Se comprar pelo WhatsApp, diga JOGO5.</p>
   <div class="acts">
-    <a class="btn" href="/#grid">Usar o cupão nas peças</a>
+    <a class="btn" href="/#grid">Ver as peças</a>
     <button class="btn dark" id="part" type="button">Desafiar uma amiga</button>
     <button class="btn out" id="outra" type="button">Jogar outra vez</button>
   </div>
@@ -105,14 +105,14 @@ g.onclick=e=>{const c=e.target.closest(".cd");if(!c||lock||c.classList.contains(
 let ULT=0;
 function fim(){clearInterval(tick);const s=(performance.now()-t0)/1000;ULT=s;
  if(!rec||s<rec){rec=s;try{localStorage.setItem("bc-mem-rec",s)}catch(e){}R.textContent=fmt(rec)}
- try{if(!localStorage.getItem("bc-cupao"))localStorage.setItem("bc-cupao","BENDITO10")}catch(e){}
+ try{localStorage.setItem("bc-jogo","1")}catch(e){}
  $("#res").innerHTML=`Encontrou os 8 pares em <b>${fmt(s)}</b> e <b>${jog}</b> jogadas.`;
  $("#pcs").innerHTML=P.map(p=>`<a href="/?peca=${p.id}"><img src="/img/${p.f}" alt="${p.m}" loading="lazy"></a>`).join("");
  $("#fim").classList.add("on");try{typeof fbq==="function"&&fbq("trackCustom","JogoMemoria")}catch(e){}try{window.bcEv&&bcEv("jogo")}catch(e){}}
 $("#fim").onclick=e=>{if(e.target.id==="fim")e.currentTarget.classList.remove("on")};
 $("#fx").onclick=()=>$("#fim").classList.remove("on");
 $("#outra").onclick=()=>{$("#fim").classList.remove("on");novo()};
-$("#part").onclick=async()=>{const txt=`Encontrei os 8 pares do Bendito Closet em ${fmt(ULT)}. Consegue fazer melhor? E ainda ganha 10% de desconto:`,url="https://benditocloset.pt/jogo-da-memoria/";
+$("#part").onclick=async()=>{const txt=`Encontrei os 8 pares do Bendito Closet em ${fmt(ULT)}. Consegue fazer melhor? E ainda ganha 5% de desconto em todas as compras:`,url="https://benditocloset.pt/jogo-da-memoria/";
  try{if(navigator.share){await navigator.share({text:txt,url});return}}catch(e){if(e&&e.name==="AbortError")return}
  location.href="https://wa.me/?text="+encodeURIComponent(txt+" "+url)};
 $("#novo").onclick=novo;novo();

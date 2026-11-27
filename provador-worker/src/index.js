@@ -104,7 +104,11 @@ const ENVIO = {
   eu: { n: "Europa · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT","CH","NO","GB"] }
 };
 // Códigos que o site aplica sozinho → cupões da conta Bendito Closet (o cupão BF expira a 29/11 na própria Stripe)
-const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "5zMdM2cY", BENDITO10BF: "Ae5VZaMp" };
+// Jogo da memória (decisão de 27/11/2026): −5% em todas as compras, somado ao cupão de boas-vindas (1.ª compra) e à Black Friday
+const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "5zMdM2cY", BENDITO10BF: "Ae5VZaMp", JOGO5: "JOGO5", JOGO5BF: "JOGO5BF", BENDITO10JOGO5: "BENDITO10JOGO5", BENDITO10JOGO5BF: "BENDITO10JOGO5BF" };
+// Depois da Black Friday (29/11/2026 23:59, Lisboa), os códigos com BF passam ao equivalente sem BF
+const BF_FIM_MS = Date.UTC(2026, 10, 30, 0, 0, 0);
+const codigoValido = c => Date.now() < BF_FIM_MS ? c : (c === "BLACKFRIDAY15" ? "" : c.replace(/BF$/, ""));
 const LOCAIS = ["pt", "en", "es", "fr", "de", "it"];
 // ===== Reserva e venda automáticas: cada peça só pode ser paga uma vez =====
 // KV "pcs" = { <id da peça>: {s: sessão Stripe, e: e-mail, ate: reservada até (ms), v: 1 se vendida} } — uma só chave, poucas escritas
@@ -166,7 +170,7 @@ async function comprar(req, env, j) {
   if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
   const ids = Array.isArray(b.ids) ? [...new Set(b.ids.map(String))] : [];
-  const e = ENVIO[String(b.ship || "")], lang = LOCAIS.includes(b.lang) ? b.lang : "pt", code = String(b.code || "").toUpperCase();
+  const e = ENVIO[String(b.ship || "")], lang = LOCAIS.includes(b.lang) ? b.lang : "pt", code = codigoValido(String(b.code || "").toUpperCase());
   if (!e || !ids.length || ids.length > 20) return j({ error: "dados" }, 400);
   const ip = req.headers.get("CF-Connecting-IP") || "x", day = new Date().toISOString().slice(0, 10), k = `buy:${day}:${ip}`, n = +((await env.LIMITS.get(k)) || 0);
   if (n >= 40) return j({ error: "limite" }, 429);
