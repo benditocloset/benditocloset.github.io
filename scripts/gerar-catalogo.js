@@ -6,6 +6,10 @@ const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const m = html.match(/const PECAS = (\[[\s\S]*?\n\]);/);
 if (!m) throw new Error("Lista PECAS não encontrada");
 const PECAS = vm.runInNewContext(m[1]);
+// Bendito é unissex: as entradas "mesma" (fotos nele) não são produtos à parte; as fotos juntam-se à peça real
+for (const a of PECAS.filter(p => p.mesma)) { const o = PECAS.find(x => x.id === a.mesma); if (!o) continue;
+  const fo = o.fotos || [o.foto]; o.fotos = fo.concat((a.fotos || [a.foto]).filter(f => f && !fo.includes(f))); }
+for (let i = PECAS.length - 1; i >= 0; i--) if (PECAS[i].mesma) PECAS.splice(i, 1);
 const SITE = "https://benditocloset.pt";
 const condicao = d => {
   const t = (d || "").toLowerCase();
