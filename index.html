@@ -245,12 +245,12 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #saco .sh h2{margin:0;font-family:var(--display);font-size:24px}
 #saco .sx{border:0;background:transparent;color:var(--ink);font-size:28px;cursor:pointer;line-height:1}
 #saco .sl{padding:6px 18px;overflow:auto;max-height:calc(100dvh - 300px)}
-#saco .it{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-#saco .it img{width:64px;height:80px;object-fit:cover;border-radius:8px}
+#saco .it{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+#saco .it img{width:72px;height:90px;object-fit:cover;border-radius:8px}
 #saco .it small{display:block;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 #saco .it span{font-size:14px;line-height:1.3}
-#saco .it .rm{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0;margin-top:4px}
-#saco .it .p{font-weight:700;white-space:nowrap}
+#saco .it .rm{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:transparent;color:var(--ink,#1f1a1c);font:inherit;font-size:12.5px;cursor:pointer;padding:6px 12px;margin-top:8px;border-radius:999px}#saco .it .rm b{font-size:15px;line-height:1;font-weight:400}
+#saco .it .p{font-weight:700;margin-top:4px}
 #saco .it .p s{color:var(--muted);font-weight:400;font-size:12px;margin-right:4px}
 #pop{max-width:400px;width:calc(100% - 32px);background:var(--surface);color:var(--ink);border:1px solid var(--halo);border-radius:16px;padding:26px 22px 22px;text-align:center}
 #pop::backdrop{background:rgba(0,0,0,.7)}
@@ -266,7 +266,7 @@ footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);f
 #pop .pn{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;margin-top:10px;text-decoration:underline;cursor:pointer}
 #saco .sf{padding:16px 18px 22px;border-top:1px solid var(--line)}
 #saco .cp{display:grid;gap:6px;margin-bottom:12px}#saco .cp label{font-size:13px;color:var(--muted)}
-#saco .cp div{display:flex;gap:8px}#saco .cp input{flex:1;min-width:0;width:100%;box-sizing:border-box;font:inherit;font-size:16px;background:#000;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-transform:uppercase}
+#saco .cp div{display:flex;gap:8px}#saco .cp input{flex:1;min-width:0;width:100%;box-sizing:border-box;font:inherit;font-size:16px;background:#fff;color:#1f1a1c;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-transform:uppercase}
 #saco .cp button{font:inherit;font-size:14px;font-weight:600;background:transparent;color:var(--halo);border:1px solid var(--halo);border-radius:10px;padding:0 14px;cursor:pointer}
 #saco .cpm{margin:-4px 0 12px;font-size:13px;color:#E8A0A0}#saco .cpm.ok{color:var(--ok)}
 #saco .tot{display:flex;justify-content:space-between;font-size:18px;font-weight:700;margin-bottom:6px}
@@ -1453,7 +1453,7 @@ function cardBtn(p){
 
 /* SACO: a cliente junta várias peças e envia um só pedido pelo WhatsApp */
 const BAG_TXT = {
-  pt:{add:"+ Juntar ao saco", addS:"+ Saco", inB:"✓ No saco", inS:"✓ No saco", title:"O seu saco", empty:"O saco está vazio. Toque em “+ Juntar ao saco” numa peça.", rm:"Tirar", total:"Total", send:"Enviar pedido pelo WhatsApp", free:"Portes grátis em Portugal continental ✓", miss:v=>`Faltam ${v} para portes grátis em Portugal continental`, label:"Saco", msg:(l,t)=>`Olá! Quero encomendar estas peças do site Bendito Closet:\n${l}\nTotal: ${t}\nAinda estão disponíveis?`},
+  pt:{add:"+ Juntar ao saco", addS:"+ Saco", inB:"✓ No saco", inS:"✓ No saco", title:"O seu saco", empty:"O saco está vazio. Toque em “+ Juntar ao saco” numa peça.", rm:"Remover", total:"Total", send:"Enviar pedido pelo WhatsApp", free:"Portes grátis em Portugal continental ✓", miss:v=>`Faltam ${v} para portes grátis em Portugal continental`, label:"Saco", msg:(l,t)=>`Olá! Quero encomendar estas peças do site Bendito Closet:\n${l}\nTotal: ${t}\nAinda estão disponíveis?`},
   en:{add:"+ Add to bag", addS:"+ Bag", inB:"✓ In your bag", inS:"✓ In bag", title:"Your bag", empty:"Your bag is empty. Tap “+ Add to bag” on a piece.", rm:"Remove", total:"Total", send:"Send order on WhatsApp", free:"Free shipping in mainland Portugal ✓", miss:v=>`${v} more for free shipping in mainland Portugal`, label:"Bag", msg:(l,t)=>`Hi! I'd like to order these pieces from the Bendito Closet website:\n${l}\nTotal: ${t}\nAre they still available?`},
   es:{add:"+ Añadir a la bolsa", addS:"+ Bolsa", inB:"✓ En la bolsa", inS:"✓ En la bolsa", title:"Tu bolsa", empty:"Tu bolsa está vacía. Toca «+ Añadir a la bolsa» en una pieza.", rm:"Quitar", total:"Total", send:"Enviar pedido por WhatsApp", free:"Envío gratis en Portugal continental ✓", miss:v=>`Faltan ${v} para el envío gratis en Portugal continental`, label:"Bolsa", msg:(l,t)=>`¡Hola! Quiero pedir estas piezas de la web de Bendito Closet:\n${l}\nTotal: ${t}\n¿Siguen disponibles?`},
   fr:{add:"+ Ajouter au panier", addS:"+ Panier", inB:"✓ Dans le panier", inS:"✓ Panier", title:"Votre panier", empty:"Votre panier est vide. Touchez « + Ajouter au panier » sur une pièce.", rm:"Retirer", total:"Total", send:"Envoyer la commande sur WhatsApp", free:"Livraison offerte au Portugal continental ✓", miss:v=>`Encore ${v} pour la livraison offerte au Portugal continental`, label:"Panier", msg:(l,t)=>`Bonjour ! Je souhaite commander ces pièces du site Bendito Closet :\n${l}\nTotal : ${t}\nSont-elles toujours disponibles ?`},
@@ -1497,7 +1497,7 @@ function bagPaint(){
   const cpInfo = !CUPAO ? "" : CUP_OK(CUPAO) ? `<p class="cpm ok">${T().cpOk}</p>` : `<p class="cpm">${CUPAO==="BENDITO10" && BF_ATIVA ? T().cpBF : T().cpBad}</p>`;
   const cpBox = `<form class="cp" id="cpform"><label for="cpin">${T().cpL}</label><div><input id="cpin" value="${CUPAO.replace(/"/g,"")}" autocomplete="off" autocapitalize="characters"><button type="submit">${T().cpA}</button></div></form>${cpInfo}`;
   d.innerHTML = `<div class="sh"><h2>${t.title}</h2><button type="button" class="sx" aria-label="Fechar">×</button></div>
-    ${items.length ? `<div class="sl">${items.map(p => `<div class="it"><img src="${(p.fotos||[p.foto])[0]}" alt=""><div><small>${p.marca}</small><span>${nomeDe(p)}</span><br><button type="button" class="rm" data-rm="${p.id}">${t.rm}</button></div><div class="p">${precoHTML(p)}</div></div>`).join("")}</div>
+    ${items.length ? `<div class="sl">${items.map(p => `<div class="it"><img src="${(p.fotos||[p.foto])[0]}" alt=""><div><small>${p.marca}</small><span>${nomeDe(p)}</span><div class="p">${precoHTML(p)}</div><button type="button" class="rm" data-rm="${p.id}"><b aria-hidden="true">×</b> ${t.rm}</button></div></div>`).join("")}</div>
     <div class="sf">${cpBox}${(BF_ATIVA||CUP_OK(CUPAO)||temJogo()) ? `<p class="ship" style="font-size:12.5px">${({pt:"Descontos já incluídos",en:"Discounts included",es:"Descuentos incluidos",fr:"Réductions incluses",de:"Rabatte enthalten",it:"Sconti inclusi"})[LANG]||"Descontos já incluídos"}: ${[BF_ATIVA?"−15% Black Friday":"",CUP_OK(CUPAO)?"−10% "+(({pt:"cupão de boas-vindas",en:"welcome coupon",es:"cupón de bienvenida",fr:"code de bienvenue",de:"Willkommensgutschein",it:"coupon di benvenuto"})[LANG]||"cupão de boas-vindas"):"",temJogo()?"−5% "+(({pt:"jogo da memória",en:"memory game",es:"juego de memoria",fr:"jeu de mémoire",de:"Memory-Spiel",it:"gioco di memoria"})[LANG]||"jogo da memória"):""].filter(Boolean).join(" + ")}</p>` : ""}<div class="tot"><span>${t.total}</span><span>${euro(tot)}</span></div><p class="ship${falta<=0?" ok":""}">${falta<=0 ? t.free : t.miss(euro(falta))}</p><p class="ship" style="opacity:.75;font-size:12.5px">${({pt:"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva.",en:"One-of-a-kind pieces: being in your bag does not reserve them. First to pay takes it.",es:"Piezas únicas: estar en la bolsa no las reserva. Quien paga primero se la lleva.",fr:"Pièces uniques : le panier ne les réserve pas. La première personne qui paie l’emporte.",de:"Einzelstücke: Die Tasche reserviert sie nicht. Wer zuerst bezahlt, bekommt es.",it:"Capi unici: essere nel carrello non li riserva. Chi paga per primo lo prende."})[LANG]||"Peças únicas: estar no saco não reserva a peça. Quem paga primeiro leva."}</p><button type="button" class="buy pay" data-buybag>${(ENV_TXT[LANG]||ENV_TXT.pt).bag}</button></div>`
     : `<p class="empty">${t.empty}</p>`}`;
 }
