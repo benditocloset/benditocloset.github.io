@@ -635,6 +635,14 @@ async function gestao(req, env, url) {
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
     if (acao === "morada") { await env.LIMITS.put("cfg:morada", String(f.get("morada") || "").trim().slice(0, 400)); msg = "Morada de devolução guardada."; }
+    // Reserva em curso (alguém abriu o pagamento e ainda não pagou): fechar o pagamento e soltar a peça já
+    if (acao === "soltar" && /^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) {
+      try { await stp(env, "checkout/sessions/" + id + "/expire", "POST"); } catch (e) {}
+      const m = await pcsLer(env); let x = 0;
+      for (const pid of Object.keys(m)) if (m[pid].s === id && !m[pid].v) { delete m[pid]; x++; }
+      await pcsGravar(env, m); await limparCacheEstado();
+      msg = x ? "Reserva tirada: a peça voltou a estar disponível no site." : "Esta reserva já tinha terminado.";
+    }
     if (acao === "colab_sai" || acao === "colab_volta") {
       const pid = String(f.get("peca") || ""), l = await colabLer(env);
       if (/^[a-z0-9-]{2,60}$/.test(pid)) {
@@ -669,9 +677,9 @@ async function gestao(req, env, url) {
             }
           }
         }
-      } catch (e) { msg = "Erro: " + esc(e.message || e); }
+      } catch (e) { msg = "Erro: " + String(e.message || e); }
     }
-    if (/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id)) {
+    if (/^cs_(live|test)_[A-Za-z0-9]{20,}$/.test(id) && acao !== "soltar") {
       const est = JSON.parse((await env.LIMITS.get("enc:" + id)) || "{}");
       try {
         if (acao === "enviada") {
@@ -722,7 +730,7 @@ async function gestao(req, env, url) {
           await pcLibertar(env, ses); await limparCacheEstado();
         }
         await env.LIMITS.put("enc:" + id, JSON.stringify(est));
-      } catch (e) { msg = "Erro: " + esc(e.message || e); }
+      } catch (e) { msg = "Erro: " + String(e.message || e); }
     }
   }
   let colabH = "";
@@ -733,6 +741,12 @@ async function gestao(req, env, url) {
     const opts = Object.entries(P).filter(([pid, p]) => p.status !== "vendido" && !l.includes(pid)).map(([pid, p]) => `<option value="${esc(pid)}">${esc(p.marca + " " + p.nome)}</option>`).join("");
     colabH += `<form method="post" style="margin-top:8px"><input type="hidden" name="acao" value="colab_sai"><select name="peca" style="padding:8px;border:1px solid #1C1517;max-width:100%">${opts}</select> <button>Marcar «Em collab»</button></form>`;
   } catch (e) { colabH = "<p>Erro: " + esc(e.message || e) + "</p>"; }
+  let resH = "";
+  try {
+    const m = await pcsLer(env), P = await pecasDoSite(), por = {};
+    for (const [pid, r] of Object.entries(m)) if (!r.v && r.ate > Date.now()) (por[r.s] = por[r.s] || { e: r.e, ate: r.ate, ids: [] }).ids.push(pid);
+    resH = Object.entries(por).map(([sid, r]) => `<div class="o"><b>${esc(r.ids.map(pid => P[pid] ? P[pid].marca + " " + P[pid].nome : pid).join(", "))}</b><br><small>${esc(r.e || "")} · reservada até às ${new Date(r.ate).toLocaleTimeString("pt-PT", { timeZone: "Europe/Lisbon", hour: "2-digit", minute: "2-digit" })}</small><div class="a"><form method="post"><input type="hidden" name="id" value="${esc(sid)}"><input type="hidden" name="acao" value="soltar"><button>Tirar do reservado</button></form></div></div>`).join("");
+  } catch (e) {}
   let cau = "";
   try {
     const o = await stp(env, "payment_intents?limit=40");
@@ -761,7 +775,7 @@ async function gestao(req, env, url) {
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a>${pbInfo}<div class="a">${pbAcoes}${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
-  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<h2 style="font:400 22px Georgia,serif">Cauções de empréstimos</h2>${cau || "<p>Nenhuma caução retida.</p>"}<h2 style="font:400 22px Georgia,serif">Peças em collab</h2>${colabH}<h2 style="font:400 22px Georgia,serif">Vendas</h2>${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}${resH ? `<h2 style="font:400 22px Georgia,serif">Reservadas agora</h2>${resH}` : ""}<h2 style="font:400 22px Georgia,serif">Cauções de empréstimos</h2>${cau || "<p>Nenhuma caução retida.</p>"}<h2 style="font:400 22px Georgia,serif">Peças em collab</h2>${colabH}<h2 style="font:400 22px Georgia,serif">Vendas</h2>${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 function est_motivo(r) { return ""; }
 
