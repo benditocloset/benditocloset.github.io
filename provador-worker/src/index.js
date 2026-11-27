@@ -627,8 +627,10 @@ async function contaSair(req, env, j) {
 }
 // Página de gestão da Marianna (link privado com o token de dona)
 async function gestao(req, env, url) {
-  const t = url.searchParams.get("t") || "";
-  if (!env.OWNER_TOKEN || t !== env.OWNER_TOKEN) return new Response("Sem acesso", { status: 403 });
+  // Entra com o link de dona (?t=) ou com a conta do site da loja (ola@benditocloset.pt, ?s= sessão)
+  const t = url.searchParams.get("t") || "", sTok = url.searchParams.get("s") || "";
+  const dona = (env.OWNER_TOKEN && t === env.OWNER_TOKEN) || (sTok && (await quem(env, sTok)) === "ola@benditocloset.pt");
+  if (!dona) return new Response("Sem acesso. Entre em benditocloset.pt/conta com o e-mail ola@benditocloset.pt e toque em «Gestão da loja».", { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   let msg = "", avisoCliente = null, continue_ = true;
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");

@@ -132,6 +132,7 @@ function mostrar(d){
   EU = d; $("aguarde").hidden = true; $("entrar").hidden = true; $("conta").hidden = false; if ($("feito")) $("feito").hidden = true;
   const p = d.perfil || {}, nome = (p.nome||"").split(" ")[0];
   $("ola").textContent = t().ola(nome); $("quem").textContent = t().quem(d.email);
+  if (d.email === "ola@benditocloset.pt" && !$("gestaoLoja")) { const g = document.createElement("p"); g.id = "gestaoLoja"; g.style.cssText = "margin:18px 0;text-align:center"; g.innerHTML = `<a href="${W}/gestao?s=${encodeURIComponent(SESS)}" style="display:inline-block;background:#111;color:#fff;padding:14px 22px;font:500 12px var(--body);letter-spacing:.2em;text-transform:uppercase;text-decoration:none">Gestão da loja</a><br><small style="color:#777">Encomendas, devoluções, cauções e peças em collab. Só aparece para si.</small>`; $("quem").after(g); }
   const L2 = d.encomendas || [];
   $("lista").innerHTML = L2.length ? L2.map(o => {
     const st = o.reembolso==="total" ? t().stRef : o.devolucao==="pedida" ? t().stRet : o.enviada ? t().stSent : t().stOpen;
