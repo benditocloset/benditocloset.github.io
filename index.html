@@ -598,6 +598,26 @@ html.maison #det .calc .cbt button,html.maison #det .calc input{border-radius:0!
 html.maison #det .calc input{background:#fff!important;color:#111!important;border:1px solid #0a0809!important;box-shadow:none!important;outline:none}
 html.maison #det .calc .cres b{white-space:nowrap;padding-left:10px}
 html.maison #det .voltar{margin-top:12px!important}
+
+/* Filas por categoria (página inicial) */
+html.maison .grid.rows,.grid.rows{display:block!important}
+.grid.rows .frow{margin:0 0 34px}
+.grid.rows .fh{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid #e6ddd2;padding-bottom:10px}
+.grid.rows .fh h3{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#0a0809}
+.grid.rows .fh .fn{font-size:11px;letter-spacing:.08em;color:#8a7f78}
+.grid.rows .fh .fall{margin-left:auto;background:none;border:0;padding:4px 0;font:500 11px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#0a0809;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.grid.rows .fwrap{position:relative}
+.grid.rows .ftrack{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 12px) / 2.25);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.grid.rows .ftrack::-webkit-scrollbar{display:none}
+.grid.rows .ftrack>.card{scroll-snap-align:start;min-width:0}
+html.maison .grid.rows .card .photo,.grid.rows .card .photo{aspect-ratio:4/5!important;height:auto!important;overflow:hidden}
+html.maison .grid.rows .card .photo img,.grid.rows .card .photo img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 20%}
+html.maison .grid.rows .card .row .unica,html.maison .grid.rows .card .body .meta,.grid.rows .card .meta,.grid.rows .card .unica,.grid.rows .card .duvida,.grid.rows .card .note{display:none!important}
+.grid.rows .fnav{position:absolute;top:calc(50% - 60px);z-index:3;width:40px;height:40px;border-radius:50%;border:1px solid #0a0809;background:rgba(255,255,255,.92);color:#0a0809;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 0 3px}
+.grid.rows .fnav.fp{left:-6px}.grid.rows .fnav.fx{right:-6px}
+.grid.rows .fnav:disabled{opacity:0;pointer-events:none}
+@media(min-width:900px){.grid.rows .ftrack{grid-auto-columns:calc((100% - 72px) / 4);gap:24px}.grid.rows .fnav{width:46px;height:46px}.grid.rows .fnav.fp{left:-20px}.grid.rows .fnav.fx{right:-20px}}
+@media(max-width:899px){.grid.rows .fnav{width:34px;height:34px;font-size:19px}.grid.rows .fnav.fp{left:4px}.grid.rows .fnav.fx{right:4px}}
 </style>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
@@ -1553,7 +1573,11 @@ function render(f){
   if (ORDEM === "barato") lista = lista.slice().sort((a,b) => a.preco - b.preco);
   if (ORDEM === "caro") lista = lista.slice().sort((a,b) => b.preco - a.preco);
   lista = lista.filter(p => p.status !== "vendido").concat(lista.filter(p => p.status === "vendido"));
-  lista.filter(p => (p.foto || p.fotos) && (f==="all" || p.cat===f)).forEach(p => {
+  grid.classList.toggle("rows", f==="all");
+  if (f==="all") { renderRows(lista); return; }
+  lista.filter(p => (p.foto || p.fotos) && (f==="all" || p.cat===f)).forEach(p => { grid.appendChild(mkCard(p)); });
+}
+function mkCard(p){
     const cls = ST[p.status] || "ok"; const label = T().st[p.status] || T().st.disponivel;
     const card = document.createElement("article");
     card.className = "card" + (p.status==="vendido" ? " sold" : "");
@@ -1576,9 +1600,33 @@ function render(f){
         <div class="row"><span class="price">${precoHTML(p)}</span>${p.status!=="vendido"?`<span class="unica">${({pt:"Peça única",en:"One of a kind",es:"Pieza única",fr:"Pièce unique",de:"Einzelstück",it:"Pezzo unico"})[LANG]||"Peça única"}</span>`:""}${btn}</div>
         <span class="note" id="note-${p.id}">O WhatsApp da loja ainda está a ser configurado. Volte em breve!</span>
       </div>`;
-    grid.appendChild(card);
+    return card;
+}
+/* Página inicial em filas por categoria que deslizam para o lado (como as lojas de luxo), com setas e "Ver tudo" */
+const ROW_T = { novo:{pt:"Novidades",en:"New in",es:"Novedades",fr:"Nouveautés",de:"Neu",it:"Novità"}, ele:{pt:"Para ele",en:"For him",es:"Para él",fr:"Pour lui",de:"Für ihn",it:"Per lui"},
+  all:{pt:"Ver tudo",en:"See all",es:"Ver todo",fr:"Tout voir",de:"Alle ansehen",it:"Vedi tutto"}, n:{pt:"peças",en:"pieces",es:"piezas",fr:"pièces",de:"Teile",it:"capi"} };
+const rt = k => ROW_T[k][LANG] || ROW_T[k].pt;
+function renderRows(lista){
+  const ok = lista.filter(p => (p.foto || p.fotos) && p.status !== "vendido");
+  const base = ok.filter(p => !p.mesma);
+  const filas = [["novo", rt("novo"), base.slice(0, 12), null]];
+  document.querySelectorAll(".filters button[data-f]").forEach(btn => { const c = btn.dataset.f; if (c === "all") return;
+    const it = base.filter(p => p.cat === c); if (it.length) filas.push([c, btn.textContent.trim(), it, c]); });
+  const ele = ok.filter(p => p.mesma); if (ele.length) filas.push(["ele", rt("ele"), ele, null]);
+  filas.forEach(([k, titulo, it, cat]) => {
+    const sec = document.createElement("section"); sec.className = "frow"; sec.dataset.k = k;
+    sec.innerHTML = `<div class="fh"><h3>${titulo}</h3><span class="fn">${it.length} ${rt("n")}</span>${cat ? `<button type="button" class="fall" data-cat="${cat}">${rt("all")} <span aria-hidden="true">→</span></button>` : ""}</div>
+      <div class="fwrap"><button type="button" class="fnav fp" aria-label="‹">‹</button><div class="ftrack"></div><button type="button" class="fnav fx" aria-label="›">›</button></div>`;
+    const tr = sec.querySelector(".ftrack"); it.forEach(p => tr.appendChild(mkCard(p)));
+    grid.appendChild(sec);
+    const upd = () => { sec.querySelector(".fp").disabled = tr.scrollLeft < 8; sec.querySelector(".fx").disabled = tr.scrollLeft + tr.clientWidth > tr.scrollWidth - 8; };
+    tr.addEventListener("scroll", upd, { passive:true }); setTimeout(upd, 60);
   });
 }
+grid.addEventListener("click", e => {
+  const n = e.target.closest(".fnav"); if (n) { const tr = n.parentElement.querySelector(".ftrack"); tr.scrollBy({ left: (n.classList.contains("fx") ? 1 : -1) * tr.clientWidth * 0.85, behavior:"smooth" }); return; }
+  const a = e.target.closest(".fall"); if (a) { const btn = document.querySelector(`.filters button[data-f="${a.dataset.cat}"]`); if (btn) { btn.click(); document.querySelector(".filters").scrollIntoView({ behavior:"smooth", block:"start" }); } }
+});
 
 document.getElementById("ordem").addEventListener("change", e => { ORDEM = e.target.value; render(FILTRO); });
 
