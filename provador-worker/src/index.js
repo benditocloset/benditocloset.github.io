@@ -66,7 +66,8 @@ async function caucao(req, env, j) {
   if (n >= 15) return j({ error: "limite" }, 429);
   await env.LIMITS.put(k, String(n + 1), { expirationTtl: 172800 });
   const P = await pecasDoSite(), sel = [];
-  for (const id of new Set(ids)) { const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 400); sel.push(p); }
+  const fora = await pecasFora(env);
+  for (const id of new Set(ids)) { const p = P[id]; if (!p || p.status === "vendido" || fora.colab.includes(id) || fora.emprestadas.includes(id) || !(p.preco > 0)) return j({ error: "peca", id }, 400); p.id = id; sel.push(p); }
   const cau = Math.round(sel.reduce((a, p) => a + p.preco, 0) * 100);
   const big = sel.some(p => !["roupas", "acessorios"].includes(p.cat));
   const portes = PORTES[ship][big ? 1 : 0] * 2 * 100;
@@ -82,7 +83,7 @@ async function caucao(req, env, j) {
     f.set("line_items[1][quantity]", "1"); f.set("line_items[1][price_data][currency]", "eur"); f.set("line_items[1][price_data][unit_amount]", String(portes));
     f.set("line_items[1][price_data][product_data][name]", "Portes ida e volta · " + PORTES_NOME[ship]);
   }
-  const meta = { pedido: code, pecas: lista.slice(0, 490), datas: fd(d1) + " a " + fd(d2), envio: PORTES_NOME[ship], caucao_eur: (cau / 100).toFixed(2), portes_eur: (portes / 100).toFixed(2) };
+  const meta = { pedido: code, ids: sel.map(p => p.id).join(",").slice(0, 490), pecas: lista.slice(0, 490), datas: fd(d1) + " a " + fd(d2), envio: PORTES_NOME[ship], caucao_eur: (cau / 100).toFixed(2), portes_eur: (portes / 100).toFixed(2) };
   for (const [a, v] of Object.entries(meta)) { f.set(`metadata[${a}]`, v); f.set(`payment_intent_data[metadata][${a}]`, v); }
   f.set("payment_intent_data[description]", "Caução retida · empréstimo " + code + " · " + (cau / 100) + " €");
   f.set("payment_intent_data[capture_method]", "manual");
@@ -141,10 +142,26 @@ async function estadoPecas(req, env, j) {
     if (st === "vendido") out.vendidas.push(id); else if (st === "reservado") out.reservadas.push(id);
   }
   if (mudou) await pcsGravar(env, all);
+  try { const f = await pecasFora(env); out.colab = f.colab; out.emprestadas = f.emprestadas; } catch (e) {}
   out.n = Object.keys(all).length;
   return j(out);
 }
-async function limparCacheEstado() {}
+// Peças fora da loja: "colab" (a Marianna marca na gestão, KV "colab") e "emprestadas" (caução retida na Stripe, metadata ids).
+// Quando a caução é libertada, a peça volta a estar disponível sozinha. Cache de 60 s para não chamar a Stripe a cada visita.
+const COLAB_INICIAL = ["adidas-calca-castanha"];
+async function colabLer(env) { const v = await env.LIMITS.get("colab"); try { return v ? JSON.parse(v) : COLAB_INICIAL.slice(); } catch (e) { return []; } }
+async function pecasFora(env) {
+  const ck = new Request("https://cache.bendito/fora"), c = caches.default;
+  const hit = await c.match(ck); if (hit) return hit.json();
+  const out = { colab: await colabLer(env), emprestadas: [] };
+  try {
+    const o = await stp(env, "payment_intents?limit=40");
+    for (const pi of (o.data || [])) if (pi.status === "requires_capture" && pi.metadata && pi.metadata.ids) out.emprestadas.push(...String(pi.metadata.ids).split(",").filter(Boolean));
+  } catch (e) {}
+  await c.put(ck, new Response(JSON.stringify(out), { headers: { "Content-Type": "application/json", "Cache-Control": "max-age=60" } }));
+  return out;
+}
+async function limparCacheEstado() { try { await caches.default.delete(new Request("https://cache.bendito/fora")); } catch (e) {} }
 async function comprar(req, env, j) {
   if (!env.STRIPE_KEY) return j({ error: "sem_chave" }, 503);
   let b = {}; try { b = await req.json(); } catch (e) { return j({ error: "pedido" }, 400); }
@@ -158,6 +175,7 @@ async function comprar(req, env, j) {
   const P = await pecasDoSite(), sel = [], antigas = new Set();
   for (const id of ids) {
     const p = P[id]; if (!p || p.status === "vendido" || !(p.preco > 0)) return j({ error: "peca", id }, 409);
+    { const fo = await pecasFora(env); if (fo.colab.includes(id) || fo.emprestadas.includes(id)) return j({ error: "peca", id }, 409); }
     const st = await pcEstado(env, id), m = await pcGet(env, id);
     if (st === "vendido") return j({ error: "peca", id }, 409);
     if (st === "reservado") { if (m.e !== quemCompra) return j({ error: "reservada", id }, 409); antigas.add(m.s); }
@@ -615,6 +633,14 @@ async function gestao(req, env, url) {
   if (req.method === "POST") {
     const f = await req.formData(), id = String(f.get("id") || ""), acao = String(f.get("acao") || "");
     if (acao === "morada") { await env.LIMITS.put("cfg:morada", String(f.get("morada") || "").trim().slice(0, 400)); msg = "Morada de devolução guardada."; }
+    if (acao === "colab_sai" || acao === "colab_volta") {
+      const pid = String(f.get("peca") || ""), l = await colabLer(env);
+      if (/^[a-z0-9-]{2,60}$/.test(pid)) {
+        const n = acao === "colab_sai" ? [...new Set([...l, pid])] : l.filter(x => x !== pid);
+        await env.LIMITS.put("colab", JSON.stringify(n)); await limparCacheEstado();
+        msg = acao === "colab_sai" ? "Peça marcada como «Em collab»: deixa de se poder comprar." : "Peça de volta à venda no site.";
+      }
+    }
     // Cauções de empréstimo (retidas no cartão): libertar (peças voltaram bem) ou cobrar um valor (dano ou peça não devolvida)
     if (/^pi_[A-Za-z0-9]{10,}$/.test(id) && (acao === "libertar" || acao === "cobrar")) {
       try {
@@ -625,6 +651,7 @@ async function gestao(req, env, url) {
           const ped = (pi.metadata && pi.metadata.pedido) || "";
           if (acao === "libertar") {
             await stp(env, "payment_intents/" + id + "/cancel", "POST", { cancellation_reason: "requested_by_customer" });
+            await limparCacheEstado();
             msg = "Caução libertada: " + (pi.amount / 100).toFixed(2) + " €. O valor volta ao limite do cartão (o banco pode levar alguns dias a mostrar).";
             if (env.RESEND_KEY && email) await mail(env, email, "Caução libertada · empréstimo " + ped,
               moldura("Caução libertada", `<p>As peças do empréstimo ${esc(ped)} voltaram em bom estado. Obrigada!</p><p>Libertámos a caução de <b>${(pi.amount / 100).toFixed(2).replace(".", ",")} €</b>: nada foi cobrado e o valor volta a ficar disponível no seu cartão. Alguns bancos levam uns dias a atualizar.</p>`),
@@ -634,7 +661,9 @@ async function gestao(req, env, url) {
             if (!(v > 0)) msg = "Escreva o valor a cobrar.";
             else {
               await stp(env, "payment_intents/" + id + "/capture", "POST", { amount_to_capture: String(v), "metadata[cobrado_motivo]": String(f.get("motivo") || "").slice(0, 400) });
-              msg = "Cobrados " + (v / 100).toFixed(2) + " € da caução" + (v < pi.amount ? "; o resto (" + ((pi.amount - v) / 100).toFixed(2) + " €) foi libertado." : ".");
+              if (v >= pi.amount && pi.metadata && pi.metadata.ids) { const m = await pcsLer(env); for (const pid of String(pi.metadata.ids).split(",").filter(Boolean)) m[pid] = { s: pi.id, v: 1 }; await pcsGravar(env, m); }
+              await limparCacheEstado();
+              msg = "Cobrados " + (v / 100).toFixed(2) + " € da caução" + (v >= pi.amount ? " (valor total: as peças ficam como vendidas no site)" : "") + (v < pi.amount ? "; o resto (" + ((pi.amount - v) / 100).toFixed(2) + " €) foi libertado." : ".");
             }
           }
         }
@@ -694,6 +723,14 @@ async function gestao(req, env, url) {
       } catch (e) { msg = "Erro: " + esc(e.message || e); }
     }
   }
+  let colabH = "";
+  try {
+    const P = await pecasDoSite(), l = await colabLer(env);
+    const fmc = (a, pid, lab) => `<form method="post"><input type="hidden" name="acao" value="${a}"><input type="hidden" name="peca" value="${esc(pid)}"><button>${lab}</button></form>`;
+    colabH = l.map(pid => `<div class="o"><b>${esc(P[pid] ? P[pid].marca + " " + P[pid].nome : pid)}</b> · em collab<div class="a">${fmc("colab_volta", pid, "Voltou → pôr à venda")}</div></div>`).join("") || "<p>Nenhuma peça em collab.</p>";
+    const opts = Object.entries(P).filter(([pid, p]) => p.status !== "vendido" && !l.includes(pid)).map(([pid, p]) => `<option value="${esc(pid)}">${esc(p.marca + " " + p.nome)}</option>`).join("");
+    colabH += `<form method="post" style="margin-top:8px"><input type="hidden" name="acao" value="colab_sai"><select name="peca" style="padding:8px;border:1px solid #1C1517;max-width:100%">${opts}</select> <button>Marcar «Em collab»</button></form>`;
+  } catch (e) { colabH = "<p>Erro: " + esc(e.message || e) + "</p>"; }
   let cau = "";
   try {
     const o = await stp(env, "payment_intents?limit=40");
@@ -722,7 +759,7 @@ async function gestao(req, env, url) {
       rows += `<div class="o"><b>${esc(r.ref)}</b> · ${esc(r.data)} · ${r.total.toFixed(2)} €<br>${esc(r.pecas)}<br><small>${esc(r.nome)} · ${esc(r.email)} · ${esc(r.envio)}</small><br><i>${st}</i>${est_motivo(r)} · <a href="${etqUrl}&tipo=envio" target="_blank">Etiqueta de envio</a> · <a href="${etqUrl}" target="_blank">Etiqueta de devolução</a>${pbInfo}<div class="a">${pbAcoes}${acoes}</div></div>`;
     }
   } catch (e) { rows = "<p>Erro ao ler a Stripe: " + esc(e.message || e) + "</p>"; }
-  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<h2 style="font:400 22px Georgia,serif">Cauções de empréstimos</h2>${cau || "<p>Nenhuma caução retida.</p>"}<h2 style="font:400 22px Georgia,serif">Vendas</h2>${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Encomendas · Bendito Closet</title><style>body{font:15px/1.5 system-ui,sans-serif;background:#FAF6F0;color:#1C1517;margin:0;padding:20px;max-width:720px;margin:auto}h1{font:400 30px Georgia,serif}.o{border-top:1px solid #ddd;padding:14px 0}.a{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}button{border:1px solid #1C1517;background:#fff;padding:8px 12px;font:inherit;cursor:pointer}.m{background:#fff;border:1px solid #1C1517;padding:10px}</style><h1>Encomendas</h1>${msg ? `<p class="m">${esc(msg)}</p>` : ""}<h2 style="font:400 22px Georgia,serif">Cauções de empréstimos</h2>${cau || "<p>Nenhuma caução retida.</p>"}<h2 style="font:400 22px Georgia,serif">Peças em collab</h2>${colabH}<h2 style="font:400 22px Georgia,serif">Vendas</h2>${avisoCliente ? `<script>fetch("https://formsubmit.co/ajax/ola@benditocloset.pt",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:${JSON.stringify(JSON.stringify(avisoCliente)).replace(/</g, "\\u003c")}}).catch(()=>{})</script>` : ""}<details><summary>Morada de devolução (aparece nas etiquetas)</summary><form method="post"><input type="hidden" name="acao" value="morada"><textarea name="morada" rows="5" style="width:100%;font:inherit">${esc(await env.LIMITS.get("cfg:morada") || "")}</textarea><button>Guardar morada</button></form></details><p>Últimos 60 dias. Marque "enviada" quando enviar: a partir daí a cliente já não consegue cancelar sozinha, só pedir devolução.</p>${rows || "<p>Sem encomendas.</p>"}`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 function est_motivo(r) { return ""; }
 
