@@ -15,7 +15,7 @@
       ['As peças são originais?', 'Sim. São peças originais, do meu armário e de closets que eu escolho. Na descrição de cada peça indicamos o estado e qualquer defeito.'],
       ['Como sei o tamanho certo?', 'O tamanho está na descrição de cada peça. Se quiser medidas exatas, pergunte-me no WhatsApp: envio fotos com a fita métrica.'],
       ['A peça ainda está disponível?', 'Se tem o botão “Comprar”, está disponível. Cada peça é única: quando é vendida, aparece como “Vendido”.'],
-      ['Há algum desconto?', 'Inscreva-se com o seu email no site e ganhe <b>10% na primeira compra</b>. Na Black Friday (27 a 29 de novembro) há −15% em tudo, e os 10% acumulam.'],
+      ['Há algum desconto?', 'Inscreva-se com o seu email no site e ganhe <b>10% na primeira compra</b>. Na Black Friday, prolongada até 14 de dezembro, há −15% em tudo, e os 10% acumulam.'],
       ['Quero vender as minhas peças aqui', 'Abrimos o seu closet no nosso site: escolhemos até 5 peças consigo, criamos fotos profissionais e publicamos no site e no Instagram. Veja em <a href="/#venda-connosco">“Abra o seu closet”</a>.']
     ]},
     en: { btn: 'Help', t: 'Hi! How can I help?', s: 'Choose a question:', back: '‹ Other questions', wa: 'Chat with Marianna on WhatsApp', waMsg: 'Hi! I have a question.', q: [
@@ -31,7 +31,7 @@
       ['Are the pieces authentic?', 'Yes. They are original pieces from my wardrobe and from closets I select. Each description states the condition and any flaws.'],
       ['How do I know my size?', 'The size is in each description. For exact measurements, ask me on WhatsApp and I will send photos with a tape measure.'],
       ['Is the piece still available?', 'If it has the “Buy now” button, it is available. Every piece is one of a kind: once sold, it shows as “Sold”.'],
-      ['Is there a discount?', 'Sign up with your email on the site and get <b>10% off your first purchase</b>. On Black Friday (27–29 November) everything is −15%, and the 10% stacks.'],
+      ['Is there a discount?', 'Sign up with your email on the site and get <b>10% off your first purchase</b>. During Black Friday, extended until 14 December, everything is −15%, and the 10% stacks.'],
       ['I want to sell my pieces here', 'We open your closet on our site: we pick up to 5 pieces with you, create professional photos and publish them on the site and Instagram. See <a href="/#venda-connosco">“Open your closet”</a>.']
     ]},
     es: { btn: 'Ayuda', t: '¡Hola! ¿En qué puedo ayudar?', s: 'Elige una pregunta:', back: '‹ Otras preguntas', wa: 'Hablar con Marianna por WhatsApp', waMsg: '¡Hola! Tengo una duda.', q: [
@@ -47,7 +47,7 @@
       ['¿Las prendas son originales?', 'Sí. Son prendas originales, de mi armario y de closets que selecciono. En cada descripción indicamos el estado y cualquier defecto.'],
       ['¿Cómo sé mi talla?', 'La talla está en cada descripción. Para medidas exactas, pregúntame por WhatsApp y te envío fotos con cinta métrica.'],
       ['¿La prenda sigue disponible?', 'Si tiene el botón “Comprar”, está disponible. Cada prenda es única: cuando se vende, aparece como “Vendido”.'],
-      ['¿Hay algún descuento?', 'Suscríbete con tu email en la web y consigue <b>un 10% en tu primera compra</b>. En Black Friday (27–29 de noviembre) hay −15% en todo, y el 10% se suma.'],
+      ['¿Hay algún descuento?', 'Suscríbete con tu email en la web y consigue <b>un 10% en tu primera compra</b>. En Black Friday, prolongado hasta el 14 de diciembre, hay −15% en todo, y el 10% se suma.'],
       ['Quiero vender mis prendas aquí', 'Abrimos tu closet en nuestra web: elegimos contigo hasta 5 prendas, hacemos fotos profesionales y las publicamos en la web y en Instagram. Mira <a href="/#venda-connosco">“Abre tu closet”</a>.']
     ]},
     fr: { btn: 'Aide', t: 'Bonjour ! Comment puis-je aider ?', s: 'Choisissez une question :', back: '‹ Autres questions', wa: 'Écrire à Marianna sur WhatsApp', waMsg: 'Bonjour ! J\'ai une question.', q: [
@@ -63,7 +63,7 @@
       ['Les pièces sont-elles authentiques ?', 'Oui. Ce sont des pièces originales, de ma garde-robe et de closets que je sélectionne. Chaque description indique l\'état et les éventuels défauts.'],
       ['Comment connaître ma taille ?', 'La taille figure dans chaque description. Pour des mesures exactes, demandez-moi sur WhatsApp : j\'envoie des photos avec un mètre ruban.'],
       ['La pièce est-elle encore disponible ?', 'Si elle a le bouton « Acheter », elle est disponible. Chaque pièce est unique : une fois vendue, elle apparaît comme « Vendu ».'],
-      ['Y a-t-il une réduction ?', 'Inscrivez-vous avec votre email sur le site et obtenez <b>10 % sur votre premier achat</b>. Pendant le Black Friday (27–29 novembre), tout est à −15 %, et les 10 % se cumulent.'],
+      ['Y a-t-il une réduction ?', 'Inscrivez-vous avec votre email sur le site et obtenez <b>10 % sur votre premier achat</b>. Pendant le Black Friday, prolongé jusqu\'au 14 décembre, tout est à −15 %, et les 10 % se cumulent.'],
       ['Je veux vendre mes pièces ici', 'Nous ouvrons votre closet sur notre site : nous choisissons avec vous jusqu\'à 5 pièces, faisons des photos professionnelles et les publions sur le site et Instagram. Voir <a href="/#venda-connosco">« Ouvrez votre closet »</a>.']
     ]},
     de: { btn: 'Hilfe', t: 'Hallo! Wie kann ich helfen?', s: 'Wähle eine Frage:', back: '‹ Andere Fragen', wa: 'Marianna auf WhatsApp schreiben', waMsg: 'Hallo! Ich habe eine Frage.', q: [
@@ -79,7 +79,7 @@
       ['Sind die Teile echt?', 'Ja. Es sind Originalteile aus meinem Kleiderschrank und aus Closets, die ich auswähle. Jede Beschreibung nennt den Zustand und eventuelle Mängel.'],
       ['Wie finde ich meine Größe?', 'Die Größe steht in jeder Beschreibung. Für genaue Maße frag mich auf WhatsApp: Ich schicke Fotos mit Maßband.'],
       ['Ist das Teil noch verfügbar?', 'Wenn es den Button „Kaufen“ hat, ist es verfügbar. Jedes Teil ist ein Unikat: Nach dem Verkauf steht es als „Verkauft“.'],
-      ['Gibt es einen Rabatt?', 'Melde dich mit deiner E-Mail auf der Website an und erhalte <b>10 % auf deinen ersten Einkauf</b>. Am Black Friday (27.–29. November) gibt es −15 % auf alles, und die 10 % kommen dazu.'],
+      ['Gibt es einen Rabatt?', 'Melde dich mit deiner E-Mail auf der Website an und erhalte <b>10 % auf deinen ersten Einkauf</b>. Am Black Friday, verlängert bis 14. Dezember, gibt es −15 % auf alles, und die 10 % kommen dazu.'],
       ['Ich möchte meine Teile hier verkaufen', 'Wir eröffnen dein Closet auf unserer Website: Wir wählen mit dir bis zu 5 Teile aus, machen Profifotos und veröffentlichen sie auf der Website und auf Instagram. Siehe <a href="/#venda-connosco">„Dein Closet“</a>.']
     ]},
     it: { btn: 'Aiuto', t: 'Ciao! Come posso aiutarti?', s: 'Scegli una domanda:', back: '‹ Altre domande', wa: 'Scrivi a Marianna su WhatsApp', waMsg: 'Ciao! Ho una domanda.', q: [
@@ -95,7 +95,7 @@
       ['I capi sono originali?', 'Sì. Sono capi originali, dal mio armadio e da closet che seleziono. Ogni descrizione indica lo stato e gli eventuali difetti.'],
       ['Come scelgo la taglia?', 'La taglia è in ogni descrizione. Per misure esatte chiedimi su WhatsApp: invio foto con il metro.'],
       ['Il capo è ancora disponibile?', 'Se ha il pulsante “Acquista”, è disponibile. Ogni capo è unico: una volta venduto, appare come “Venduto”.'],
-      ['C\'è uno sconto?', 'Iscriviti con la tua email sul sito e ottieni <b>il 10% sul primo acquisto</b>. Al Black Friday (27–29 novembre) tutto è −15%, e il 10% si somma.'],
+      ['C\'è uno sconto?', 'Iscriviti con la tua email sul sito e ottieni <b>il 10% sul primo acquisto</b>. Al Black Friday, prolungato fino al 14 dicembre, tutto è −15%, e il 10% si somma.'],
       ['Voglio vendere i miei capi qui', 'Apriamo il tuo closet sul nostro sito: scegliamo con te fino a 5 capi, facciamo foto professionali e li pubblichiamo sul sito e su Instagram. Vedi <a href="/#venda-connosco">“Apri il tuo closet”</a>.']
     ]}
   };

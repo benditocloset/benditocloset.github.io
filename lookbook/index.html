@@ -87,7 +87,7 @@
 </head>
 <body>
 <div class="bar"><a class="caps" href="/">‹ Loja</a><a class="logo" href="/">BENDITO CLOSET</a><a class="caps" href="/looks/">Looks</a></div>
-<div class="bf caps" id="bf" hidden>Black Friday · −15% em tudo até domingo, 29 de novembro</div>
+<div class="bf caps" id="bf" hidden>Black Friday prolongada · −15% em tudo até 14 de dezembro</div>
 <div class="mintro"><div class="caps" style="color:var(--soft)">Lookbook</div><h1>Inverno 2026</h1><p>Peças únicas, vendidas à parte. Deslize para ver os looks.</p></div>
 
 <section class="stage">
@@ -123,7 +123,7 @@ const LOOKS = [
   { hero:"shein-bomber-lantejoulas",com:["shein-sapatos-lantejoulas","primark-bolsa-brocado"] },
   { hero:"guess-casaco-2",          com:["moschino-coturnos-bordo","gucci-gframe"] }
 ];
-const BF_FIM = new Date("2026-11-30T00:00:00Z");
+const BF_FIM = new Date("2026-12-15T00:00:00Z");
 const emBF = Date.now() < BF_FIM.getTime();
 const eur = n => n.toLocaleString("pt-PT",{style:"currency",currency:"EUR",minimumFractionDigits:n % 1 ? 2 : 0, maximumFractionDigits:2});
 let L = [], i = 0;

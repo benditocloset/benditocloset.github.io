@@ -104,12 +104,13 @@ const ENVIO = {
   ilhas: { n: "Açores e Madeira · CTT · 3 a 5 dias úteis", p: [9, 12], min: 3, max: 5, c: ["PT"] },
   eu: { n: "União Europeia · DHL ou Correos Express", p: [18, 24], min: 2, max: 6, c: ["ES","FR","IT","DE","NL","BE","LU","IE","AT","DK","SE","FI","PL","CZ","SK","SI","HR","HU","RO","BG","GR","CY","MT","EE","LV","LT"] }
 };
-// Códigos que o site aplica sozinho → cupões da conta Bendito Closet (o cupão BF expira a 29/11 na própria Stripe)
+// Códigos que o site aplica sozinho → cupões da conta Bendito Closet
+// Black Friday prolongada até 14/12 23:59 (decisão de 28/11): BLACKFRIDAY15 e BENDITO10BF passam aos cupões novos BF15DEZ e B10BFDEZ (os antigos expiravam a 29/11)
 // Jogo da memória (decisão de 27/11/2026): −5% em todas as compras, somado ao cupão de boas-vindas (1.ª compra) e à Black Friday
-const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "5zMdM2cY", BENDITO10BF: "Ae5VZaMp", JOGO5: "JOGO5", JOGO5BF: "JOGO5BF", BENDITO10JOGO5: "BENDITO10JOGO5", BENDITO10JOGO5BF: "BENDITO10JOGO5BF" };
-// Depois da Black Friday (29/11/2026 23:59, Lisboa), os códigos com BF passam ao equivalente sem BF
-const BF_FIM_MS = Date.UTC(2026, 10, 30, 0, 0, 0);
-const codigoValido = c => Date.now() < BF_FIM_MS ? c : (c === "BLACKFRIDAY15" ? "" : c.replace(/BF$/, ""));
+const CUPOES = { BENDITO10: "4PD8sCeI", BLACKFRIDAY15: "BF15DEZ", BENDITO10BF: "B10BFDEZ", BLACKFRIDAY15DEZ: "BF15DEZ", BENDITO10BFDEZ: "B10BFDEZ", JOGO5: "JOGO5", JOGO5BF: "JOGO5BF", BENDITO10JOGO5: "BENDITO10JOGO5", BENDITO10JOGO5BF: "BENDITO10JOGO5BF" };
+// Depois da Black Friday (14/12/2026 23:59, Lisboa), os códigos com BF passam ao equivalente sem BF
+const BF_FIM_MS = Date.UTC(2026, 11, 15, 0, 0, 0);
+const codigoValido = c => Date.now() < BF_FIM_MS ? c : (/^BLACKFRIDAY15/.test(c) ? "" : c.replace(/BF(DEZ)?$/, ""));
 const LOCAIS = ["pt", "en", "es", "fr", "de", "it"];
 // ===== Reserva e venda automáticas: cada peça só pode ser paga uma vez =====
 // KV "pcs" = { <id da peça>: {s: sessão Stripe, e: e-mail, ate: reservada até (ms), v: 1 se vendida} } — uma só chave, poucas escritas
