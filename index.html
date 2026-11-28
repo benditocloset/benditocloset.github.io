@@ -1606,7 +1606,9 @@ function render(f){
   lista = lista.filter(p => p.status !== "vendido").concat(lista.filter(p => p.status === "vendido"));
   grid.classList.toggle("rows", f==="all");
   if (f==="all") { renderRows(lista); return; }
-  lista.filter(p => !p.mesma && (p.foto || p.fotos) && (f==="all" || p.cat===f || (f==="unissex" && UNI(p)))).forEach(p => { grid.appendChild(mkCard(p)); });
+  /* fotos nele: cartões próprios, depois dos dela (decisão de 28/11) */
+  const vis = lista.filter(p => (p.foto || p.fotos) && (f==="all" ? !p.mesma : (p.cat===f || (f==="unissex" && (UNI(p) || p.mesma)))));
+  vis.filter(p => !p.mesma).concat(vis.filter(p => p.mesma)).forEach(p => { grid.appendChild(mkCard(p)); });
 }
 function mkCard(p){
     const cls = ST[p.status] || "ok"; const label = T().st[p.status] || T().st.disponivel;
@@ -1634,7 +1636,7 @@ function mkCard(p){
     return card;
 }
 /* Página inicial em filas por categoria que deslizam para o lado (como as lojas de luxo), com setas e "Ver tudo" */
-const ROW_T = { novo:{pt:"Novidades",en:"New in",es:"Novedades",fr:"Nouveautés",de:"Neu",it:"Novità"}, ele:{pt:"Para ele",en:"For him",es:"Para él",fr:"Pour lui",de:"Für ihn",it:"Per lui"}, uni:{pt:"Unissex · para ela e para ele",en:"Unisex · for her and for him",es:"Unisex · para ella y para él",fr:"Unisexe · pour elle et pour lui",de:"Unisex · für sie und für ihn",it:"Unisex · per lei e per lui"},
+const ROW_T = { novo:{pt:"Novidades",en:"New in",es:"Novedades",fr:"Nouveautés",de:"Neu",it:"Novità"}, ele:{pt:"Para ele",en:"For him",es:"Para él",fr:"Pour lui",de:"Für ihn",it:"Per lui"}, uniA:{pt:"Unissex · nela",en:"Unisex · on her",es:"Unisex · en ella",fr:"Unisexe · sur elle",de:"Unisex · an ihr",it:"Unisex · su di lei"}, uniB:{pt:"Unissex · nele",en:"Unisex · on him",es:"Unisex · en él",fr:"Unisexe · sur lui",de:"Unisex · an ihm",it:"Unisex · su di lui"},
   all:{pt:"Ver tudo",en:"See all",es:"Ver todo",fr:"Tout voir",de:"Alle ansehen",it:"Vedi tutto"}, n:{pt:"peças",en:"pieces",es:"piezas",fr:"pièces",de:"Teile",it:"capi"} };
 const rt = k => ROW_T[k][LANG] || ROW_T[k].pt;
 /* Unissex: peças com fotos nele (entradas "mesma") ou com "unissex" no nome/detalhe */
@@ -1644,9 +1646,10 @@ function renderRows(lista){
   const base = ok.filter(p => !p.mesma);
   const novos = base.slice(0, 12);
   const filas = [["novo", rt("novo"), novos, null]];
-  const uni = base.filter(UNI); if (uni.length) filas.push(["unissex", rt("uni"), uni, "unissex"]);
+  const uni = base.filter(UNI); if (uni.length) filas.push(["unissex", rt("uniA"), uni, "unissex"]);
+  const ele = ok.filter(p => p.mesma); if (ele.length) filas.push(["unissex-ele", rt("uniB"), ele, "unissex"]);
   document.querySelectorAll(".filters button[data-f]").forEach(btn => { const c = btn.dataset.f; if (c === "all") return;
-    const it = base.filter(p => p.cat === c); if (it.length) filas.push([c, btn.textContent.trim(), it, c]); });
+    const it = base.filter(p => p.cat === c).concat(ok.filter(p => p.mesma && p.cat === c)); if (it.length) filas.push([c, btn.textContent.trim(), it, c]); });
     filas.forEach(([k, titulo, it, cat]) => {
     const sec = document.createElement("section"); sec.className = "frow"; sec.dataset.k = k;
     sec.innerHTML = `<div class="fh"><h3>${titulo}</h3><span class="fn">${it.length} ${rt("n")}</span>${cat ? `<button type="button" class="fall" data-cat="${cat}">${rt("all")} <span aria-hidden="true">→</span></button>` : ""}</div>
