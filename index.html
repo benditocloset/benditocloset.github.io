@@ -17,7 +17,7 @@
 <script src="/faq.js?v=97" defer></script>
 <meta charset="utf-8">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="icon" type="image/png" href="/img/favicon-64.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="96x96" href="/img/favicon-96.png"><link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192.png">
 <link rel="apple-touch-icon" href="/img/app-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -591,6 +591,7 @@ html.maison .grid.rows,.grid.rows{display:block!important}
 .grid.rows .fh{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid #e6ddd2;padding-bottom:10px}
 .grid.rows .fh h3{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#0a0809}
 .grid.rows .fh .fn{font-size:11px;letter-spacing:.08em;color:#8a7f78}
+.grid .gsep{grid-column:1/-1;margin:28px 0 4px;font:400 22px "Playfair Display",Georgia,serif;letter-spacing:.02em;border-top:1px solid #e5ded4;padding-top:22px;scroll-margin-top:90px}
 .grid.rows .fh .fall{margin-left:auto;background:none;border:0;padding:4px 0;font:500 11px "Helvetica Neue",Helvetica,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#0a0809;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 .grid.rows .fwrap{position:relative}
 .grid.rows .ftrack{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 12px) / 2.25);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:4px}
@@ -1608,7 +1609,9 @@ function render(f){
   if (f==="all") { renderRows(lista); return; }
   /* fotos nele: cartões próprios, depois dos dela (decisão de 28/11) */
   const vis = lista.filter(p => (p.foto || p.fotos) && (f==="all" ? !p.mesma : (p.cat===f || (f==="unissex" && (UNI(p) || p.mesma)))));
-  vis.filter(p => !p.mesma).concat(vis.filter(p => p.mesma)).forEach(p => { grid.appendChild(mkCard(p)); });
+  const dela = vis.filter(p => !p.mesma), dele = vis.filter(p => p.mesma);
+  dela.forEach(p => { grid.appendChild(mkCard(p)); });
+  if (dele.length) { if (dela.length) { const sep = document.createElement("h3"); sep.className = "gsep"; sep.id = "nele"; sep.textContent = rt("uniB"); grid.appendChild(sep); } dele.forEach(p => { grid.appendChild(mkCard(p)); }); }
 }
 /* cartões usam miniaturas leves (img/t/, scripts/miniaturas.py); o detalhe usa a foto grande */
 const MINI = f => /^img\/[^/]+\.(jpe?g|png|webp)$/i.test(f) ? "img/t/" + f.slice(4).replace(/\.[a-z]+$/i, ".jpg") : f;
@@ -1649,9 +1652,9 @@ function renderRows(lista){
   const novos = base.slice(0, 12);
   const filas = [["novo", rt("novo"), novos, null]];
   const uni = base.filter(UNI); if (uni.length) filas.push(["unissex", rt("uniA"), uni, "unissex"]);
-  const ele = ok.filter(p => p.mesma); if (ele.length) filas.push(["unissex-ele", rt("uniB"), ele, "unissex"]);
+  const ele = ok.filter(p => p.mesma); if (ele.length) filas.push(["unissex-ele", rt("uniB"), ele, "unissex-ele"]);
   document.querySelectorAll(".filters button[data-f]").forEach(btn => { const c = btn.dataset.f; if (c === "all") return;
-    const it = base.filter(p => p.cat === c).concat(ok.filter(p => p.mesma && p.cat === c)); if (it.length) filas.push([c, btn.textContent.trim(), it, c]); });
+    const it = base.filter(p => p.cat === c); if (it.length) filas.push([c, btn.textContent.trim(), it, c]); });
     filas.forEach(([k, titulo, it, cat]) => {
     const sec = document.createElement("section"); sec.className = "frow"; sec.dataset.k = k;
     sec.innerHTML = `<div class="fh"><h3>${titulo}</h3><span class="fn">${it.length} ${rt("n")}</span>${cat ? `<button type="button" class="fall" data-cat="${cat}">${rt("all")} <span aria-hidden="true">→</span></button>` : ""}</div>
@@ -1664,7 +1667,7 @@ function renderRows(lista){
 }
 grid.addEventListener("click", e => {
   const n = e.target.closest(".fnav"); if (n) { const tr = n.parentElement.querySelector(".ftrack"); tr.scrollBy({ left: (n.classList.contains("fx") ? 1 : -1) * tr.clientWidth * 0.85, behavior:"smooth" }); return; }
-  const a = e.target.closest(".fall"); if (a) { const btn = document.querySelector(`.filters button[data-f="${a.dataset.cat}"]`); if (btn) { btn.click(); document.querySelector(".filters").scrollIntoView({ behavior:"smooth", block:"start" }); } }
+  const a = e.target.closest(".fall"); if (a) { const ele = a.dataset.cat === "unissex-ele"; const btn = document.querySelector(`.filters button[data-f="${ele ? "unissex" : a.dataset.cat}"]`); if (btn) { btn.click(); const alvo = ele && document.getElementById("nele"); (alvo || document.querySelector(".filters")).scrollIntoView({ behavior:"smooth", block:"start" }); } }
 });
 document.getElementById("ordem").addEventListener("change", e => { ORDEM = e.target.value; render(FILTRO); });
 grid.addEventListener("click", e => {
