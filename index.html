@@ -1610,13 +1610,15 @@ function render(f){
   const vis = lista.filter(p => (p.foto || p.fotos) && (f==="all" ? !p.mesma : (p.cat===f || (f==="unissex" && (UNI(p) || p.mesma)))));
   vis.filter(p => !p.mesma).concat(vis.filter(p => p.mesma)).forEach(p => { grid.appendChild(mkCard(p)); });
 }
+/* cartões usam miniaturas leves (img/t/, scripts/miniaturas.py); o detalhe usa a foto grande */
+const MINI = f => /^img\/[^/]+\.(jpe?g|png|webp)$/i.test(f) ? "img/t/" + f.slice(4).replace(/\.[a-z]+$/i, ".jpg") : f;
 function mkCard(p){
     const cls = ST[p.status] || "ok"; const label = T().st[p.status] || T().st.disponivel;
     const card = document.createElement("article");
     card.className = "card" + (p.status==="vendido" ? " sold" : "");
     const fotos = p.fotos || (p.foto ? [p.foto] : []);
     const photo = fotos.length
-      ? `<img src="${fotos[0]}" alt="${nomeDe(p)}" data-i="0" data-id="${p.id}">${fotos.length>1?`<span class="count">1/${fotos.length} · ${T().more}</span>`:""}`
+      ? `<img src="${MINI(fotos[0])}" alt="${nomeDe(p)}" data-i="0" data-id="${p.id}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fotos[0]}'">${fotos.length>1?`<span class="count">1/${fotos.length} · ${T().more}</span>`:""}`
       : `<div class="ph"><svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 30 V24 a5 5 0 1 0 -5 -5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M32 30 L7 48 Q4 51 8 52 H56 Q60 51 57 48 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>Foto em breve</div>`;
     const btn = p.status==="vendido"
       ? `<span class="buy">${T().st.vendido}</span>`
